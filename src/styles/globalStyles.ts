@@ -8,17 +8,21 @@ const GlobalStlyes = createGlobalStyle`
         box-sizing: border-box;
         font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
     }
+
+    body, input, button {
+        font-size: 14px;
+        line-height: 18px;
+    }
     
     body,input {
-        font-size: 14px;
         color: #262626;
-        line-height: 18px;
         background-color: ${(props) => props.theme.color.bg_gray};
     }
 
     input {
         border: 1px solid ${(props) => props.theme.color.bd_gray}
     }
+    
     input:focus {
         outline:none;
     }
@@ -26,6 +30,7 @@ const GlobalStlyes = createGlobalStyle`
         border:none;
         background-color:inherit;
         cursor:pointer;
+        font-weight: ${(props) => props.theme.font.bold}
     }
     `;
 
