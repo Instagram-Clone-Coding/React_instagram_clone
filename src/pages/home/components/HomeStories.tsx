@@ -152,7 +152,7 @@ const HomeStories = () => {
                 parentNode: { scrollLeft, clientWidth, scrollWidth },
             },
         } = event;
-        const move = (scrollWidth - clientWidth) / 4;
+        const move = (scrollWidth - clientWidth + 2) / 3;
         if (className === "leftArrow") {
             parentNode.scroll({
                 left: scrollLeft - move,
