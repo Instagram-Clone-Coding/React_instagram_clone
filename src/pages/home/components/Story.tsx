@@ -49,6 +49,7 @@ const ListLayout = styled.li`
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        text-align: center;
     }
 `;
 
