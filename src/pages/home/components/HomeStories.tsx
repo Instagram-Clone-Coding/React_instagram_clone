@@ -86,7 +86,6 @@ const DUMMY_STORIES = [
 const StoriesCard = styled(Card)`
     padding: 16px 0;
     margin-bottom: 24px;
-    background-color: ${(props) => props.theme.color.bg_white};
     position: relative;
     .layout {
         height: 84px;

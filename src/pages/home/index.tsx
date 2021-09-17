@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import HomeAside from "./components/HomeAside";
-import HomeSections from "./components/HomeSections";
 import HomeStories from "./components/HomeStories";
+import HomeSection from "./components/HomeSection";
 
 const Layout = styled.div`
     padding-top: 30px;
@@ -30,7 +30,7 @@ const Home = () => {
         <Layout>
             <main>
                 <HomeStories />
-                <HomeSections />
+                <HomeSection />
             </main>
             <HomeAside />
         </Layout>
