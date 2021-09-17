@@ -11,6 +11,7 @@ const Card = styled.div<CardType>`
     border-bottom: 1px solid
         ${(props) => (props.isNav ? props.theme.color.bd_gray : "none")};
     border-radius: ${(props) => props.radius + "px"};
+    background-color: ${(props) => props.theme.color.bg_white};
 `;
 
 Card.defaultProps = {
