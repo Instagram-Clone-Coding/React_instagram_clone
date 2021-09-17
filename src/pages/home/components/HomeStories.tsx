@@ -111,15 +111,11 @@ const StoriesCard = styled(Card)`
 
         .leftArrow {
             background: url(${sprite}) no-repeat -379px -128px;
-            width: 45px;
-            height: 45px;
         }
 
         .rightArrow {
             right: 0;
             background: url(${sprite}) no-repeat -244px -107px;
-            width: 45px;
-            height: 45px;
         }
     }
 `;
