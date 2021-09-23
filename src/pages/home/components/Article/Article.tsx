@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Card from "UI/Card/Card";
 import Username from "../Username";
 import sprite2 from "../../../../img/sprite2.png";
+import { useState } from "react";
 
 const ArticleCard = styled(Card)`
     margin-bottom: 24px;
@@ -53,6 +54,7 @@ const ArticleCard = styled(Card)`
         .img-slider {
             display: flex;
             align-items: center;
+            transition: transform 1s;
             img {
                 width: 100%;
             }
@@ -80,6 +82,7 @@ const ArticleCard = styled(Card)`
 `;
 
 const Article = ({ article }: any) => {
+    const [sliderIndex, setSliderIndex] = useState(0);
     const arrowClickHandler = (event: any) => {
         const {
             target: {
