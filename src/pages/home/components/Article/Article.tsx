@@ -2,9 +2,14 @@ import styled from "styled-components";
 import Card from "UI/Card/Card";
 import Username from "../Username";
 import sprite2 from "../../../../img/sprite2.png";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const ArticleCard = styled(Card)`
+interface ArticleProps {
+    total: number;
+    currentIndex: number;
+}
+
+const ArticleCard = styled(Card)<ArticleProps>`
     margin-bottom: 24px;
     header {
         height: 60px;
@@ -45,30 +50,21 @@ const ArticleCard = styled(Card)`
             }
         }
     }
-    .img-wrap {
-        width: 100%;
+    .img-relative {
+        position: relative;
         display: flex;
         align-items: center;
-        overflow-x: hidden;
-        position: relative;
-        .img-slider {
-            display: flex;
-            align-items: center;
-            transition: transform 1s;
-            img {
-                width: 100%;
-            }
-        }
         .leftArrow {
             left: 8px;
             background: url(${sprite2}) no-repeat;
             background-position: -129px -97px;
+            display: ${(props) => props.currentIndex <= 0 && "none"};
         }
-
         .rightArrow {
             right: 8px;
             background: url(${sprite2}) no-repeat;
             background-position: -160px -97px;
+            display: ${(props) => props.total <= props.currentIndex && "none"};
         }
         .leftArrow,
         .rightArrow {
@@ -78,27 +74,57 @@ const ArticleCard = styled(Card)`
             background-size: 440px 411px;
             cursor: pointer;
         }
+        .img-wrap {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+            &::-webkit-scrollbar {
+                display: none; /* Chrome, Safari, Opera*/
+            }
+            .img-slider {
+                display: flex;
+                align-items: center;
+                transition: transform 0.3s;
+                img {
+                    width: 100%;
+                    scroll-snap-align: center;
+                }
+            }
+        }
     }
 `;
 
 const Article = ({ article }: any) => {
     const [sliderIndex, setSliderIndex] = useState(0);
-    const arrowClickHandler = (event: any) => {
-        const {
-            target: {
-                className,
-                parentNode: { childNodes },
-            },
-        } = event;
-        const slider = childNodes[0];
-        if (className === "leftArrow") {
-        } else if (className === "rightArrow") {
-            console.log("rightArrow");
-        }
+    const [totalIndex, setTotalIndex] = useState(0);
+    const sliderRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        // get article's number
+        setTotalIndex(article.imgs.length - 1);
+    }, [article.imgs.length]);
+
+    const leftArrowClickHandler = () => {
+        const { current } = sliderRef;
+        if (current === null) return;
+        if (sliderIndex <= 0) return;
+        current.style.transform = `translateX(${-100 * (sliderIndex - 1)}%)`;
+        setSliderIndex((sliderIndex) => sliderIndex - 1);
+    };
+
+    const rightArrowClickHandler = () => {
+        const { current } = sliderRef;
+        if (current === null) return;
+        if (sliderIndex >= totalIndex) return;
+        current.style.transform = `translateX(${-100 * (sliderIndex + 1)}%)`;
+        setSliderIndex((sliderIndex) => sliderIndex + 1);
     };
 
     return (
-        <ArticleCard as="article">
+        <ArticleCard as="article" total={totalIndex} currentIndex={sliderIndex}>
             <header>
                 <img
                     src={article.owner.avatarUrl}
@@ -112,14 +138,22 @@ const Article = ({ article }: any) => {
                     <div></div>
                 </div>
             </header>
-            <div className="img-wrap">
-                <div className="img-slider">
-                    {article.imgs.map((url: string, index: string) => (
-                        <img key={index} src={url} alt={index} />
-                    ))}
+            <div className="img-relative">
+                <div className="img-wrap">
+                    <div className="img-slider" ref={sliderRef}>
+                        {article.imgs.map((url: string, index: string) => (
+                            <img key={index} src={url} alt={index} />
+                        ))}
+                    </div>
                 </div>
-                <div className="leftArrow" onClick={arrowClickHandler}></div>
-                <div className="rightArrow" onClick={arrowClickHandler}></div>
+                <div
+                    className="leftArrow"
+                    onClick={leftArrowClickHandler}
+                ></div>
+                <div
+                    className="rightArrow"
+                    onClick={rightArrowClickHandler}
+                ></div>
             </div>
         </ArticleCard>
     );
