@@ -74,6 +74,24 @@ const ArticleCard = styled(Card)<ArticleProps>`
             background-size: 440px 411px;
             cursor: pointer;
         }
+        .img-dots {
+            position: absolute;
+            width: 100%;
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            bottom: -15px;
+            .img-dot {
+                background-color: #a8a8a8;
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+            }
+            .img-dot:nth-of-type(${(props) => props.currentIndex + 1}) {
+                background-color: ${(props) => props.theme.color.blue};
+            }
+        }
+
         .img-wrap {
             width: 100%;
             display: flex;
@@ -101,26 +119,52 @@ const ArticleCard = styled(Card)<ArticleProps>`
 const Article = ({ article }: any) => {
     const [sliderIndex, setSliderIndex] = useState(0);
     const [totalIndex, setTotalIndex] = useState(0);
+    const wrapRef = useRef<HTMLDivElement>(null);
     const sliderRef = useRef<HTMLDivElement>(null);
+    const { current: slider } = sliderRef;
+    const { current: wrap } = wrapRef;
+
     useEffect(() => {
         // get article's number
         setTotalIndex(article.imgs.length - 1);
     }, [article.imgs.length]);
 
     const leftArrowClickHandler = () => {
-        const { current } = sliderRef;
-        if (current === null) return;
+        if (slider === null) return;
+        if (wrap === null) return;
         if (sliderIndex <= 0) return;
-        current.style.transform = `translateX(${-100 * (sliderIndex - 1)}%)`;
-        setSliderIndex((sliderIndex) => sliderIndex - 1);
+        const wrapWidth = wrap.clientWidth;
+        wrap.scrollBy({
+            left: -wrapWidth,
+            behavior: "smooth",
+        });
+        detectScroll();
     };
 
     const rightArrowClickHandler = () => {
-        const { current } = sliderRef;
-        if (current === null) return;
+        if (slider === null) return;
+        if (wrap === null) return;
         if (sliderIndex >= totalIndex) return;
-        current.style.transform = `translateX(${-100 * (sliderIndex + 1)}%)`;
-        setSliderIndex((sliderIndex) => sliderIndex + 1);
+
+        const wrapWidth = wrap.clientWidth;
+        wrap.scrollBy({
+            left: wrapWidth,
+            behavior: "smooth",
+        });
+        detectScroll();
+    };
+
+    const detectScroll = () => {
+        if (wrap === null) return;
+
+        let timer = null;
+        let scrollLeft = wrap.scrollLeft;
+        if (timer !== null) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(function () {
+            setSliderIndex(Math.round(scrollLeft / wrap.clientWidth));
+        }, 150);
     };
 
     return (
@@ -139,7 +183,7 @@ const Article = ({ article }: any) => {
                 </div>
             </header>
             <div className="img-relative">
-                <div className="img-wrap">
+                <div className="img-wrap" ref={wrapRef} onScroll={detectScroll}>
                     <div className="img-slider" ref={sliderRef}>
                         {article.imgs.map((url: string, index: string) => (
                             <img key={index} src={url} alt={index} />
@@ -154,6 +198,11 @@ const Article = ({ article }: any) => {
                     className="rightArrow"
                     onClick={rightArrowClickHandler}
                 ></div>
+                <div className="img-dots">
+                    {[...Array(totalIndex + 1)].map((a, index) => (
+                        <div key={index} className="img-dot" />
+                    ))}
+                </div>
             </div>
         </ArticleCard>
     );
