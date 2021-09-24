@@ -3,6 +3,7 @@ import Card from "UI/Card/Card";
 import Username from "../Username";
 import sprite2 from "../../../../img/sprite2.png";
 import { useEffect, useRef, useState } from "react";
+import ArticleMainIcons from "./ArticleMainIcons";
 
 interface ArticleProps {
     total: number;
@@ -116,9 +117,27 @@ const ArticleCard = styled(Card)<ArticleProps>`
     }
 `;
 
+// interface ArticleTypes {
+//     article: {
+//         img: ;
+//         location: string;
+//         hashtags: Array<string>;
+//         text: string;
+//         owner: {
+//             username: string;
+//             avatarUrl: string;
+//         };
+//         likes: Array<string>;
+//         comments: Array<{ username: string }>;
+//     };
+// }
+
 const Article = ({ article }: any) => {
+    const DUMMY_USER = "like2"; // 유저 닉네임 혹은 유저 아이디
     const [sliderIndex, setSliderIndex] = useState(0);
     const [totalIndex, setTotalIndex] = useState(0);
+    const [likedUsers, setLikedUsers] = useState<Array<string>>([]);
+    const [isLiked, setIsLiked] = useState(false);
     const wrapRef = useRef<HTMLDivElement>(null);
     const sliderRef = useRef<HTMLDivElement>(null);
     const { current: slider } = sliderRef;
@@ -127,7 +146,10 @@ const Article = ({ article }: any) => {
     useEffect(() => {
         // get article's number
         setTotalIndex(article.imgs.length - 1);
-    }, [article.imgs.length]);
+        setLikedUsers(article.likes);
+        // setIsLiked(article.likes.includes(DUMMY_USER));
+        console.log(likedUsers);
+    }, [isLiked]);
 
     const leftArrowClickHandler = () => {
         if (slider === null) return;
@@ -167,6 +189,10 @@ const Article = ({ article }: any) => {
         }, 150);
     };
 
+    const toggleLikes = () => {
+        setIsLiked((isLiked) => !isLiked);
+        // 지우기
+    };
     return (
         <ArticleCard as="article" total={totalIndex} currentIndex={sliderIndex}>
             <header>
@@ -182,7 +208,7 @@ const Article = ({ article }: any) => {
                     <div></div>
                 </div>
             </header>
-            <div className="img-relative">
+            <div className="img-relative" onDoubleClick={toggleLikes}>
                 <div className="img-wrap" ref={wrapRef} onScroll={detectScroll}>
                     <div className="img-slider" ref={sliderRef}>
                         {article.imgs.map((url: string, index: string) => (
@@ -204,6 +230,7 @@ const Article = ({ article }: any) => {
                     ))}
                 </div>
             </div>
+            <ArticleMainIcons isLiked={isLiked} onLikeChange={toggleLikes} />
         </ArticleCard>
     );
 };
