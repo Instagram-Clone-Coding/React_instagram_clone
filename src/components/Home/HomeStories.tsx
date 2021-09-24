@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Card from "UI/Card/Card";
 import Story from "./Story";
-import sprite from "../../../img/sprite.png";
+import sprite from "../../img/sprite.png";
 
 const DUMMY_STORIES = [
     {
