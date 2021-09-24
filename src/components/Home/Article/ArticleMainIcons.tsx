@@ -59,8 +59,8 @@ const ArticleMainIcons = ({ isLiked, onLikeChange }: any) => {
         <StyledMainIcons>
             <div
                 className={`heart ${animationEnd ? "first" : "not-first"}`}
-                onClick={toggleActivate}
-                onAnimationEnd={}
+                // onClick={toggleActivate}
+                // onAnimationEnd={}
             >
                 {/* {isLiked ? ( */}
                 <svg

@@ -3,6 +3,7 @@ import Card from "UI/Card/Card";
 import Username from "../Username";
 import sprite2 from "../../../img/sprite2.png";
 import { useEffect, useRef, useState } from "react";
+import ArticleMainIcons from "./ArticleMainIcons";
 
 interface ArticleProps {
     total: number;
@@ -204,6 +205,7 @@ const Article = ({ article }: any) => {
                     ))}
                 </div>
             </div>
+            <ArticleMainIcons />
         </ArticleCard>
     );
 };
