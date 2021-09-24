@@ -77,6 +77,7 @@ const ArticleCard = styled(Card)<ArticleProps>`
         }
         .img-dots {
             position: absolute;
+            z-index: 0;
             width: 100%;
             display: flex;
             gap: 4px;
@@ -120,6 +121,8 @@ const ArticleCard = styled(Card)<ArticleProps>`
 const Article = ({ article }: any) => {
     const [sliderIndex, setSliderIndex] = useState(0);
     const [totalIndex, setTotalIndex] = useState(0);
+    const [isLiked, setIsliked] = useState(false);
+    const [isChanged, setIsChanged] = useState(false);
     const wrapRef = useRef<HTMLDivElement>(null);
     const sliderRef = useRef<HTMLDivElement>(null);
     const { current: slider } = sliderRef;
@@ -128,6 +131,7 @@ const Article = ({ article }: any) => {
     useEffect(() => {
         // get article's number
         setTotalIndex(article.imgs.length - 1);
+        // toggle likes
     }, [article.imgs.length]);
 
     const leftArrowClickHandler = () => {
@@ -168,6 +172,13 @@ const Article = ({ article }: any) => {
         }, 150);
     };
 
+    const toggleLike = () => setIsliked((prev: boolean) => !prev);
+    const changeToLike = () => {
+        if (isLiked) return;
+        setIsliked(true);
+        setIsChanged(true);
+    };
+
     return (
         <ArticleCard as="article" total={totalIndex} currentIndex={sliderIndex}>
             <header>
@@ -183,7 +194,7 @@ const Article = ({ article }: any) => {
                     <div></div>
                 </div>
             </header>
-            <div className="img-relative">
+            <div className="img-relative" onDoubleClick={changeToLike}>
                 <div className="img-wrap" ref={wrapRef} onScroll={detectScroll}>
                     <div className="img-slider" ref={sliderRef}>
                         {article.imgs.map((url: string, index: string) => (
@@ -205,7 +216,12 @@ const Article = ({ article }: any) => {
                     ))}
                 </div>
             </div>
-            <ArticleMainIcons />
+            <ArticleMainIcons
+                isLiked={isLiked}
+                isChanged={isChanged}
+                onToggleLike={toggleLike}
+                onToggleChange={setIsChanged}
+            />
         </ArticleCard>
     );
 };

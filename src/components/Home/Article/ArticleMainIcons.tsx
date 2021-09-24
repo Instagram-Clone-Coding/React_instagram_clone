@@ -3,6 +3,8 @@ import styled from "styled-components";
 
 const StyledMainIcons = styled.div`
     display: flex;
+    z-index: 101;
+    /* dots에 가려져 클릭 안되던 것 해결 */
     padding: 0 16px;
     margin-top: 2px;
     .heart,
@@ -21,20 +23,19 @@ const StyledMainIcons = styled.div`
     }
     .heart {
         margin-left: -8px;
-        &.not-first {
+        animation: none;
+        svg.pop {
+            animation: pop 0.3s forwards;
             @keyframes pop {
                 0% {
                     transform: scale(1);
                 }
                 50% {
-                    transform: scale(2);
+                    transform: scale(1.2);
                 }
                 100% {
                     transform: none;
                 }
-            }
-            svg {
-                animation: pop 1s;
             }
         }
     }
@@ -48,47 +49,54 @@ const StyledMainIcons = styled.div`
         margin-left: auto;
     }
 `;
-const ArticleMainIcons = ({ isLiked, onLikeChange }: any) => {
-    const [animationEnd, setAnimationEnd] = useState(true);
-    // const toggleActivate = () => {
-    //     setAnimationEnd(tr);
-    //     onLikeChange();
-    // };
 
+interface likePropsType {
+    isLiked: boolean;
+    isChanged: boolean;
+    onToggleLike: () => void;
+    onToggleChange: (a: boolean) => void;
+}
+const ArticleMainIcons = ({
+    isLiked,
+    isChanged,
+    onToggleLike,
+    onToggleChange,
+}: likePropsType) => {
+    const checkChange = () => {
+        onToggleChange(true);
+        onToggleLike();
+    };
     return (
         <StyledMainIcons>
-            <div
-                className={`heart ${animationEnd ? "first" : "not-first"}`}
-                // onClick={toggleActivate}
-                // onAnimationEnd={}
-            >
-                {/* {isLiked ? ( */}
-                <svg
-                    // className={isLiked && !isFirst ? "activate" : "default"}
-                    color="#ed4956"
-                    fill="#ed4956"
-                    height="24"
-                    role="img"
-                    viewBox="0 0 48 48"
-                    width="24"
-                >
-                    <path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
-                </svg>
-                {/* ) : ( */}
-                <svg
-                    // className={
-                    //     !isLiked && !isFirst ? "activate" : "default"
-                    // }
-                    color="#262626"
-                    fill="#262626"
-                    height="24"
-                    role="img"
-                    viewBox="0 0 48 48"
-                    width="24"
-                >
-                    <path d="M34.6 6.1c5.7 0 10.4 5.2 10.4 11.5 0 6.8-5.9 11-11.5 16S25 41.3 24 41.9c-1.1-.7-4.7-4-9.5-8.3-5.7-5-11.5-9.2-11.5-16C3 11.3 7.7 6.1 13.4 6.1c4.2 0 6.5 2 8.1 4.3 1.9 2.6 2.2 3.9 2.5 3.9.3 0 .6-1.3 2.5-3.9 1.6-2.3 3.9-4.3 8.1-4.3m0-3c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5.6 0 1.1-.2 1.6-.5 1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
-                </svg>
-                {/* )} */}
+            <div onClick={checkChange} className="heart">
+                {isLiked ? (
+                    <svg
+                        className={isLiked && isChanged ? "pop" : undefined}
+                        onAnimationEnd={() => onToggleChange(false)}
+                        // 와 드디어 이걸로 해결했네... 하
+                        color="#ed4956"
+                        fill="#ed4956"
+                        height="24"
+                        role="img"
+                        viewBox="0 0 48 48"
+                        width="24"
+                    >
+                        <path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
+                    </svg>
+                ) : (
+                    <svg
+                        className={!isLiked && isChanged ? "pop" : undefined}
+                        onAnimationEnd={() => onToggleChange(false)}
+                        color="#262626"
+                        fill="#262626"
+                        height="24"
+                        role="img"
+                        viewBox="0 0 48 48"
+                        width="24"
+                    >
+                        <path d="M34.6 6.1c5.7 0 10.4 5.2 10.4 11.5 0 6.8-5.9 11-11.5 16S25 41.3 24 41.9c-1.1-.7-4.7-4-9.5-8.3-5.7-5-11.5-9.2-11.5-16C3 11.3 7.7 6.1 13.4 6.1c4.2 0 6.5 2 8.1 4.3 1.9 2.6 2.2 3.9 2.5 3.9.3 0 .6-1.3 2.5-3.9 1.6-2.3 3.9-4.3 8.1-4.3m0-3c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5.6 0 1.1-.2 1.6-.5 1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
+                    </svg>
+                )}
             </div>
             <div className="comment">
                 <svg
