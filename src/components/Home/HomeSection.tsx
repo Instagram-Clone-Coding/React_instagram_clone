@@ -12,7 +12,9 @@ const DUMMY_ARTICLES = [
         ],
         location: "White Hart Lane Stadium",
         hashtags: ["#OnThisDay", "#안녕"],
-        text: "이 영역은 토트넘 핫스퍼 공식 계정 글입니다.",
+        text: `이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
+        이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
+        이 영역은 토트넘 핫스퍼 공식 계정 글입니다.`,
         owner: {
             username: "spursofficial",
             avatarUrl:
@@ -20,10 +22,15 @@ const DUMMY_ARTICLES = [
         },
         likes: ["like1", "like2", "like3", "like4"],
         comments: [
-            { username: "user1" },
-            { username: "user2" },
-            { username: "user3" },
+            { username: "user1", comment: "이게 첫 번째 댓글이다!!" },
+            { username: "user2", comment: "이게 두 번째 댓글이다!!" },
+            { username: "user3", comment: "이게 세 번째 댓글이다!!" },
+            { username: "user3", comment: "이게 세 번째 댓글이다!!" },
+            { username: "user3", comment: "이게 세 번째 댓글이다!!" },
+            { username: "user3", comment: "이게 세 번째 댓글이다!!" },
+            { username: "user3", comment: "이게 세 번째 댓글이다!!" },
         ],
+        createdAt: 1632738927077,
     },
     {
         imgs: [
@@ -34,7 +41,9 @@ const DUMMY_ARTICLES = [
         ],
         location: "White Hart Lane Stadium",
         hashtags: ["#OnThisDay", "#안녕"],
-        text: "이 영역은 토트넘 핫스퍼 공식 계정 글입니다.",
+        text: `이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
+        이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
+        이 영역은 토트넘 핫스퍼 공식 계정 글입니다.`,
         owner: {
             username: "spursofficial",
             avatarUrl:
@@ -42,10 +51,11 @@ const DUMMY_ARTICLES = [
         },
         likes: ["like1", "like2", "like3", "like4"],
         comments: [
-            { username: "user1" },
-            { username: "user2" },
-            { username: "user3" },
+            { username: "user1", comment: "이게 첫 번째 댓글이다!!" },
+            { username: "user2", comment: "이게 두 번째 댓글이다!!" },
+            { username: "user3", comment: "이게 세 번째 댓글이다!!" },
         ],
+        createdAt: 1632638927077,
     },
     {
         imgs: [
@@ -60,7 +70,9 @@ const DUMMY_ARTICLES = [
         ],
         location: "White Hart Lane Stadium",
         hashtags: ["#OnThisDay", "#안녕"],
-        text: "이 영역은 토트넘 핫스퍼 공식 계정 글입니다.",
+        text: `이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
+        이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
+        이 영역은 토트넘 핫스퍼 공식 계정 글입니다.`,
         owner: {
             username: "spursofficial",
             avatarUrl:
@@ -68,10 +80,11 @@ const DUMMY_ARTICLES = [
         },
         likes: ["like1", "like2", "like3", "like4"],
         comments: [
-            { username: "user1" },
-            { username: "user2" },
-            { username: "user3" },
+            { username: "user1", comment: "이게 첫 번째 댓글이다!!" },
+            { username: "user2", comment: "이게 두 번째 댓글이다!!" },
+            { username: "user3", comment: "이게 세 번째 댓글이다!!" },
         ],
+        createdAt: 1632638927077,
     },
 ];
 const HomeSection = () => {
