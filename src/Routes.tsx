@@ -1,4 +1,5 @@
 import Home from "pages/Home";
+import Direct from "pages/Direct";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 const Routes = () => {
@@ -6,6 +7,9 @@ const Routes = () => {
         <BrowserRouter>
             <Switch>
                 <Route exact path="/" component={Home} />
+            </Switch>
+            <Switch>
+                <Route exact path="/direct" component={Direct} />
             </Switch>
         </BrowserRouter>
     );
