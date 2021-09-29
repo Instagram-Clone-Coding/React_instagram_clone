@@ -1,12 +1,28 @@
 import styled, { css } from "styled-components";
 import Card from "UI/Card/Card";
 import phoneUrl from "./img/home-phone.png";
+import sprite from "./img/sprite.png";
 import { Form } from "./LoginForm";
 
 // interface
 interface imageType {
     height: number;
     width: number;
+}
+
+interface NewCardType {
+    width?: number;
+    height?: number;
+    hasPadding?: boolean;
+    hasMargin?: boolean;
+    isColumn?: boolean;
+}
+
+interface ImgSpriteType {
+    position: string;
+    height: number;
+    width: number;
+    url: string;
 }
 
 // styled component
@@ -21,6 +37,14 @@ const Layout = styled.article`
     margin-top: 32px;
 `;
 
+const ContentBox = styled.div`
+    ${flexRowCenter}
+    width: 350px;
+    height: 606px;
+    flex-direction: column;
+    margin-top: 12px;
+`;
+
 // - image
 const Image = styled.img<imageType>`
     height: ${(props) => props.height}px;
@@ -33,23 +57,15 @@ const ImageMedia = styled(Image)`
     }
 `;
 
-const Contents = styled.div`
-    ${flexRowCenter}
-    width: 350px;
-    height: 606px;
-    flex-direction: column;
-    margin-top: 12px;
+const ImgSprite = styled.div<ImgSpriteType>`
+    background-repeat: no-repeat;
+    background: url(${(props) => props.url});
+    background-position: ${(props) => props.position};
+    width: ${(props) => props.width}px;
+    height: ${(props) => props.height}px;
 `;
 
 // - Container
-interface NewCardType {
-    width?: number;
-    height?: number;
-    hasPadding?: boolean;
-    hasMargin?: boolean;
-    isColumn?: boolean;
-}
-
 export const NewCard = styled(Card)<NewCardType>`
     ${flexRowCenter}
     align-items: center;
@@ -68,11 +84,12 @@ NewCard.defaultProps = {
     isColumn: false,
 };
 
+// Components
 const DownloadApp = () => {
     return <div></div>;
 };
 
-const Forms = () => {
+const LoginForm = () => {
     return (
         <div>
             <Form
@@ -84,6 +101,45 @@ const Forms = () => {
     );
 };
 
+const Logo = () => {
+    const LogoStyle = styled.div`
+        margin: 22px 86.5px 12px 86.5px;
+    `;
+
+    const Logo: ImgSpriteType = {
+        width: 175,
+        height: 51,
+        position: "0 -130px",
+        url: sprite,
+    };
+
+    return (
+        <LogoStyle>
+            <ImgSprite
+                width={Logo.width}
+                height={Logo.height}
+                url={Logo.url}
+                position={Logo.position}
+            />
+        </LogoStyle>
+    );
+};
+
+const Contents = () => {
+    const radius: number = 1;
+
+    return (
+        <>
+            <NewCard radius={radius} isColumn={true}>
+                <Logo />
+                <LoginForm />
+            </NewCard>
+            <NewCard radius={radius} height={62.6}></NewCard>
+            <DownloadApp />
+        </>
+    );
+};
+
 // render
 function LoginContent() {
     const phone = {
@@ -92,7 +148,6 @@ function LoginContent() {
         height: 618,
     };
 
-    const radius: number = 1;
     return (
         <>
             <main>
@@ -102,14 +157,9 @@ function LoginContent() {
                         width={phone.width}
                         height={phone.height}
                     />
-                    <Contents>
-                        <NewCard radius={radius} isColumn={true}>
-                            <Forms />
-                        </NewCard>
-                        <NewCard radius={radius} height={62.6}></NewCard>
-                        <DownloadApp />
-                    </Contents>
-                    {/* <LoginForm /> */}
+                    <ContentBox>
+                        <Contents />
+                    </ContentBox>
                 </Layout>
             </main>
             <footer></footer>
