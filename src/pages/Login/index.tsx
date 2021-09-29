@@ -1,5 +1,7 @@
+import LoginContent from "components/Login/LoginContent";
+
 function LoginPage() {
-    return <div>로그인페이지</div>;
+    return <LoginContent />;
 }
 
 export default LoginPage;
