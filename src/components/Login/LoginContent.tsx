@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 import Card from "UI/Card/Card";
 import phoneUrl from "./img/home-phone.png";
+import { Form } from "./LoginForm";
 
 // interface
 interface imageType {
@@ -71,6 +72,18 @@ const DownloadApp = () => {
     return <div></div>;
 };
 
+const Forms = () => {
+    return (
+        <div>
+            <Form
+                description="전화번호 사용자 이름 또는 이메일"
+                inputType="text"
+            />
+            <Form description="비밀번호" inputType="password" />
+        </div>
+    );
+};
+
 // render
 function LoginContent() {
     const phone = {
@@ -90,7 +103,9 @@ function LoginContent() {
                         height={phone.height}
                     />
                     <Contents>
-                        <NewCard radius={radius} isColumn={true}></NewCard>
+                        <NewCard radius={radius} isColumn={true}>
+                            <Forms />
+                        </NewCard>
                         <NewCard radius={radius} height={62.6}></NewCard>
                         <DownloadApp />
                     </Contents>
