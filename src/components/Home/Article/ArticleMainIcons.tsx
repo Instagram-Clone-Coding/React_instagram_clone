@@ -5,8 +5,7 @@ import styled from "styled-components";
 const StyledMainIcons = styled.div`
     display: flex;
     z-index: 101;
-    /* dots에 가려져 클릭 안되던 것 해결 */
-    padding: 0 16px;
+    padding: 6px 16px 8px 16px;
     margin-top: 2px;
     margin-left: -8px;
     .heart,
