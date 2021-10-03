@@ -10,12 +10,12 @@ const GlobalStlyes = createGlobalStyle`
         box-sizing:border-box;
     }
 
-    body, input, button {
+    body, input,textarea ,button {
         font-size: 14px;
         line-height: 18px;
     }
     
-    body,input {
+    body,input,textarea {
         color: #262626;
         background-color: ${(props) => props.theme.color.bg_gray};
     }
