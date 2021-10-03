@@ -41,9 +41,7 @@ const DUMMY_ARTICLES = [
         ],
         location: "White Hart Lane Stadium",
         hashtags: ["#OnThisDay", "#안녕"],
-        text: `이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
-        이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
-        이 영역은 토트넘 핫스퍼 공식 계정 글입니다.`,
+        text: `이 영역은 토트넘 핫스퍼 공식 계정 글입니다.`,
         owner: {
             username: "spursofficial",
             avatarUrl:
