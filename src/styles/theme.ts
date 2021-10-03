@@ -9,6 +9,7 @@ const theme: DefaultTheme = {
     },
     font: {
         bold: 600,
+        gray: "#8e8e8e",
     },
 };
 
