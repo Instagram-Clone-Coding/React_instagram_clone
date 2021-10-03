@@ -13,6 +13,8 @@ const GlobalStlyes = createGlobalStyle`
     body, input,textarea ,button {
         font-size: 14px;
         line-height: 18px;
+        padding:0;
+        margin:0;
     }
     
     body,input,textarea {
