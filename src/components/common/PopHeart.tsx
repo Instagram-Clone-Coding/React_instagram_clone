@@ -2,6 +2,8 @@ import { useState } from "react";
 import styled from "styled-components";
 
 const HeartBox = styled.div`
+    display: flex;
+    align-items: center;
     svg.pop {
         animation: pop 0.3s forwards;
         @keyframes pop {
