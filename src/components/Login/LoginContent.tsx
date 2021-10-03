@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 import Card from "UI/Card/Card";
 import phoneUrl from "./img/home-phone.png";
 import sprite from "./img/sprite.png";
+import LinkBox, { Linkdata } from "./LinkBox";
 import { Form } from "./LoginForm";
 
 // interface
@@ -86,18 +87,30 @@ NewCard.defaultProps = {
 
 // Components
 const DownloadApp = () => {
-    return <div></div>;
+    return (
+        <div>
+            <p>앱을 다운로드하세요.</p>
+            <div></div>
+        </div>
+    );
 };
 
 const LoginForm = () => {
+    const Forms = styled.div`
+        margin-top: 24px;
+    `;
+
     return (
-        <div>
-            <Form
-                description="전화번호 사용자 이름 또는 이메일"
-                inputType="text"
-            />
-            <Form description="비밀번호" inputType="password" />
-        </div>
+        <form>
+            <Forms>
+                <Form
+                    description="전화번호 사용자 이름 또는 이메일"
+                    inputType="text"
+                />
+                <Form description="비밀번호" inputType="password" />
+                <button>로그인</button>
+            </Forms>
+        </form>
     );
 };
 
@@ -127,6 +140,11 @@ const Logo = () => {
 
 const Contents = () => {
     const radius: number = 1;
+    const data: Linkdata = {
+        router: "accounts/emailsingup",
+        message: "계정이 없으신가요?",
+        linker: "가입하기",
+    };
 
     return (
         <>
@@ -134,7 +152,11 @@ const Contents = () => {
                 <Logo />
                 <LoginForm />
             </NewCard>
-            <NewCard radius={radius} height={62.6}></NewCard>
+            <LinkBox
+                router={data.router}
+                message={data.message}
+                linker={data.linker}
+            />
             <DownloadApp />
         </>
     );
@@ -162,7 +184,7 @@ function LoginContent() {
                     </ContentBox>
                 </Layout>
             </main>
-            <footer></footer>
+            <footer>footer</footer>
         </>
     );
 }

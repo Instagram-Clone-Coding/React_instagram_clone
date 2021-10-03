@@ -16,6 +16,7 @@ interface FormType {
 
 // styled component
 const InputBox = styled.div<InputType>`
+    margin: 0 40px 6px 40px;
     div {
         display: flex;
         align-items: center;
@@ -28,13 +29,13 @@ const InputBox = styled.div<InputType>`
         height: ${(props) => (props.height ? props.height : 38)}px;
         label {
             display: flex;
-            align-items: center;
             position: relative;
             width: 100%;
             height: 100%;
             span {
                 position: relative;
                 padding-left: 9px;
+                line-height: 36px;
                 z-index: 2;
                 font-size: ${(props) =>
                     props.fontSize ? props.fontSize : 12}px;
@@ -59,6 +60,19 @@ const InputBox = styled.div<InputType>`
 `;
 
 export const Form = ({ description, inputType }: FormType) => {
+    // const [event, setEvent] = useState(false);
+    // const onChange = (e: any) => {
+    //     let animation: boolean = false;
+    //     if (e.target.value.length >= 1) {
+    //         animation = true;
+    //     }
+    // };
+
+    // transform: ${(props) =>
+    //     props.animation
+    //         ? undefined
+    //         : " scale(.83333) translateY(-10px)"};
+
     return (
         <InputBox>
             <div>
