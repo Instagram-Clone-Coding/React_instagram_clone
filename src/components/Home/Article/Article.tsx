@@ -38,9 +38,6 @@ const Article = ({ article }: any) => {
     const [isMyFollowerLiked, setIsMyFollowerLiked] = useState(false);
     // like state
     const [isLiked, setIsliked] = useState(false);
-    const [isChanged, setIsChanged] = useState(false);
-
-    //text split
 
     useEffect(() => {
         // toggle likes
@@ -53,10 +50,10 @@ const Article = ({ article }: any) => {
     }, [article]);
 
     const toggleLike = () => setIsliked((prev: boolean) => !prev);
+
     const changeToLike = () => {
         if (isLiked) return;
         setIsliked(true);
-        setIsChanged(true);
     };
 
     const calculateTerm = (createdAt: number): string => {
@@ -78,12 +75,7 @@ const Article = ({ article }: any) => {
         <ArticleCard as="article">
             <ArticleHeader article={article} />
             <ArticleImgSlider imgs={article.imgs} onLike={changeToLike} />
-            <ArticleMainIcons
-                isLiked={isLiked}
-                isChanged={isChanged}
-                onToggleLike={toggleLike}
-                onToggleChange={setIsChanged}
-            />
+            <ArticleMainIcons isLiked={isLiked} onToggleLike={toggleLike} />
             <div className="article-likeInfo">
                 {isMyFollowerLiked ? (
                     <div>
