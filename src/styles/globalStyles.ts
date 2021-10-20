@@ -7,14 +7,17 @@ const GlobalStlyes = createGlobalStyle`
     * {
         box-sizing: border-box;
         font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
+        box-sizing:border-box;
     }
 
-    body, input, button {
+    body, input,textarea ,button {
         font-size: 14px;
         line-height: 18px;
+        padding:0;
+        margin:0;
     }
     
-    body,input {
+    body,input,textarea {
         color: #262626;
         background-color: ${(props) => props.theme.color.bg_gray};
     }
