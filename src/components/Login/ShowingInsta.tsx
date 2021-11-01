@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import PhoneImg from "images/home-phone.png";
+import PhoneImg from "images/Login/home-phone.png";
 
 export function ShowingInstagram() {
     return (

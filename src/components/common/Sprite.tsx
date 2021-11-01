@@ -1,1 +1,5 @@
-import sprite from "images/sprite.png";
+import sprite from "images/Login/sprite.png";
+
+export function RenderImage() {
+    return <div>image</div>;
+}
