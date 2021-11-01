@@ -1,7 +1,7 @@
-import LoginContent from "components/Login/LoginContent";
+import { Login } from "components/Login";
 
 function LoginPage() {
-    return <LoginContent />;
+    return <Login />;
 }
 
 export default LoginPage;
