@@ -1,12 +1,15 @@
 import styled, { css } from "styled-components";
 import Card from "UI/Card/Card";
-import phoneUrl from "./img/home-phone.png";
-import sprite from "./img/sprite.png";
+import phoneUrl from "images/home-phone.png";
+import sprite from "images/sprite.png";
 import LinkBox, { Linkdata } from "./LinkBox";
 import { Form } from "./LoginForm";
+import Apple from "images/appStore.png";
+import Google from "images/googlePlay.png";
 
 // interface
 interface imageType {
+    // ImageProps ** 이름 고치기
     height: number;
     width: number;
 }
@@ -44,6 +47,7 @@ const ContentBox = styled.div`
     height: 606px;
     flex-direction: column;
     margin-top: 12px;
+    align-items: center;
 `;
 
 // - image
@@ -87,17 +91,36 @@ NewCard.defaultProps = {
 
 // Components
 const DownloadApp = () => {
+    const appImg = [Apple, Google];
+    const Img = styled.img.attrs((props: URL) => {})<URL>`
+        height: 40px;
+        margin-right: ${(props) => (props.key === 0 ? 8 : 0)}px;
+    `;
+
     return (
         <div>
             <p>앱을 다운로드하세요.</p>
-            <div></div>
+            <div>
+                {appImg.map((url, idx) => (
+                    <Img src={url} alt="다운로드" key={idx} />
+                ))}
+            </div>
         </div>
     );
 };
-
 const LoginForm = () => {
     const Forms = styled.div`
         margin-top: 24px;
+    `;
+
+    const Btn = styled.button`
+        width: 268px;
+        color: white;
+        border-radius: 4px;
+        background-color: #0095f6;
+        height: 30px;
+        margin: 8px 40px;
+        padding: 5px 9px;
     `;
 
     return (
@@ -108,7 +131,7 @@ const LoginForm = () => {
                     inputType="text"
                 />
                 <Form description="비밀번호" inputType="password" />
-                <button>로그인</button>
+                <Btn>로그인</Btn>
             </Forms>
         </form>
     );
@@ -141,7 +164,7 @@ const Logo = () => {
 const Contents = () => {
     const radius: number = 1;
     const data: Linkdata = {
-        router: "accounts/emailsingup",
+        router: "accounts/emailsignup",
         message: "계정이 없으신가요?",
         linker: "가입하기",
     };

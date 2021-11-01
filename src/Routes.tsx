@@ -1,3 +1,4 @@
+import SignUp from "components/Signup/SignUp";
 import Home from "pages/Home";
 import LoginPage from "pages/Login";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
@@ -7,6 +8,9 @@ const Routes = () => {
         <BrowserRouter>
             <Switch>
                 <Route exact path="/" component={LoginPage} />
+            </Switch>
+            <Switch>
+                <Route exact path="/accounts/emailsignup" component={SignUp} />
             </Switch>
             <Switch>
                 <Route exact path="/" component={Home} />
