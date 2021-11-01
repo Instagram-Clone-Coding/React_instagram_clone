@@ -32,6 +32,10 @@ const GlobalStlyes = createGlobalStyle`
         cursor:pointer;
         font-weight: ${(props) => props.theme.font.bold}
     }
+
+    a {
+        text-decoration: none;
+    }
     `;
 
 export default GlobalStlyes;
