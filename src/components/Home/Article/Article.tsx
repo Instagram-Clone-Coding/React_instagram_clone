@@ -4,12 +4,12 @@ import Username from "../Username";
 import sprite2 from "../../../img/sprite2.png";
 import { useEffect, useRef, useState } from "react";
 
-interface ArticleProps {
+interface ArticleCardProps {
     total: number;
     currentIndex: number;
 }
 
-const ArticleCard = styled(Card)<ArticleProps>`
+const ArticleCard = styled(Card)<ArticleCardProps>`
     margin-bottom: 24px;
     header {
         height: 60px;
@@ -115,8 +115,28 @@ const ArticleCard = styled(Card)<ArticleProps>`
         }
     }
 `;
+interface ArticleProps {
+    article: {
+        imgs: string[];
+        location: string;
+        hashtags: string[];
+        text: string;
+        owner: {
+            username: string;
+            avatarUrl: string;
+        };
+        likes: string[];
+        comments: CommentProps[];
+        createdAt: number;
+    };
+}
 
-const Article = ({ article }: any) => {
+interface CommentProps {
+    username: string;
+    comment: string;
+}
+
+const Article = ({ article }: ArticleProps) => {
     const [sliderIndex, setSliderIndex] = useState(0);
     const [totalIndex, setTotalIndex] = useState(0);
     const wrapRef = useRef<HTMLDivElement>(null);
@@ -185,8 +205,8 @@ const Article = ({ article }: any) => {
             <div className="img-relative">
                 <div className="img-wrap" ref={wrapRef} onScroll={detectScroll}>
                     <div className="img-slider" ref={sliderRef}>
-                        {article.imgs.map((url: string, index: string) => (
-                            <img key={index} src={url} alt={index} />
+                        {article.imgs.map((url: string, index) => (
+                            <img key={index} src={url} alt={"undefined"} />
                         ))}
                     </div>
                 </div>
