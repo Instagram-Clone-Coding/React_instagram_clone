@@ -1,8 +1,10 @@
-import Home from "pages/Home";
-import React from "react";
+import Routes from "Routes";
 function App() {
-    // return <div className="App">App</div>;
-    return <Home />;
+    return (
+        <div className="App">
+            <Routes />
+        </div>
+    );
 }
 
 export default App;
