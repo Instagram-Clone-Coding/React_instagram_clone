@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Card from "UI/Card/Card";
 import Username from "../Username";
-import sprite2 from "../../../../img/sprite2.png";
+import sprite2 from "../../../img/sprite2.png";
 import { useEffect, useRef, useState } from "react";
 
 interface ArticleProps {

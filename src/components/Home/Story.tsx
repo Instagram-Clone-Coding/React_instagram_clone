@@ -1,10 +1,5 @@
 import styled from "styled-components";
 
-interface StoryProps {
-    src: string;
-    username: string;
-}
-
 const ListLayout = styled.li`
     min-width: 80px;
     height: 100%;
@@ -52,6 +47,11 @@ const ListLayout = styled.li`
         text-align: center;
     }
 `;
+
+interface StoryProps {
+    src: string;
+    username: string;
+}
 
 const Story = ({ src, username }: StoryProps) => {
     return (

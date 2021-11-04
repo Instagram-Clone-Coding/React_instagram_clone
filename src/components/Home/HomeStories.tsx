@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Card from "UI/Card/Card";
 import Story from "./Story";
-import sprite from "../../../img/sprite.png";
+import sprite from "../../img/sprite.png";
 
 const DUMMY_STORIES = [
     {
@@ -123,9 +123,11 @@ const StoriesCard = styled(Card)`
 const HomeStories = () => {
     const [leftArrow, setLeftArrow] = useState(false);
     const [rightArrow, setRightArrow] = useState(true);
-    const toggleArrowHandler = (event: any): void => {
+    const toggleArrowHandler = (
+        event: React.UIEvent<HTMLUListElement>
+    ): void => {
         const {
-            target: { scrollLeft, clientWidth, scrollWidth },
+            currentTarget: { scrollLeft, clientWidth, scrollWidth },
         } = event;
         if (scrollLeft === 0) {
             setLeftArrow(false);
@@ -139,25 +141,29 @@ const HomeStories = () => {
         }
     };
 
-    const arrowClickHandler = (event: any) => {
-        const {
-            target: {
-                className,
-                parentNode,
-                parentNode: { scrollLeft, clientWidth, scrollWidth },
-            },
-        } = event;
-        const move = (scrollWidth - clientWidth + 2) / 3;
-        if (className === "leftArrow") {
-            parentNode.scroll({
-                left: scrollLeft - move,
-                behavior: "smooth",
-            });
-        } else if (className === "rightArrow") {
-            parentNode.scroll({
-                left: scrollLeft + move,
-                behavior: "smooth",
-            });
+    const arrowClickHandler = (
+        event: React.MouseEvent<HTMLDivElement>
+    ): void => {
+        if (event.currentTarget.parentElement) {
+            const {
+                currentTarget: {
+                    className,
+                    parentElement,
+                    parentElement: { scrollLeft, clientWidth, scrollWidth },
+                },
+            } = event;
+            const move = (scrollWidth - clientWidth + 2) / 3;
+            if (className === "leftArrow") {
+                parentElement?.scroll({
+                    left: scrollLeft - move,
+                    behavior: "smooth",
+                });
+            } else if (className === "rightArrow") {
+                parentElement?.scroll({
+                    left: scrollLeft + move,
+                    behavior: "smooth",
+                });
+            }
         }
     };
 
