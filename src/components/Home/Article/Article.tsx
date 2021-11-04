@@ -35,14 +35,34 @@ const ArticleCard = styled(Card)`
     }
 `;
 
+interface ArticleProps {
+    article: {
+        imgs: string[];
+        location: string;
+        hashtags: string[];
+        text: string;
+        owner: {
+            username: string;
+            avatarUrl: string;
+        };
+        likes: string[];
+        comments: CommentProps[];
+        createdAt: number;
+    };
+}
+
+interface CommentProps {
+    username: string;
+    comment: string;
+}
+
 // 아마 여기 articleData는 상위 HomeSection 컴포넌트에서 가져와야 하지 않을까
-const Article = ({ article }: any) => {
+const Article = ({ article }: ArticleProps) => {
     // data state
-    const [myFollowersLiked, setMyFollowersLiked] = useState([]);
+    const [myFollowersLiked, setMyFollowersLiked] = useState<string[]>([]);
     const [isMyFollowerLiked, setIsMyFollowerLiked] = useState(false);
     // like state
     const [isLiked, setIsliked] = useState(false);
-
     useEffect(() => {
         // toggle likes
         // 내 팔로워 중 한 명이 좋아요 눌렀는지 확인(여기서 일단 내 팔로워가 like2라 가정)
