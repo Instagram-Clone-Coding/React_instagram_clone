@@ -1,120 +1,38 @@
 import styled from "styled-components";
 import Card from "UI/Card/Card";
-import Username from "../Username";
-import sprite2 from "../../../img/sprite2.png";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import ArticleHeader from "./ArticleHeader";
+import ArticleImgSlider from "./ArticleImgSlider";
+import ArticleMainIcons from "./ArticleMainIcons";
+import ArticleMain from "./ArticleMain";
+import CommentForm from "./CommentForm";
 
-interface ArticleCardProps {
-    total: number;
-    currentIndex: number;
-}
-
-const ArticleCard = styled(Card)<ArticleCardProps>`
+const ArticleCard = styled(Card)`
     margin-bottom: 24px;
-    header {
-        height: 60px;
-        padding: 16px;
-        display: flex;
-        position: relative;
-        img {
-            min-width: 32px;
-            min-height: 32px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-        .header-content {
-            margin-left: 14px;
-            flex: 1;
-            div:nth-child(2) {
-                font-size: 12px;
-                line-height: 15px;
-                cursor: pointer;
-            }
-        }
-        .header-dots {
-            position: absolute;
-            right: 4px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 24px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            div {
-                background: url(${sprite2}) no-repeat -524px -483px;
-                width: 15px;
-                height: 3px;
-                transform: scale(0.8);
-            }
+    .article-likeInfo {
+        padding: 0 16px;
+        margin-bottom: 8px;
+        span {
+            font-weight: ${(props) => props.theme.font.bold};
         }
     }
-    .img-relative {
-        position: relative;
+    .article-createdAt {
+        padding-left: 16px;
+        margin-bottom: 16px;
+        color: ${(props) => props.theme.font.gray};
+        font-size: 10px;
+    }
+    .article-form-layout {
+        padding: 6px 16px;
         display: flex;
         align-items: center;
-        .leftArrow {
-            left: 8px;
-            background: url(${sprite2}) no-repeat;
-            background-position: -129px -97px;
-            display: ${(props) => props.currentIndex <= 0 && "none"};
-        }
-        .rightArrow {
-            right: 8px;
-            background: url(${sprite2}) no-repeat;
-            background-position: -160px -97px;
-            display: ${(props) => props.total <= props.currentIndex && "none"};
-        }
-        .leftArrow,
-        .rightArrow {
-            width: 30px;
-            height: 30px;
-            position: absolute;
-            background-size: 440px 411px;
-            cursor: pointer;
-        }
-        .img-dots {
-            position: absolute;
+        border-top: 1px solid #efefef;
+        form {
             width: 100%;
-            display: flex;
-            gap: 4px;
-            justify-content: center;
-            bottom: -15px;
-            .img-dot {
-                background-color: #a8a8a8;
-                width: 6px;
-                height: 6px;
-                border-radius: 50%;
-            }
-            .img-dot:nth-of-type(${(props) => props.currentIndex + 1}) {
-                background-color: ${(props) => props.theme.color.blue};
-            }
-        }
-
-        .img-wrap {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            -ms-overflow-style: none; /* IE and Edge */
-            scrollbar-width: none; /* Firefox */
-            &::-webkit-scrollbar {
-                display: none; /* Chrome, Safari, Opera*/
-            }
-            .img-slider {
-                display: flex;
-                align-items: center;
-                transition: transform 0.3s;
-                img {
-                    width: 100%;
-                    scroll-snap-align: center;
-                }
-            }
         }
     }
 `;
+
 interface ArticleProps {
     article: {
         imgs: string[];
@@ -136,93 +54,71 @@ interface CommentProps {
     comment: string;
 }
 
+// 아마 여기 articleData는 상위 HomeSection 컴포넌트에서 가져와야 하지 않을까
 const Article = ({ article }: ArticleProps) => {
-    const [sliderIndex, setSliderIndex] = useState(0);
-    const [totalIndex, setTotalIndex] = useState(0);
-    const wrapRef = useRef<HTMLDivElement>(null);
-    const sliderRef = useRef<HTMLDivElement>(null);
-    const { current: slider } = sliderRef;
-    const { current: wrap } = wrapRef;
-
+    // data state
+    const [myFollowersLiked, setMyFollowersLiked] = useState<string[]>([]);
+    const [isMyFollowerLiked, setIsMyFollowerLiked] = useState(false);
+    // like state
+    const [isLiked, setIsliked] = useState(false);
     useEffect(() => {
-        // get article's number
-        setTotalIndex(article.imgs.length - 1);
-    }, [article.imgs.length]);
+        // toggle likes
+        // 내 팔로워 중 한 명이 좋아요 눌렀는지 확인(여기서 일단 내 팔로워가 like2라 가정)
+        const getMyFollowerLiked = article.likes.filter(
+            (username: string) => username === "like2"
+        );
+        setMyFollowersLiked(getMyFollowerLiked);
+        setIsMyFollowerLiked(getMyFollowerLiked !== []);
+    }, [article]);
 
-    const leftArrowClickHandler = () => {
-        if (slider === null) return;
-        if (wrap === null) return;
-        if (sliderIndex <= 0) return;
-        const wrapWidth = wrap.clientWidth;
-        wrap.scrollBy({
-            left: -wrapWidth,
-            behavior: "smooth",
-        });
-        detectScroll();
+    const toggleLike = () => setIsliked((prev: boolean) => !prev);
+
+    const changeToLike = () => {
+        if (isLiked) return;
+        setIsliked(true);
     };
 
-    const rightArrowClickHandler = () => {
-        if (slider === null) return;
-        if (wrap === null) return;
-        if (sliderIndex >= totalIndex) return;
-
-        const wrapWidth = wrap.clientWidth;
-        wrap.scrollBy({
-            left: wrapWidth,
-            behavior: "smooth",
-        });
-        detectScroll();
-    };
-
-    const detectScroll = () => {
-        if (wrap === null) return;
-
-        let timer = null;
-        let scrollLeft = wrap.scrollLeft;
-        if (timer !== null) {
-            clearTimeout(timer);
+    const calculateTerm = (createdAt: number): string => {
+        const gap = Date.now() - createdAt;
+        if (gap >= 604800000) {
+            return `${Math.floor(gap / 604800000)}주 전`;
+        } else if (gap >= 86400000) {
+            return `${Math.floor(gap / 86400000)}일 전`;
+        } else if (gap >= 3600000) {
+            return `${Math.floor(gap / 3600000)}시간 전`;
+        } else if (gap >= 60000) {
+            return `${Math.floor(gap / 60000)}분 전`;
+        } else {
+            return "방금 전";
         }
-        timer = setTimeout(function () {
-            setSliderIndex(Math.round(scrollLeft / wrap.clientWidth));
-        }, 150);
     };
 
     return (
-        <ArticleCard as="article" total={totalIndex} currentIndex={sliderIndex}>
-            <header>
-                <img
-                    src={article.owner.avatarUrl}
-                    alt={article.owner.username}
-                />
-                <div className="header-content">
-                    <Username>{article.owner.username}</Username>
-                    <div>{article.location}</div>
-                </div>
-                <div className="header-dots">
-                    <div></div>
-                </div>
-            </header>
-            <div className="img-relative">
-                <div className="img-wrap" ref={wrapRef} onScroll={detectScroll}>
-                    <div className="img-slider" ref={sliderRef}>
-                        {article.imgs.map((url: string, index) => (
-                            <img key={index} src={url} alt={"undefined"} />
-                        ))}
+        <ArticleCard as="article">
+            <ArticleHeader article={article} />
+            <ArticleImgSlider imgs={article.imgs} onLike={changeToLike} />
+            <ArticleMainIcons isLiked={isLiked} onToggleLike={toggleLike} />
+            <div className="article-likeInfo">
+                {isMyFollowerLiked ? (
+                    <div>
+                        {/* 임의로 첫 번째 인덱스 선택 */}
+                        <span>{myFollowersLiked[0]}</span>님 외
+                        <span>{article.likes.length - 1}명</span>이 좋아합니다
                     </div>
-                </div>
-                <div
-                    className="leftArrow"
-                    onClick={leftArrowClickHandler}
-                ></div>
-                <div
-                    className="rightArrow"
-                    onClick={rightArrowClickHandler}
-                ></div>
-                <div className="img-dots">
-                    {[...Array(totalIndex + 1)].map((a, index) => (
-                        <div key={index} className="img-dot" />
-                    ))}
-                </div>
+                ) : (
+                    <span>좋아요 {article.likes.length}개</span>
+                )}
+            </div>
+            <ArticleMain
+                owner={article.owner}
+                text={article.text}
+                comments={article.comments}
+            />
+            <div className="article-createdAt">
+                {calculateTerm(article.createdAt)}
+            </div>
+            <div className="article-form-layout">
+                <CommentForm />
             </div>
         </ArticleCard>
     );
