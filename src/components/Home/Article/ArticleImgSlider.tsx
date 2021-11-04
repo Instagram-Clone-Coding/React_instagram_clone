@@ -1,11 +1,6 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import sprite2 from "../../../img/sprite2.png";
 import styled from "styled-components";
-
-interface SliderProps {
-    total: number;
-    currentIndex: number;
-}
 
 const StyledImgSlider = styled.div<SliderProps>`
     position: relative;
@@ -73,7 +68,17 @@ const StyledImgSlider = styled.div<SliderProps>`
     }
 `;
 
-const ArticleImgSlider = ({ imgs, onLike }: any) => {
+interface SliderProps {
+    total: number;
+    currentIndex: number;
+}
+
+interface ArticleImgSliderProps {
+    imgs: string[];
+    onLike: () => undefined;
+}
+
+const ArticleImgSlider = ({ imgs, onLike }: ArticleImgSliderProps) => {
     //slider state
     const [sliderIndex, setSliderIndex] = useState(0);
     const totalIndex = imgs.length - 1;
@@ -82,7 +87,7 @@ const ArticleImgSlider = ({ imgs, onLike }: any) => {
     const { current: slider } = sliderRef;
     const { current: wrap } = wrapRef;
 
-    const leftArrowClickHandler = () => {
+    const leftArrowClickHandler = (): undefined => {
         if (slider === null) return;
         if (wrap === null) return;
         if (sliderIndex <= 0) return;
@@ -94,7 +99,7 @@ const ArticleImgSlider = ({ imgs, onLike }: any) => {
         detectScroll();
     };
 
-    const rightArrowClickHandler = () => {
+    const rightArrowClickHandler = (): undefined => {
         if (slider === null) return;
         if (wrap === null) return;
         if (sliderIndex >= totalIndex) return;
@@ -107,7 +112,7 @@ const ArticleImgSlider = ({ imgs, onLike }: any) => {
         detectScroll();
     };
 
-    const detectScroll = () => {
+    const detectScroll = (): undefined => {
         if (wrap === null) return;
 
         let timer = null;
@@ -128,9 +133,9 @@ const ArticleImgSlider = ({ imgs, onLike }: any) => {
         >
             <div className="img-wrap" ref={wrapRef} onScroll={detectScroll}>
                 <div className="img-slider" ref={sliderRef}>
-                    {imgs.map((url: string, index: string) => (
+                    {imgs.map((url: string, index) => (
                         // id 추가되면 key 변경 예정
-                        <img key={index} src={url} alt={index} />
+                        <img key={index} src={url} alt={"undefined"} />
                     ))}
                 </div>
             </div>
@@ -145,4 +150,4 @@ const ArticleImgSlider = ({ imgs, onLike }: any) => {
     );
 };
 
-export default ArticleImgSlider;
+export default React.memo(ArticleImgSlider);

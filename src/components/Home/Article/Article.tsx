@@ -6,6 +6,7 @@ import ArticleImgSlider from "./ArticleImgSlider";
 import ArticleMainIcons from "./ArticleMainIcons";
 import ArticleMain from "./ArticleMain";
 import CommentForm from "./CommentForm";
+import ArticleProps from "./ArticleProps";
 
 const ArticleCard = styled(Card)`
     margin-bottom: 24px;
@@ -33,27 +34,6 @@ const ArticleCard = styled(Card)`
     }
 `;
 
-interface ArticleProps {
-    article: {
-        imgs: string[];
-        location: string;
-        hashtags: string[];
-        text: string;
-        owner: {
-            username: string;
-            avatarUrl: string;
-        };
-        likes: string[];
-        comments: CommentProps[];
-        createdAt: number;
-    };
-}
-
-interface CommentProps {
-    username: string;
-    comment: string;
-}
-
 // 아마 여기 articleData는 상위 HomeSection 컴포넌트에서 가져와야 하지 않을까
 const Article = ({ article }: ArticleProps) => {
     // data state
@@ -71,9 +51,9 @@ const Article = ({ article }: ArticleProps) => {
         setIsMyFollowerLiked(getMyFollowerLiked !== []);
     }, [article]);
 
-    const toggleLike = () => setIsliked((prev: boolean) => !prev);
+    const toggleLikeHandler = (): void => setIsliked((prev: boolean) => !prev);
 
-    const changeToLike = () => {
+    const changeToLikeHandler = (): undefined => {
         if (isLiked) return;
         setIsliked(true);
     };
@@ -96,8 +76,14 @@ const Article = ({ article }: ArticleProps) => {
     return (
         <ArticleCard as="article">
             <ArticleHeader article={article} />
-            <ArticleImgSlider imgs={article.imgs} onLike={changeToLike} />
-            <ArticleMainIcons isLiked={isLiked} onToggleLike={toggleLike} />
+            <ArticleImgSlider
+                imgs={article.imgs}
+                onLike={changeToLikeHandler}
+            />
+            <ArticleMainIcons
+                isLiked={isLiked}
+                onToggleLike={toggleLikeHandler}
+            />
             <div className="article-likeInfo">
                 {isMyFollowerLiked ? (
                     <div>

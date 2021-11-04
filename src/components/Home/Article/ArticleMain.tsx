@@ -1,5 +1,5 @@
 import PopHeart from "components/common/PopHeart";
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const StyledMain = styled.div`
@@ -130,4 +130,4 @@ const ArticleMain = ({ owner, text, comments }: MainProps) => {
     );
 };
 
-export default ArticleMain;
+export default React.memo(ArticleMain);

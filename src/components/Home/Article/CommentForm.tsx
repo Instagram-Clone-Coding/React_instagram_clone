@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-interface FormProps {
-    lineNumber: number;
-}
-
 const StyledCommentForm = styled.form<FormProps>`
     display: flex;
     align-items: center;
@@ -39,6 +35,10 @@ const StyledCommentForm = styled.form<FormProps>`
         opacity: 0.3;
     }
 `;
+
+interface FormProps {
+    lineNumber: number;
+}
 
 const CommentForm = () => {
     const [text, setText] = useState("");

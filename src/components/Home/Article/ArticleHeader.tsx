@@ -1,5 +1,7 @@
+import React from "react";
 import styled from "styled-components";
 import Username from "../Username";
+import ArticleProps from "./ArticleProps";
 
 const StyledArticleHeader = styled.header`
     height: 60px;
@@ -35,7 +37,7 @@ const StyledArticleHeader = styled.header`
     }
 `;
 
-const ArticleHeader = ({ article }: any) => {
+const ArticleHeader = ({ article }: ArticleProps) => {
     return (
         <StyledArticleHeader>
             <img src={article.owner.avatarUrl} alt={article.owner.username} />
@@ -62,4 +64,4 @@ const ArticleHeader = ({ article }: any) => {
     );
 };
 
-export default ArticleHeader;
+export default React.memo(ArticleHeader);
