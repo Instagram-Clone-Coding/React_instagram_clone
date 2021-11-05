@@ -154,12 +154,12 @@ const HomeStories = () => {
             } = event;
             const move = (scrollWidth - clientWidth + 2) / 3;
             if (className === "leftArrow") {
-                parentElement?.scroll({
+                parentElement.scroll({
                     left: scrollLeft - move,
                     behavior: "smooth",
                 });
             } else if (className === "rightArrow") {
-                parentElement?.scroll({
+                parentElement.scroll({
                     left: scrollLeft + move,
                     behavior: "smooth",
                 });
