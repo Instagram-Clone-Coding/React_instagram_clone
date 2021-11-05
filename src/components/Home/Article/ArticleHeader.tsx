@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import Username from "../Username";
-import ArticleProps from "./ArticleProps";
 
 const StyledArticleHeader = styled.header`
     height: 60px;

@@ -6,7 +6,6 @@ import ArticleImgSlider from "./ArticleImgSlider";
 import ArticleMainIcons from "./ArticleMainIcons";
 import ArticleMain from "./ArticleMain";
 import CommentForm from "./CommentForm";
-import ArticleProps from "./ArticleProps";
 
 const ArticleCard = styled(Card)`
     margin-bottom: 24px;
