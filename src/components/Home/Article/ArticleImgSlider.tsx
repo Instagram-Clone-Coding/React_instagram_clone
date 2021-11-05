@@ -6,6 +6,66 @@ const StyledImgSlider = styled.div<SliderProps>`
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: center;
+    @keyframes whiteHeartAnimation {
+        0% {
+            transform: scale(0);
+            opacity: 0;
+        }
+        20% {
+            transform: scale(1.2);
+            opacity: 0.9;
+        }
+        30% {
+            transform: scale(0.9);
+            opacity: 0.9;
+        }
+        40% {
+            transform: scale(1);
+            opacity: 0.9;
+        }
+        75% {
+            transform: scale(1);
+            opacity: 0.9;
+        }
+        100% {
+            transform: scale(0);
+            opacity: 0;
+        }
+    }
+    .img-heart {
+        position: absolute;
+        z-index: 101;
+        background: url(${sprite2}) no-repeat 2.584% 6.902%;
+        background-size: 440px 411px;
+        width: 111px;
+        height: 100px;
+        opacity: 0;
+    }
+    .img-heart.clicked {
+        animation: whiteHeartAnimation 1s;
+    }
+    .img-wrap {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+        &::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera*/
+        }
+        .img-slider {
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s;
+            img {
+                width: 100%;
+                scroll-snap-align: center;
+            }
+        }
+    }
     .leftArrow {
         left: 8px;
         background: url(${sprite2}) no-repeat;
@@ -44,28 +104,6 @@ const StyledImgSlider = styled.div<SliderProps>`
             background-color: ${(props) => props.theme.color.blue};
         }
     }
-
-    .img-wrap {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        -ms-overflow-style: none; /* IE and Edge */
-        scrollbar-width: none; /* Firefox */
-        &::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, Opera*/
-        }
-        .img-slider {
-            display: flex;
-            align-items: center;
-            transition: transform 0.3s;
-            img {
-                width: 100%;
-                scroll-snap-align: center;
-            }
-        }
-    }
 `;
 
 interface SliderProps {
@@ -81,11 +119,17 @@ interface ArticleImgSliderProps {
 const ArticleImgSlider = ({ imgs, onLike }: ArticleImgSliderProps) => {
     //slider state
     const [sliderIndex, setSliderIndex] = useState(0);
+    const [doubleClicked, setDoubleClicked] = useState(false);
     const totalIndex = imgs.length - 1;
     const wrapRef = useRef<HTMLDivElement>(null);
     const sliderRef = useRef<HTMLDivElement>(null);
     const { current: slider } = sliderRef;
     const { current: wrap } = wrapRef;
+
+    const doubleClickLikeHandler = () => {
+        setDoubleClicked(true);
+        onLike();
+    };
 
     const leftArrowClickHandler = (): undefined => {
         if (slider === null) return;
@@ -127,10 +171,14 @@ const ArticleImgSlider = ({ imgs, onLike }: ArticleImgSliderProps) => {
 
     return (
         <StyledImgSlider
-            onDoubleClick={onLike}
+            onDoubleClick={doubleClickLikeHandler} // 빨간 하트 애니메이션 효과는 redux 적용하면서 연결할 예정
             total={totalIndex}
             currentIndex={sliderIndex}
         >
+            <div
+                className={`img-heart ${doubleClicked ? "clicked" : ""}`}
+                onAnimationEnd={() => setDoubleClicked(false)}
+            ></div>
             <div className="img-wrap" ref={wrapRef} onScroll={detectScroll}>
                 <div className="img-slider" ref={sliderRef}>
                     {imgs.map((url: string, index) => (

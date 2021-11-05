@@ -30,7 +30,7 @@ interface StoryProps {
 const Story = ({ src, username }: StoryProps) => {
     return (
         <ListLayout>
-            <StoryCircle src={src} username={username} width={66} />
+            <StoryCircle src={src} username={username} scale={1} />
             <span>{username}</span>
         </ListLayout>
     );

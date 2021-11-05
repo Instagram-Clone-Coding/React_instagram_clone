@@ -9,12 +9,7 @@ const StyledArticleHeader = styled.header`
     display: flex;
     align-items: center;
     position: relative;
-    /* img {
-        min-width: 32px;
-        min-height: 32px;
-        border-radius: 50%;
-        cursor: pointer;
-    } */
+
     .header-content {
         margin-left: 14px;
         flex: 1;
@@ -38,6 +33,8 @@ const StyledArticleHeader = styled.header`
     }
 `;
 
+const HEADER_STORY_CIRCLE = 42 / 64;
+
 const ArticleHeader = ({ article }: ArticleProps) => {
     return (
         <StyledArticleHeader>
@@ -45,7 +42,7 @@ const ArticleHeader = ({ article }: ArticleProps) => {
             <StoryCircle
                 src={article.owner.avatarUrl}
                 username={article.owner.username}
-                width={42}
+                scale={HEADER_STORY_CIRCLE}
             />
             <div className="header-content">
                 <Username>{article.owner.username}</Username>
