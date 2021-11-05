@@ -1,3 +1,4 @@
+import StoryCircle from "components/common/StoryCircle";
 import React from "react";
 import styled from "styled-components";
 import Username from "../Username";
@@ -6,13 +7,14 @@ const StyledArticleHeader = styled.header`
     height: 60px;
     padding: 16px;
     display: flex;
+    align-items: center;
     position: relative;
-    img {
+    /* img {
         min-width: 32px;
         min-height: 32px;
         border-radius: 50%;
         cursor: pointer;
-    }
+    } */
     .header-content {
         margin-left: 14px;
         flex: 1;
@@ -39,7 +41,12 @@ const StyledArticleHeader = styled.header`
 const ArticleHeader = ({ article }: ArticleProps) => {
     return (
         <StyledArticleHeader>
-            <img src={article.owner.avatarUrl} alt={article.owner.username} />
+            {/* <img src={article.owner.avatarUrl} alt={article.owner.username} /> */}
+            <StoryCircle
+                src={article.owner.avatarUrl}
+                username={article.owner.username}
+                width={42}
+            />
             <div className="header-content">
                 <Username>{article.owner.username}</Username>
                 <div>{article.location}</div>
