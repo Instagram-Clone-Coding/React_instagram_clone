@@ -36,9 +36,16 @@ const StyledMainIcons = styled.div`
 interface likePropsType {
     isLiked: boolean;
     onToggleLike: () => void;
+    isAnimation: boolean;
+    resetAnimation: () => void;
 }
 
-const ArticleMainIcons = ({ isLiked, onToggleLike }: likePropsType) => {
+const ArticleMainIcons = ({
+    isLiked,
+    onToggleLike,
+    isAnimation,
+    resetAnimation,
+}: likePropsType) => {
     const [isSaved, setIsSaved] = useState(false);
     // 로그인 된 유저의 saved articles에 이 document id가 있는 지 확인하여 결정
     const toggleSave = () => {
@@ -52,6 +59,8 @@ const ArticleMainIcons = ({ isLiked, onToggleLike }: likePropsType) => {
                 size={24}
                 isLiked={isLiked}
                 onToggleLike={onToggleLike}
+                isAnimation={isAnimation}
+                resetAnimation={resetAnimation}
             />
             <div className="comment">
                 {/* <Link to={`/p/${document.id}`} className="comment"> */}

@@ -40,6 +40,8 @@ const Article = ({ article }: ArticleProps) => {
     const [isMyFollowerLiked, setIsMyFollowerLiked] = useState(false);
     // like state
     const [isLiked, setIsliked] = useState(false);
+    // red heart animation state
+    const [isRedHeartAnimation, setIsRedHeartAnimation] = useState(false);
     useEffect(() => {
         // toggle likes
         // 내 팔로워 중 한 명이 좋아요 눌렀는지 확인(여기서 일단 내 팔로워가 like2라 가정)
@@ -50,10 +52,14 @@ const Article = ({ article }: ArticleProps) => {
         setIsMyFollowerLiked(getMyFollowerLiked !== []);
     }, [article]);
 
-    const toggleLikeHandler = (): void => setIsliked((prev: boolean) => !prev);
+    const toggleLikeHandler = (): void => {
+        setIsRedHeartAnimation(true);
+        setIsliked((prev: boolean) => !prev);
+    };
 
     const changeToLikeHandler = (): undefined => {
         if (isLiked) return;
+        setIsRedHeartAnimation(true);
         setIsliked(true);
     };
 
@@ -82,6 +88,8 @@ const Article = ({ article }: ArticleProps) => {
             <ArticleMainIcons
                 isLiked={isLiked}
                 onToggleLike={toggleLikeHandler}
+                isAnimation={isRedHeartAnimation}
+                resetAnimation={() => setIsRedHeartAnimation(false)}
             />
             <div className="article-likeInfo">
                 {isMyFollowerLiked ? (

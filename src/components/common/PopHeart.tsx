@@ -1,9 +1,9 @@
-import { useState } from "react";
 import styled from "styled-components";
 
 const HeartBox = styled.div`
     display: flex;
     align-items: center;
+    cursor: pointer;
     svg.pop {
         animation: pop 0.3s forwards;
         @keyframes pop {
@@ -25,6 +25,8 @@ interface PopHeartProps {
     size: number;
     isLiked: boolean;
     onToggleLike: () => void;
+    isAnimation: boolean;
+    resetAnimation: () => void;
     // setliked를 포함한 처리를 수행하는 함수
 }
 
@@ -33,19 +35,24 @@ const PopHeart = ({
     size,
     isLiked,
     onToggleLike,
+    isAnimation,
+    resetAnimation,
 }: PopHeartProps) => {
-    const [isChanged, setIsChanged] = useState(false);
-    const checkChangeHandler = () => {
-        setIsChanged(true);
-        onToggleLike();
-    };
+    // const [isChanged, setIsChanged] = useState(false);
+    // const checkChangeHandler = () => {
+    //     // setIsChanged(true);
+    //     resetAnimation(true);
+    //     onToggleLike();
+    // };
 
     return (
-        <HeartBox onClick={checkChangeHandler} className={className}>
+        <HeartBox onClick={onToggleLike} className={className}>
             {isLiked ? (
                 <svg
-                    className={isLiked && isChanged ? "pop" : undefined}
-                    onAnimationEnd={() => setIsChanged(false)}
+                    // className={isLiked && isChanged ? "pop" : undefined}
+                    className={isLiked && isAnimation ? "pop" : ""}
+                    // onAnimationEnd={() => setIsChanged(false)}
+                    onAnimationEnd={resetAnimation}
                     // 와 드디어 이걸로 해결했네... 하
                     color="#ed4956"
                     fill="#ed4956"
@@ -58,8 +65,9 @@ const PopHeart = ({
                 </svg>
             ) : (
                 <svg
-                    className={!isLiked && isChanged ? "pop" : undefined}
-                    onAnimationEnd={() => setIsChanged(false)}
+                    className={!isLiked && isAnimation ? "pop" : ""}
+                    // onAnimationEnd={() => setIsChanged(false)}
+                    onAnimationEnd={resetAnimation}
                     color="#262626"
                     fill="#262626"
                     height={size}
