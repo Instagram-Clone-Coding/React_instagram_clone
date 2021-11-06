@@ -10,7 +10,7 @@ export function Forms() {
                 height={test.height}
                 position={test.position}
             />
-            <Link to="sign">password</Link>
+            <Link to="sign">비밀번호를 잊으셨나요? </Link>
         </div>
     );
 }
