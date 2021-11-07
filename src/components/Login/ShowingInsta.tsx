@@ -5,7 +5,7 @@ import Edit from "images/Login/slider/ImageEdit.jpg";
 import takephoto from "images/Login/slider/takePhoto.jpg";
 import talk from "images/Login/slider/talk.jpg";
 import InstagramImg from "images/Login/slider/instagram.jpg";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export function ShowingInstagram() {
     const ref = useRef<HTMLDivElement>(null);
@@ -33,7 +33,7 @@ export function ShowingInstagram() {
             if (index === ImgNumber?.length) {
                 index = 0;
             }
-        }, 3000);
+        }, 5000);
 
         return function clean() {
             clearInterval(TimerId);
@@ -55,7 +55,7 @@ export function ShowingInstagram() {
     );
 }
 
-const SlideImg = [home, Edit, takephoto, talk, InstagramImg];
+const SlideImg = [home, Edit, talk, takephoto, InstagramImg];
 
 const Background = styled.div`
     background-image: url(${PhoneImg});
