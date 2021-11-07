@@ -20,6 +20,8 @@ export function Forms() {
                         <Input innerText={placeholder.id} />
                         <Input innerText={placeholder.password} />
                         <LoginButton>로그인</LoginButton>
+                        <Line />
+                        <Facebook />
                     </Div>
                 </InputForm>
                 <Link to="/accounts/password/reset/">
@@ -82,6 +84,20 @@ function Input({ innerText }: textProps) {
             </InputContent>
         </Wrapper>
     );
+}
+
+function Line() {
+    return (
+        <LineStyle>
+            <div />
+            <span>또는</span>
+            <div />
+        </LineStyle>
+    );
+}
+
+function Facebook() {
+    return <div></div>;
 }
 
 // style
@@ -187,4 +203,26 @@ const State = styled.div`
 const LoginButton = styled(Button)`
     margin: 8px 40px;
     opacity: 0.3;
+`;
+
+const LineStyle = styled.div`
+    margin: 10px 40px 18px;
+    display: flex;
+    align-items: center;
+
+    & > span {
+        color: #8e8e8e;
+        font-size: 13px;
+        font-weight: ${(props) => props.theme.font.bold};
+        margin: 0 18px;
+        line-height: 15px;
+    }
+
+    & > div {
+        background-color: ${(props) => props.theme.color.bd_gray};
+        height: 1px;
+        flex-grow: 1;
+        flex-shrink: 1;
+        top: 0.45em;
+    }
 `;
