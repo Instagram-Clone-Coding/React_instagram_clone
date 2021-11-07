@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 import { imageProps, ImgSprite } from "components/common/Sprite";
 import { Link } from "react-router-dom";
 import React, { useRef } from "react";
+import Button from "UI/Button/Button";
 
 export function Forms() {
     return (
@@ -14,11 +15,12 @@ export function Forms() {
             />
             <InputContainer>
                 <InputForm>
-                    <div>
+                    <Div>
                         {/** id, password, btn, line, facebook */}
                         <Input innerText={placeholder.id} />
                         <Input innerText={placeholder.password} />
-                    </div>
+                        <LoginButton>로그인</LoginButton>
+                    </Div>
                 </InputForm>
                 <Link to="/accounts/password/reset/">
                     비밀번호를 잊으셨나요?
@@ -52,6 +54,7 @@ function Input({ innerText }: textProps) {
     const TextRef = useRef<HTMLSpanElement>(null);
     const InputRef = useRef<HTMLInputElement>(null);
 
+    // input에 값이 있을 때, 설명 작게 조절
     const handleText = (event: React.ChangeEvent<HTMLInputElement>) => {
         const check = event.target.value.length;
         const explanText = TextRef.current;
@@ -65,7 +68,7 @@ function Input({ innerText }: textProps) {
     };
 
     return (
-        <Div>
+        <Wrapper>
             <InputContent>
                 <Label>
                     <Span ref={TextRef}>{innerText}</Span>
@@ -77,11 +80,20 @@ function Input({ innerText }: textProps) {
                 </Label>
                 <State></State>
             </InputContent>
-        </Div>
+        </Wrapper>
     );
 }
 
 // style
+const flexColumn = css`
+    display: flex;
+    flex-direction: column;
+`;
+
+const Div = styled.div`
+    ${flexColumn}
+`;
+
 const FormContainer = styled.div`
     .logo {
         margin: 22px auto 12px;
@@ -89,20 +101,29 @@ const FormContainer = styled.div`
 `;
 
 const InputContainer = styled.div`
+    ${flexColumn}
     margin-bottom: 10px;
     max-width: 350px;
     width: 100%;
+
+    a {
+        margin-top: 12px;
+        font-size: 12px;
+        line-height: 16px;
+        color: #385185;
+        width: 100%;
+        text-align: center;
+    }
 `;
 
 const InputForm = styled.form`
-    display: flex;
-    flex-direction: column;
+    ${flexColumn}
     & > div {
         margin-top: 24px;
     }
 `;
 
-const Div = styled.div`
+const Wrapper = styled.div`
     margin: 0 40px 6px;
 `;
 
@@ -161,4 +182,9 @@ const WritingForm = styled.input`
 const State = styled.div`
     height: 100%;
     padding-right: 8px;
+`;
+
+const LoginButton = styled(Button)`
+    margin: 8px 40px;
+    opacity: 0.3;
 `;
