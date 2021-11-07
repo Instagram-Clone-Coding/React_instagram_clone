@@ -38,9 +38,13 @@ interface NewCardProps {
 }
 
 const ContentBox = styled(Card)<NewCardProps>`
-    display: flex;
-    justify-content: center;
     margin: ${(props) => props.margin};
     padding: ${(props) => props.padding};
     border-radius: 1px;
+
+    & > div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 `;

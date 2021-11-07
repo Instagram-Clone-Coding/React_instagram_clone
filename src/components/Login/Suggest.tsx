@@ -13,7 +13,7 @@ export function Suggest() {
 }
 
 const MessageState = {
-    signUp: ["계정이 없으신가요? ", "회원가입"],
+    signUp: ["계정이 없으신가요? ", "가입하기"],
     Login: ["계정이 있으신가요? ", "로그인"],
 };
 // 라우터로 상태 제어

@@ -14,8 +14,6 @@ export function ShowingInstagram() {
     useEffect(() => {
         let ImgNumber = ref.current?.children;
         const TimerId = setInterval(() => {
-            console.log(index);
-
             // 이전배경 지우기
             const backGround = document.querySelector(".background");
             backGround?.classList.remove("background");
