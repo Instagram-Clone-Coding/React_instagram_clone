@@ -49,6 +49,12 @@ const placeholder = {
     password: "비밀번호",
 };
 
+const facebook: imageProps = {
+    width: 16,
+    height: 16,
+    position: `-414px -259px`,
+};
+
 // component
 function Input({ innerText }: textProps) {
     const textType = innerText === placeholder.id ? "text" : "password";
@@ -97,7 +103,18 @@ function Line() {
 }
 
 function Facebook() {
-    return <div></div>;
+    return (
+        <FacebookStyle>
+            <button>
+                <ImgSprite
+                    width={facebook.width}
+                    height={facebook.height}
+                    position={facebook.position}
+                />
+                <span>Facebook으로 로그인</span>
+            </button>
+        </FacebookStyle>
+    );
 }
 
 // style
@@ -224,5 +241,21 @@ const LineStyle = styled.div`
         flex-grow: 1;
         flex-shrink: 1;
         top: 0.45em;
+    }
+`;
+
+const FacebookStyle = styled.div`
+    margin: 8px 40px;
+
+    & > button {
+        width: 100%;
+        
+        & > div {
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        & > span {
+        color: #385185;
     }
 `;
