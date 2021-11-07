@@ -22,11 +22,12 @@ const StyledMainIcons = styled.div`
             height: 20px;
         }
     }
-    .comment {
+    .comment:hover,
+    .share:hover,
+    .save:hover {
+        opacity: 0.6;
     }
 
-    .share {
-    }
     .save {
         margin-right: -10px;
         margin-left: auto;

@@ -18,6 +18,9 @@ const HeartBox = styled.div`
             }
         }
     }
+    .not:hover {
+        opacity: 0.6;
+    }
 `;
 
 interface PopHeartProps {
@@ -38,22 +41,12 @@ const PopHeart = ({
     isAnimation,
     resetAnimation,
 }: PopHeartProps) => {
-    // const [isChanged, setIsChanged] = useState(false);
-    // const checkChangeHandler = () => {
-    //     // setIsChanged(true);
-    //     resetAnimation(true);
-    //     onToggleLike();
-    // };
-
     return (
         <HeartBox onClick={onToggleLike} className={className}>
             {isLiked ? (
                 <svg
-                    // className={isLiked && isChanged ? "pop" : undefined}
                     className={isLiked && isAnimation ? "pop" : ""}
-                    // onAnimationEnd={() => setIsChanged(false)}
                     onAnimationEnd={resetAnimation}
-                    // 와 드디어 이걸로 해결했네... 하
                     color="#ed4956"
                     fill="#ed4956"
                     height={size}
@@ -65,8 +58,7 @@ const PopHeart = ({
                 </svg>
             ) : (
                 <svg
-                    className={!isLiked && isAnimation ? "pop" : ""}
-                    // onAnimationEnd={() => setIsChanged(false)}
+                    className={!isLiked && isAnimation ? "pop not" : "not"}
                     onAnimationEnd={resetAnimation}
                     color="#262626"
                     fill="#262626"
