@@ -58,6 +58,7 @@
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
+        <li><a href="#convention">Convention</a></li>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
       </ul>
@@ -105,6 +106,8 @@ Frontend
 
 ## Getting Started
 
+### convention
+
 -   Conding Convention
 
     1. Event Handler 네이밍: ~handler
@@ -121,7 +124,7 @@ Frontend
             name: string;
         }
         ```
-    4. styled-components 구조: 최상위 컴포넌트에만 한 번
+    4. styled-components 구조: 최상위 태그에만 한 번
 
         ```ts
         const StyledTag = styled.div``;
