@@ -146,6 +146,7 @@ const InputContainer = styled.div`
         color: #385185;
         width: 100%;
         text-align: center;
+        text-decoration: none;
     }
 `;
 
