@@ -249,13 +249,14 @@ const FacebookStyle = styled.div`
 
     & > button {
         width: 100%;
-        
+
         & > div {
             display: inline-block;
             margin-right: 8px;
         }
 
         & > span {
-        color: #385185;
+            color: #385185;
+        }
     }
 `;
