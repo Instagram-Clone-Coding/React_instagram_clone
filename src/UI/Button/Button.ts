@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
-interface ButtonType {
+interface ButtonProps {
     bgColor?: string;
     radius?: number;
     color?: string;
 }
 
-const Button = styled.button<ButtonType>`
+const Button = styled.button<ButtonProps>`
     border-radius: ${(props) => props.radius + "px"};
     padding: 5px 9px;
     background-color: ${(props) => props.bgColor || props.theme.color.blue};
