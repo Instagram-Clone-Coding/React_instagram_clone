@@ -63,7 +63,7 @@ const StyledStoryCircle = styled.div<StyledStoryCircleProps>`
 
 interface StoryCircleProps {
     type: "unread" | "read" | "default";
-    src: string;
+    avatarUrl: string;
     username: string;
     scale: number;
     onMouseEnter?: (
@@ -76,7 +76,7 @@ interface StoryCircleProps {
 
 const StoryCircle = ({
     type = "unread",
-    src,
+    avatarUrl,
     username,
     scale,
     onMouseEnter,
@@ -89,7 +89,7 @@ const StoryCircle = ({
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
-            <img src={src} alt={username} />
+            <img src={avatarUrl} alt={username} />
         </StyledStoryCircle>
     );
 };

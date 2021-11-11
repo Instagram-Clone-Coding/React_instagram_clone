@@ -78,10 +78,9 @@ const HomeAside = () => {
     return (
         <StyledAside rightMargin={rightMargin}>
             <Link to={`/${DUMMY_USER.username}`} className="aside-imgLink">
-                {/* <img src={DUMMY_USER.src} alt={DUMMY_USER.username} /> */}
                 <StoryCircle
                     type="default"
-                    src={DUMMY_USER.src}
+                    avatarUrl={DUMMY_USER.src}
                     username={DUMMY_USER.username}
                     scale={1}
                 />

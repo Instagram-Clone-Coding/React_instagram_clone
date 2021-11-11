@@ -1,7 +1,7 @@
 import StoryCircle from "components/Common/StoryCircle";
 import React, { useState } from "react";
 import styled from "styled-components";
-import ModalCard from "UI/ModalCard";
+import HoverModal from "../Modals/HoverModal";
 import Username from "../Username";
 
 const StyledArticleHeader = styled.header`
@@ -58,14 +58,16 @@ const ArticleHeader = ({ article }: ArticleProps) => {
     return (
         <StyledArticleHeader>
             {isModalActivated && (
-                <ModalCard
+                <HoverModal
+                    username={article.owner.username}
                     modalPosition={modalPositionObj}
                     onMouseEnter={() => setIsModalActivated(true)}
                     onMouseLeave={() => setIsModalActivated(false)}
                 />
             )}
             <StoryCircle
-                src={article.owner.avatarUrl}
+                type="unread" // 백엔드 소통하여 읽었는지 여부 확인
+                avatarUrl={article.owner.avatarUrl}
                 username={article.owner.username}
                 scale={HEADER_STORY_CIRCLE}
                 onMouseEnter={mouseEnterHandler}

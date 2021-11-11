@@ -32,7 +32,7 @@ const Story = ({ src, username }: StoryProps) => {
         <ListLayout>
             <StoryCircle
                 type="unread" // 백엔드 소통 후 읽었는지 여부 확인
-                src={src}
+                avatarUrl={src}
                 username={username}
                 scale={1}
             />
