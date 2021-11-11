@@ -1,3 +1,4 @@
+import StoryCircle from "components/Common/StoryCircle";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -77,7 +78,13 @@ const HomeAside = () => {
     return (
         <StyledAside rightMargin={rightMargin}>
             <Link to={`/${DUMMY_USER.username}`} className="aside-imgLink">
-                <img src={DUMMY_USER.src} alt={DUMMY_USER.username} />
+                {/* <img src={DUMMY_USER.src} alt={DUMMY_USER.username} /> */}
+                <StoryCircle
+                    type="default"
+                    src={DUMMY_USER.src}
+                    username={DUMMY_USER.username}
+                    scale={1}
+                />
             </Link>
             <div className="aside-userInfo">
                 <Username
