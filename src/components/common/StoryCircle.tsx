@@ -46,14 +46,9 @@ const StyledStoryCircle = styled.div<StyledStoryCircleProps>`
     align-items: center;
     cursor: pointer;
     img {
-        width: ${(props) =>
-            props.type !== "default"
-                ? `${64 * props.scale - 10}px`
-                : `${64 * props.scale}px`};
-        height: ${(props) =>
-            props.type !== "default"
-                ? `${64 * props.scale - 10}px`
-                : `${64 * props.scale}px`};
+        width: ${(props) => `${64 * props.scale - 10}px`};
+
+        height: ${(props) => `${64 * props.scale - 10}px`};
         border: ${(props) => props.type === "read" && `2px solid white`};
         box-sizing: ${(props) => props.type === "read" && "content-box"};
         border-radius: 50%;
