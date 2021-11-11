@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 import Card from "UI/Card/Card";
@@ -16,6 +16,9 @@ const StyledModalCard = styled(Card)<ModalCardProps>`
     height: 356px;
     top: ${(props) => props.top + "px"};
     left: ${(props) => props.left + "px"};
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 16px 0px,
+        rgb(219, 219, 219) 0px 0px 0px 1px;
+    border: none;
 `;
 
 interface ModalProps {
@@ -23,6 +26,7 @@ interface ModalProps {
     modalPosition?: DOMRect;
     onMouseEnter: () => void;
     onMouseLeave: () => void;
+    children: React.ReactNode;
 }
 
 const ModalCard = ({
@@ -30,6 +34,7 @@ const ModalCard = ({
     modalPosition,
     onMouseEnter,
     onMouseLeave,
+    children,
 }: ModalProps) => {
     const isUpperThanHalfPosition: boolean = useMemo(
         () =>
@@ -55,7 +60,7 @@ const ModalCard = ({
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
-            Hello
+            {children}
         </StyledModalCard>,
         document.getElementById("modal-root")!
     );
