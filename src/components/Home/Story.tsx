@@ -1,4 +1,4 @@
-import StoryCircle from "components/common/StoryCircle";
+import StoryCircle from "components/Common/StoryCircle";
 import styled from "styled-components";
 
 const ListLayout = styled.li`
