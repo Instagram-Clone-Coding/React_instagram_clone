@@ -34,11 +34,27 @@ interface StoryCircleProps {
     src: string;
     username: string;
     scale: number;
+    onMouseEnter?: (
+        event:
+            | React.MouseEvent<HTMLSpanElement>
+            | React.MouseEvent<HTMLDivElement>
+    ) => void;
+    onMouseLeave?: () => void;
 }
 
-const StoryCircle = ({ src, username, scale }: StoryCircleProps) => {
+const StoryCircle = ({
+    src,
+    username,
+    scale,
+    onMouseEnter,
+    onMouseLeave,
+}: StoryCircleProps) => {
     return (
-        <StyledStoryCircle scale={scale}>
+        <StyledStoryCircle
+            scale={scale}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+        >
             <img src={src} alt={username} />
         </StyledStoryCircle>
     );

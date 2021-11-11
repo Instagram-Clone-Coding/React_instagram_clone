@@ -1,6 +1,7 @@
-import StoryCircle from "components/common/StoryCircle";
-import React from "react";
+import StoryCircle from "components/Common/StoryCircle";
+import React, { useState } from "react";
 import styled from "styled-components";
+import ModalCard from "UI/ModalCard";
 import Username from "../Username";
 
 const StyledArticleHeader = styled.header`
@@ -36,16 +37,47 @@ const StyledArticleHeader = styled.header`
 const HEADER_STORY_CIRCLE = 42 / 64;
 
 const ArticleHeader = ({ article }: ArticleProps) => {
+    const [isModalActivated, setIsModalActivated] = useState(false);
+    const [modalPositionObj, setModalPositionObj] = useState<DOMRect>();
+
+    const mouseEnterHandler = (
+        event:
+            | React.MouseEvent<HTMLSpanElement>
+            | React.MouseEvent<HTMLDivElement>
+    ) => {
+        console.log("enter");
+        setModalPositionObj(event?.currentTarget.getBoundingClientRect());
+        setIsModalActivated(true);
+    };
+
+    const mouseLeaveHandler = () => {
+        console.log("leave");
+        setIsModalActivated(false);
+    };
+
     return (
         <StyledArticleHeader>
-            {/* <img src={article.owner.avatarUrl} alt={article.owner.username} /> */}
+            {isModalActivated && (
+                <ModalCard
+                    modalPosition={modalPositionObj}
+                    onMouseEnter={() => setIsModalActivated(true)}
+                    onMouseLeave={() => setIsModalActivated(false)}
+                />
+            )}
             <StoryCircle
                 src={article.owner.avatarUrl}
                 username={article.owner.username}
                 scale={HEADER_STORY_CIRCLE}
+                onMouseEnter={mouseEnterHandler}
+                onMouseLeave={mouseLeaveHandler}
             />
             <div className="header-content">
-                <Username>{article.owner.username}</Username>
+                <Username
+                    onMouseEnter={mouseEnterHandler}
+                    onMouseLeave={mouseLeaveHandler}
+                >
+                    {article.owner.username}
+                </Username>
                 <div>{article.location}</div>
             </div>
             <div className="header-dots">
