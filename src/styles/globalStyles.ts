@@ -21,6 +21,9 @@ const GlobalStlyes = createGlobalStyle`
         color: #262626;
         background-color: ${(props) => props.theme.color.bg_gray};
     }
+    a {
+        color: #262626;
+    }
 
     input {
         border: 1px solid ${(props) => props.theme.color.bd_gray}
