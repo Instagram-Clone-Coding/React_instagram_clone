@@ -13,7 +13,6 @@ const StyledModalCard = styled(Card)<ModalCardProps>`
     position: absolute;
     z-index: 101;
     width: 390px;
-    height: 356px;
     top: ${(props) => props.top + "px"};
     left: ${(props) => props.left + "px"};
     box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 16px 0px,

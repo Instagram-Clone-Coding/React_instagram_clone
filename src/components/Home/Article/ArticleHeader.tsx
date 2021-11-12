@@ -1,5 +1,6 @@
 import StoryCircle from "components/Common/StoryCircle";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import HoverModal from "../Modals/HoverModal";
 import Username from "../Username";
@@ -12,6 +13,7 @@ const StyledArticleHeader = styled.header`
     position: relative;
 
     .header-content {
+        text-decoration: none;
         margin-left: 14px;
         flex: 1;
         div:nth-child(2) {
@@ -45,13 +47,11 @@ const ArticleHeader = ({ article }: ArticleProps) => {
             | React.MouseEvent<HTMLSpanElement>
             | React.MouseEvent<HTMLDivElement>
     ) => {
-        console.log("enter");
         setModalPositionObj(event?.currentTarget.getBoundingClientRect());
         setIsModalActivated(true);
     };
 
     const mouseLeaveHandler = () => {
-        console.log("leave");
         setIsModalActivated(false);
     };
 
@@ -73,7 +73,7 @@ const ArticleHeader = ({ article }: ArticleProps) => {
                 onMouseEnter={mouseEnterHandler}
                 onMouseLeave={mouseLeaveHandler}
             />
-            <div className="header-content">
+            <Link to={`/${article.owner.username}`} className="header-content">
                 <Username
                     onMouseEnter={mouseEnterHandler}
                     onMouseLeave={mouseLeaveHandler}
@@ -81,7 +81,7 @@ const ArticleHeader = ({ article }: ArticleProps) => {
                     {article.owner.username}
                 </Username>
                 <div>{article.location}</div>
-            </div>
+            </Link>
             <div className="header-dots">
                 <svg
                     aria-label="옵션 더 보기"
