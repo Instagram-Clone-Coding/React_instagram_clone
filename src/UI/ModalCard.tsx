@@ -1,24 +1,31 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useRef } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 import Card from "UI/Card/Card";
 import { CardProps } from "../UI/Card/Card";
 
-interface ModalCardProps extends CardProps {
+interface PositionedModal extends CardProps {
     top: number;
     left: number;
+    isUpperThanHalfPosition: boolean;
 }
 
-const StyledModalCard = styled(Card)<ModalCardProps>`
+const StyledPositionedModal = styled(Card)<PositionedModal>`
     position: absolute;
     z-index: 101;
     width: 390px;
     top: ${(props) => props.top + "px"};
     left: ${(props) => props.left + "px"};
+    transform: ${(props) =>
+        !props.isUpperThanHalfPosition && `translateY(-100%)`};
     box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 16px 0px,
         rgb(219, 219, 219) 0px 0px 0px 1px;
     border: none;
 `;
+
+// const StyledBackDrop = styled.div`
+
+// `
 
 interface ModalProps {
     modalType?: "positioned" | "withBackDrop";
@@ -35,6 +42,7 @@ const ModalCard = ({
     onMouseLeave,
     children,
 }: ModalProps) => {
+    const modalRef = useRef() as React.MutableRefObject<HTMLDivElement>;
     const isUpperThanHalfPosition: boolean = useMemo(
         () =>
             modalPosition !== undefined &&
@@ -42,25 +50,27 @@ const ModalCard = ({
                 window.innerHeight / 2,
         [modalPosition]
     );
+
     const topPosition = useMemo(
         () =>
             isUpperThanHalfPosition
                 ? window.pageYOffset + modalPosition!.bottom
-                : window.pageYOffset + modalPosition!.top - 356,
+                : window.pageYOffset + modalPosition!.top, //
         [isUpperThanHalfPosition, modalPosition]
     );
-    const leftPosition = useMemo(() => modalPosition!.left, [modalPosition]);
 
     return ReactDOM.createPortal(
-        <StyledModalCard
+        <StyledPositionedModal
+            ref={modalRef}
             radius={12}
+            isUpperThanHalfPosition={isUpperThanHalfPosition}
             top={topPosition}
-            left={leftPosition}
+            left={modalPosition!.left}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
             {children}
-        </StyledModalCard>,
+        </StyledPositionedModal>,
         document.getElementById("modal-root")!
     );
 };
