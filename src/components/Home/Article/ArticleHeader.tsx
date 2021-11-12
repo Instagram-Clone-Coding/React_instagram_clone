@@ -13,13 +13,28 @@ const StyledArticleHeader = styled.header`
     position: relative;
 
     .header-content {
-        text-decoration: none;
-        margin-left: 14px;
         flex: 1;
-        div:nth-child(2) {
+        margin-left: 14px;
+        a {
+            text-decoration: none;
+            display: block;
+        }
+        & > a {
             font-size: 12px;
             line-height: 15px;
             cursor: pointer;
+        }
+        & > .header-mainContent {
+            display: flex;
+        }
+        .header-followBox {
+            & > span {
+                margin: 0 4px;
+            }
+            & > button {
+                margin-left: 2px;
+                color: ${(props) => props.theme.color.blue};
+            }
         }
     }
     .header-dots {
@@ -41,6 +56,7 @@ const HEADER_STORY_CIRCLE = 42 / 64;
 const ArticleHeader = ({ article }: ArticleProps) => {
     const [isModalActivated, setIsModalActivated] = useState(false);
     const [modalPositionObj, setModalPositionObj] = useState<DOMRect>();
+    const [isFollowing, setIsFollowing] = useState(false);
 
     const mouseEnterHandler = (
         event:
@@ -53,6 +69,11 @@ const ArticleHeader = ({ article }: ArticleProps) => {
 
     const mouseLeaveHandler = () => {
         setIsModalActivated(false);
+    };
+
+    const followHandler = () => {
+        // follow
+        setIsFollowing(true);
     };
 
     return (
@@ -73,15 +94,28 @@ const ArticleHeader = ({ article }: ArticleProps) => {
                 onMouseEnter={mouseEnterHandler}
                 onMouseLeave={mouseLeaveHandler}
             />
-            <Link to={`/${article.owner.username}`} className="header-content">
-                <Username
-                    onMouseEnter={mouseEnterHandler}
-                    onMouseLeave={mouseLeaveHandler}
-                >
-                    {article.owner.username}
-                </Username>
-                <div>{article.location}</div>
-            </Link>
+            <div className="header-content">
+                <div className="header-mainContent">
+                    <Username
+                        onMouseEnter={mouseEnterHandler}
+                        onMouseLeave={mouseLeaveHandler}
+                    >
+                        <Link to={`/${article.owner.username}`}>
+                            {article.owner.username}
+                        </Link>
+                    </Username>
+                    {!isFollowing && (
+                        <div className="header-followBox">
+                            <span>•</span>
+                            <button onClick={followHandler}>팔로우</button>
+                        </div>
+                    )}
+                </div>
+                <Link to={`/explore/locations/:id/${article.location}`}>
+                    {/* location id */}
+                    {article.location}
+                </Link>
+            </div>
             <div className="header-dots">
                 <svg
                     aria-label="옵션 더 보기"
