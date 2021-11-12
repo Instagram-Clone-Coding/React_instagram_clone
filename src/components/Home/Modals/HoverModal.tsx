@@ -7,6 +7,8 @@ import ModalCard from "UI/ModalCard";
 import Username from "../Username";
 import sprite2 from "../../../Imgs/sprite2.png";
 import useNumberSummary from "Hooks/useNumberSummary";
+import FollowingModal from "./FollowingModal";
+import Button from "UI/Button/Button";
 
 const StyledHoverModalInner = styled.div`
     width: 100%;
@@ -88,7 +90,6 @@ const StyledHoverModalInner = styled.div`
         & > * {
             flex: 1 1 auto;
             text-decoration: none;
-            color: black;
             font-weight: ${(props) => props.theme.font.bold};
             margin-right: 4px;
             cursor: pointer;
@@ -110,6 +111,7 @@ interface HoverModalProps {
 interface UserSummaryProps {
     avatarUrl: string;
     verified: boolean;
+    isFollowing: boolean;
     realName: string;
     link?: string;
     followingUsernames: string[]; // 내가 팔로우한 사람 중에 이 사람 팔로우한 사람.
@@ -129,6 +131,8 @@ const HoverModal = ({
     onMouseLeave,
 }: HoverModalProps) => {
     const [userSummary, setUserSummary] = useState<UserSummaryProps>();
+    const [isFollowingModal, setIsFollowingModal] = useState(false);
+    const [isFollowing, setIsFollowing] = useState(true);
     const articlesNumSummary = useNumberSummary(
         userSummary ? userSummary.articlesNum : 0
     );
@@ -140,10 +144,11 @@ const HoverModal = ({
     );
     useEffect(() => {
         // get username summary
-        setUserSummary({
+        const fetchedUserSummary = {
             avatarUrl:
                 "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
             verified: true,
+            isFollowing: false,
             realName: "Son HeungMin(손흥민)",
             link: "https://linktr.ee/spursofficial",
             followingUsernames: ["hwangheechan", "me"],
@@ -164,7 +169,9 @@ const HoverModal = ({
                     param: "sdfhhjhj",
                 },
             ],
-        });
+        };
+        setUserSummary(fetchedUserSummary);
+        setIsFollowing(fetchedUserSummary.isFollowing);
     }, []);
     return (
         <ModalCard
@@ -232,14 +239,42 @@ const HoverModal = ({
                         ))}
                     </div>
                     <div className="hoverModal-btns">
-                        <Link to="/direct/t/id">
-                            {/* 이 아이디가 어떤 id인지 모르겠음 */}
-                            <Card>메세지 보내기</Card>
-                        </Link>
-                        <div onClick={() => {}}>
-                            {/* 클릭 시 backdrop 모달 등장   */}
-                            <Card>팔로잉</Card>
-                        </div>
+                        {isFollowing ? (
+                            <>
+                                {/* 이 아이디가 어떤 id인지 모르겠음 */}
+                                <Link to="/direct/t/id">
+                                    <Card>메세지 보내기</Card>
+                                </Link>
+                                <div>
+                                    {isFollowing && isFollowingModal && (
+                                        <FollowingModal
+                                            onUnfollow={() =>
+                                                setIsFollowing(false)
+                                            }
+                                            onMouseEnter={() =>
+                                                setIsFollowingModal(true)
+                                            }
+                                            onMouseLeave={() =>
+                                                setIsFollowingModal(false)
+                                            }
+                                            username={username}
+                                            avatarUrl={userSummary.avatarUrl}
+                                        />
+                                    )}
+                                    <Card
+                                        onClick={() =>
+                                            setIsFollowingModal(true)
+                                        }
+                                    >
+                                        팔로잉
+                                    </Card>
+                                </div>
+                            </>
+                        ) : (
+                            <Button onClick={() => setIsFollowing(true)}>
+                                팔로우
+                            </Button>
+                        )}
                     </div>
                 </StyledHoverModalInner>
             )}

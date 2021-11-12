@@ -23,9 +23,34 @@ const StyledPositionedModal = styled(Card)<PositionedModal>`
     border: none;
 `;
 
-// const StyledBackDrop = styled.div`
-
-// `
+const StyledBackDrop = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.65); // 부모만 opacity 적용하는 법
+    & > div {
+        width: 400px;
+        @keyframes popModal {
+            0% {
+                opacity: 0;
+                transform: scale(1.1);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        animation: popModal 0.3s;
+    }
+`;
 
 interface ModalProps {
     modalType?: "positioned" | "withBackDrop";
@@ -43,7 +68,7 @@ const ModalCard = ({
     children,
 }: ModalProps) => {
     const modalRef = useRef() as React.MutableRefObject<HTMLDivElement>;
-    const isUpperThanHalfPosition: boolean = useMemo(
+    const isUpperThanHalfPosition = useMemo(
         () =>
             modalPosition !== undefined &&
             (modalPosition.top + modalPosition.bottom) / 2 <
@@ -53,24 +78,42 @@ const ModalCard = ({
 
     const topPosition = useMemo(
         () =>
-            isUpperThanHalfPosition
-                ? window.pageYOffset + modalPosition!.bottom
-                : window.pageYOffset + modalPosition!.top, //
+            modalPosition !== undefined
+                ? isUpperThanHalfPosition
+                    ? window.pageYOffset + modalPosition?.bottom
+                    : window.pageYOffset + modalPosition?.top
+                : 0, //
         [isUpperThanHalfPosition, modalPosition]
     );
 
+    const renderingComponent =
+        modalType === "positioned" ? (
+            <StyledPositionedModal
+                ref={modalRef}
+                radius={12}
+                isUpperThanHalfPosition={isUpperThanHalfPosition}
+                top={topPosition}
+                left={modalPosition!.left}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+            >
+                {children}
+            </StyledPositionedModal>
+        ) : (
+            <StyledBackDrop
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                onClick={onMouseLeave}
+            >
+                <Card onClick={(event) => event.stopPropagation()} radius={12}>
+                    {/* 자식까지 onClick 전파 안되게 */}
+                    {children}
+                </Card>
+            </StyledBackDrop>
+        );
+
     return ReactDOM.createPortal(
-        <StyledPositionedModal
-            ref={modalRef}
-            radius={12}
-            isUpperThanHalfPosition={isUpperThanHalfPosition}
-            top={topPosition}
-            left={modalPosition!.left}
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
-        >
-            {children}
-        </StyledPositionedModal>,
+        renderingComponent,
         document.getElementById("modal-root")!
     );
 };

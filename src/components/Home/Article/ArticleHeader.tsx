@@ -56,7 +56,7 @@ const HEADER_STORY_CIRCLE = 42 / 64;
 const ArticleHeader = ({ article }: ArticleProps) => {
     const [isModalActivated, setIsModalActivated] = useState(false);
     const [modalPositionObj, setModalPositionObj] = useState<DOMRect>();
-    const [isFollowing, setIsFollowing] = useState(false);
+    const [isFollowing, setIsFollowing] = useState(false); // followingModal의 isFollowing과 연결할 것
 
     const mouseEnterHandler = (
         event:
