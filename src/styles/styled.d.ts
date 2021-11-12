@@ -11,6 +11,7 @@ declare module "styled-components" {
         font: {
             bold: number;
             gray: string;
+            link_blue: string;
         };
     }
 }
