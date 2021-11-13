@@ -7,7 +7,7 @@ import Facebook from "./FacebookLogin";
 import { imageProps } from "../types";
 import Input from "components/common/Input";
 
-export function Forms() {
+export default function Forms() {
     return (
         <FormContainer>
             <ImgSprite

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-export function Suggest() {
+export default function Suggest() {
     return (
         <SentenceContainer>
             <p>
