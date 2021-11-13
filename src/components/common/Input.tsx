@@ -1,37 +1,27 @@
 import { textProps } from "components/Login/types";
 import styled from "styled-components";
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 export default function Input({ innerText }: textProps) {
     const textType = innerText === "비밀번호" ? "password" : "text";
-    let [value, setVaule] = useState("");
-
-    const TextRef = useRef<HTMLSpanElement>(null);
-    const InputRef = useRef<HTMLInputElement>(null);
+    const [value, setVaule] = useState("");
+    const [animation, setAnimation] = useState(false);
 
     // input에 값이 있을 때, 설명 작게 조절
     const handleText = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const check = event.target.value.length;
-        const explanText = TextRef.current;
-        if (check) {
-            explanText?.classList.add("small");
-            InputRef.current?.classList.add("inputSmall");
-        } else {
-            explanText?.classList.remove("small");
-            InputRef.current?.classList.remove("inputSmall");
-        }
-        setVaule(event.target.value);
+        const changed = event.target.value;
+        setVaule(changed);
+        setAnimation(changed.length ? true : false);
     };
 
     return (
         <Wrapper>
             <InputContent>
-                <Label>
-                    <Span ref={TextRef}>{innerText}</Span>
+                <Label animation={animation}>
+                    <Span>{innerText}</Span>
                     <WritingForm
                         onChange={handleText}
                         type={textType}
-                        ref={InputRef}
                         value={value}
                     />
                 </Label>
@@ -56,7 +46,7 @@ const InputContent = styled.div`
     border-radius: 3px;
 `;
 
-const Label = styled.label`
+const Label = styled.label<{ animation: Boolean }>`
     height: 36px;
     flex: 1 0 0;
     padding: 0;
@@ -65,12 +55,13 @@ const Label = styled.label`
     position: relative;
     cursor: text;
 
-    // input에 값이 쓰이면 이벤트
-    .small {
-        transform: scale(0.83333) translateY(-10px);
+    & > span {
+        ${(props) =>
+            props.animation && `transform: scale(0.83333) translateY(-10px)`}
     }
-    .inputSmall {
-        padding: 14px 0 2px 8px;
+
+    & > input {
+        ${(props) => props.animation && `padding: 14px 0 2px 8px;`}
     }
 `;
 
