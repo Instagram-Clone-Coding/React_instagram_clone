@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { LoginForm } from "./LoginForm";
+import { LoginForm } from "./LoginForm/LoginForm";
 import { ShowingInstagram } from "./ShowingInsta";
 
 export function Contents() {

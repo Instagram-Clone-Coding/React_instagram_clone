@@ -1,9 +1,10 @@
 import styled, { css } from "styled-components";
-import Card from "UI/Card/Card";
 import { Forms } from "./Forms";
-import { Suggest } from "./Suggest";
+import { Suggest } from "../../common/Suggest";
 import apple from "images/Login/appStore.png";
 import android from "images/Login/googlePlay.png";
+import { NewCardProps } from "../types";
+import ContentBox from "components/common/ContentBox";
 
 export function LoginForm() {
     return (
@@ -48,23 +49,6 @@ const FormContainer = styled.div`
     margin-top: 12px;
     max-width: 350px;
     flex-grow: 1;
-`;
-
-interface NewCardProps {
-    padding: string;
-    margin: string;
-}
-
-const ContentBox = styled(Card)<NewCardProps>`
-    margin: ${(props) => props.margin};
-    padding: ${(props) => props.padding};
-    border-radius: 1px;
-
-    & > div {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
 `;
 
 const DownloadStyle = styled.div`
