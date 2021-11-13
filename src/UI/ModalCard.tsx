@@ -55,16 +55,16 @@ const StyledBackDrop = styled.div`
 interface ModalProps {
     modalType?: "positioned" | "withBackDrop";
     modalPosition?: DOMRect;
-    onMouseEnter: () => void;
-    onMouseLeave: () => void;
+    onModalOn: () => void;
+    onModalOff: () => void;
     children: React.ReactNode;
 }
 
 const ModalCard = ({
     modalType = "positioned",
     modalPosition,
-    onMouseEnter,
-    onMouseLeave,
+    onModalOn,
+    onModalOff,
     children,
 }: ModalProps) => {
     const modalRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -94,16 +94,16 @@ const ModalCard = ({
                 isUpperThanHalfPosition={isUpperThanHalfPosition}
                 top={topPosition}
                 left={modalPosition!.left}
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
+                onMouseEnter={onModalOn}
+                onMouseLeave={onModalOff}
             >
                 {children}
             </StyledPositionedModal>
         ) : (
             <StyledBackDrop
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
-                onClick={onMouseLeave}
+                onMouseEnter={onModalOn}
+                onMouseLeave={onModalOff}
+                onClick={onModalOff}
             >
                 <Card onClick={(event) => event.stopPropagation()} radius={12}>
                     {/* 자식까지 onClick 전파 안되게 */}

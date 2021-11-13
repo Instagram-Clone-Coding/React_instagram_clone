@@ -60,8 +60,8 @@ const FollowingModal = ({
     return (
         <ModalCard
             modalType="withBackDrop"
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
+            onModalOn={onMouseEnter}
+            onModalOff={onMouseLeave}
         >
             <FollowingModalInner>
                 <StoryCircle

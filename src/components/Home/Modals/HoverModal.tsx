@@ -177,8 +177,8 @@ const HoverModal = ({
         <ModalCard
             modalType="positioned"
             modalPosition={modalPosition}
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
+            onModalOn={onMouseEnter}
+            onModalOff={onMouseLeave}
         >
             {userSummary && (
                 <StyledHoverModalInner>
