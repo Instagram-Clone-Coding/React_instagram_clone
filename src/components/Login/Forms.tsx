@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 import { imageProps, ImgSprite } from "components/common/Sprite";
 import { Link } from "react-router-dom";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Button from "UI/Button/Button";
 
 export function Forms() {
@@ -16,10 +16,7 @@ export function Forms() {
             <InputContainer>
                 <InputForm>
                     <Div>
-                        {/** id, password, btn, line, facebook */}
-                        <Input innerText={placeholder.id} />
-                        <Input innerText={placeholder.password} />
-                        <LoginButton>로그인</LoginButton>
+                        <LoginFormAndButton />
                         <Line />
                         <Facebook />
                     </Div>
@@ -31,6 +28,17 @@ export function Forms() {
         </FormContainer>
     );
 }
+
+const LoginFormAndButton = () => {
+    return (
+        <>
+            <Input innerText={placeholder.id} />
+            <Input innerText={placeholder.password} />
+            <LoginButton>로그인</LoginButton>
+        </>
+        // 리덕스 필요 **
+    );
+};
 
 // interface
 interface textProps {
@@ -58,6 +66,7 @@ const facebook: imageProps = {
 // component
 function Input({ innerText }: textProps) {
     const textType = innerText === placeholder.id ? "text" : "password";
+    let [value, setVaule] = useState("");
 
     const TextRef = useRef<HTMLSpanElement>(null);
     const InputRef = useRef<HTMLInputElement>(null);
@@ -73,6 +82,7 @@ function Input({ innerText }: textProps) {
             explanText?.classList.remove("small");
             InputRef.current?.classList.remove("inputSmall");
         }
+        setVaule(event.target.value);
     };
 
     return (
@@ -84,6 +94,7 @@ function Input({ innerText }: textProps) {
                         onChange={handleText}
                         type={textType}
                         ref={InputRef}
+                        value={value}
                     />
                 </Label>
                 <State></State>
@@ -183,7 +194,6 @@ const Label = styled.label`
     // input에 값이 쓰이면 이벤트
     .small {
         transform: scale(0.83333) translateY(-10px);
-        left: -15px;
     }
     .inputSmall {
         padding: 12px 0 2px 8px;
@@ -198,6 +208,8 @@ const Span = styled.span`
     line-height: 36px;
     position: absolute;
     right: 0;
+    transform-origin: left;
+    transition: transform ease-out 0.1s;
 `;
 
 const WritingForm = styled.input`
