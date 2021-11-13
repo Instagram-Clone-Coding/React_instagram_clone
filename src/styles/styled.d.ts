@@ -12,6 +12,7 @@ declare module "styled-components" {
             bold: number;
             gray: string;
             link_blue: string;
+            red: string;
         };
     }
 }

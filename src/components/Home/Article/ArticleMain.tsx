@@ -1,6 +1,7 @@
 import PopHeart from "components/Common/PopHeart";
 import React, { useState } from "react";
 import styled from "styled-components";
+import FollowingModal from "../Modals/FollowingModal";
 import HoverModal from "../Modals/HoverModal";
 import Username from "../Username";
 
@@ -64,9 +65,13 @@ const ArticleMain = ({
     const [isFullText, setIsFullText] = useState(false);
     const [isHeart1Animation, setIsHeart1Animation] = useState(false);
     const [isHeart2Animation, setIsHeart2Animation] = useState(false);
-    const [isModalActivated, setIsModalActivated] = useState(false);
+    const [isHoverModalActivated, setIsHoverModalActivated] = useState(false);
+    const [isFollowingModalActivated, setIsFollowingModalActivated] =
+        useState(false);
+    // const [isFollowing, setIsFollowing] = useState(false);
     const [modalPositionObj, setModalPositionObj] = useState<DOMRect>();
     const [hoveredUsername, setHoveredUsername] = useState("");
+    const [ishoveredUserFollowing, setIsHoveredUserFollowing] = useState(false); // hover한 데이터 가져와서 적용
     const isTextLineBreak = text.includes("\n");
     const textArray = isTextLineBreak ? text.split("\n") : [text];
 
@@ -100,22 +105,40 @@ const ArticleMain = ({
     ) => {
         setHoveredUsername(event.currentTarget.innerText);
         setModalPositionObj(event?.currentTarget.getBoundingClientRect());
-        setIsModalActivated(true);
+        setIsHoverModalActivated(true);
     };
 
     const mouseLeaveHandler = () => {
-        setIsModalActivated(false);
+        setIsHoverModalActivated(false);
     };
 
     const getFullText = () => setIsFullText(true);
     return (
         <StyledMain>
-            {isModalActivated && (
+            {isHoverModalActivated && (
                 <HoverModal
+                    isFollowing={ishoveredUserFollowing} // hover username 데이터 가져오면 필요 없음
+                    onFollowChange={(a: boolean) =>
+                        setIsHoveredUserFollowing(a)
+                    }
                     username={hoveredUsername}
                     modalPosition={modalPositionObj}
-                    onMouseEnter={() => setIsModalActivated(true)}
-                    onMouseLeave={() => setIsModalActivated(false)}
+                    onMouseEnter={() => setIsHoverModalActivated(true)}
+                    onMouseLeave={() => setIsHoverModalActivated(false)}
+                    onFollowingModalOn={() =>
+                        setIsFollowingModalActivated(true)
+                    }
+                />
+            )}
+            {ishoveredUserFollowing && isFollowingModalActivated && (
+                <FollowingModal
+                    onUnfollow={() => {
+                        setIsHoveredUserFollowing(false);
+                    }}
+                    onModalOn={() => setIsFollowingModalActivated(true)}
+                    onModalOff={() => setIsFollowingModalActivated(false)}
+                    username={hoveredUsername}
+                    avatarUrl={owner.avatarUrl} // 원래 FollowingModal 내부에서 username에 따라 받아와야 함.
                 />
             )}
             <div className="article-likeInfo">

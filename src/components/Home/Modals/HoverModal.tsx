@@ -7,7 +7,6 @@ import ModalCard from "UI/ModalCard";
 import Username from "../Username";
 import sprite2 from "../../../Imgs/sprite2.png";
 import useNumberSummary from "Hooks/useNumberSummary";
-import FollowingModal from "./FollowingModal";
 import Button from "UI/Button/Button";
 
 const StyledHoverModalInner = styled.div`
@@ -102,10 +101,13 @@ const StyledHoverModalInner = styled.div`
 `;
 
 interface HoverModalProps {
+    isFollowing?: boolean;
+    onFollowChange: (a: boolean) => void;
     username: string;
     modalPosition?: DOMRect;
     onMouseEnter: () => void;
     onMouseLeave: () => void;
+    onFollowingModalOn: () => void;
 }
 
 interface UserSummaryProps {
@@ -125,14 +127,15 @@ interface UserSummaryProps {
 }
 
 const HoverModal = ({
+    isFollowing,
+    onFollowChange,
     username,
     modalPosition,
     onMouseEnter,
     onMouseLeave,
+    onFollowingModalOn,
 }: HoverModalProps) => {
     const [userSummary, setUserSummary] = useState<UserSummaryProps>();
-    const [isFollowingModal, setIsFollowingModal] = useState(false);
-    const [isFollowing, setIsFollowing] = useState(true);
     const articlesNumSummary = useNumberSummary(
         userSummary ? userSummary.articlesNum : 0
     );
@@ -171,7 +174,7 @@ const HoverModal = ({
             ],
         };
         setUserSummary(fetchedUserSummary);
-        setIsFollowing(fetchedUserSummary.isFollowing);
+        // onFollowChange(fetchedUserSummary.isFollowing);
     }, []);
     return (
         <ModalCard
@@ -246,32 +249,13 @@ const HoverModal = ({
                                     <Card>메세지 보내기</Card>
                                 </Link>
                                 <div>
-                                    {isFollowing && isFollowingModal && (
-                                        <FollowingModal
-                                            onUnfollow={() =>
-                                                setIsFollowing(false)
-                                            }
-                                            onMouseEnter={() =>
-                                                setIsFollowingModal(true)
-                                            }
-                                            onMouseLeave={() =>
-                                                setIsFollowingModal(false)
-                                            }
-                                            username={username}
-                                            avatarUrl={userSummary.avatarUrl}
-                                        />
-                                    )}
-                                    <Card
-                                        onClick={() =>
-                                            setIsFollowingModal(true)
-                                        }
-                                    >
+                                    <Card onClick={onFollowingModalOn}>
                                         팔로잉
                                     </Card>
                                 </div>
                             </>
                         ) : (
-                            <Button onClick={() => setIsFollowing(true)}>
+                            <Button onClick={() => onFollowChange(true)}>
                                 팔로우
                             </Button>
                         )}

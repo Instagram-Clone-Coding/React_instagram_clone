@@ -21,7 +21,7 @@ const FollowingModalInner = styled.div`
     }
     & > .followingModal-delete {
         margin-top: 16px;
-        color: #ed4956;
+        color: ${(props) => props.theme.font.red};
         font-weight: 700;
     }
     & > .followingModal-cancel {
@@ -37,8 +37,8 @@ const FollowingModalInner = styled.div`
 
 interface FollowingModalProps {
     onUnfollow: () => void;
-    onMouseEnter: () => void;
-    onMouseLeave: () => void;
+    onModalOn: () => void;
+    onModalOff: () => void;
     username: string;
     avatarUrl: string;
 }
@@ -47,21 +47,22 @@ const MODAL_CIRCLE_SIZE = 90 / 64;
 
 const FollowingModal = ({
     onUnfollow,
-    onMouseEnter,
-    onMouseLeave,
+    onModalOn,
+    onModalOff,
     username,
     avatarUrl,
 }: FollowingModalProps) => {
     const unFollowHandler = () => {
         // 언팔로우
         onUnfollow();
+        onModalOff();
     };
 
     return (
         <ModalCard
             modalType="withBackDrop"
-            onModalOn={onMouseEnter}
-            onModalOff={onMouseLeave}
+            onModalOn={onModalOn}
+            onModalOff={onModalOff}
         >
             <FollowingModalInner>
                 <StoryCircle
@@ -79,7 +80,7 @@ const FollowingModal = ({
                 >
                     팔로우 취소
                 </div>
-                <div className="followingModal-cancel" onClick={onMouseLeave}>
+                <div className="followingModal-cancel" onClick={onModalOff}>
                     취소
                 </div>
             </FollowingModalInner>

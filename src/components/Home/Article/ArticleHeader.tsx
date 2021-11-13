@@ -2,6 +2,8 @@ import StoryCircle from "components/Common/StoryCircle";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import ArticleMenuModal from "../Modals/ArticleMenuModal";
+import FollowingModal from "../Modals/FollowingModal";
 import HoverModal from "../Modals/HoverModal";
 import Username from "../Username";
 
@@ -54,7 +56,11 @@ const StyledArticleHeader = styled.header`
 const HEADER_STORY_CIRCLE = 42 / 64;
 
 const ArticleHeader = ({ article }: ArticleProps) => {
-    const [isModalActivated, setIsModalActivated] = useState(false);
+    const [isHoverModalActivated, setIsHoverModalActivated] = useState(false);
+    const [isDotModalActivated, setIsDotModalActivated] = useState(false);
+    const [isReportModalActivated, setIsReportModalActivated] = useState(false);
+    const [isFollowingModalActivated, setIsFollowingModalActivated] =
+        useState(false);
     const [modalPositionObj, setModalPositionObj] = useState<DOMRect>();
     const [isFollowing, setIsFollowing] = useState(false); // followingModal의 isFollowing과 연결할 것
 
@@ -64,11 +70,11 @@ const ArticleHeader = ({ article }: ArticleProps) => {
             | React.MouseEvent<HTMLDivElement>
     ) => {
         setModalPositionObj(event?.currentTarget.getBoundingClientRect());
-        setIsModalActivated(true);
+        setIsHoverModalActivated(true);
     };
 
     const mouseLeaveHandler = () => {
-        setIsModalActivated(false);
+        setIsHoverModalActivated(false);
     };
 
     const followHandler = () => {
@@ -76,14 +82,42 @@ const ArticleHeader = ({ article }: ArticleProps) => {
         setIsFollowing(true);
     };
 
+    const unfollowHandler = () => {
+        // unfollow하기 전에 modal에서 재차 확인
+        setIsFollowingModalActivated(true);
+    };
+
     return (
         <StyledArticleHeader>
-            {isModalActivated && (
+            {isHoverModalActivated && (
                 <HoverModal
+                    isFollowing={isFollowing}
+                    onFollowChange={(a: boolean) => setIsFollowing(a)}
                     username={article.owner.username}
                     modalPosition={modalPositionObj}
-                    onMouseEnter={() => setIsModalActivated(true)}
-                    onMouseLeave={() => setIsModalActivated(false)}
+                    onMouseEnter={() => setIsHoverModalActivated(true)}
+                    onMouseLeave={() => setIsHoverModalActivated(false)}
+                    onFollowingModalOn={() =>
+                        setIsFollowingModalActivated(true)
+                    }
+                />
+            )}
+            {isFollowing && isFollowingModalActivated && (
+                <FollowingModal
+                    onUnfollow={() => setIsFollowing(false)}
+                    onModalOn={() => setIsFollowingModalActivated(true)}
+                    onModalOff={() => setIsFollowingModalActivated(false)}
+                    username={article.owner.username}
+                    avatarUrl={article.owner.avatarUrl}
+                />
+            )}
+            {isDotModalActivated && (
+                <ArticleMenuModal
+                    isFollowing={isFollowing}
+                    onUnfollow={unfollowHandler}
+                    onModalOn={() => setIsDotModalActivated(true)}
+                    onModalOff={() => setIsDotModalActivated(false)}
+                    onReportModalOn={() => setIsReportModalActivated(true)}
                 />
             )}
             <StoryCircle
@@ -116,7 +150,10 @@ const ArticleHeader = ({ article }: ArticleProps) => {
                     {article.location}
                 </Link>
             </div>
-            <div className="header-dots">
+            <div
+                className="header-dots"
+                onClick={() => setIsDotModalActivated(true)}
+            >
                 <svg
                     aria-label="옵션 더 보기"
                     color="#262626"
