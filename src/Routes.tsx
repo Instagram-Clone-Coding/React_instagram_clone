@@ -1,6 +1,6 @@
 import Home from "pages/Home";
 import Direct from "pages/Direct";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 
 const Routes = () => {
     return (
@@ -9,6 +9,7 @@ const Routes = () => {
                 <Route exact path="/" component={Home} />
                 {/* Direct */}
                 <Route path="/direct" component={Direct} />
+                <Redirect to="/" />
             </Switch>
         </BrowserRouter>
     );

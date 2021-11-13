@@ -4,8 +4,15 @@ import theme from "styles/theme";
 import AsideBody from "components/Direct/Aside/AsideBody";
 import AsideHeader from "components/Direct/Aside/AsideHeader";
 import SectionBody from "components/Direct/Section/SectionBody";
+import { useEffect } from "react";
 
 const Direct = () => {
+    // title 변경해주는 역할
+    // Todo: (1) 이 부분 데이터 받아서 안 읽은 메세지 개수로 처리해줘야 합니다.
+    useEffect(() => {
+        document.title = "(1) 받은 메세지함 · Direct";
+    }, []);
+
     const borderStyle = `1px solid ${theme.color.bd_gray}`;
     return (
         <Layout style={{ backgroundColor: theme.color.bg_gray }}>
