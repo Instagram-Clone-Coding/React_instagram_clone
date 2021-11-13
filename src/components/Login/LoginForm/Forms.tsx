@@ -98,4 +98,5 @@ const FormContainer = styled.div`
 const LoginButton = styled(Button)`
     margin: 8px 40px;
     opacity: 0.3;
+    border: 1px solid transparent;
 `;

@@ -41,7 +41,6 @@ const DownloadStyle = styled.div`
     display: flex;
     flex-direction: column;
     text-align: center;
-    margin: 10px 20px;
     & > p {
         margin: 10px 20px;
     }

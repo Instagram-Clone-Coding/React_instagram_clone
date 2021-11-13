@@ -32,6 +32,8 @@ const FacebookStyle = styled.div`
         & > div {
             display: inline-block;
             margin-right: 8px;
+            position: relative;
+            top: 3px;
         }
 
         & > span {

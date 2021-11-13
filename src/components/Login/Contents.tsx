@@ -17,4 +17,5 @@ const ContentContainer = styled.main`
     padding-bottom: 32px;
     margin: 32px auto 0;
     width: 100%;
+    max-width: 935px;
 `;
