@@ -1,4 +1,6 @@
 import Home from "pages/Home";
+import SignUp from "components/Signup/SignUp";
+import LoginPage from "pages/Login";
 import Direct from "pages/Direct";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 
@@ -9,7 +11,9 @@ const Routes = () => {
                 <Route exact path="/" component={Home} />
                 {/* Direct */}
                 <Route path="/direct" component={Direct} />
-                <Redirect to="/" />
+                {/*  */}
+                <Route exact path="/accounts/signin" component={LoginPage} />
+                <Route exact path="/accounts/emailsignup" component={SignUp} />
             </Switch>
         </BrowserRouter>
     );
