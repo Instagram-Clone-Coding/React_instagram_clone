@@ -5,6 +5,7 @@ import styled from "styled-components";
 import ArticleMenuModal from "../Modals/ArticleMenuModal";
 import FollowingModal from "../Modals/FollowingModal";
 import HoverModal from "../Modals/HoverModal";
+import ReportModal from "../Modals/ReportModal";
 import Username from "../Username";
 
 const StyledArticleHeader = styled.header`
@@ -87,6 +88,11 @@ const ArticleHeader = ({ article }: ArticleProps) => {
         setIsFollowingModalActivated(true);
     };
 
+    const reportModalHandler = () => {
+        setIsDotModalActivated(false);
+        setIsReportModalActivated(true);
+    };
+
     return (
         <StyledArticleHeader>
             {isHoverModalActivated && (
@@ -117,9 +123,10 @@ const ArticleHeader = ({ article }: ArticleProps) => {
                     onUnfollow={unfollowHandler}
                     onModalOn={() => setIsDotModalActivated(true)}
                     onModalOff={() => setIsDotModalActivated(false)}
-                    onReportModalOn={() => setIsReportModalActivated(true)}
+                    onReportModalOn={reportModalHandler}
                 />
             )}
+            {isReportModalActivated && <ReportModal />}
             <StoryCircle
                 type="unread" // 백엔드 소통하여 읽었는지 여부 확인
                 avatarUrl={article.owner.avatarUrl}
