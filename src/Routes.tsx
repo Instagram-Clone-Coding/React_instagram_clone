@@ -5,6 +5,8 @@ import Direct from "pages/Direct";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import Header from "components/common/Header";
 
+import { useAppSelector } from "app/hooks";
+
 const Routes = () => {
     return (
         <BrowserRouter>
@@ -18,17 +20,22 @@ const Routes = () => {
     );
 };
 
-const AuthedContainer = () => (
-    <>
-        <Header />
-        <Route path="*">
-            <Redirect to="/" />
-        </Route>
-        <Route exact path="/" component={Home} />
-        {/* Direct */}
-        <Route path="/direct" component={Direct} />
-        {/*  */}
-    </>
-);
+const AuthedContainer = () => {
+    const userInfo = useAppSelector((state) => state.auth.userInfo);
+    return !userInfo ? (
+        <Redirect to="/accounts/signin" />
+    ) : (
+        <>
+            <Header />
+            <Route path="*">
+                <Redirect to="/" />
+            </Route>
+            <Route exact path="/" component={Home} />
+            {/* Direct */}
+            <Route path="/direct" component={Direct} />
+            {/*  */}
+        </>
+    );
+};
 
 export default Routes;
