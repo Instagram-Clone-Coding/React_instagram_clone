@@ -1,10 +1,31 @@
 import styled, { css } from "styled-components";
 import { imageProps, ImgSprite } from "components/common/Sprite";
-import { Link } from "react-router-dom";
-import React, { useRef } from "react";
+
+import { Link, useHistory } from "react-router-dom";
+import React, { useRef, MouseEvent } from "react";
 import Button from "UI/Button/Button";
 
+import { useAppDispatch } from "app/hooks";
+import { setUserInfo } from "features/auth/authSlice";
+
+const callSignInAPI = (
+    e: MouseEvent<HTMLButtonElement>,
+    dispatch: Function,
+    history: any,
+) => {
+    e.preventDefault();
+    dispatch(
+        setUserInfo({
+            name: "minsoo",
+        }),
+    );
+    history.replace("/");
+};
+
 export function Forms() {
+    const dispatch = useAppDispatch();
+    const history = useHistory();
+
     return (
         <FormContainer>
             <ImgSprite
@@ -19,7 +40,11 @@ export function Forms() {
                         {/** id, password, btn, line, facebook */}
                         <Input innerText={placeholder.id} />
                         <Input innerText={placeholder.password} />
-                        <LoginButton>로그인</LoginButton>
+                        <LoginButton
+                            onClick={(e) => callSignInAPI(e, dispatch, history)}
+                        >
+                            로그인
+                        </LoginButton>
                         <Line />
                         <Facebook />
                     </Div>
