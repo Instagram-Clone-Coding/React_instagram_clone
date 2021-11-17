@@ -59,6 +59,7 @@
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#convention">Convention</a></li>
+        <li><a href="#commit-convention">Commit Convention</a></li>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
       </ul>
@@ -110,37 +111,81 @@ Frontend
 
 -   Conding Convention
 
-    1. Event Handler 네이밍: ~handler
-        ```ts
-        const exampleHandler = (): void => {};
-        ```
-    2. Handler Function Prop 네이밍: on~
-        ```ts
-        return <ExampleComponent onSubmit={exampleHandler} />;
-        ```
-    3. Interface 네이밍: Pascal Case + ~Props
-        ```ts
-        interface ExampleProps {
-            name: string;
-        }
-        ```
-    4. styled-components 구조: 최상위 태그에만 한 번
+1. Event Handler 네이밍: ~handler
+    ```ts
+    const exampleHandler = (): void => {};
+    ```
+2. Handler Function Prop 네이밍: on~
+    ```ts
+    return <ExampleComponent onSubmit={exampleHandler} />;
+    ```
+3. Interface 네이밍: Pascal Case + ~Props
 
-        ```ts
-        const StyledTag = styled.div``;
+    ```ts
+    interface ExampleProps {
+        name: string;
+    }
+    ```
 
-        return (
-            <StyledTag>
-                <div>Not</div>
-                <div>There</div>
-            </StyledTag>
-        );
-        ```
+4. styled-components 구조: 최상위 태그에만 한 번
+
+    ```ts
+    const StyledTag = styled.div``;
+
+    return (
+        <StyledTag>
+            <div>Not</div>
+            <div>There</div>
+        </StyledTag>
+    );
+    ```
+
+5. interface 관리
+
+    최상위 컴포넌트 폴더 내부에 d.ts 파일 생성
+    검색 용이하도록 index.js 파일에 import한 후 export
 
 -   파일(폴더) 네이밍 : Pascal Case(components, pages 제외)
     ```ts
     ExampleFileName;
     ```
+
+### Commit Convention
+
+feat: 새로운 기능에 대한 커밋  
+fix: 버그 수정에 대한 커밋  
+build: 빌드 관련 파일 수정에 대한 커밋  
+etc: 그 외 자잘한 수정에 대한 커밋  
+docs: README.md 수정에 대한 커밋  
+style: 코드 스타일 혹은 포맷 등에 관한 커밋(prettier 등)  
+refactor: 코드 리팩토링에 대한 커밋
+
+### Directory Structure
+
+src  
+│ App.tsx  
+│ Index.tsx  
+│ react-app-env.d.ts  
+│ Routes.tsx  
+├── assets  
+│ ├── images  
+│ └── svgs  
+├── components  
+│ ├── commmon  
+│ ├── Direct  
+│ ├── Home  
+│ ├── Login  
+│ ├── Signup  
+│ └── layout  
+├── pages  
+│ ├── Direct  
+│ ├── Home  
+│ └── Login  
+├── styles  
+│ ├── UI  
+│ ├── globalStyles.ts  
+│ ├── styled.d.ts  
+│ └── theme.ts
 
 ### Prerequisites
 
