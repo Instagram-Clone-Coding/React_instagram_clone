@@ -3,6 +3,7 @@ import ModalCard from "UI/ModalCard";
 import ModalHeader from "./ModalHeader";
 import direct from "../../../assets/Images/direct.png";
 import sprite3 from "../../../assets/Images/sprite3.png";
+import useCopy from "Hooks/useCopy";
 
 const ShareWithModalInner = styled.div`
     .shareWithModal-options {
@@ -87,7 +88,7 @@ interface ShareWithModalProps {
 
 const DUMMY_P_ID = "CWWCI-eINvr"; // 게시물 id
 
-const DUMMY_BASE_URL = "https://www.instagram.com/"; // 원래 root url: window.location.href
+const DUMMY_BASE_URL = "https://www.instagram.com"; // 원래 root url: window.location.href
 
 // 위 두 DUMMY 데이터로 공유 기능을 임시 구현하였습니다.
 // 참고 url: https://developers.facebook.com/docs/plugins/share-button?locale=ko_KR
@@ -97,6 +98,8 @@ const ShareWithModal = ({
     onModalOff,
     username,
 }: ShareWithModalProps) => {
+    const copyHandler = useCopy(DUMMY_BASE_URL + "/p/" + DUMMY_P_ID);
+
     return (
         <ModalCard
             modalType="withBackDrop"
@@ -166,7 +169,7 @@ const ShareWithModal = ({
                         </div>
                         <div>이메일로 공유</div>
                     </a>
-                    <div className="shareWithModal-link">
+                    <div className="shareWithModal-link" onClick={copyHandler}>
                         <div>
                             <div></div>
                         </div>

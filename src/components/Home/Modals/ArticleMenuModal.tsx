@@ -1,3 +1,4 @@
+import useCopy from "Hooks/useCopy";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import ModalCard from "UI/ModalCard";
@@ -36,6 +37,10 @@ interface ArticleMenuModalProps {
     onShareWithModalOn: () => void;
 }
 
+const DUMMY_P_ID = "CWWCI-eINvr"; // 게시물 id
+
+const DUMMY_BASE_URL = "https://www.instagram.com"; // 원래 root url: window.location.href
+
 const ArticleMenuModal = ({
     isFollowing,
     onUnfollow,
@@ -44,6 +49,8 @@ const ArticleMenuModal = ({
     onReportModalOn,
     onShareWithModalOn,
 }: ArticleMenuModalProps) => {
+    const copyHandler = useCopy(DUMMY_BASE_URL + "/p/" + DUMMY_P_ID);
+
     const reportClickHandler = () => {
         onModalOff();
         onReportModalOn();
@@ -75,7 +82,7 @@ const ArticleMenuModal = ({
                     {/* p, tv 등 다양해서 일단 url은 보류 */}
                 </div>
                 <div onClick={onShareWithModalOn}>공유 대상...</div>
-                <div>링크 복사</div>
+                <div onClick={copyHandler}>링크 복사</div>
                 <div>퍼가기</div>
                 <div onClick={onModalOff}>취소</div>
             </ArticleMenuModalInner>
