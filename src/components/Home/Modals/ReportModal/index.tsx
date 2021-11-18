@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import ModalCard from "UI/ModalCard";
+import ModalHeader from "../ModalHeader";
 
 const REPORT_REASONS = [
     "스팸",
@@ -16,50 +17,22 @@ const REPORT_REASONS = [
     "마음에 들지 않습니다",
 ];
 
-const ReportModalInner = styled.div`
-    .reportModal-head {
-        height: 43px;
-        display: flex;
-        align-items: center;
-        /* & > h1 {
-            flex: 1;
-        } */
-        & > div,
-        button {
-            flex: 0 0 48px;
-        }
-    }
-`;
+const ReportModalInner = styled.div``;
 
-const ReportModal = () => {
+interface ReportModalProps {
+    onModalOn: () => void;
+    onModalOff: () => void;
+}
+
+const ReportModal = ({ onModalOn, onModalOff }: ReportModalProps) => {
     return (
         <ModalCard
             modalType="withBackDrop"
-            onModalOn={() => {}}
-            onModalOff={() => {}}
+            onModalOn={onModalOn}
+            onModalOff={onModalOff}
         >
             <ReportModalInner>
-                <div className="reportModal-head">
-                    <div></div>
-                    <h1>신고</h1>
-                    <button>
-                        <svg
-                            aria-label="닫기"
-                            color="#262626"
-                            fill="#262626"
-                            height="24"
-                            role="img"
-                            viewBox="0 0 48 48"
-                            width="24"
-                        >
-                            <path
-                                clipRule="evenodd"
-                                d="M41.1 9.1l-15 15L41 39c.6.6.6 1.5 0 2.1s-1.5.6-2.1 0L24 26.1l-14.9 15c-.6.6-1.5.6-2.1 0-.6-.6-.6-1.5 0-2.1l14.9-15-15-15c-.6-.6-.6-1.5 0-2.1s1.5-.6 2.1 0l15 15 15-15c.6-.6 1.5-.6 2.1 0 .6.6.6 1.6 0 2.2z"
-                                fillRule="evenodd"
-                            ></path>
-                        </svg>
-                    </button>
-                </div>
+                <ModalHeader title="신고" onModalOff={onModalOff} />
                 <h2>이 게시물을 신고하는 이유</h2>
                 {REPORT_REASONS.map((reason, index) => (
                     <button key={index}>
