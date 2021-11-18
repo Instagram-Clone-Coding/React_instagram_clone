@@ -5,7 +5,7 @@ import styled from "styled-components";
 import Card from "UI/Card/Card";
 import ModalCard from "UI/ModalCard";
 import Username from "../Username";
-import sprite2 from "../../../Imgs/sprite2.png";
+import sprite2 from "../../../assets/Images/sprite2.png";
 import useNumberSummary from "Hooks/useNumberSummary";
 import Button from "UI/Button/Button";
 

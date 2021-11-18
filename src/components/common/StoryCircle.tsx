@@ -1,4 +1,4 @@
-import sprite2 from "../../Imgs/sprite2.png";
+import sprite2 from "../../assets/Images/sprite2.png";
 import styled, { DefaultTheme } from "styled-components";
 
 interface StyledStoryCircleProps {

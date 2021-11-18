@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import sprite2 from "../../../Imgs/sprite2.png";
+import sprite2 from "../../../assets/Images/sprite2.png";
 import styled from "styled-components";
 
 const StyledImgSlider = styled.div<SliderProps>`
