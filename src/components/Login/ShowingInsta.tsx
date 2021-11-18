@@ -5,32 +5,16 @@ import Edit from "images/Login/slider/ImageEdit.jpg";
 import takephoto from "images/Login/slider/takePhoto.jpg";
 import talk from "images/Login/slider/talk.jpg";
 import InstagramImg from "images/Login/slider/instagram.jpg";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 
 export function ShowingInstagram() {
-    const ref = useRef<HTMLDivElement>(null);
-    let index = 1;
+    const [index, setIndex] = useState(-1);
+    const imgLen = SlideImg.length;
 
     useEffect(() => {
-        let ImgNumber = ref.current?.children;
         const TimerId = setInterval(() => {
-            // 이전배경 지우기
-            const backGround = document.querySelector(".background");
-            backGround?.classList.remove("background");
-
-            // 현재 사진 -> 배경으로
-            const prev = document.querySelector(".visible");
-            prev?.classList.remove("visible");
-            prev?.classList.add("background");
-
-            // 다음 사진 보이게
-            const point = ImgNumber?.item(index);
-            point?.classList.add("visible");
-            index++;
-
-            if (index === ImgNumber?.length) {
-                index = 0;
-            }
+            const updateIndex = index + 1 === imgLen ? 0 : index + 1;
+            setIndex(updateIndex);
         }, 5000);
 
         return function clean() {
@@ -40,12 +24,18 @@ export function ShowingInstagram() {
 
     return (
         <Background>
-            <Slider ref={ref}>
+            <Slider>
                 {SlideImg.map((img, order) => {
-                    return order === 0 ? (
-                        <Image src={img} className="visible" />
-                    ) : (
-                        <Image src={img} />
+                    const isBackground = order === index ? true : false;
+                    const isShow =
+                        order === (index + 1) % imgLen ? true : false;
+                    return (
+                        <Image
+                            key={order}
+                            src={img}
+                            background={isBackground}
+                            show={isShow}
+                        />
                     );
                 })}
             </Slider>
@@ -67,26 +57,20 @@ const Background = styled.div`
     }
 `;
 
+interface imgStateProps {
+    show: Boolean;
+    background: Boolean;
+}
+
 const Slider = styled.div`
     margin: 99px 0 0 151px;
-
-    .background {
-        opacity: 1;
-        visibility: visible;
-        position: absolute;
-        z-index: 1;
-    }
-
-    .visible {
-        opacity: 1;
-        visibility: visible;
-        transition: opacity 1.5s ease-in;
-        z-index: 2;
-    }
 `;
 
-const Image = styled.img`
-    opacity: 0;
-    visibility: hidden;
+const Image = styled.img<imgStateProps>`
     position: absolute;
+    opacity: ${(props) => (props.show || props.background ? 1 : 0)};
+    z-index: ${(props) => (props.show ? 2 : 1)};
+    visibility: ${(props) =>
+        props.show || props.background ? `visible` : `hidden`};
+    ${(props) => props.show && `transition: opacity 1.5s ease-in;`}
 `;
