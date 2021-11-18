@@ -6,6 +6,7 @@ import ArticleMenuModal from "../Modals/ArticleMenuModal";
 import FollowingModal from "../Modals/FollowingModal";
 import HoverModal from "../Modals/HoverModal";
 import ReportModal from "../Modals/ReportModal";
+import ShareWithModal from "../Modals/SharerWithModal";
 import Username from "../Username";
 
 const StyledArticleHeader = styled.header`
@@ -62,6 +63,9 @@ const ArticleHeader = ({ article }: ArticleProps) => {
     const [isReportModalActivated, setIsReportModalActivated] = useState(false);
     const [isFollowingModalActivated, setIsFollowingModalActivated] =
         useState(false);
+    const [isShareWithModalActivated, setIsShareWithModalActivated] =
+        useState(false);
+
     const [modalPositionObj, setModalPositionObj] = useState<DOMRect>();
     const [isFollowing, setIsFollowing] = useState(false); // followingModal의 isFollowing과 연결할 것
 
@@ -124,9 +128,24 @@ const ArticleHeader = ({ article }: ArticleProps) => {
                     onModalOn={() => setIsDotModalActivated(true)}
                     onModalOff={() => setIsDotModalActivated(false)}
                     onReportModalOn={reportModalHandler}
+                    onShareWithModalOn={() =>
+                        setIsShareWithModalActivated(true)
+                    }
                 />
             )}
-            {isReportModalActivated && <ReportModal />}
+            {isReportModalActivated && (
+                <ReportModal
+                    onModalOn={() => setIsReportModalActivated(true)}
+                    onModalOff={() => setIsReportModalActivated(false)}
+                />
+            )}
+            {isShareWithModalActivated && (
+                <ShareWithModal
+                    onModalOn={() => setIsShareWithModalActivated(true)}
+                    onModalOff={() => setIsShareWithModalActivated(false)}
+                    username={article.owner.username}
+                />
+            )}
             <StoryCircle
                 type="unread" // 백엔드 소통하여 읽었는지 여부 확인
                 avatarUrl={article.owner.avatarUrl}

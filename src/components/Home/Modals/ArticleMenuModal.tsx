@@ -33,6 +33,7 @@ interface ArticleMenuModalProps {
     onModalOn: () => void;
     onModalOff: () => void;
     onReportModalOn: () => void;
+    onShareWithModalOn: () => void;
 }
 
 const ArticleMenuModal = ({
@@ -41,6 +42,7 @@ const ArticleMenuModal = ({
     onModalOn,
     onModalOff,
     onReportModalOn,
+    onShareWithModalOn,
 }: ArticleMenuModalProps) => {
     const reportClickHandler = () => {
         onModalOff();
@@ -72,7 +74,7 @@ const ArticleMenuModal = ({
                     <Link to={`/`}>게시물로 이동</Link>
                     {/* p, tv 등 다양해서 일단 url은 보류 */}
                 </div>
-                <div>공유 대상...</div>
+                <div onClick={onShareWithModalOn}>공유 대상...</div>
                 <div>링크 복사</div>
                 <div>퍼가기</div>
                 <div onClick={onModalOff}>취소</div>
