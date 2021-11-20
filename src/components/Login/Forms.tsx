@@ -6,7 +6,7 @@ import React, { useRef, MouseEvent } from "react";
 import Button from "UI/Button/Button";
 
 import { useAppDispatch } from "app/hooks";
-import { setUserInfo } from "features/auth/authSlice";
+import { setUserInfo } from "features/Auth/authSlice";
 
 const callSignInAPI = (
     e: MouseEvent<HTMLButtonElement>,
