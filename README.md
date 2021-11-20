@@ -149,6 +149,23 @@ Frontend
     ExampleFileName;
     ```
 
+6.  컴포넌트 폴더 구조 관리
+
+    ```txt
+    /SomeComponent
+    │ index.js
+    │ SomeComponent.tsx
+    ├── /SomeChildrenComponent
+    │ ├── index.js
+    │ └── SomeChildrenComponent.tsx
+    /SomeComponent2
+    │ index.js
+    │ SomeComponent2.tsx
+    ```
+
+    `index.tsx`를 자주 사용하게 되면 파일 이름으로 검색해 작업에 용이하지 못하므로
+    `컴포넌트이름.tsx` 사용을 지향하고 `index.js` 로 `import`를 쉽게 할 수 있게한다.
+
 ### Commit Convention
 
 feat: 새로운 기능에 대한 커밋  
@@ -161,29 +178,31 @@ refactor: 코드 리팩토링에 대한 커밋
 
 ### Directory Structure
 
-src  
-│ App.tsx  
-│ Index.tsx  
-│ react-app-env.d.ts  
-│ Routes.tsx  
-├── assets  
-│ ├── Images  
-│ └── Svgs  
-├── components  
-│ ├── Commmon  
-│ ├── Direct  
-│ ├── Home  
-│ ├── Login  
-│ └── Signup  
-├── pages  
-│ ├── Direct  
-│ ├── Home  
-│ └── Login  
-├── styles  
-│ ├── UI  
-│ ├── globalStyles.ts  
-│ ├── styled.d.ts  
+```txt
+/src
+│ App.tsx
+│ Index.tsx
+│ react-app-env.d.ts
+│ Routes.tsx
+├── /assets
+│ ├── Images
+│ └── Svgs
+├── /components
+│ ├── /Commmon
+│ ├── /Direct
+│ ├── /Home
+│ ├── /Login
+│ └── /Signup
+├── /pages
+│ ├── /Direct
+│ ├── /Home
+│ └── /Login
+├── /styles
+│ ├── /UI
+│ ├── globalStyles.ts
+│ ├── styled.d.ts
 │ └── theme.ts
+```
 
 ### Prerequisites
 
