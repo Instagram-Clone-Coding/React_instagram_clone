@@ -28,6 +28,7 @@ const FacebookStyle = styled.div`
 
     & > button {
         width: 100%;
+        padding: 0;
 
         & > div {
             display: inline-block;

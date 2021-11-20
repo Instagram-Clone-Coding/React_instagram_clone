@@ -6,8 +6,8 @@ import { footerContentProps } from "./types";
 function FooterRow(props: footerContentProps) {
     return (
         <FlexRow>
-            {props.content.map((data) => (
-                <FooterTextPiece text={data.text} url={data.url} />
+            {props.content.map((data, index) => (
+                <FooterTextPiece text={data.text} url={data.url} key={index} />
             ))}
         </FlexRow>
     );

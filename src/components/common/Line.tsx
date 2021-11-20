@@ -13,7 +13,6 @@ export default function Line() {
 const LineStyle = styled.div`
     margin: 10px 40px 18px;
     display: flex;
-    align-items: center;
 
     & > span {
         color: #8e8e8e;
@@ -29,5 +28,6 @@ const LineStyle = styled.div`
         flex-grow: 1;
         flex-shrink: 1;
         top: 0.45em;
+        position: relative;
     }
 `;
