@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { imageProps, ImgSprite } from "components/common/Sprite";
+import { imageProps, ImgSprite } from "components/Common/Sprite";
 
 import { Link, useHistory } from "react-router-dom";
 import React, { useRef, MouseEvent } from "react";

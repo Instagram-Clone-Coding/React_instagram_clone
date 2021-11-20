@@ -1,4 +1,4 @@
-import PopHeart from "components/common/PopHeart";
+import PopHeart from "components/Common/PopHeart";
 import { useState } from "react";
 import styled from "styled-components";
 

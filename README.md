@@ -168,15 +168,14 @@ src
 │ react-app-env.d.ts  
 │ Routes.tsx  
 ├── assets  
-│ ├── images  
-│ └── svgs  
+│ ├── Images  
+│ └── Svgs  
 ├── components  
-│ ├── commmon  
+│ ├── Commmon  
 │ ├── Direct  
 │ ├── Home  
 │ ├── Login  
-│ ├── Signup  
-│ └── layout  
+│ └── Signup  
 ├── pages  
 │ ├── Direct  
 │ ├── Home  

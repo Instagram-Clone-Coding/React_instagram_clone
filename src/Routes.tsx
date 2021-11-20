@@ -3,7 +3,7 @@ import SignUp from "components/Signup/SignUp";
 import LoginPage from "pages/Login";
 import Direct from "pages/Direct";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
-import Header from "components/common/Header";
+import Header from "components/Common/Header";
 
 import { useAppSelector } from "app/hooks";
 
