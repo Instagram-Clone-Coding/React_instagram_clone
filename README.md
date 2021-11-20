@@ -143,7 +143,6 @@ Frontend
 5. interface 관리
 
     최상위 컴포넌트 폴더 내부에 d.ts 파일 생성
-    검색 용이하도록 index.js 파일에 import한 후 export
 
 -   파일(폴더) 네이밍 : Pascal Case(components, pages 제외)
     ```ts
