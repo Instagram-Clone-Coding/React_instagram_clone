@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import Forms from "./Forms";
-import Suggest from "../../common/Suggest";
-import ContentBox from "components/common/ContentBox";
-import Appdownload from "components/common/AppDownload";
+import Suggest from "../../Common/Suggest";
+import ContentBox from "components/Common/ContentBox";
+import Appdownload from "components/Common/AppDownload";
 import { NewCardProps } from "../types";
 
 export function LoginForm() {

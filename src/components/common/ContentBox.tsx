@@ -1,6 +1,6 @@
 import { NewCardProps } from "components/Login/types";
 import styled from "styled-components";
-import Card from "UI/Card/Card";
+import Card from "styles/UI/Card/Card";
 
 const ContentBox = styled(Card)<NewCardProps>`
     margin: ${(props) => props.margin};

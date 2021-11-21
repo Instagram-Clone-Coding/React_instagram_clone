@@ -1,9 +1,9 @@
 import Home from "pages/Home";
 import SignUp from "components/Signup/SignUp";
-import LoginPage from "pages/Login";
+import Login from "pages/Login";
 import Direct from "pages/Direct";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
-import Header from "components/common/Header";
+import Header from "components/Common/Header";
 
 import { useAppSelector } from "app/hooks";
 
@@ -11,7 +11,7 @@ const Routes = () => {
     return (
         <BrowserRouter>
             <Switch>
-                <Route path="/accounts/signin" component={LoginPage} />
+                <Route path="/accounts/signin" component={Login} />
                 <Route path="/accounts/emailsignup" component={SignUp} />
 
                 <Route component={AuthedContainer} />

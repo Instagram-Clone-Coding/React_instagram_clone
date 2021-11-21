@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Card from "UI/Card/Card";
+import Card from "styles/UI/Card/Card";
 import { useEffect, useState } from "react";
 import ArticleMainIcons from "./ArticleMainIcons";
 import ArticleHeader from "./ArticleHeader";
@@ -47,7 +47,7 @@ const Article = ({ article }: any) => {
         // toggle likes
         // 내 팔로워 중 한 명이 좋아요 눌렀는지 확인(여기서 일단 내 팔로워가 like2라 가정)
         const getMyFollowerLiked = article.likes.filter(
-            (username: string) => username === "like2"
+            (username: string) => username === "like2",
         );
         setMyFollowersLiked(getMyFollowerLiked);
         setIsMyFollowerLiked(getMyFollowerLiked !== []);

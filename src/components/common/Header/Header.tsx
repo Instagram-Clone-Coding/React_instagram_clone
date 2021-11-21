@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import navLogo from "assets/images/nav-logo.png";
+import navLogo from "assets/Images/nav-logo.png";
 import SearchBar from "./SearchBar";
 import NavItems from "./NavItems";
 

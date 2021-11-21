@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import apple from "assets/images/appStore.png";
-import android from "assets/images/googlePlay.png";
+import apple from "assets/Images/appStore.png";
+import android from "assets/Images/googlePlay.png";
 
 export default function Appdownload() {
     return (

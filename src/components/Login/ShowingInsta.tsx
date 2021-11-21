@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import PhoneImg from "assets/images/home-phone.png";
-import home from "assets/images/slider/home.jpg";
-import Edit from "assets/images/slider/ImageEdit.jpg";
-import takephoto from "assets/images/slider/takePhoto.jpg";
-import talk from "assets/images/slider/talk.jpg";
-import InstagramImg from "assets/images/slider/instagram.jpg";
+import PhoneImg from "assets/Images/home-phone.png";
+import home from "assets/Images/slider/home.jpg";
+import Edit from "assets/Images/slider/ImageEdit.jpg";
+import takephoto from "assets/Images/slider/takePhoto.jpg";
+import talk from "assets/Images/slider/talk.jpg";
+import InstagramImg from "assets/Images/slider/instagram.jpg";
 import { useEffect, useState } from "react";
 
 /**

@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { ReactComponent as Home } from "assets/svgs/home.svg";
-import { ReactComponent as Direct } from "assets/svgs/direct.svg";
-import { ReactComponent as NewArticle } from "assets/svgs/new-article.svg";
-import { ReactComponent as Map } from "assets/svgs/map.svg";
-import { ReactComponent as Heart } from "assets/svgs/heart.svg";
+import { ReactComponent as Home } from "assets/Svgs/home.svg";
+import { ReactComponent as Direct } from "assets/Svgs/direct.svg";
+import { ReactComponent as NewArticle } from "assets/Svgs/new-article.svg";
+import { ReactComponent as Map } from "assets/Svgs/map.svg";
+import { ReactComponent as Heart } from "assets/Svgs/heart.svg";
 
 import { Link } from "react-router-dom";
 

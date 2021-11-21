@@ -1,11 +1,11 @@
 import styled, { css } from "styled-components";
-import ImgSprite from "components/common/Sprite";
+import ImgSprite from "components/Common/Sprite";
 import { Link } from "react-router-dom";
-import Button from "UI/Button/Button";
-import Line from "components/common/Line";
+import Button from "styles/UI/Button/Button";
+import Line from "components/Common/Line";
 import Facebook from "./FacebookLogin";
 import { imageProps } from "../types";
-import Input from "components/common/Input";
+import Input from "components/Common/Input";
 import { useState } from "react";
 
 export default function Forms() {

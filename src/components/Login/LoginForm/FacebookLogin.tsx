@@ -1,4 +1,4 @@
-import ImgSprite from "components/common/Sprite";
+import ImgSprite from "components/Common/Sprite";
 import styled from "styled-components";
 import { imageProps } from "../types";
 
