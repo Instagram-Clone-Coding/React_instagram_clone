@@ -1,18 +1,29 @@
-import { textProps } from "components/Login/types";
-import styled from "styled-components";
-import { useState } from "react";
+import { LoginInputProps } from "components/Login/types";
+import styled, { css } from "styled-components";
+import { useEffect, useState, useCallback } from "react";
 
-export default function Input({ innerText }: textProps) {
-    const textType = innerText === "비밀번호" ? "password" : "text";
-    const [value, setVaule] = useState("");
+export default function Input(props: LoginInputProps) {
+    const { innerText, inputName, setUserData } = props;
+
+    const [textType, setTextType] = useState("text");
     const [animation, setAnimation] = useState(false);
+    const [userAnswer, setAnswer] = useState("");
 
-    // input에 값이 있을 때, 설명 작게 조절
-    const handleText = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const changed = event.target.value;
-        setVaule(changed);
-        setAnimation(changed.length ? true : false);
-    };
+    const handleText = useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            const { name, value } = event.target;
+            const updated = { [name]: value };
+            setUserData(updated);
+            setAnswer(value);
+            setAnimation(value.length ? true : false);
+        },
+        [setUserData],
+    );
+
+    useEffect(() => {
+        const typeCheck = inputName === "id" ? "text" : "passsword";
+        setTextType(typeCheck);
+    }, []);
 
     return (
         <Wrapper>
@@ -22,7 +33,8 @@ export default function Input({ innerText }: textProps) {
                     <WritingForm
                         onChange={handleText}
                         type={textType}
-                        value={value}
+                        value={userAnswer}
+                        name={inputName}
                     />
                 </Label>
                 <State></State>
@@ -55,14 +67,16 @@ const Label = styled.label<{ animation: Boolean }>`
     position: relative;
     cursor: text;
 
-    & > span {
-        ${(props) =>
-            props.animation && `transform: scale(0.83333) translateY(-10px)`}
-    }
-
-    & > input {
-        ${(props) => props.animation && `padding: 14px 0 2px 8px;`}
-    }
+    ${(props) =>
+        props.animation &&
+        css`
+            & > span {
+                transform: scale(0.83333) translateY(-10px);
+            }
+            & > input {
+                padding: 14px 0 2px 8px;
+            }
+        `}
 `;
 
 const Span = styled.span`
@@ -74,6 +88,7 @@ const Span = styled.span`
     position: absolute;
     right: 0;
     transform-origin: left;
+    user-select: none;
     transition: transform ease-out 0.1s;
 `;
 

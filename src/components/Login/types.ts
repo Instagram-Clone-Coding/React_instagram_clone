@@ -1,3 +1,5 @@
+import { Interface } from "readline";
+
 // image
 export interface imageProps {
     width: number;
@@ -6,8 +8,10 @@ export interface imageProps {
 }
 
 // text
-export interface textProps {
+export interface LoginInputProps {
     innerText: string;
+    inputName: string;
+    setUserData: Function;
 }
 
 export interface footerTextProps {

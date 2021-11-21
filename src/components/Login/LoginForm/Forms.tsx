@@ -6,6 +6,7 @@ import Line from "components/common/Line";
 import Facebook from "./FacebookLogin";
 import { imageProps } from "../types";
 import Input from "components/common/Input";
+import { useState } from "react";
 
 export default function Forms() {
     return (
@@ -33,13 +34,38 @@ export default function Forms() {
 }
 
 const LoginFormAndButton = () => {
+    const [userData, setUserData] = useState({
+        id: "",
+        password: "",
+    });
+
+    const changeUserData = (changed: { id?: string; password?: string }) => {
+        setUserData({ ...userData, ...changed });
+    };
+
     return (
         <>
-            <Input innerText={placeholder.id} />
-            <Input innerText={placeholder.password} />
-            <LoginButton>로그인</LoginButton>
+            <Input
+                innerText={placeholder.id}
+                inputName="id"
+                setUserData={changeUserData}
+            />
+            <Input
+                innerText={placeholder.password}
+                inputName="password"
+                setUserData={changeUserData}
+            />
+            <LoginButton
+                type="submit"
+                disabled={
+                    userData.id.length > 0 && userData.password.length > 5
+                        ? false
+                        : true
+                }
+            >
+                로그인
+            </LoginButton>
         </>
-        // 리덕스 필요 **
     );
 };
 
@@ -97,6 +123,10 @@ const FormContainer = styled.div`
 
 const LoginButton = styled(Button)`
     margin: 8px 40px;
-    opacity: 0.3;
+    opacity: 1;
     border: 1px solid transparent;
+    &:disabled {
+        opacity: 0.3;
+        pointer-events: none;
+    }
 `;
