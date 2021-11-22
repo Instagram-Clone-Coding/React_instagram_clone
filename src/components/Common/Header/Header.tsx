@@ -36,23 +36,30 @@ const LogoWrapper = styled.div`
     margin-top: 7px;
 `;
 
+const FakeHeader = styled.div`
+    height: 54px;
+`;
+
 const Header = () => {
     return (
-        <HeaderContainer>
-            <HeaderContentsWrapper>
-                <LogoWrapper>
-                    <img
-                        src={navLogo}
-                        alt="상단바 인스타 로고"
-                        srcSet={navLogo + " 2x"}
-                    />
-                </LogoWrapper>
-                {/*  */}
-                <SearchBar />
-                {/*  */}
-                <NavItems />
-            </HeaderContentsWrapper>
-        </HeaderContainer>
+        <>
+            <HeaderContainer>
+                <HeaderContentsWrapper>
+                    <LogoWrapper>
+                        <img
+                            src={navLogo}
+                            alt="상단바 인스타 로고"
+                            srcSet={navLogo + " 2x"}
+                        />
+                    </LogoWrapper>
+                    {/*  */}
+                    <SearchBar />
+                    {/*  */}
+                    <NavItems />
+                </HeaderContentsWrapper>
+            </HeaderContainer>
+            <FakeHeader />
+        </>
     );
 };
 
