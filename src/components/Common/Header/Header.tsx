@@ -2,6 +2,7 @@ import styled from "styled-components";
 import navLogo from "assets/Images/nav-logo.png";
 import SearchBar from "./SearchBar";
 import NavItems from "./NavItems";
+import { NavLink } from "react-router-dom";
 
 const HeaderContainer = styled.nav`
     display: flex;
@@ -28,7 +29,7 @@ const HeaderContentsWrapper = styled.div`
     max-width: 975px;
 `;
 
-const LogoWrapper = styled.div`
+const LogoWrapper = styled(NavLink)`
     display: inline-flex;
     align-items: center;
     flex: 1 9999 0%;
@@ -45,7 +46,7 @@ const Header = () => {
         <>
             <HeaderContainer>
                 <HeaderContentsWrapper>
-                    <LogoWrapper>
+                    <LogoWrapper to="/">
                         <img
                             src={navLogo}
                             alt="상단바 인스타 로고"
