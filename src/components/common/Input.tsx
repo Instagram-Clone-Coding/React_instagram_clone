@@ -1,6 +1,6 @@
 import { LoginInputProps } from "components/Login/types";
 import styled, { css } from "styled-components";
-import { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 export default function Input(props: LoginInputProps) {
     const { innerText, inputName, setUserData } = props;
@@ -8,22 +8,40 @@ export default function Input(props: LoginInputProps) {
     const [textType, setTextType] = useState("text");
     const [animation, setAnimation] = useState(false);
     const [userAnswer, setAnswer] = useState("");
+    const [isShowPassword, setShowPassword] = useState(false);
+    const [passwordMessage, setPasswordMessage] = useState("");
+
+    useEffect(() => {
+        const typeCheck = inputName === "id" ? "text" : "password";
+        setTextType(typeCheck);
+        setPasswordMessage(message.show);
+    }, []);
 
     const handleText = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => {
             const { name, value } = event.target;
             const updated = { [name]: value };
+            const visible = value.length ? true : false;
             setUserData(updated);
             setAnswer(value);
-            setAnimation(value.length ? true : false);
+            setAnimation(visible);
+            setShowPassword(inputName === "password" && visible);
         },
         [setUserData],
     );
 
-    useEffect(() => {
-        const typeCheck = inputName === "id" ? "text" : "password";
-        setTextType(typeCheck);
-    }, []);
+    const handlePasswordBtn = useCallback(
+        (event: React.MouseEvent<HTMLButtonElement>) => {
+            event.preventDefault();
+            if (textType === "password") {
+                setPasswordMessage(message.hide);
+                return setTextType("text");
+            }
+            setPasswordMessage(message.show);
+            setTextType("password");
+        },
+        [textType],
+    );
 
     return (
         <Wrapper>
@@ -37,11 +55,23 @@ export default function Input(props: LoginInputProps) {
                         name={inputName}
                     />
                 </Label>
-                <State></State>
+                <State>
+                    {isShowPassword && (
+                        <ShowPassword type="button" onClick={handlePasswordBtn}>
+                            {passwordMessage}
+                        </ShowPassword>
+                    )}
+                </State>
             </InputContent>
         </Wrapper>
     );
 }
+
+// props
+const message = {
+    show: "비밀번호 표시",
+    hide: "숨기기",
+};
 
 // style
 const Wrapper = styled.div`
@@ -56,6 +86,7 @@ const InputContent = styled.div`
     border: 1px solid ${(props) => props.theme.color.bd_gray};
     background-color: ${(props) => props.theme.color.bg_gray};
     border-radius: 3px;
+    align-items: center;
 `;
 
 const Label = styled.label<{ animation: Boolean }>`
@@ -108,4 +139,8 @@ const WritingForm = styled.input`
 const State = styled.div`
     height: 100%;
     padding-right: 8px;
+`;
+
+const ShowPassword = styled.button`
+    user-select: none;
 `;
