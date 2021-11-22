@@ -18,11 +18,11 @@ const GlobalStlyes = createGlobalStyle`
     }
     
     body,input,textarea {
-        color: #262626;
+        color:${(props) => props.theme.font.default_black};
         background-color: ${(props) => props.theme.color.bg_gray};
     }
     a {
-        color: #262626;
+        color:${(props) => props.theme.font.default_black};
     }
 
     input {
