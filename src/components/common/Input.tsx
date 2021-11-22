@@ -21,7 +21,7 @@ export default function Input(props: LoginInputProps) {
     );
 
     useEffect(() => {
-        const typeCheck = inputName === "id" ? "text" : "passsword";
+        const typeCheck = inputName === "id" ? "text" : "password";
         setTextType(typeCheck);
     }, []);
 
