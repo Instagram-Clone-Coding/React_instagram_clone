@@ -40,7 +40,6 @@ const Layout = styled.div`
 
     height: calc(100vh - 54px);
     padding: 20px;
-    margin-top: 54px;
 
     @media (max-width: 935px) {
         padding: 0;
