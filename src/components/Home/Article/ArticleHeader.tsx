@@ -8,6 +8,7 @@ import FollowingModal from "../Modals/FollowingModal";
 import HoverModal from "../Modals/HoverModal";
 import ReportModal from "../Modals/ReportModal";
 import ShareWithModal from "../Modals/SharerWithModal";
+import { ReactComponent as ThreeDots } from "../../../assets/Svgs/threeDots.svg";
 
 const StyledArticleHeader = styled.header`
     height: 60px;
@@ -180,19 +181,7 @@ const ArticleHeader = ({ article }: ArticleProps) => {
                 className="header-dots"
                 onClick={() => setIsDotModalActivated(true)}
             >
-                <svg
-                    aria-label="옵션 더 보기"
-                    color="#262626"
-                    fill="#262626"
-                    height="24"
-                    role="img"
-                    viewBox="0 0 24 24"
-                    width="24"
-                >
-                    <circle cx="12" cy="12" r="1.5"></circle>
-                    <circle cx="6.5" cy="12" r="1.5"></circle>
-                    <circle cx="17.5" cy="12" r="1.5"></circle>
-                </svg>
+                <ThreeDots />
             </div>
         </StyledArticleHeader>
     );
