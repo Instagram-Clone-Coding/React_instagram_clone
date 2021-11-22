@@ -1,4 +1,5 @@
 import StoryCircle from "components/Common/StoryCircle";
+import Username from "components/Common/Username";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -7,7 +8,6 @@ import FollowingModal from "../Modals/FollowingModal";
 import HoverModal from "../Modals/HoverModal";
 import ReportModal from "../Modals/ReportModal";
 import ShareWithModal from "../Modals/SharerWithModal";
-import Username from "../Username";
 
 const StyledArticleHeader = styled.header`
     height: 60px;

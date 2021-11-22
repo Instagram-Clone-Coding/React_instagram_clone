@@ -2,7 +2,7 @@ import StoryCircle from "components/Common/StoryCircle";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import Username from "./Username";
+import Username from "../Common/Username";
 
 interface RightMarginProp {
     rightMargin: number;

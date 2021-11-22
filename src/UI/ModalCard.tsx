@@ -1,7 +1,7 @@
 import React, { useMemo, useRef } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
-import Card from "UI/Card/Card";
+import Card from "UI/Card";
 import { CardProps } from "../UI/Card/Card";
 
 interface PositionedModal extends CardProps {

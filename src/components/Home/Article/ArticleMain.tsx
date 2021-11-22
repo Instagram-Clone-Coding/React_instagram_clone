@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import FollowingModal from "../Modals/FollowingModal";
 import HoverModal from "../Modals/HoverModal";
-import Username from "../Username";
+import Username from "../../Common/Username";
 
 const StyledMain = styled.div`
     padding: 0 16px;

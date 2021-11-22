@@ -2,12 +2,12 @@ import StoryCircle from "components/Common/StoryCircle";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import Card from "UI/Card/Card";
+import Card from "UI/Card";
 import ModalCard from "UI/ModalCard";
-import Username from "../Username";
+import Username from "../../Common/Username";
 import sprite2 from "../../../assets/Images/sprite2.png";
 import useNumberSummary from "Hooks/useNumberSummary";
-import Button from "UI/Button/Button";
+import Button from "UI/Button";
 
 const StyledHoverModalInner = styled.div`
     width: 100%;
