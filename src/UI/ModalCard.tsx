@@ -36,6 +36,7 @@ const StyledBackDrop = styled.div`
     background-color: rgba(0, 0, 0, 0.65); // 부모만 opacity 적용하는 법
     & > div {
         width: 400px;
+        margin: 20px;
         @keyframes popModal {
             0% {
                 opacity: 0;
@@ -102,7 +103,7 @@ const ModalCard = ({
         ) : (
             <StyledBackDrop
                 onMouseEnter={onModalOn}
-                onMouseLeave={onModalOff}
+                // onMouseLeave={onModalOff}
                 onClick={onModalOff}
             >
                 <Card onClick={(event) => event.stopPropagation()} radius={12}>

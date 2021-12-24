@@ -2,6 +2,7 @@ import styled from "styled-components";
 import ModalCard from "UI/ModalCard";
 import ModalHeader from "../ModalHeader";
 import { ReactComponent as V } from "../../../../assets/Svgs/v.svg";
+import Loading from "components/Common/Loading";
 
 const REPORT_REASONS = [
     "스팸",
@@ -32,6 +33,7 @@ const ReportModalInner = styled.div`
     }
     & > button {
         width: 100%;
+        height: 50px;
         display: flex;
         align-items: center;
         padding: 16px;
@@ -43,6 +45,12 @@ const ReportModalInner = styled.div`
         & > div {
             transform: rotate(90deg);
         }
+    }
+    & > .reportModal__loading {
+        min-height: 122px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 `;
 
@@ -60,156 +68,23 @@ const ReportModal = ({ onModalOn, onModalOff }: ReportModalProps) => {
         >
             <ReportModalInner>
                 <ModalHeader title="신고" onModalOff={onModalOff} />
-                <h4>이 게시물을 신고하는 이유</h4>
-                {REPORT_REASONS.map((reason, index) => (
-                    <button key={index}>
-                        <span>{reason}</span>
-                        <div>
-                            <V />
-                        </div>
-                    </button>
-                ))}
-                <div className="loading">
-                    <svg
-                        aria-label="읽어들이는 중..."
-                        viewBox="0 0 100 100"
-                        // width="17"
-                        // height="17"
-                    >
-                        <rect
-                            fill="#555555"
-                            height="6"
-                            opacity="0"
-                            rx="3"
-                            ry="3"
-                            transform="rotate(-90 50 50)"
-                            width="25"
-                            x="72"
-                            y="47"
-                        ></rect>
-                        <rect
-                            fill="#555555"
-                            height="6"
-                            opacity="0.08333333333333333"
-                            rx="3"
-                            ry="3"
-                            transform="rotate(-60 50 50)"
-                            width="25"
-                            x="72"
-                            y="47"
-                        ></rect>
-                        <rect
-                            fill="#555555"
-                            height="6"
-                            opacity="0.16666666666666666"
-                            rx="3"
-                            ry="3"
-                            transform="rotate(-30 50 50)"
-                            width="25"
-                            x="72"
-                            y="47"
-                        ></rect>
-                        <rect
-                            fill="#555555"
-                            height="6"
-                            opacity="0.25"
-                            rx="3"
-                            ry="3"
-                            transform="rotate(0 50 50)"
-                            width="25"
-                            x="72"
-                            y="47"
-                        ></rect>
-                        <rect
-                            fill="#555555"
-                            height="6"
-                            opacity="0.3333333333333333"
-                            rx="3"
-                            ry="3"
-                            transform="rotate(30 50 50)"
-                            width="25"
-                            x="72"
-                            y="47"
-                        ></rect>
-                        <rect
-                            fill="#555555"
-                            height="6"
-                            opacity="0.4166666666666667"
-                            rx="3"
-                            ry="3"
-                            transform="rotate(60 50 50)"
-                            width="25"
-                            x="72"
-                            y="47"
-                        ></rect>
-                        <rect
-                            fill="#555555"
-                            height="6"
-                            opacity="0.5"
-                            rx="3"
-                            ry="3"
-                            transform="rotate(90 50 50)"
-                            width="25"
-                            x="72"
-                            y="47"
-                        ></rect>
-                        <rect
-                            fill="#555555"
-                            height="6"
-                            opacity="0.5833333333333334"
-                            rx="3"
-                            ry="3"
-                            transform="rotate(120 50 50)"
-                            width="25"
-                            x="72"
-                            y="47"
-                        ></rect>
-                        <rect
-                            fill="#555555"
-                            height="6"
-                            opacity="0.6666666666666666"
-                            rx="3"
-                            ry="3"
-                            transform="rotate(150 50 50)"
-                            width="25"
-                            x="72"
-                            y="47"
-                        ></rect>
-                        <rect
-                            fill="#555555"
-                            height="6"
-                            opacity="0.75"
-                            rx="3"
-                            ry="3"
-                            transform="rotate(180 50 50)"
-                            width="25"
-                            x="72"
-                            y="47"
-                        ></rect>
-                        <rect
-                            fill="#555555"
-                            height="6"
-                            opacity="0.8333333333333334"
-                            rx="3"
-                            ry="3"
-                            transform="rotate(210 50 50)"
-                            width="25"
-                            x="72"
-                            y="47"
-                        ></rect>
-                        <rect
-                            fill="#555555"
-                            height="6"
-                            opacity="0.9166666666666666"
-                            rx="3"
-                            ry="3"
-                            transform="rotate(240 50 50)"
-                            width="25"
-                            x="72"
-                            y="47"
-                        ></rect>
-                    </svg>
-                </div>
+                {true ? (
+                    <>
+                        <h4>이 게시물을 신고하는 이유</h4>
+                        {REPORT_REASONS.map((reason, index) => (
+                            <button key={index}>
+                                <span>{reason}</span>
+                                <div>
+                                    <V />
+                                </div>
+                            </button>
+                        ))}
+                    </>
+                ) : (
+                    <div className="reportModal__loading">
+                        <Loading size={32} />
+                    </div>
+                )}
             </ReportModalInner>
         </ModalCard>
     );
