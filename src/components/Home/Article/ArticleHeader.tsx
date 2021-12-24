@@ -93,9 +93,14 @@ const ArticleHeader = ({ article }: ArticleProps) => {
         setIsFollowingModalActivated(true);
     };
 
-    const reportModalHandler = () => {
+    const cloaseArticleMenuModalAndOpenReportModal = () => {
         setIsDotModalActivated(false);
         setIsReportModalActivated(true);
+    };
+
+    const cloaseArticleMenuModalAndOpenShareWithModal = () => {
+        setIsDotModalActivated(false);
+        setIsShareWithModalActivated(true);
     };
 
     return (
@@ -128,9 +133,9 @@ const ArticleHeader = ({ article }: ArticleProps) => {
                     onUnfollow={unfollowHandler}
                     onModalOn={() => setIsDotModalActivated(true)}
                     onModalOff={() => setIsDotModalActivated(false)}
-                    onReportModalOn={reportModalHandler}
-                    onShareWithModalOn={() =>
-                        setIsShareWithModalActivated(true)
+                    onReportModalOn={cloaseArticleMenuModalAndOpenReportModal}
+                    onShareWithModalOn={
+                        cloaseArticleMenuModalAndOpenShareWithModal
                     }
                 />
             )}
