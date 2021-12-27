@@ -1,5 +1,5 @@
-import styled, { css } from "styled-components";
-import Card from "UI/Card/Card";
+import styled from "styled-components";
+import Card from "styles/UI/Card/Card";
 import { Forms } from "./Forms";
 import { Suggest } from "./Suggest";
 import apple from "images/Login/appStore.png";
