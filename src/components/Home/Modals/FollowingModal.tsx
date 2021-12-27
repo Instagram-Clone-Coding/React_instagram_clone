@@ -1,6 +1,6 @@
 import StoryCircle from "components/Common/StoryCircle";
 import styled from "styled-components";
-import ModalCard from "UI/ModalCard";
+import ModalCard from "styles/UI/ModalCard";
 
 const FollowingModalInner = styled.div`
     width: 100%;

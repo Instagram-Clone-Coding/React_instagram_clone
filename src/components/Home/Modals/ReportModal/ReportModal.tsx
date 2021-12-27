@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import ModalCard from "UI/ModalCard";
+import ModalCard from "styles/UI/ModalCard";
 import ModalHeader from "../ModalHeader";
 import { ReactComponent as V } from "../../../../assets/Svgs/v.svg";
 import Loading from "components/Common/Loading";

@@ -101,7 +101,7 @@ const ArticleMain = ({
     const mouseEnterHandler = (
         event:
             | React.MouseEvent<HTMLSpanElement>
-            | React.MouseEvent<HTMLDivElement>
+            | React.MouseEvent<HTMLDivElement>,
     ) => {
         setHoveredUsername(event.currentTarget.innerText);
         setModalPositionObj(event?.currentTarget.getBoundingClientRect());

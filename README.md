@@ -59,6 +59,7 @@
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#convention">Convention</a></li>
+        <li><a href="#commit-convention">Commit Convention</a></li>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
       </ul>
@@ -110,37 +111,98 @@ Frontend
 
 -   Conding Convention
 
-    1. Event Handler 네이밍: ~handler
-        ```ts
-        const exampleHandler = (): void => {};
-        ```
-    2. Handler Function Prop 네이밍: on~
-        ```ts
-        return <ExampleComponent onSubmit={exampleHandler} />;
-        ```
-    3. Interface 네이밍: Pascal Case + ~Props
-        ```ts
-        interface ExampleProps {
-            name: string;
-        }
-        ```
-    4. styled-components 구조: 최상위 태그에만 한 번
+1. Event Handler 네이밍: ~handler
+    ```ts
+    const exampleHandler = (): void => {};
+    ```
+2. Handler Function Prop 네이밍: on~
+    ```ts
+    return <ExampleComponent onSubmit={exampleHandler} />;
+    ```
+3. Interface 네이밍: Pascal Case + ~Props
 
-        ```ts
-        const StyledTag = styled.div``;
+    ```ts
+    interface ExampleProps {
+        name: string;
+    }
+    ```
 
-        return (
-            <StyledTag>
-                <div>Not</div>
-                <div>There</div>
-            </StyledTag>
-        );
-        ```
+4. styled-components 구조: 최상위 태그에만 한 번
+
+    ```ts
+    const StyledTag = styled.div``;
+
+    return (
+        <StyledTag>
+            <div>Not</div>
+            <div>There</div>
+        </StyledTag>
+    );
+    ```
+
+5. interface 관리
+
+    최상위 컴포넌트 폴더 내부에 d.ts 파일 생성
 
 -   파일(폴더) 네이밍 : Pascal Case(components, pages 제외)
     ```ts
     ExampleFileName;
     ```
+
+6.  컴포넌트 폴더 구조 관리
+
+    ```txt
+    /SomeComponent
+    │ index.js
+    │ SomeComponent.tsx
+    ├── /SomeChildrenComponent
+    │ ├── index.js
+    │ └── SomeChildrenComponent.tsx
+    /SomeComponent2
+    │ index.js
+    │ SomeComponent2.tsx
+    ```
+
+    `index.tsx`를 자주 사용하게 되면 파일 이름으로 검색해 작업에 용이하지 못하므로
+    `컴포넌트이름.tsx` 사용을 지향하고 `index.js` 로 `import`를 쉽게 할 수 있게한다.
+
+### Commit Convention
+
+feat: 새로운 기능에 대한 커밋  
+fix: 버그 수정에 대한 커밋  
+build: 빌드 관련 파일 수정에 대한 커밋  
+etc: 그 외 자잘한 수정에 대한 커밋  
+docs: README.md 수정에 대한 커밋  
+style: 코드 스타일 혹은 포맷 등에 관한 커밋(prettier 등)  
+refactor: 코드 리팩토링에 대한 커밋
+
+### Directory Structure
+
+```txt
+/src
+│ App.tsx
+│ Index.tsx
+│ react-app-env.d.ts
+│ Routes.tsx
+├── /assets
+│ ├── Images
+│ └── Svgs
+├── /components
+│ ├── /Commmon
+│ ├── /Direct
+│ ├── /Home
+│ ├── /Login
+│ └── /Signup
+├── /pages
+│ ├── /Direct
+│ ├── /Home
+│ └── /Login
+├── /styles
+│ ├── /UI
+│ ├── globalStyles.ts
+│ ├── styled.d.ts
+│ └── theme.ts
+```
 
 ### Prerequisites
 

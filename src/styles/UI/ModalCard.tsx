@@ -1,7 +1,7 @@
 import React, { useMemo, useRef } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
-import Card from "UI/Card";
+import Card from "styles/UI/Card";
 import { CardProps } from "../UI/Card/Card";
 
 interface PositionedModal extends CardProps {
@@ -74,7 +74,7 @@ const ModalCard = ({
             modalPosition !== undefined &&
             (modalPosition.top + modalPosition.bottom) / 2 <
                 window.innerHeight / 2,
-        [modalPosition]
+        [modalPosition],
     );
 
     const topPosition = useMemo(
@@ -84,7 +84,7 @@ const ModalCard = ({
                     ? window.pageYOffset + modalPosition?.bottom
                     : window.pageYOffset + modalPosition?.top
                 : 0, //
-        [isUpperThanHalfPosition, modalPosition]
+        [isUpperThanHalfPosition, modalPosition],
     );
 
     const renderingComponent =
@@ -115,7 +115,7 @@ const ModalCard = ({
 
     return ReactDOM.createPortal(
         renderingComponent,
-        document.getElementById("modal-root")!
+        document.getElementById("modal-root")!,
     );
 };
 

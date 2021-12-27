@@ -1,7 +1,7 @@
 import useCopy from "Hooks/useCopy";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import ModalCard from "UI/ModalCard";
+import ModalCard from "styles/UI/ModalCard";
 
 const ArticleMenuModalInner = styled.div`
     display: flex;

@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import HomeAside from "../../components/Home/HomeAside";
-import HomeStories from "../../components/Home/HomeStories";
-import HomeSection from "../../components/Home/HomeSection";
-import Notification from "UI/Notification";
+import HomeAside from "components/Home/HomeAside";
+import HomeStories from "components/Home/HomeStories";
+import HomeSection from "components/Home/HomeSection";
+import Notification from "styles/UI/Notification";
 
 const Layout = styled.div`
     padding-top: 30px;

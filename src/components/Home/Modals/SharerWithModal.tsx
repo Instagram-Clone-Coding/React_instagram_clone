@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import ModalCard from "UI/ModalCard";
+import ModalCard from "styles/UI/ModalCard";
 import ModalHeader from "./ModalHeader";
 import direct from "../../../assets/Images/direct.png";
 import sprite3 from "../../../assets/Images/sprite3.png";

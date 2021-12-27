@@ -2,12 +2,12 @@ import StoryCircle from "components/Common/StoryCircle";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import Card from "UI/Card";
-import ModalCard from "UI/ModalCard";
+import Card from "styles/UI/Card";
+import ModalCard from "styles/UI/ModalCard";
 import Username from "../../Common/Username";
 import sprite2 from "../../../assets/Images/sprite2.png";
 import useNumberSummary from "Hooks/useNumberSummary";
-import Button from "UI/Button";
+import Button from "styles/UI/Button";
 
 const StyledHoverModalInner = styled.div`
     width: 100%;
@@ -137,13 +137,13 @@ const HoverModal = ({
 }: HoverModalProps) => {
     const [userSummary, setUserSummary] = useState<UserSummaryProps>();
     const articlesNumSummary = useNumberSummary(
-        userSummary ? userSummary.articlesNum : 0
+        userSummary ? userSummary.articlesNum : 0,
     );
     const followersNumSummary = useNumberSummary(
-        userSummary ? userSummary.followersNum : 0
+        userSummary ? userSummary.followersNum : 0,
     );
     const followsNumSummary = useNumberSummary(
-        userSummary ? userSummary.followsNum : 0
+        userSummary ? userSummary.followsNum : 0,
     );
     useEffect(() => {
         // get username summary
