@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import PhoneImg from "images/Login/home-phone.png";
-import home from "images/Login/slider/home.jpg";
-import Edit from "images/Login/slider/ImageEdit.jpg";
-import takephoto from "images/Login/slider/takePhoto.jpg";
-import talk from "images/Login/slider/talk.jpg";
-import InstagramImg from "images/Login/slider/instagram.jpg";
+import PhoneImg from "assets/Images/home-phone.png";
+import home from "assets/Images/slider/home.jpg";
+import Edit from "assets/Images/slider/ImageEdit.jpg";
+import takephoto from "assets/Images/slider/takePhoto.jpg";
+import talk from "assets/Images/slider/talk.jpg";
+import InstagramImg from "assets/Images/slider/instagram.jpg";
 import { useEffect, useRef } from "react";
 
 export function ShowingInstagram() {
