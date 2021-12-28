@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { footerTextProps } from "../types";
+import { Login } from "@type";
 
-function FooterTextPiece(props: footerTextProps) {
+function FooterTextPiece(props: Login.FooterTextProps) {
     return (
         <ContentStyle>
             {props.url ? (

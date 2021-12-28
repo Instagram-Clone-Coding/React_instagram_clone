@@ -1,9 +1,9 @@
 import React from "react";
 import FooterTextPiece from "./FooterTextPiece";
 import styled from "styled-components";
-import { footerContentProps } from "../types";
+import FooterContentProps from "./FooterText.type";
 
-function FooterRow(props: footerContentProps) {
+function FooterRow(props: FooterContentProps) {
     return (
         <FlexRow>
             {props.content.map((data, index) => (

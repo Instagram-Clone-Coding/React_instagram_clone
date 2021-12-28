@@ -1,8 +1,9 @@
-import { LoginInputProps } from "components/Login/types";
+import { Login } from "@type";
+
 import styled, { css } from "styled-components";
 import React, { useEffect, useState, useCallback } from "react";
 
-export default function Input(props: LoginInputProps) {
+export default function Input(props: Login.InputProps) {
     const { innerText, inputName, setUserData } = props;
 
     const [textType, setTextType] = useState("text");

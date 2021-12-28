@@ -1,12 +1,13 @@
 import styled, { css } from "styled-components";
-import ImgSprite from "components/Common/Sprite";
+import ImgSprite from "components/Common/LoginSprite";
 import { Link, useHistory } from "react-router-dom";
 import Button from "styles/UI/Button/Button";
 import Line from "components/Common/Line";
 import Facebook from "./FacebookLogin";
-import { imageProps } from "../types";
 import Input from "components/Common/Input";
 import { useState, MouseEvent } from "react";
+
+import { Login } from "@type";
 
 import { useAppDispatch } from "app/hooks";
 import { setUserInfo } from "features/Auth/authSlice";
@@ -91,7 +92,7 @@ const LoginFormAndButton = () => {
 };
 
 // Props
-const test: imageProps = {
+const test: Login.ImageProps = {
     width: 175,
     height: 51,
     position: `0 -130px`,

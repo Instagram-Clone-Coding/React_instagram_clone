@@ -1,6 +1,7 @@
-import ImgSprite from "components/Common/Sprite";
+import ImgSprite from "components/Common/LoginSprite";
 import styled from "styled-components";
-import { imageProps } from "../types";
+
+import { Login } from "@type";
 
 export default function Facebook() {
     return (
@@ -17,7 +18,7 @@ export default function Facebook() {
     );
 }
 
-const facebook: imageProps = {
+const facebook: Login.ImageProps = {
     width: 16,
     height: 16,
     position: `-414px -259px`,

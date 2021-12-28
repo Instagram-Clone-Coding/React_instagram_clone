@@ -14,3 +14,27 @@ export declare module Direct {
         isImLast: boolean;
     }
 }
+
+export declare module Login {
+    export interface FooterTextProps {
+        text: string;
+        url?: string;
+    }
+
+    export interface ImageProps {
+        width: number;
+        height: number;
+        position: string;
+    }
+
+    export interface InputProps {
+        innerText: string;
+        inputName: string;
+        setUserData: Function;
+    }
+
+    export interface NewCardProps {
+        padding: string;
+        margin: string;
+    }
+}

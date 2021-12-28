@@ -3,7 +3,8 @@ import Forms from "./Forms";
 import Suggest from "../../Common/Suggest";
 import ContentBox from "components/Common/ContentBox";
 import Appdownload from "components/Common/AppDownload";
-import { NewCardProps } from "../types";
+
+import { Login } from "@type";
 
 export function LoginForm() {
     return (
@@ -20,7 +21,7 @@ export function LoginForm() {
 }
 
 // Props
-const Props: NewCardProps = {
+const Props: Login.NewCardProps = {
     padding: `10px 0`,
     margin: `0 0 10px`,
 };
