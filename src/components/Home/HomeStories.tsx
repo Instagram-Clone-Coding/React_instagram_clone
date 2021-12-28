@@ -124,7 +124,7 @@ const HomeStories = () => {
     const [leftArrow, setLeftArrow] = useState(false);
     const [rightArrow, setRightArrow] = useState(true);
     const toggleArrowHandler = (
-        event: React.UIEvent<HTMLUListElement>
+        event: React.UIEvent<HTMLUListElement>,
     ): void => {
         const {
             currentTarget: { scrollLeft, clientWidth, scrollWidth },
@@ -142,7 +142,7 @@ const HomeStories = () => {
     };
 
     const arrowClickHandler = (
-        event: React.MouseEvent<HTMLDivElement>
+        event: React.MouseEvent<HTMLDivElement>,
     ): void => {
         if (event.currentTarget.parentElement) {
             const {

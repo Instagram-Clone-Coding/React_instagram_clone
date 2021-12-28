@@ -8,8 +8,11 @@ const theme: DefaultTheme = {
         blue: "#0095F6",
     },
     font: {
+        default_black: "#262626",
         bold: 600,
         gray: "#8e8e8e",
+        link_blue: "#00376b",
+        red: "#ed4956",
     },
 };
 

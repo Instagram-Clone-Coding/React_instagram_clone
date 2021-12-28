@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import HomeAside from "../../components/Home/HomeAside";
-import HomeStories from "../../components/Home/HomeStories";
-import HomeSection from "../../components/Home/HomeSection";
+import HomeAside from "components/Home/HomeAside";
+import HomeStories from "components/Home/HomeStories";
+import HomeSection from "components/Home/HomeSection";
+import Notification from "styles/UI/Notification";
 
 const Layout = styled.div`
     padding-top: 30px;
@@ -26,6 +27,8 @@ const Layout = styled.div`
 `;
 
 const Home = () => {
+    // Redux 적용 시 notification on/off, text 적용
+    // action creator로 5초 뒤 off 되도록 비동기 작업 실행
     return (
         <Layout>
             <main>
@@ -33,6 +36,7 @@ const Home = () => {
                 <HomeSection />
             </main>
             <HomeAside />
+            <Notification text="링크를 클립보드에 복사했습니다." />
         </Layout>
     );
 };

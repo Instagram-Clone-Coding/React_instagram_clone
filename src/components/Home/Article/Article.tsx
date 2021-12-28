@@ -9,13 +9,6 @@ import CommentForm from "./CommentForm";
 
 const ArticleCard = styled(Card)`
     margin-bottom: 24px;
-    .article-likeInfo {
-        padding: 0 16px;
-        margin-bottom: 8px;
-        span {
-            font-weight: ${(props) => props.theme.font.bold};
-        }
-    }
     .article-createdAt {
         padding-left: 16px;
         margin-bottom: 16px;
@@ -46,7 +39,7 @@ const Article = ({ article }: ArticleProps) => {
         // toggle likes
         // 내 팔로워 중 한 명이 좋아요 눌렀는지 확인(여기서 일단 내 팔로워가 like2라 가정)
         const getMyFollowerLiked = article.likes.filter(
-            (username: string) => username === "like2"
+            (username: string) => username === "like2",
         );
         setMyFollowersLiked(getMyFollowerLiked);
         setIsMyFollowerLiked(getMyFollowerLiked !== []);
@@ -91,18 +84,10 @@ const Article = ({ article }: ArticleProps) => {
                 isAnimation={isRedHeartAnimation}
                 resetAnimation={() => setIsRedHeartAnimation(false)}
             />
-            <div className="article-likeInfo">
-                {isMyFollowerLiked ? (
-                    <div>
-                        {/* 임의로 첫 번째 인덱스 선택 */}
-                        <span>{myFollowersLiked[0]}</span>님 외
-                        <span>{article.likes.length - 1}명</span>이 좋아합니다
-                    </div>
-                ) : (
-                    <span>좋아요 {article.likes.length}개</span>
-                )}
-            </div>
             <ArticleMain
+                isMyFollowerLiked={isMyFollowerLiked}
+                myFollowersLiked={myFollowersLiked}
+                likes={article.likes}
                 owner={article.owner}
                 text={article.text}
                 comments={article.comments}

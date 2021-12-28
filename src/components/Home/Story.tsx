@@ -30,7 +30,12 @@ interface StoryProps {
 const Story = ({ src, username }: StoryProps) => {
     return (
         <ListLayout>
-            <StoryCircle src={src} username={username} scale={1} />
+            <StoryCircle
+                type="unread" // 백엔드 소통 후 읽었는지 여부 확인
+                avatarUrl={src}
+                username={username}
+                scale={1}
+            />
             <span>{username}</span>
         </ListLayout>
     );
