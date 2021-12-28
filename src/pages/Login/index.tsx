@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Contents } from "../../components/Login/Contents";
-import { Footer } from "../../components/Login/Footer";
+import { Footer } from "../../components/Login/Footer/Footer";
 
 export default function Login() {
     return (

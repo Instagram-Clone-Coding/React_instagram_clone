@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { LoginForm } from "./LoginForm/LoginForm";
-import { ShowingInstagram } from "./ShowingInsta";
+import { ShowingInstagram } from "./InstagramSlider/ShowingInsta";
 
 export function Contents() {
     return (
