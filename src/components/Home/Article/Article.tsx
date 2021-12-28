@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Card from "UI/Card/Card";
+import Card from "styles/UI/Card";
 import { useEffect, useState } from "react";
 import ArticleHeader from "./ArticleHeader";
 import ArticleImgSlider from "./ArticleImgSlider";
