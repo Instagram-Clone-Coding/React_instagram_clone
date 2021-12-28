@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import sprite2 from "../../../img/sprite2.png";
+import sprite2 from "assets/Images/sprite2.png";
 import styled from "styled-components";
 
 interface SliderProps {

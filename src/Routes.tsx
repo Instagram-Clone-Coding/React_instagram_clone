@@ -21,10 +21,7 @@ const Routes = () => {
 };
 
 const AuthedContainer = () => {
-    const userInfo = useAppSelector((state) => state.auth.userInfo);
-    return !userInfo ? (
-        <Redirect to="/accounts/signin" />
-    ) : (
+    return (
         <>
             <Header />
             <Route path="*">
@@ -36,6 +33,21 @@ const AuthedContainer = () => {
             {/*  */}
         </>
     );
+    // const userInfo = useAppSelector((state) => state.auth.userInfo);
+    // return !userInfo ? (
+    //     <Redirect to="/accounts/signin" />
+    // ) : (
+    //     <>
+    //         <Header />
+    //         <Route path="*">
+    //             <Redirect to="/" />
+    //         </Route>
+    //         <Route exact path="/" component={Home} />
+    //         {/* Direct */}
+    //         <Route path="/direct" component={Direct} />
+    //         {/*  */}
+    //     </>
+    // );
 };
 
 export default Routes;

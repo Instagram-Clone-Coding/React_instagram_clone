@@ -1,11 +1,20 @@
 import styled from "styled-components";
 import { ReactComponent as Home } from "assets/Svgs/home.svg";
-import { ReactComponent as Direct } from "assets/Svgs/direct.svg";
-import { ReactComponent as NewArticle } from "assets/Svgs/new-article.svg";
-import { ReactComponent as Map } from "assets/Svgs/map.svg";
-import { ReactComponent as Heart } from "assets/Svgs/heart.svg";
+import { ReactComponent as HomeActive } from "assets/Svgs/home-active.svg";
 
-import { Link } from "react-router-dom";
+import { ReactComponent as Direct } from "assets/Svgs/direct.svg";
+import { ReactComponent as DirectActive } from "assets/Svgs/direct-active.svg";
+
+import { ReactComponent as NewArticle } from "assets/Svgs/new-article.svg";
+import { ReactComponent as NewArticleActive } from "assets/Svgs/new-article-active.svg";
+
+import { ReactComponent as Map } from "assets/Svgs/map.svg";
+import { ReactComponent as MapActive } from "assets/Svgs/map-active.svg";
+
+import { ReactComponent as Heart } from "assets/Svgs/heart.svg";
+import { ReactComponent as HeartActive } from "assets/Svgs/heart-active.svg";
+
+import { NavLink } from "react-router-dom";
 
 const Container = styled.div`
     flex: 1 0 0%;
@@ -38,26 +47,31 @@ const navItems = [
         id: "홈",
         path: "/",
         component: <Home />,
+        activeComponent: <HomeActive />,
     },
     {
         id: "메세지",
         path: "/direct",
         component: <Direct />,
+        activeComponent: <DirectActive />,
     },
     {
         id: "새 글 작성",
         path: "/",
         component: <NewArticle />,
+        activeComponent: <NewArticleActive />,
     },
     {
         id: "사람 찾기",
         path: "/",
         component: <Map />,
+        activeComponent: <MapActive />,
     },
     {
         id: "피드 활동",
         path: "/",
         component: <Heart />,
+        activeComponent: <HeartActive />,
     },
 ];
 
@@ -67,7 +81,7 @@ const NavItems = () => {
             <NavLitemContainer>
                 {navItems.map((navItem) => (
                     <NavItemWrapper key={navItem.id}>
-                        <Link to={navItem.path}>{navItem.component}</Link>
+                        <NavLink to={navItem.path}>{navItem.component}</NavLink>
                     </NavItemWrapper>
                 ))}
 

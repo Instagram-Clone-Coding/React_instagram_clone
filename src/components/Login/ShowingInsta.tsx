@@ -35,7 +35,7 @@ export function ShowingInstagram() {
         return function clean() {
             clearInterval(TimerId);
         };
-    }, [index]);
+    }, [index, IMAGE_LENGTH]);
 
     return (
         <Background>

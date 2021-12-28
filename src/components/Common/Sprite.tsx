@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import sprite from "assets/Images/LoginSprite.png";
+import sprite from "assets/Images/loginPageSprite.png";
 import { imageProps } from "components/Login/types";
 
 const ImgSprite = styled.div<imageProps>`

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import sprite from "img/sprite.png";
+import sprite from "assets/Images/sprite.png";
 import { useState } from "react";
 
 const SearchBarContainer = styled.div`

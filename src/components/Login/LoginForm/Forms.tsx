@@ -1,12 +1,15 @@
 import styled, { css } from "styled-components";
 import ImgSprite from "components/Common/Sprite";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Button from "styles/UI/Button/Button";
 import Line from "components/Common/Line";
 import Facebook from "./FacebookLogin";
 import { imageProps } from "../types";
 import Input from "components/Common/Input";
-import { useState } from "react";
+import { useState, MouseEvent } from "react";
+
+import { useAppDispatch } from "app/hooks";
+import { setUserInfo } from "features/Auth/authSlice";
 
 export default function Forms() {
     return (
@@ -33,6 +36,20 @@ export default function Forms() {
     );
 }
 
+const callSignInAPI = (
+    e: MouseEvent<HTMLButtonElement>,
+    dispatch: Function,
+    history: any,
+) => {
+    e.preventDefault();
+    dispatch(
+        setUserInfo({
+            name: "minsoo",
+        }),
+    );
+    history.replace("/");
+};
+
 const LoginFormAndButton = () => {
     const [userData, setUserData] = useState({
         id: "",
@@ -42,6 +59,9 @@ const LoginFormAndButton = () => {
     const changeUserData = (changed: { id?: string; password?: string }) => {
         setUserData({ ...userData, ...changed });
     };
+
+    const dispatch = useAppDispatch();
+    const history = useHistory();
 
     return (
         <>
@@ -62,6 +82,7 @@ const LoginFormAndButton = () => {
                         ? false
                         : true
                 }
+                onClick={(e) => callSignInAPI(e, dispatch, history)}
             >
                 로그인
             </LoginButton>
