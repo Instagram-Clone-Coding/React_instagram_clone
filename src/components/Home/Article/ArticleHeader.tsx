@@ -1,4 +1,4 @@
-import StoryCircle from "components/common/StoryCircle";
+import StoryCircle from "components/Common/StoryCircle";
 import React from "react";
 import styled from "styled-components";
 import Username from "../Username";
