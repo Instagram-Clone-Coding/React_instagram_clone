@@ -1,4 +1,5 @@
-import useCopy from "Hooks/useCopy";
+import { homeActions } from "app/store/ducks/home/homeSlice";
+import { useAppDispatch } from "app/store/hooks";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import ModalCard from "styles/UI/ModalCard";
@@ -49,7 +50,32 @@ const ArticleMenuModal = ({
     onReportModalOn,
     onShareWithModalOn,
 }: ArticleMenuModalProps) => {
-    const copyHandler = useCopy(DUMMY_BASE_URL + "/p/" + DUMMY_P_ID);
+    const dispatch = useAppDispatch();
+
+    const copyHandler = () => {
+        if (!document.queryCommandSupported("copy")) {
+            return alert("복사하기가 지원되지 않는 브라우저입니다.");
+        }
+        const textarea = document.createElement("textarea");
+        textarea.value = DUMMY_BASE_URL + "/p/" + DUMMY_P_ID;
+        textarea.style.position = "fixed";
+        textarea.style.top = "0";
+        textarea.style.left = "0";
+        // 포지션을 주지 않으면 복사 시 스크롤이 하단으로 이동
+
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+        dispatch(homeActions.notificateIsCopied());
+        setTimeout(
+            () => dispatch(homeActions.closeIsCopiedNotification()),
+            8500,
+        );
+        // notification root 작성 후 복사 여부 알려주기
+        // dispatch(notificationActions.appear())
+    };
 
     const reportClickHandler = () => {
         onModalOff();

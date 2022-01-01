@@ -3,9 +3,39 @@ import styled from "styled-components";
 
 const StyledNotification = styled.div`
     position: fixed;
-    bottom: 0;
+    bottom: -100%;
     left: 0;
     width: 100%;
+    @-webkit-keyframes wait5 {
+        0% {
+            bottom: -100%;
+        }
+        15% {
+            bottom: 0;
+        }
+        70% {
+            bottom: 0;
+        }
+        100% {
+            bottom: -100%;
+        }
+    }
+    @keyframes wait5 {
+        0% {
+            bottom: -100%;
+        }
+        15% {
+            bottom: 0;
+        }
+        70% {
+            bottom: 0;
+        }
+        100% {
+            bottom: -100%;
+        }
+    }
+    animation: wait5 8.5s;
+
     background-color: ${(props) => props.theme.font.default_black};
     min-height: 44px;
     padding: 0 16px;
@@ -26,7 +56,7 @@ const Notification = ({ text }: NotificationProps) => {
         <StyledNotification>
             <p>{text}</p>
         </StyledNotification>,
-        document.getElementById("notification-root")!
+        document.getElementById("notification-root")!,
     );
     return notificationRoot;
 };
