@@ -1,16 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export interface homeState {
+type storiesScrollPositionType = "left" | "right" | "center";
+
+export interface homeStateProps {
     isCopiedNotification: boolean;
+    storiesScrollPosition: storiesScrollPositionType;
 }
 
-// interface isCopiedNotificationProp {
-//     isCopiedNotification: boolean;
-// }
-
-const initialState: homeState = {
+const initialState: homeStateProps = {
     isCopiedNotification: false,
+    storiesScrollPosition: "left",
 };
+
 const homeSlice = createSlice({
     name: "home",
     initialState,
@@ -20,6 +21,12 @@ const homeSlice = createSlice({
         },
         closeIsCopiedNotification: (state) => {
             state.isCopiedNotification = false;
+        },
+        changeStoriesScrollPosition: (
+            state,
+            action: PayloadAction<storiesScrollPositionType>,
+        ) => {
+            state.storiesScrollPosition = action.payload;
         },
     },
 });
