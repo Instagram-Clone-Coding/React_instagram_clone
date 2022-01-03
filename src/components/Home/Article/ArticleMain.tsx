@@ -60,15 +60,12 @@ const ArticleMain = ({
     text,
     comments,
 }: MainProps) => {
-    const [isComment1Liked, setIsComment1Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람이 있는지 확인
-    const [isComment2Liked, setIsComment2Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람이 있는지 확인
+    const [isComment1Liked, setIsComment1Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
+    const [isComment2Liked, setIsComment2Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
     const [isFullText, setIsFullText] = useState(false);
-    const [isHeart1Animation, setIsHeart1Animation] = useState(false);
-    const [isHeart2Animation, setIsHeart2Animation] = useState(false);
     const [isHoverModalActivated, setIsHoverModalActivated] = useState(false);
     const [isFollowingModalActivated, setIsFollowingModalActivated] =
         useState(false);
-    // const [isFollowing, setIsFollowing] = useState(false);
     const [modalPositionObj, setModalPositionObj] = useState<DOMRect>();
     const [hoveredUsername, setHoveredUsername] = useState("");
     const [ishoveredUserFollowing, setIsHoveredUserFollowing] = useState(false); // hover한 데이터 가져와서 적용
@@ -88,12 +85,10 @@ const ArticleMain = ({
         })
     );
     const comment1LikeHandler = () => {
-        setIsHeart1Animation(true);
         setIsComment1Liked((prev) => !prev);
         // 백엔드 수행
     };
     const comment2LikeHandler = () => {
-        setIsHeart2Animation(true);
         setIsComment2Liked((prev) => !prev);
         // 백엔드 수행
     };
@@ -197,8 +192,6 @@ const ArticleMain = ({
                         size={17}
                         isLiked={isComment1Liked}
                         onToggleLike={comment1LikeHandler}
-                        isAnimation={isHeart1Animation}
-                        resetAnimation={() => setIsHeart1Animation(false)}
                     />
                 </div>
                 <div className="article-recent-comment">
@@ -218,8 +211,6 @@ const ArticleMain = ({
                         size={17}
                         isLiked={isComment2Liked}
                         onToggleLike={comment2LikeHandler}
-                        isAnimation={isHeart2Animation}
-                        resetAnimation={() => setIsHeart2Animation(false)}
                     />
                 </div>
             </div>

@@ -1,6 +1,5 @@
 <svg
     className="current"
-    onAnimationEnd="current"
     height="current"
     width="current"
     color="#ed4956"

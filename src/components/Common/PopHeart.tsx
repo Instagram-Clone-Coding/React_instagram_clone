@@ -8,6 +8,17 @@ const HeartBox = styled.div`
     cursor: pointer;
     svg.pop {
         animation: pop 0.3s forwards;
+        @-webkit-keyframes pop {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: none;
+            }
+        }
         @keyframes pop {
             0% {
                 transform: scale(1);
@@ -30,9 +41,6 @@ interface PopHeartProps {
     size: number;
     isLiked: boolean;
     onToggleLike: () => void;
-    isAnimation: boolean;
-    resetAnimation: () => void;
-    // setliked를 포함한 처리를 수행하는 함수
 }
 
 const PopHeart = ({
@@ -40,22 +48,18 @@ const PopHeart = ({
     size,
     isLiked,
     onToggleLike,
-    isAnimation,
-    resetAnimation,
 }: PopHeartProps) => {
     return (
         <HeartBox onClick={onToggleLike} className={className}>
             {isLiked ? (
                 <RedHeart
-                    className={isLiked && isAnimation ? "pop" : ""}
-                    onAnimationEnd={resetAnimation}
+                    className={isLiked ? "pop" : ""}
                     height={size}
                     width={size}
                 />
             ) : (
                 <EmptyHeart
-                    className={!isLiked && isAnimation ? "pop not" : "not"}
-                    onAnimationEnd={resetAnimation}
+                    className={!isLiked ? "pop not" : "not"}
                     height={size}
                     width={size}
                 />
