@@ -8,7 +8,7 @@ const HomeSection = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(homeActions.getArticles());
+        dispatch(homeActions.getArticles()); // 비동기 받아오기
     }, [dispatch]);
 
     return (
