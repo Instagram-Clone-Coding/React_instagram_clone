@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import sprite2 from "assets/Images/sprite2.png";
 import styled from "styled-components";
 import { HomeType } from "@type";
+import { ReactComponent as Avatar } from "assets/Svgs/avatar.svg";
 
 const StyledImgSlider = styled.div<SliderProps>`
     position: relative;
@@ -87,9 +88,27 @@ const StyledImgSlider = styled.div<SliderProps>`
             display: flex;
             align-items: center;
             transition: transform 0.3s;
-            img {
+            & > div {
                 width: 100%;
                 scroll-snap-align: center;
+                background-color: red;
+                position: relative;
+                & > .img-slider-tagBox {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+                & > img {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    max-width: 614px;
+                    @media (max-width: 1000px) {
+                        max-width: 600px;
+                    }
+                }
             }
         }
     }
@@ -210,11 +229,16 @@ const ArticleImgSlider = ({ imageDTOs, onLike }: ArticleImgSliderProps) => {
                 <div className="img-slider" ref={sliderRef}>
                     {imageDTOs.map((imageDTO) => (
                         // id 추가되면 key 변경 예정
-                        <img
-                            key={imageDTO.id}
-                            src={imageDTO.image.imageUrl}
-                            alt={imageDTO.image.imageName}
-                        />
+                        <div>
+                            <div className="img-slider-tagBox">
+                                <Avatar />
+                            </div>
+                            <img
+                                key={imageDTO.id}
+                                src={imageDTO.image.imageUrl}
+                                alt={imageDTO.image.imageName}
+                            />
+                        </div>
                     ))}
                 </div>
             </div>

@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import Card from "styles/UI/Card";
 import { useState } from "react";
-import ArticleHeader from "./ArticleHeader";
-import ArticleImgSlider from "./ArticleImgSlider";
-import ArticleMainIcons from "./ArticleMainIcons";
-import ArticleMain from "./ArticleMain";
-import CommentForm from "./CommentForm";
+import ArticleHeader from "components/Home/Article/ArticleHeader";
+import ArticleImgSlider from "components/Home/Article/ArticleImgSlider";
+import ArticleMainIcons from "components/Home/Article/ArticleMainIcons";
+import ArticleMain from "components/Home/Article/ArticleMain";
+import CommentForm from "components/Home/Article/CommentForm";
 import { HomeType } from "@type";
 import useGapText from "Hooks/useGapText";
 
