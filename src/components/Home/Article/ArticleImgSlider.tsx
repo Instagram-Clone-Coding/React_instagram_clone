@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import sprite2 from "assets/Images/sprite2.png";
 import styled from "styled-components";
+import { HomeType } from "@type";
 
 const StyledImgSlider = styled.div<SliderProps>`
     position: relative;
@@ -8,6 +9,32 @@ const StyledImgSlider = styled.div<SliderProps>`
     align-items: center;
     justify-content: center;
     @keyframes whiteHeartAnimation {
+        0% {
+            transform: scale(0);
+            opacity: 0;
+        }
+        20% {
+            transform: scale(1.2);
+            opacity: 0.9;
+        }
+        30% {
+            transform: scale(0.9);
+            opacity: 0.9;
+        }
+        40% {
+            transform: scale(1);
+            opacity: 0.9;
+        }
+        75% {
+            transform: scale(1);
+            opacity: 0.9;
+        }
+        100% {
+            transform: scale(0);
+            opacity: 0;
+        }
+    }
+    @-webkit-keyframes whiteHeartAnimation {
         0% {
             transform: scale(0);
             opacity: 0;
@@ -112,15 +139,15 @@ interface SliderProps {
 }
 
 interface ArticleImgSliderProps {
-    imgs: string[];
+    imageDTOs: HomeType.PostImageDTOProps[];
     onLike: () => undefined;
 }
 
-const ArticleImgSlider = ({ imgs, onLike }: ArticleImgSliderProps) => {
+const ArticleImgSlider = ({ imageDTOs, onLike }: ArticleImgSliderProps) => {
     //slider state
     const [sliderIndex, setSliderIndex] = useState(0);
     const [doubleClicked, setDoubleClicked] = useState(false);
-    const totalIndex = imgs.length - 1;
+    const totalIndex = imageDTOs.length - 1;
     const wrapRef = useRef<HTMLDivElement>(null);
     const sliderRef = useRef<HTMLDivElement>(null);
     const { current: slider } = sliderRef;
@@ -181,9 +208,13 @@ const ArticleImgSlider = ({ imgs, onLike }: ArticleImgSliderProps) => {
             ></div>
             <div className="img-wrap" ref={wrapRef} onScroll={detectScroll}>
                 <div className="img-slider" ref={sliderRef}>
-                    {imgs.map((url: string, index) => (
+                    {imageDTOs.map((imageDTO) => (
                         // id 추가되면 key 변경 예정
-                        <img key={index} src={url} alt={"undefined"} />
+                        <img
+                            key={imageDTO.id}
+                            src={imageDTO.image.imageUrl}
+                            alt={imageDTO.image.imageName}
+                        />
                     ))}
                 </div>
             </div>

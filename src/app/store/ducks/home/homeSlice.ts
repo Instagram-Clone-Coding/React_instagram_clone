@@ -1,89 +1,475 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { HomeType } from "@type";
+import { getHomeArticles } from "app/store/ducks/home/homThunk";
 
-const DUMMY_ARTICLES = [
+const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
     {
-        imgs: [
+        postId: 10,
+        followingMemberUsernameLikedPost: null,
+        memberImageUrl:
             "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-        ],
-        location: "White Hart Lane Stadium",
-        hashtags: ["#OnThisDay", "#안녕"],
-        text: `이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
+        memberNickname: "spursofficial",
+        memberUsername: "Tottenham Hotspur",
+        postBookmarkFlag: false,
+        postCommentsCount: 0,
+        postContent: `이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
         이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
         이 영역은 토트넘 핫스퍼 공식 계정 글입니다.`,
-        owner: {
-            username: "spursofficial",
-            avatarUrl:
-                "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-        },
-        likes: ["like1", "like2", "like3", "like4"],
-        comments: [
-            { username: "user1", comment: "이게 첫 번째 댓글이다!!" },
-            { username: "user2", comment: "이게 두 번째 댓글이다!!" },
-            { username: "user3", comment: "이게 세 번째 댓글이다!!" },
-            { username: "user3", comment: "이게 세 번째 댓글이다!!" },
-            { username: "user3", comment: "이게 세 번째 댓글이다!!" },
-            { username: "user3", comment: "이게 세 번째 댓글이다!!" },
-            { username: "user3", comment: "이게 세 번째 댓글이다!!" },
+        postImageDTOs: [
+            {
+                id: 12,
+                image: {
+                    imageName: "dummy",
+                    imageType: "JPG",
+                    imageUUID: "dummy",
+                    imageUrl:
+                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+                },
+                postTagDTOs: [
+                    {
+                        id: 12,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 30,
+                            y: 40,
+                        },
+                    },
+                ],
+            },
+            {
+                id: 13,
+                image: {
+                    imageName: "dummy",
+                    imageType: "JPG",
+                    imageUUID: "dummy",
+                    imageUrl:
+                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+                },
+                postTagDTOs: [
+                    {
+                        id: 12,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 30,
+                            y: 40,
+                        },
+                    },
+                ],
+            },
+            {
+                id: 14,
+                image: {
+                    imageName: "dummy",
+                    imageType: "JPG",
+                    imageUUID: "dummy",
+                    imageUrl:
+                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+                },
+                postTagDTOs: [
+                    {
+                        id: 12,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 30,
+                            y: 40,
+                        },
+                    },
+                ],
+            },
         ],
-        createdAt: 1632738927077,
+        postLikeFlag: true,
+        postLikesCount: 24,
+        postUploadDate: "2022-01-03T13:33:00",
     },
     {
-        imgs: [
+        postId: 11,
+        followingMemberUsernameLikedPost: "followingUser",
+        memberImageUrl:
             "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-        ],
-        location: "White Hart Lane Stadium",
-        hashtags: ["#OnThisDay", "#안녕"],
-        text: `이 영역은 토트넘 핫스퍼 공식 계정 글입니다.`,
-        owner: {
-            username: "spursofficial",
-            avatarUrl:
-                "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-        },
-        likes: ["like1", "like2", "like3", "like4"],
-        comments: [
-            { username: "user1", comment: "이게 첫 번째 댓글이다!!" },
-            { username: "user2", comment: "이게 두 번째 댓글이다!!" },
-            { username: "user3", comment: "이게 세 번째 댓글이다!!" },
-        ],
-        createdAt: 1632638927077,
-    },
-    {
-        imgs: [
-            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-        ],
-        location: "White Hart Lane Stadium",
-        hashtags: ["#OnThisDay", "#안녕"],
-        text: `이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
+        memberNickname: "spursofficial",
+        memberUsername: "Tottenham Hotspur",
+        postBookmarkFlag: false,
+        postCommentsCount: 0,
+        postContent: `이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
         이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
         이 영역은 토트넘 핫스퍼 공식 계정 글입니다.`,
-        owner: {
-            username: "spursofficial",
-            avatarUrl:
-                "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-        },
-        likes: ["like1", "like2", "like3", "like4"],
-        comments: [
-            { username: "user1", comment: "이게 첫 번째 댓글이다!!" },
-            { username: "user2", comment: "이게 두 번째 댓글이다!!" },
-            { username: "user3", comment: "이게 세 번째 댓글이다!!" },
+        postImageDTOs: [
+            {
+                id: 12,
+                image: {
+                    imageName: "dummy",
+                    imageType: "JPG",
+                    imageUUID: "dummy",
+                    imageUrl:
+                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+                },
+                postTagDTOs: [
+                    {
+                        id: 12,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 30,
+                            y: 40,
+                        },
+                    },
+                ],
+            },
+            {
+                id: 13,
+                image: {
+                    imageName: "dummy",
+                    imageType: "JPG",
+                    imageUUID: "dummy",
+                    imageUrl:
+                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+                },
+                postTagDTOs: [
+                    {
+                        id: 12,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 30,
+                            y: 40,
+                        },
+                    },
+                ],
+            },
+            {
+                id: 14,
+                image: {
+                    imageName: "dummy",
+                    imageType: "JPG",
+                    imageUUID: "dummy",
+                    imageUrl:
+                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+                },
+                postTagDTOs: [
+                    {
+                        id: 12,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 30,
+                            y: 40,
+                        },
+                    },
+                ],
+            },
         ],
-        createdAt: 1632638927077,
+        postLikeFlag: true,
+        postLikesCount: 24,
+        postUploadDate: "2022-01-03T13:33:00",
+    },
+    {
+        postId: 12,
+        followingMemberUsernameLikedPost: null,
+        memberImageUrl:
+            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+        memberNickname: "spursofficial",
+        memberUsername: "Tottenham Hotspur",
+        postBookmarkFlag: false,
+        postCommentsCount: 0,
+        postContent: `이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
+        이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
+        이 영역은 토트넘 핫스퍼 공식 계정 글입니다.`,
+        postImageDTOs: [
+            {
+                id: 12,
+                image: {
+                    imageName: "dummy",
+                    imageType: "JPG",
+                    imageUUID: "dummy",
+                    imageUrl:
+                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+                },
+                postTagDTOs: [
+                    {
+                        id: 12,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 30,
+                            y: 40,
+                        },
+                    },
+                ],
+            },
+            {
+                id: 13,
+                image: {
+                    imageName: "dummy",
+                    imageType: "JPG",
+                    imageUUID: "dummy",
+                    imageUrl:
+                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+                },
+                postTagDTOs: [
+                    {
+                        id: 12,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 30,
+                            y: 40,
+                        },
+                    },
+                ],
+            },
+            {
+                id: 14,
+                image: {
+                    imageName: "dummy",
+                    imageType: "JPG",
+                    imageUUID: "dummy",
+                    imageUrl:
+                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+                },
+                postTagDTOs: [
+                    {
+                        id: 12,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 30,
+                            y: 40,
+                        },
+                    },
+                ],
+            },
+        ],
+        postLikeFlag: true,
+        postLikesCount: 24,
+        postUploadDate: "2022-01-03T13:33:00",
+    },
+    {
+        postId: 13,
+        followingMemberUsernameLikedPost: null,
+        memberImageUrl:
+            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+        memberNickname: "spursofficial",
+        memberUsername: "Tottenham Hotspur",
+        postBookmarkFlag: false,
+        postCommentsCount: 0,
+        postContent: `이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
+        이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
+        이 영역은 토트넘 핫스퍼 공식 계정 글입니다.`,
+        postImageDTOs: [
+            {
+                id: 12,
+                image: {
+                    imageName: "dummy",
+                    imageType: "JPG",
+                    imageUUID: "dummy",
+                    imageUrl:
+                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+                },
+                postTagDTOs: [
+                    {
+                        id: 12,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 30,
+                            y: 40,
+                        },
+                    },
+                ],
+            },
+            {
+                id: 13,
+                image: {
+                    imageName: "dummy",
+                    imageType: "JPG",
+                    imageUUID: "dummy",
+                    imageUrl:
+                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+                },
+                postTagDTOs: [
+                    {
+                        id: 12,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 30,
+                            y: 40,
+                        },
+                    },
+                ],
+            },
+            {
+                id: 14,
+                image: {
+                    imageName: "dummy",
+                    imageType: "JPG",
+                    imageUUID: "dummy",
+                    imageUrl:
+                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+                },
+                postTagDTOs: [
+                    {
+                        id: 12,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 30,
+                            y: 40,
+                        },
+                    },
+                ],
+            },
+        ],
+        postLikeFlag: true,
+        postLikesCount: 24,
+        postUploadDate: "2022-01-03T13:33:00",
+    },
+    {
+        postId: 14,
+        followingMemberUsernameLikedPost: null,
+        memberImageUrl:
+            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+        memberNickname: "spursofficial",
+        memberUsername: "Tottenham Hotspur",
+        postBookmarkFlag: false,
+        postCommentsCount: 0,
+        postContent: `이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
+        이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
+        이 영역은 토트넘 핫스퍼 공식 계정 글입니다.`,
+        postImageDTOs: [
+            {
+                id: 12,
+                image: {
+                    imageName: "dummy",
+                    imageType: "JPG",
+                    imageUUID: "dummy",
+                    imageUrl:
+                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+                },
+                postTagDTOs: [
+                    {
+                        id: 12,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 30,
+                            y: 40,
+                        },
+                    },
+                ],
+            },
+            {
+                id: 13,
+                image: {
+                    imageName: "dummy",
+                    imageType: "JPG",
+                    imageUUID: "dummy",
+                    imageUrl:
+                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+                },
+                postTagDTOs: [
+                    {
+                        id: 12,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 30,
+                            y: 40,
+                        },
+                    },
+                ],
+            },
+            {
+                id: 14,
+                image: {
+                    imageName: "dummy",
+                    imageType: "JPG",
+                    imageUUID: "dummy",
+                    imageUrl:
+                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+                },
+                postTagDTOs: [
+                    {
+                        id: 12,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 30,
+                            y: 40,
+                        },
+                    },
+                ],
+            },
+        ],
+        postLikeFlag: true,
+        postLikesCount: 24,
+        postUploadDate: "2022-01-03T13:33:00",
+    },
+    {
+        postId: 15,
+        followingMemberUsernameLikedPost: null,
+        memberImageUrl:
+            "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+        memberNickname: "spursofficial",
+        memberUsername: "Tottenham Hotspur",
+        postBookmarkFlag: false,
+        postCommentsCount: 0,
+        postContent: `이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
+        이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
+        이 영역은 토트넘 핫스퍼 공식 계정 글입니다.`,
+        postImageDTOs: [
+            {
+                id: 12,
+                image: {
+                    imageName: "dummy",
+                    imageType: "JPG",
+                    imageUUID: "dummy",
+                    imageUrl:
+                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+                },
+                postTagDTOs: [
+                    {
+                        id: 12,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 30,
+                            y: 40,
+                        },
+                    },
+                ],
+            },
+            {
+                id: 13,
+                image: {
+                    imageName: "dummy",
+                    imageType: "JPG",
+                    imageUUID: "dummy",
+                    imageUrl:
+                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+                },
+                postTagDTOs: [
+                    {
+                        id: 12,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 30,
+                            y: 40,
+                        },
+                    },
+                ],
+            },
+            {
+                id: 14,
+                image: {
+                    imageName: "dummy",
+                    imageType: "JPG",
+                    imageUUID: "dummy",
+                    imageUrl:
+                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+                },
+                postTagDTOs: [
+                    {
+                        id: 12,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 30,
+                            y: 40,
+                        },
+                    },
+                ],
+            },
+        ],
+        postLikeFlag: true,
+        postLikesCount: 24,
+        postUploadDate: "2022-01-03T13:33:00",
     },
 ];
 
@@ -93,6 +479,8 @@ const DUMMY_ARTICLES = [
 const initialState: HomeType.homeStateProps = {
     storiesScrollPosition: "left",
     articles: [],
+    isLoading: true, /// dummy
+    isAsyncError: false,
     hoveredUser: null,
     isCopiedNotification: false,
     homeModal: {
@@ -113,13 +501,9 @@ const homeSlice = createSlice({
         },
         changeStoriesScrollPosition: (
             state,
-            action: PayloadAction<HomeType.storiesScrollPositionType>,
+            action: PayloadAction<HomeType.StoriesScrollPositionType>,
         ) => {
             state.storiesScrollPosition = action.payload;
-        },
-        // 비동기 받아와야 함
-        getArticles: (state) => {
-            state.articles = DUMMY_ARTICLES;
         },
         startModal: (state, action: PayloadAction<HomeType.homeModalProps>) => {
             state.homeModal = action.payload;
@@ -131,6 +515,27 @@ const homeSlice = createSlice({
                 handledObj: null,
             };
         },
+    },
+    extraReducers: (build) => {
+        build.addCase(getHomeArticles.pending, (state) => {
+            state.isLoading = true;
+        });
+        build.addCase(
+            getHomeArticles.fulfilled,
+            (state, action: PayloadAction<HomeType.ArticleProps[]>) => {
+                return {
+                    ...state,
+                    isLoading: false,
+                    articles: action.payload || DUMMY_ARTICLES, // 토큰 관련 받으면 수정
+                    // articles: action.payload,
+                };
+            },
+        );
+        build.addCase(getHomeArticles.rejected, (state) => {
+            state.isLoading = false;
+            // state.isAsyncError = true;
+            state.articles = DUMMY_ARTICLES; // 엑세스 토큰 관련 코드 받으면 수정
+        });
     },
 });
 

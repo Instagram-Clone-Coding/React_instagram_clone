@@ -31,6 +31,7 @@ const Home = () => {
     const isCopiedNotification = useAppSelector(
         (state) => state.home.isCopiedNotification,
     );
+
     return (
         <Layout>
             <main>

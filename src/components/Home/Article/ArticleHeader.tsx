@@ -58,7 +58,17 @@ const StyledArticleHeader = styled.header`
 
 const HEADER_STORY_CIRCLE = 42 / 64;
 
-const ArticleHeader = ({ article }: ArticleProps) => {
+interface ArticleHeaderProps {
+    memberImageUrl: string;
+    memberNickname: string;
+    location?: string;
+}
+
+const ArticleHeader = ({
+    memberImageUrl,
+    memberNickname,
+    location,
+}: ArticleHeaderProps) => {
     const [isHoverModalActivated, setIsHoverModalActivated] = useState(false);
     const [isDotModalActivated, setIsDotModalActivated] = useState(false);
     const [isReportModalActivated, setIsReportModalActivated] = useState(false);
@@ -109,7 +119,7 @@ const ArticleHeader = ({ article }: ArticleProps) => {
                 <HoverModal
                     isFollowing={isFollowing}
                     onFollowChange={(a: boolean) => setIsFollowing(a)}
-                    username={article.owner.username}
+                    username={memberNickname}
                     modalPosition={modalPositionObj}
                     onMouseEnter={() => setIsHoverModalActivated(true)}
                     onMouseLeave={() => setIsHoverModalActivated(false)}
@@ -123,8 +133,8 @@ const ArticleHeader = ({ article }: ArticleProps) => {
                     onUnfollow={() => setIsFollowing(false)}
                     onModalOn={() => setIsFollowingModalActivated(true)}
                     onModalOff={() => setIsFollowingModalActivated(false)}
-                    username={article.owner.username}
-                    avatarUrl={article.owner.avatarUrl}
+                    username={memberNickname}
+                    avatarUrl={memberImageUrl}
                 />
             )}
             {isDotModalActivated && (
@@ -149,13 +159,13 @@ const ArticleHeader = ({ article }: ArticleProps) => {
                 <ShareWithModal
                     onModalOn={() => setIsShareWithModalActivated(true)}
                     onModalOff={() => setIsShareWithModalActivated(false)}
-                    username={article.owner.username}
+                    username={memberNickname}
                 />
             )}
             <StoryCircle
                 type="unread" // 백엔드 소통하여 읽었는지 여부 확인
-                avatarUrl={article.owner.avatarUrl}
-                username={article.owner.username}
+                avatarUrl={memberImageUrl}
+                username={memberNickname}
                 scale={HEADER_STORY_CIRCLE}
                 onMouseEnter={mouseEnterHandler}
                 onMouseLeave={mouseLeaveHandler}
@@ -166,9 +176,7 @@ const ArticleHeader = ({ article }: ArticleProps) => {
                         onMouseEnter={mouseEnterHandler}
                         onMouseLeave={mouseLeaveHandler}
                     >
-                        <Link to={`/${article.owner.username}`}>
-                            {article.owner.username}
-                        </Link>
+                        <Link to={`/${memberNickname}`}>{memberNickname}</Link>
                     </Username>
                     {!isFollowing && (
                         <div className="header-followBox">
@@ -177,9 +185,9 @@ const ArticleHeader = ({ article }: ArticleProps) => {
                         </div>
                     )}
                 </div>
-                <Link to={`/explore/locations/:id/${article.location}`}>
+                <Link to={`/explore/locations/:id/${location}`}>
                     {/* location id */}
-                    {article.location}
+                    {location}
                 </Link>
             </div>
             <div

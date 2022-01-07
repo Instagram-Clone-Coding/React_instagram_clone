@@ -38,26 +38,26 @@ const StyledMain = styled.div`
 `;
 
 interface MainProps {
-    isMyFollowerLiked: boolean;
-    myFollowersLiked: string[];
-    likes: string[];
-    owner: {
-        username: string;
-        avatarUrl: string;
-    };
-    text: string;
-    comments: {
+    followingUserWhoLikesArticle: null | string;
+    likesCount: number;
+    memberNickname: string;
+    memberImageUrl: string;
+    content: string;
+    commentsCount: number;
+    comments?: {
+        // 없거나 있으면 보내주거나 해야 할 듯
         username: string;
         comment: string;
     }[];
 }
 
 const ArticleMain = ({
-    isMyFollowerLiked,
-    myFollowersLiked,
-    likes,
-    owner,
-    text,
+    followingUserWhoLikesArticle,
+    likesCount,
+    memberNickname,
+    memberImageUrl,
+    content,
+    commentsCount,
     comments,
 }: MainProps) => {
     const [isComment1Liked, setIsComment1Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
@@ -69,8 +69,8 @@ const ArticleMain = ({
     const [modalPositionObj, setModalPositionObj] = useState<DOMRect>();
     const [hoveredUsername, setHoveredUsername] = useState("");
     const [ishoveredUserFollowing, setIsHoveredUserFollowing] = useState(false); // hover한 데이터 가져와서 적용
-    const isTextLineBreak = text.includes("\n");
-    const textArray = isTextLineBreak ? text.split("\n") : [text];
+    const isTextLineBreak = content.includes("\n");
+    const textArray = isTextLineBreak ? content.split("\n") : [content];
 
     const textSpan = !isFullText ? (
         <span>{textArray[0]}</span>
@@ -133,23 +133,23 @@ const ArticleMain = ({
                     onModalOn={() => setIsFollowingModalActivated(true)}
                     onModalOff={() => setIsFollowingModalActivated(false)}
                     username={hoveredUsername}
-                    avatarUrl={owner.avatarUrl} // 원래 FollowingModal 내부에서 username에 따라 받아와야 함.
+                    avatarUrl={memberImageUrl} // 원래 FollowingModal 내부에서 username에 따라 받아와야 함.
                 />
             )}
             <div className="article-likeInfo">
-                {isMyFollowerLiked ? (
+                {followingUserWhoLikesArticle ? (
                     <div>
                         {/* 임의로 첫 번째 인덱스 선택 */}
                         <Username
                             onMouseEnter={mouseEnterHandler}
                             onMouseLeave={mouseLeaveHandler}
                         >
-                            {myFollowersLiked[0]}
+                            {followingUserWhoLikesArticle}
                         </Username>
-                        님 외<span>{likes.length - 1}명</span>이 좋아합니다
+                        님 외<span>{likesCount - 1}명</span>이 좋아합니다
                     </div>
                 ) : (
-                    <span>좋아요 {likes.length}개</span>
+                    <span>좋아요 {likesCount}개</span>
                 )}
             </div>
             <div className="article-textBox">
@@ -158,7 +158,7 @@ const ArticleMain = ({
                     onMouseLeave={mouseLeaveHandler}
                     className="article-text-username"
                 >
-                    {owner.username}&nbsp;
+                    {memberNickname}&nbsp;
                 </Username>
                 <span className="article-text">
                     <>
@@ -172,48 +172,50 @@ const ArticleMain = ({
                     </>
                 </span>
             </div>
-            <div className="article-commentsBox">
-                <div className="article-commentsNum">
-                    댓글 {comments.length}개 모두 보기
-                </div>
-                <div className="article-recent-comment">
-                    <span>
-                        <Username
-                            onMouseEnter={mouseEnterHandler}
-                            onMouseLeave={mouseLeaveHandler}
-                            className="comment-username"
-                        >
-                            {comments[0].username}
-                        </Username>
-                        &nbsp;
-                        {comments[0].comment}
-                    </span>
-                    <PopHeart
-                        size={17}
-                        isLiked={isComment1Liked}
-                        onToggleLike={comment1LikeHandler}
-                    />
-                </div>
-                <div className="article-recent-comment">
-                    <span>
-                        <Username
-                            onMouseEnter={mouseEnterHandler}
-                            onMouseLeave={mouseLeaveHandler}
-                            className="comment-username"
-                        >
-                            {comments[1].username}
-                        </Username>
-                        &nbsp;
-                        {comments[1].comment}
-                    </span>
+            {comments && (
+                <div className="article-commentsBox">
+                    <div className="article-commentsNum">
+                        댓글 {commentsCount}개 모두 보기
+                    </div>
+                    <div className="article-recent-comment">
+                        <span>
+                            <Username
+                                onMouseEnter={mouseEnterHandler}
+                                onMouseLeave={mouseLeaveHandler}
+                                className="comment-username"
+                            >
+                                {comments[0].username}
+                            </Username>
+                            &nbsp;
+                            {comments[0].comment}
+                        </span>
+                        <PopHeart
+                            size={17}
+                            isLiked={isComment1Liked}
+                            onToggleLike={comment1LikeHandler}
+                        />
+                    </div>
+                    <div className="article-recent-comment">
+                        <span>
+                            <Username
+                                onMouseEnter={mouseEnterHandler}
+                                onMouseLeave={mouseLeaveHandler}
+                                className="comment-username"
+                            >
+                                {comments[1].username}
+                            </Username>
+                            &nbsp;
+                            {comments[1].comment}
+                        </span>
 
-                    <PopHeart
-                        size={17}
-                        isLiked={isComment2Liked}
-                        onToggleLike={comment2LikeHandler}
-                    />
+                        <PopHeart
+                            size={17}
+                            isLiked={isComment2Liked}
+                            onToggleLike={comment2LikeHandler}
+                        />
+                    </div>
                 </div>
-            </div>
+            )}
         </StyledMain>
     );
 };
