@@ -2,7 +2,12 @@ import React, { useRef, useState } from "react";
 import sprite2 from "assets/Images/sprite2.png";
 import styled from "styled-components";
 import { HomeType } from "@type";
-import { ReactComponent as Avatar } from "assets/Svgs/avatar.svg";
+import ArticleImgSliderUnit from "components/Home/Article/ArticleImgSlider/ArticleImgSliderUnit";
+
+interface SliderProps {
+    total: number;
+    currentIndex: number;
+}
 
 const StyledImgSlider = styled.div<SliderProps>`
     position: relative;
@@ -69,10 +74,11 @@ const StyledImgSlider = styled.div<SliderProps>`
         width: 111px;
         height: 100px;
         opacity: 0;
-    }
-    .img-heart.clicked {
         animation: whiteHeartAnimation 1s;
     }
+    /* .img-heart.clicked {
+        animation: whiteHeartAnimation 1s;
+    } */
     .img-wrap {
         width: 100%;
         display: flex;
@@ -88,28 +94,6 @@ const StyledImgSlider = styled.div<SliderProps>`
             display: flex;
             align-items: center;
             transition: transform 0.3s;
-            & > div {
-                width: 100%;
-                scroll-snap-align: center;
-                background-color: red;
-                position: relative;
-                & > .img-slider-tagBox {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                }
-                & > img {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    max-width: 614px;
-                    @media (max-width: 1000px) {
-                        max-width: 600px;
-                    }
-                }
-            }
         }
     }
     .leftArrow {
@@ -131,6 +115,7 @@ const StyledImgSlider = styled.div<SliderProps>`
         position: absolute;
         background-size: 440px 411px;
         cursor: pointer;
+        z-index: 999;
     }
     .img-dots {
         position: absolute;
@@ -169,8 +154,6 @@ const ArticleImgSlider = ({ imageDTOs, onLike }: ArticleImgSliderProps) => {
     const totalIndex = imageDTOs.length - 1;
     const wrapRef = useRef<HTMLDivElement>(null);
     const sliderRef = useRef<HTMLDivElement>(null);
-    const { current: slider } = sliderRef;
-    const { current: wrap } = wrapRef;
 
     const doubleClickLikeHandler = () => {
         setDoubleClicked(true);
@@ -178,6 +161,8 @@ const ArticleImgSlider = ({ imageDTOs, onLike }: ArticleImgSliderProps) => {
     };
 
     const leftArrowClickHandler = (): undefined => {
+        const { current: slider } = sliderRef;
+        const { current: wrap } = wrapRef;
         if (slider === null) return;
         if (wrap === null) return;
         if (sliderIndex <= 0) return;
@@ -190,6 +175,8 @@ const ArticleImgSlider = ({ imageDTOs, onLike }: ArticleImgSliderProps) => {
     };
 
     const rightArrowClickHandler = (): undefined => {
+        const { current: slider } = sliderRef;
+        const { current: wrap } = wrapRef;
         if (slider === null) return;
         if (wrap === null) return;
         if (sliderIndex >= totalIndex) return;
@@ -203,8 +190,8 @@ const ArticleImgSlider = ({ imageDTOs, onLike }: ArticleImgSliderProps) => {
     };
 
     const detectScroll = (): undefined => {
+        const { current: wrap } = wrapRef;
         if (wrap === null) return;
-
         let timer = null;
         let scrollLeft = wrap.scrollLeft;
         if (timer !== null) {
@@ -221,24 +208,19 @@ const ArticleImgSlider = ({ imageDTOs, onLike }: ArticleImgSliderProps) => {
             total={totalIndex}
             currentIndex={sliderIndex}
         >
-            <div
-                className={`img-heart ${doubleClicked ? "clicked" : ""}`}
-                onAnimationEnd={() => setDoubleClicked(false)}
-            ></div>
+            {doubleClicked && (
+                <div
+                    className="img-heart"
+                    onAnimationEnd={() => setDoubleClicked(false)}
+                ></div>
+            )}
             <div className="img-wrap" ref={wrapRef} onScroll={detectScroll}>
                 <div className="img-slider" ref={sliderRef}>
                     {imageDTOs.map((imageDTO) => (
-                        // id 추가되면 key 변경 예정
-                        <div>
-                            <div className="img-slider-tagBox">
-                                <Avatar />
-                            </div>
-                            <img
-                                key={imageDTO.id}
-                                src={imageDTO.image.imageUrl}
-                                alt={imageDTO.image.imageName}
-                            />
-                        </div>
+                        <ArticleImgSliderUnit
+                            key={imageDTO.id}
+                            imageDTO={imageDTO}
+                        />
                     ))}
                 </div>
             </div>

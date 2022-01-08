@@ -20,7 +20,6 @@ const Layout = styled.div`
     }
     @media (max-width: 1000px) {
         max-width: 600px;
-
         main {
             margin-right: 0;
         }

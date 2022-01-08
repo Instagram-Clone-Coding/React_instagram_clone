@@ -26,6 +26,15 @@ declare module HomeType {
         | "shareWith"
         | null;
 
+    export interface PostImgTagDTOProps {
+        id: number;
+        tag: {
+            username: string;
+            x: number;
+            y: number;
+        };
+    }
+
     export interface PostImageDTOProps {
         id: number;
         image: {
@@ -34,17 +43,11 @@ declare module HomeType {
             imageUUID: string;
             imageUrl: string;
         };
-        postTagDTOs: {
-            id: number;
-            tag: {
-                username: string;
-                x: number;
-                y: number;
-            };
-        }[];
+        postTagDTOs: PostImgTagDTOProps[];
+        // 받아온 후 처리
     }
 
-    export interface ArticleProps {
+    interface ArticleProps {
         followingMemberUsernameLikedPost: null | string; // 내가 팔로우한 사람 중에서 이 글을 좋아한 사람 있으면 보내줌
         memberImageUrl: string;
         memberNickname: string;
@@ -59,22 +62,6 @@ declare module HomeType {
         postUploadDate: string;
         // comment 몇 개 가져오기
     }
-
-    // interface ArticleProps {
-    //     article: {
-    //         imgs: string[];
-    //         location: string;
-    //         hashtags: string[];
-    //         text: string;
-    //         owner: {
-    //             username: string;
-    //             avatarUrl: string;
-    //         };
-    //         likes: string[];
-    //         comments: CommentProps[];
-    //         createdAt: number;
-    //     };
-    // }
 
     // interface CommentProps {
     //     username: string;

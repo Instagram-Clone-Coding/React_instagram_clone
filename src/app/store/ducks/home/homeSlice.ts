@@ -34,6 +34,14 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
                             y: 40,
                         },
                     },
+                    {
+                        id: 13,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 60,
+                            y: 60,
+                        },
+                    },
                 ],
             },
             {
@@ -50,8 +58,8 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
                         id: 12,
                         tag: {
                             username: "dummyUsername",
-                            x: 30,
-                            y: 40,
+                            x: 60,
+                            y: 70,
                         },
                     },
                 ],
@@ -72,6 +80,14 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
                             username: "dummyUsername",
                             x: 30,
                             y: 40,
+                        },
+                    },
+                    {
+                        id: 13,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 60,
+                            y: 60,
                         },
                     },
                 ],
@@ -112,6 +128,14 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
                             y: 40,
                         },
                     },
+                    {
+                        id: 13,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 60,
+                            y: 60,
+                        },
+                    },
                 ],
             },
             {
@@ -128,8 +152,8 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
                         id: 12,
                         tag: {
                             username: "dummyUsername",
-                            x: 30,
-                            y: 40,
+                            x: 60,
+                            y: 70,
                         },
                     },
                 ],
@@ -150,6 +174,14 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
                             username: "dummyUsername",
                             x: 30,
                             y: 40,
+                        },
+                    },
+                    {
+                        id: 13,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 60,
+                            y: 60,
                         },
                     },
                 ],
@@ -190,6 +222,14 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
                             y: 40,
                         },
                     },
+                    {
+                        id: 13,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 60,
+                            y: 60,
+                        },
+                    },
                 ],
             },
             {
@@ -206,8 +246,8 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
                         id: 12,
                         tag: {
                             username: "dummyUsername",
-                            x: 30,
-                            y: 40,
+                            x: 60,
+                            y: 70,
                         },
                     },
                 ],
@@ -228,6 +268,14 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
                             username: "dummyUsername",
                             x: 30,
                             y: 40,
+                        },
+                    },
+                    {
+                        id: 13,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 60,
+                            y: 60,
                         },
                     },
                 ],
@@ -268,6 +316,14 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
                             y: 40,
                         },
                     },
+                    {
+                        id: 13,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 60,
+                            y: 60,
+                        },
+                    },
                 ],
             },
             {
@@ -284,8 +340,8 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
                         id: 12,
                         tag: {
                             username: "dummyUsername",
-                            x: 30,
-                            y: 40,
+                            x: 60,
+                            y: 70,
                         },
                     },
                 ],
@@ -306,6 +362,14 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
                             username: "dummyUsername",
                             x: 30,
                             y: 40,
+                        },
+                    },
+                    {
+                        id: 13,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 60,
+                            y: 60,
                         },
                     },
                 ],
@@ -346,6 +410,14 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
                             y: 40,
                         },
                     },
+                    {
+                        id: 13,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 60,
+                            y: 60,
+                        },
+                    },
                 ],
             },
             {
@@ -362,8 +434,8 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
                         id: 12,
                         tag: {
                             username: "dummyUsername",
-                            x: 30,
-                            y: 40,
+                            x: 60,
+                            y: 70,
                         },
                     },
                 ],
@@ -384,6 +456,14 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
                             username: "dummyUsername",
                             x: 30,
                             y: 40,
+                        },
+                    },
+                    {
+                        id: 13,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 60,
+                            y: 60,
                         },
                     },
                 ],
@@ -424,6 +504,14 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
                             y: 40,
                         },
                     },
+                    {
+                        id: 13,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 60,
+                            y: 60,
+                        },
+                    },
                 ],
             },
             {
@@ -440,8 +528,8 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
                         id: 12,
                         tag: {
                             username: "dummyUsername",
-                            x: 30,
-                            y: 40,
+                            x: 60,
+                            y: 70,
                         },
                     },
                 ],
@@ -462,6 +550,14 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
                             username: "dummyUsername",
                             x: 30,
                             y: 40,
+                        },
+                    },
+                    {
+                        id: 13,
+                        tag: {
+                            username: "dummyUsername",
+                            x: 60,
+                            y: 60,
                         },
                     },
                 ],
@@ -523,12 +619,8 @@ const homeSlice = createSlice({
         build.addCase(
             getHomeArticles.fulfilled,
             (state, action: PayloadAction<HomeType.ArticleProps[]>) => {
-                return {
-                    ...state,
-                    isLoading: false,
-                    articles: action.payload || DUMMY_ARTICLES, // 토큰 관련 받으면 수정
-                    // articles: action.payload,
-                };
+                state.isLoading = false;
+                state.articles = action.payload || DUMMY_ARTICLES;
             },
         );
         build.addCase(getHomeArticles.rejected, (state) => {
