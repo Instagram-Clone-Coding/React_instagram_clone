@@ -1,22 +1,44 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 export default function Suggest() {
+    const { pathname } = useLocation();
+    const [stateKey, setStateKey] = useState("");
+    const [stateLink, setStateLink] = useState("");
+
+    useEffect(() => {
+        for (let key of Object.keys(MessageState)) {
+            if (pathname.includes(key) && stateKey !== undefined) {
+                setStateKey(key);
+            } else {
+                setStateLink(key);
+            }
+        }
+    }, [pathname, stateKey]);
+
+    const [question, suggest] = stateKey && MessageState[stateKey];
+
     return (
         <SentenceContainer>
             <p>
-                {MessageState.signUp[0]}
-                <Link to="/accounts/emailsignup">{MessageState.signUp[1]}</Link>
+                {question}
+                <Link to={`/accounts/${stateLink}`}>{suggest}</Link>
             </p>
         </SentenceContainer>
     );
 }
 
-const MessageState = {
-    signUp: ["계정이 없으신가요? ", "가입하기"],
-    Login: ["계정이 있으신가요? ", "로그인"],
+type MessageStateType = {
+    emailsignup: string[];
+    signin: string[];
+    [stateKey: string]: string[];
 };
-// 라우터로 상태 제어
+
+const MessageState: MessageStateType = {
+    signin: ["계정이 없으신가요? ", "가입하기"],
+    emailsignup: ["계정이 있으신가요? ", "로그인"],
+};
 
 const SentenceContainer = styled.div`
     font-size: 14px;
