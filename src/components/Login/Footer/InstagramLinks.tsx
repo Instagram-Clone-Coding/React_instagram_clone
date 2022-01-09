@@ -1,13 +1,15 @@
-import React from "react";
-import { useParams } from "react-router-dom"; // 회원가입에서 라우터 처리로 조작
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import FooterRow from "./FooterRow";
 
 function InstagramLinks() {
+    const { pathname } = useLocation();
+    const isLoginPage = pathname.includes(`signin`);
+
     return (
         <Links>
             <FooterRow content={InstagramRelateLink} />
-            <FooterRow content={SearchResult} />
+            {isLoginPage && <FooterRow content={SearchResult} />}
         </Links>
     );
 }
