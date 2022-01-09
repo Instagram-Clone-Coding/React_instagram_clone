@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-interface ButtonType {
+export interface ButtonType {
     bgColor?: string;
     radius?: number;
     color?: string;

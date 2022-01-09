@@ -3,7 +3,7 @@ import ImgSprite from "components/Common/LoginSprite";
 import { Link, useHistory } from "react-router-dom";
 import Button from "styles/UI/Button/Button";
 import Line from "components/Common/Line";
-import Facebook from "./FacebookLogin";
+import FacebookLogin from "../../Common/FacebookLogin";
 import Input from "components/Common/Input";
 import { useState, MouseEvent } from "react";
 
@@ -16,9 +16,9 @@ export default function Forms() {
     return (
         <FormContainer>
             <ImgSprite
-                width={test.width}
-                height={test.height}
-                position={test.position}
+                width={instagramImage.width}
+                height={instagramImage.height}
+                position={instagramImage.position}
                 className="logo"
             />
             <InputContainer>
@@ -26,7 +26,7 @@ export default function Forms() {
                     <FlexColumn>
                         <LoginFormAndButton />
                         <Line />
-                        <Facebook />
+                        <FacebookLogin bgColor="#fff" color="#385185" />
                     </FlexColumn>
                 </InputForm>
                 <Link to="/accounts/password/reset/">
@@ -92,7 +92,7 @@ const LoginFormAndButton = () => {
 };
 
 // Props
-const test: Login.ImageProps = {
+const instagramImage: Login.ImageProps = {
     width: 175,
     height: 51,
     position: `0 -130px`,
