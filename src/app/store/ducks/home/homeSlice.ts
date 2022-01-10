@@ -615,17 +615,18 @@ const homeSlice = createSlice({
     extraReducers: (build) => {
         build.addCase(getHomeArticles.pending, (state) => {
             state.isLoading = true;
+            state.isAsyncError = false;
         });
         build.addCase(
             getHomeArticles.fulfilled,
             (state, action: PayloadAction<HomeType.ArticleProps[]>) => {
                 state.isLoading = false;
-                state.articles = action.payload || DUMMY_ARTICLES;
+                state.articles = action.payload;
             },
         );
-        build.addCase(getHomeArticles.rejected, (state) => {
+        build.addCase(getHomeArticles.rejected, (state, action) => {
             state.isLoading = false;
-            // state.isAsyncError = true;
+            state.isAsyncError = true;
             state.articles = DUMMY_ARTICLES; // 엑세스 토큰 관련 코드 받으면 수정
         });
     },

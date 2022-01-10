@@ -10,7 +10,6 @@ export const getHomeArticles = createAsyncThunk<
         size: number;
     }
 >("home/getHomeArticles", async (payload, ThunkOptions) => {
-    console.log(payload);
     const config = {
         headers: { Authorization: `Bearer ${payload.token}` },
     };
@@ -25,7 +24,15 @@ export const getHomeArticles = createAsyncThunk<
         );
         return data;
     } catch (error) {
-        console.log(error);
-        ThunkOptions.rejectWithValue(error);
+        throw ThunkOptions.rejectWithValue(error);
     }
 });
+
+// export const getExtraArticle = createAsyncThunk<
+//     HomeType.ArticleProps,
+//     {
+//         token: string;
+//         page: number;
+//         size: number;
+//     }
+// >("home/getExtraArticle", async (payload, ThunkOptions) => {});
