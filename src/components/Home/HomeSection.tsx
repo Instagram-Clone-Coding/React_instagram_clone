@@ -27,8 +27,12 @@ const HomeSection = () => {
     return (
         <section>
             {isLoading ||
-                articles.map((article) => (
-                    <Article key={article.postId} article={article} />
+                articles.map((article, index) => (
+                    <Article
+                        key={article.postId}
+                        article={article}
+                        isObserving={articles.length - 4 === index}
+                    />
                 ))}
         </section>
     );
