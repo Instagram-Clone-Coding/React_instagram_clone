@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import SenderChatBubble from "components/Direct/Section/ChatBubble/SenderChatBubble";
+import ChatBubble from "components/Direct/Section/ChatBubble/ChatBubble";
 
 
 const ChatSectionContainer = styled.div`
@@ -9,17 +9,21 @@ const ChatSectionContainer = styled.div`
 `;
 const ChatSection = () => {
     return (
-        <ChatSectionContainer >
-            <SenderChatBubble me={true} message={"saddasdasd"} />
-            <SenderChatBubble me={false} message={"saddasdasd"} />
-            <SenderChatBubble me={true}
-                              message={"saddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasd"} />
-            <SenderChatBubble me={true} message={"saddasdasd"} />
-            <SenderChatBubble me={false} message={"saddasdasd"} />
-            <SenderChatBubble me={false} message={"saddasdasd"} />
-            <SenderChatBubble me={false} message={"saddasdasd"} />
-            <SenderChatBubble me={false} message={"saddasdasd"} />
-
+        <ChatSectionContainer>
+            <ChatBubble me={true} message={"saddasdasd"} />
+            <ChatBubble me={false} message={"saddasdasd"} />
+            <ChatBubble me={true}
+                        message={"saddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasd"} />
+            <ChatBubble me={true} message={"saddasdasd"} />
+            <ChatBubble me={false} message={"saddasdasd"} />
+            <ChatBubble me={true} message={"saddasdasd"} />
+            <ChatBubble me={false} message={"saddasdasd"} />
+            <ChatBubble me={true} message={"saddasdasd"} />
+            <ChatBubble me={true} message={"saddasdasd"} />
+            <ChatBubble me={true} message={"saddasdasd"} />
+            <ChatBubble me={true} message={"saddasdasd"} />
+            <ChatBubble me={false} message={"saddasdasd"} />
+            <ChatBubble me={true} message={"saddasdasd"} />
         </ChatSectionContainer>
     );
 };

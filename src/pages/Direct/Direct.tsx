@@ -33,7 +33,7 @@ const Direct = () => {
                 {/* body */}
                 <section>
                     <SectionHeader isDetailedView={isDetailedView} setIsDetailedView={setIsDetailedView}/>
-                    <SectionBody message={message} setMessage={setMessage} />
+                    <SectionBody isDetailedView={isDetailedView} message={message} setMessage={setMessage} />
                 </section>
             </Container>
         </Layout>
