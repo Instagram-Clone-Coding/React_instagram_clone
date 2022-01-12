@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, MouseEventHandler, SetStateAction, useState } from "react";
+import React, { ChangeEvent, Dispatch, KeyboardEventHandler, MouseEventHandler, SetStateAction, useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as Emoji } from "assets/Svgs/direct-emoji-icon.svg";
 import { ReactComponent as ImageUpload } from "assets/Svgs/direct-image-upload.svg";
@@ -48,7 +48,7 @@ const ChatBarContainer = styled.div<ChatBarContainerType>`
     button {
       margin-right: 8px;
       color: rgba(var(--d69, 0, 149, 246), 1);
-      opacity: ${props => props.sendButtonClicked ? '0.8' : '1.0'};
+      opacity: ${props => props.sendButtonClicked ? "0.8" : "1.0"};
     }
   }
 `;
@@ -58,6 +58,13 @@ const ChatBar = ({ message, setMessage }: ChatBarType) => {
 
 
     const [sendButtonClicked, setSendButtonClicked] = useState<boolean>(false);
+
+    const sendMessage = () => {
+        // Todo : axios
+        console.log(message);
+        setMessage("");
+    };
+
 
     const messageChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setMessage(event.target.value);
@@ -70,19 +77,34 @@ const ChatBar = ({ message, setMessage }: ChatBarType) => {
     const sendButtonMouseUpHandler = () => {
         setSendButtonClicked(false);
     };
+
+    const sendButtonClickHandler = () => {
+        sendMessage();
+    };
+
+    const pressEnterHandler: KeyboardEventHandler<HTMLTextAreaElement> = (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            sendMessage();
+        }
+    };
+
     return (
         <ChatBarContainer sendButtonClicked={sendButtonClicked}>
             <div className="input-container">
                 <Emoji />
-                <textarea placeholder="메시지 입력..." className="chat-input" onChange={messageChangeHandler} />
-                {message.length > 0 ?
-                    <button onMouseDown={sendButtonMouseDownHandler} onMouseUp={sendButtonMouseUpHandler}>
-                        보내기
-                    </button> :
+                <textarea value={message} placeholder="메시지 입력..." className="chat-input" onChange={messageChangeHandler}
+                          onKeyPress={pressEnterHandler} />
+                {message.length === 0 ?
                     <>
                         <ImageUpload />
                         <Heart />
                     </>
+                    : <button onClick={sendButtonClickHandler} onMouseDown={sendButtonMouseDownHandler}
+                              onMouseUp={sendButtonMouseUpHandler}>
+                        보내기
+                    </button>
+
                 }
             </div>
         </ChatBarContainer>
