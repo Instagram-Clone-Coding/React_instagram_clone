@@ -10,6 +10,9 @@ import SectionHeader from "components/Direct/Section/SectionHeader";
 const Direct = () => {
 
     const [isDetailedView,setIsDetailedView] = useState<boolean>(false)
+    const [message,setMessage] = useState<string>("")
+
+
     // title 변경해주는 역할
     // Todo: (1) 이 부분 데이터 받아서 안 읽은 메세지 개수로 처리해줘야 합니다.
     useEffect(() => {
@@ -30,7 +33,7 @@ const Direct = () => {
                 {/* body */}
                 <section>
                     <SectionHeader isDetailedView={isDetailedView} setIsDetailedView={setIsDetailedView}/>
-                    <SectionBody />
+                    <SectionBody message={message} setMessage={setMessage} />
                 </section>
             </Container>
         </Layout>
