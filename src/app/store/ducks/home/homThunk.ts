@@ -11,7 +11,10 @@ export const getHomeArticles = createAsyncThunk<
     }
 >("home/getHomeArticles", async (payload, ThunkOptions) => {
     const config = {
-        headers: { Authorization: `Bearer ${payload.token}` },
+        // headers: { Authorization: `Bearer ${payload.token}` },
+        headers: {
+            Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MTk4NDYyNH0.DRxdk2XiiMajyFX47ZJXxtn6F1GJ9esiWXRPN90-vgrG0vsLTz6EAmkBUvwXWN6qylgC32fcVqGZODsHrPlD_g`,
+        },
     };
     try {
         const {
@@ -19,9 +22,10 @@ export const getHomeArticles = createAsyncThunk<
                 data: { content: data },
             },
         } = await axios.get(
-            `https://instagram-test2.herokuapp.com/posts?page=${payload.page}&size=${payload.size}`,
+            `http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/posts?page=${payload.page}&size=${payload.size}`,
             config,
         );
+        console.log(data);
         return data;
     } catch (error) {
         throw ThunkOptions.rejectWithValue(error);
