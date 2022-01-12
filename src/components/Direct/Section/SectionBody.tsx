@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 import ChatBar from "components/Direct/Section/ChatBar";
+import ChatSection from "components/Direct/Section/ChatSection";
 
 
 interface SectionBodyType {
@@ -11,11 +12,13 @@ interface SectionBodyType {
 const SectionBodyContainer = styled.section`
   position: relative;
   height: calc(100% - 60px); // 이름 써져있는 header 의 높이만큼빼줍니다.
+  overflow-y: auto;
+
 `;
 
 const SectionBody = ({ message, setMessage }: SectionBodyType) => {
-    return <SectionBodyContainer>body
-
+    return <SectionBodyContainer>
+        <ChatSection/>
         <ChatBar message={message} setMessage={setMessage} />
     </SectionBodyContainer>;
 };
