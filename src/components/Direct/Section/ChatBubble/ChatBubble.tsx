@@ -1,20 +1,19 @@
 import React from "react";
 import styled from "styled-components";
-import theme from "styles/theme";
 
-interface SenderChatBubbleProps {
+interface ChatBubbleProps {
     message: string;
     me: boolean;
 }
 
-interface SenderChatBubbleContainerType {
+interface ChatBubbleContainerType {
     me: boolean;
 }
 
-const SenderChatBubbleContainer = styled.div<SenderChatBubbleContainerType>`
+const ChatBubbleContainer = styled.div<ChatBubbleContainerType>`
   margin-top: 5px;
   padding: 0px 20px;
-  padding-left: ;
+  padding-left: ${props => props.me ? "20px" : "50px"};
   text-align: ${props => props.me ? "right" : "left"};
   display: block;
   position: relative;
@@ -34,7 +33,7 @@ const SenderChatBubbleContainer = styled.div<SenderChatBubbleContainerType>`
   img {
     position: absolute;
     bottom: 0;
-    left: 30px;
+    left: 20px;
     width: 24px;
     height: 24px;
     border-radius: 50%;
@@ -44,9 +43,9 @@ const SenderChatBubbleContainer = styled.div<SenderChatBubbleContainerType>`
 `;
 
 
-const SenderChatBubble = ({ me, message }: SenderChatBubbleProps) => {
+const ChatBubble = ({ me, message }: ChatBubbleProps) => {
     return (
-        <SenderChatBubbleContainer me={me}>
+        <ChatBubbleContainer me={me}>
             {
                 !me &&
                 <img src={"https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150"} alt={"보낸사람"} />
@@ -55,8 +54,8 @@ const SenderChatBubble = ({ me, message }: SenderChatBubbleProps) => {
                 {message}
             </p>
 
-        </SenderChatBubbleContainer>
+        </ChatBubbleContainer>
     );
 };
 
-export default SenderChatBubble;
+export default ChatBubble;

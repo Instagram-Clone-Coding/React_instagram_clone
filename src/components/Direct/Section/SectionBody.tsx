@@ -2,9 +2,11 @@ import React, { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 import ChatBar from "components/Direct/Section/ChatBar";
 import ChatSection from "components/Direct/Section/ChatSection";
+import DetailSection from "./DetailSection";
 
 
 interface SectionBodyType {
+    isDetailedView: boolean;
     message: string;
     setMessage: Dispatch<SetStateAction<string>>;
 }
@@ -16,10 +18,16 @@ const SectionBodyContainer = styled.section`
 
 `;
 
-const SectionBody = ({ message, setMessage }: SectionBodyType) => {
+const SectionBody = ({ isDetailedView, message, setMessage }: SectionBodyType) => {
     return <SectionBodyContainer>
-        <ChatSection/>
-        <ChatBar message={message} setMessage={setMessage} />
+        {
+            isDetailedView ? <DetailSection /> :
+                <ChatSection />
+        }
+        {
+            !isDetailedView && <ChatBar message={message} setMessage={setMessage} />
+
+        }
     </SectionBodyContainer>;
 };
 

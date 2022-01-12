@@ -18,7 +18,8 @@ const ChatBarContainer = styled.div<ChatBarContainerType>`
   bottom: 0;
   padding: 20px;
   width: 100%;
-
+  background-color: white;
+  z-index: 1;
   .input-container {
     border: 1px solid rgba(var(--b6a, 219, 219, 219), 1);
     border-radius: 22px;
@@ -39,7 +40,7 @@ const ChatBarContainer = styled.div<ChatBarContainerType>`
       padding: 0 9px;
       overflow: hidden;
       height: 18px;
-
+      background-color: white;
       &:focus {
         outline: none;
       }
