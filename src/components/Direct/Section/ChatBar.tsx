@@ -58,7 +58,7 @@ const ChatBar = ({ message, setMessage }: ChatBarType) => {
 
 
     const [sendButtonClicked, setSendButtonClicked] = useState<boolean>(false);
-
+    const [image,setImage] = useState<File>()
     const sendMessage = () => {
         // Todo : axios
         console.log(message);
@@ -89,6 +89,9 @@ const ChatBar = ({ message, setMessage }: ChatBarType) => {
         }
     };
 
+    const imageUploadHandler = (e:ChangeEvent<HTMLInputElement>) => {
+    }
+
 
     return (
         <ChatBarContainer sendButtonClicked={sendButtonClicked}>
@@ -98,7 +101,13 @@ const ChatBar = ({ message, setMessage }: ChatBarType) => {
                           onKeyPress={pressEnterHandler} />
                 {message.length === 0 ?
                     <>
-                        <ImageUpload />
+                        <ImageUpload /> <input
+                        onChange={imageUploadHandler}
+                        type="file"
+                        id="img"
+                        accept="image/*"
+                        style={{ display: "none" }}
+                    />
                         <Heart />
                     </>
                     : <button onClick={sendButtonClickHandler} onMouseDown={sendButtonMouseDownHandler}
