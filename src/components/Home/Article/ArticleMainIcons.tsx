@@ -1,9 +1,9 @@
 import PopHeart from "components/Common/PopHeart";
 import { useState } from "react";
-import { ReactComponent as CommentBubble } from "../../../assets/Svgs/commentBubble.svg";
-import { ReactComponent as PaperAirplane } from "../../../assets/Svgs/paperAirplane.svg";
-import { ReactComponent as EmptyBookmark } from "../../../assets/Svgs/emptyBookmark.svg";
-import { ReactComponent as FilledBookmark } from "../../../assets/Svgs/filledBookmark.svg";
+import { ReactComponent as CommentBubble } from "assets/Svgs/commentBubble.svg";
+import { ReactComponent as PaperAirplane } from "assets/Svgs/paperAirplane.svg";
+import { ReactComponent as EmptyBookmark } from "assets/Svgs/emptyBookmark.svg";
+import { ReactComponent as FilledBookmark } from "assets/Svgs/filledBookmark.svg";
 import styled from "styled-components";
 
 const StyledMainIcons = styled.div`
@@ -36,6 +36,10 @@ const StyledMainIcons = styled.div`
         margin-right: -10px;
         margin-left: auto;
     }
+
+    .save.saved:hover {
+        opacity: 1;
+    }
 `;
 
 interface likePropsType {
@@ -65,7 +69,10 @@ const ArticleMainIcons = ({ isLiked, onToggleLike }: likePropsType) => {
             <div className="share">
                 <PaperAirplane />
             </div>
-            <div onClick={toggleSave} className="save">
+            <div
+                onClick={toggleSave}
+                className={`save ${isSaved ? "saved" : ""}`}
+            >
                 {isSaved ? <FilledBookmark /> : <EmptyBookmark />}
             </div>
         </StyledMainIcons>
