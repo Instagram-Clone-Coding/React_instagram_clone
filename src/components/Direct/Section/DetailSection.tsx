@@ -77,6 +77,7 @@ const DetailSectionContainer = styled.div`
     div{
       margin: 12px 16px;
       color: #ed4956;
+      cursor: pointer;
     }
   }
 `;

@@ -31,6 +31,7 @@ const ChatBarContainer = styled.div<ChatBarContainerType>`
 
     svg {
       margin: 8px;
+      cursor: pointer;
     }
 
     textarea {
@@ -102,7 +103,11 @@ const ChatBar = ({ message, setMessage }: ChatBarType) => {
                           onKeyPress={pressEnterHandler} />
                 {message.length === 0 ?
                     <>
-                        <ImageUpload /> <input
+                        <label htmlFor={"img"}>
+
+                        <ImageUpload />
+                        </label>
+                        <input
                         onChange={imageUploadHandler}
                         type="file"
                         id="img"
