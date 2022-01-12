@@ -14,7 +14,7 @@ interface SenderChatBubbleContainerType {
 const SenderChatBubbleContainer = styled.div<SenderChatBubbleContainerType>`
   margin-top: 5px;
   padding: 0px 20px;
-  padding-left: ;
+  padding-left:${props => props.me ? "20px" : "40px"} ;
   text-align: ${props => props.me ? "right" : "left"};
   display: block;
   position: relative;
@@ -34,7 +34,7 @@ const SenderChatBubbleContainer = styled.div<SenderChatBubbleContainerType>`
   img {
     position: absolute;
     bottom: 0;
-    left: 30px;
+    left: 10px;
     width: 24px;
     height: 24px;
     border-radius: 50%;

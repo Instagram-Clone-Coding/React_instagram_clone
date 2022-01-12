@@ -89,6 +89,7 @@ const ChatBar = ({ message, setMessage }: ChatBarType) => {
         }
     };
 
+
     return (
         <ChatBarContainer sendButtonClicked={sendButtonClicked}>
             <div className="input-container">
