@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import sprite from "images/Login/sprite.png";
+import sprite from "assets/Images/loginSprite.png";
 
 export interface imageProps {
     width: number;

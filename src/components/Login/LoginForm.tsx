@@ -1,9 +1,9 @@
-import styled, { css } from "styled-components";
-import Card from "UI/Card/Card";
+import styled from "styled-components";
+import Card from "styles/UI/Card/Card";
 import { Forms } from "./Forms";
 import { Suggest } from "./Suggest";
-import apple from "images/Login/appStore.png";
-import android from "images/Login/googlePlay.png";
+import apple from "assets/Images/appStore.png";
+import android from "assets/Images/googlePlay.png";
 
 export function LoginForm() {
     return (

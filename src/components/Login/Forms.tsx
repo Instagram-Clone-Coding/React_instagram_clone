@@ -3,7 +3,7 @@ import { imageProps, ImgSprite } from "components/Common/Sprite";
 
 import { Link, useHistory } from "react-router-dom";
 import React, { useRef, MouseEvent } from "react";
-import Button from "UI/Button/Button";
+import Button from "styles/UI/Button/Button";
 
 import { useAppDispatch } from "app/hooks";
 import { setUserInfo } from "features/Auth/authSlice";
