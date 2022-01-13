@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Card from "styles/UI/Card";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ArticleHeader from "components/Home/Article/ArticleHeader";
 import ArticleImgSlider from "components/Home/Article/ArticleImgSlider";
 import ArticleMainIcons from "components/Home/Article/ArticleMainIcons";
@@ -9,6 +9,8 @@ import CommentForm from "components/Home/Article/CommentForm";
 import { HomeType } from "@type";
 import useGapText from "Hooks/useGapText";
 import useOnView from "Hooks/useOnView";
+import { useAppDispatch } from "app/store/hooks";
+import { getExtraArticle } from "app/store/ducks/home/homThunk";
 
 const ArticleCard = styled(Card)`
     margin-bottom: 24px;
@@ -43,10 +45,24 @@ const Article = ({
     // like state
     const [isLiked, setIsliked] = useState(article.postLikeFlag);
     const gapText = useGapText(article.postUploadDate);
-
     const articleRef = useRef<HTMLDivElement>(null);
     const isVisible = useOnView(articleRef);
-    isVisible && isObserving && console.log("visible"); // 이 때 비동기 작업 및 무한 스크롤
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        const dispatchExtraArticle = async () => {
+            console.log("start");
+            try {
+                await dispatch(getExtraArticle({ token: "" }));
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        isObserving && isVisible && dispatchExtraArticle(); // 이 때 비동기 작업 및 무한 스크롤
+    }, [isObserving, isVisible, dispatch]);
+
+    // isObserving && isVisible && console.log("start"); // 이 때 비동기 작업 및 무한 스크롤
 
     const toggleLikeHandler = (): void => {
         setIsliked((prev: boolean) => !prev);

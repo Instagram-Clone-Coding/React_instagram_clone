@@ -1,5 +1,6 @@
 import { getHomeArticles } from "app/store/ducks/home/homThunk";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import ExtraLoadingCircle from "components/Home/ExtraLoadingCircle";
 import { useEffect } from "react";
 import Article from "./Article";
 
@@ -13,7 +14,9 @@ const page = 1;
 const size = 5;
 
 const HomeSection = () => {
-    const { articles, isLoading } = useAppSelector((state) => state.home);
+    const { articles, isLoading, isExtraArticleLoading } = useAppSelector(
+        (state) => state.home,
+    );
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -23,7 +26,9 @@ const HomeSection = () => {
             );
         };
         fetchData();
+        console.log("effect is occur");
     }, [dispatch]);
+
     return (
         <section>
             {isLoading ||
@@ -31,9 +36,11 @@ const HomeSection = () => {
                     <Article
                         key={article.postId}
                         article={article}
+                        // isObserving={1 === index}
                         isObserving={articles.length - 4 === index}
                     />
                 ))}
+            {isExtraArticleLoading && <ExtraLoadingCircle />}
         </section>
     );
 };

@@ -93,6 +93,7 @@ declare module HomeType {
         articles: ArticleProps[];
         // location?
         isLoading: boolean; // 더미 로딩
+        isExtraArticleLoading: boolean;
         isAsyncError: boolean;
         hoveredUser: {
             avatarUrl: string;

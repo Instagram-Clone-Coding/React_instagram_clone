@@ -11,10 +11,7 @@ export const getHomeArticles = createAsyncThunk<
     }
 >("home/getHomeArticles", async (payload, ThunkOptions) => {
     const config = {
-        // headers: { Authorization: `Bearer ${payload.token}` },
-        headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MTk4NDYyNH0.DRxdk2XiiMajyFX47ZJXxtn6F1GJ9esiWXRPN90-vgrG0vsLTz6EAmkBUvwXWN6qylgC32fcVqGZODsHrPlD_g`,
-        },
+        headers: { Authorization: `Bearer ${payload.token}` },
     };
     try {
         const {
@@ -25,18 +22,30 @@ export const getHomeArticles = createAsyncThunk<
             `http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/posts?page=${payload.page}&size=${payload.size}`,
             config,
         );
-        console.log(data);
         return data;
     } catch (error) {
         throw ThunkOptions.rejectWithValue(error);
     }
 });
 
-// export const getExtraArticle = createAsyncThunk<
-//     HomeType.ArticleProps,
-//     {
-//         token: string;
-//         page: number;
-//         size: number;
-//     }
-// >("home/getExtraArticle", async (payload, ThunkOptions) => {});
+export const getExtraArticle = createAsyncThunk<
+    // HomeType.ArticleProps,
+    null,
+    {
+        token: string;
+    }
+>("home/getExtraArticle", async (payload, ThunkOptions) => {
+    const config = {
+        headers: { Authorization: `Bearer ${payload.token}` },
+    };
+    try {
+        const {
+            data: {
+                data: { content: data },
+            },
+        } = await axios.get(""); // 단건 조회 api 추가
+        return data;
+    } catch (error) {
+        throw ThunkOptions.rejectWithValue(error);
+    }
+});
