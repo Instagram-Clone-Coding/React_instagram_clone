@@ -2,7 +2,7 @@ import React, { useMemo, useRef } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 import Card from "styles/UI/Card";
-import { CardProps } from "../UI/Card/Card";
+import { CardProps } from "styles/UI/Card/Card";
 
 interface PositionedModal extends CardProps {
     top: number;
@@ -101,13 +101,8 @@ const ModalCard = ({
                 {children}
             </StyledPositionedModal>
         ) : (
-            <StyledBackDrop
-                onMouseEnter={onModalOn}
-                // onMouseLeave={onModalOff}
-                onClick={onModalOff}
-            >
+            <StyledBackDrop onMouseEnter={onModalOn} onClick={onModalOff}>
                 <Card onClick={(event) => event.stopPropagation()} radius={12}>
-                    {/* 자식까지 onClick 전파 안되게 */}
                     {children}
                 </Card>
             </StyledBackDrop>
