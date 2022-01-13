@@ -1,10 +1,11 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 export interface InitialStateType {
     deleteChat: boolean;
     block: boolean;
     report: boolean;
     newChat: boolean;
+    convertAccount:boolean;
 }
 
 const initialState: InitialStateType = {
@@ -12,6 +13,7 @@ const initialState: InitialStateType = {
     block: false,
     report: false,
     newChat: false,
+    convertAccount:false
 };
 
 const directSlice = createSlice({
@@ -32,6 +34,12 @@ const directSlice = createSlice({
                 case "newChat":
                     state.newChat = true
                     break;
+                 case "convertAccount":
+                    state.convertAccount = true
+                    break;
+
+                default:
+                    break
             }
         },
         closeModal: (state) => {
@@ -40,6 +48,7 @@ const directSlice = createSlice({
             state.block = false;
             state.report = false;
             state.newChat = false;
+            state.convertAccount = false;
 
         },
     },
