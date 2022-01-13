@@ -24,7 +24,7 @@ const dummyChatList: Array<Direct.ChatItem> = [
         lastMessage: "마지막으로 상대가 보낸 메세지",
         isImLast: false,
     },{
-        id: 1,
+        id: 2,
         avatarImg:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
         userName: "붕어빵",
@@ -32,7 +32,7 @@ const dummyChatList: Array<Direct.ChatItem> = [
         lastMessage: "마지막으로 상대가 보낸 메세지",
         isImLast: false,
     },{
-        id: 1,
+        id: 3,
         avatarImg:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
         userName: "붕어빵",
@@ -40,7 +40,7 @@ const dummyChatList: Array<Direct.ChatItem> = [
         lastMessage: "마지막으로 상대가 보낸 메세지",
         isImLast: false,
     },{
-        id: 1,
+        id: 4,
         avatarImg:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
         userName: "붕어빵",
@@ -48,7 +48,7 @@ const dummyChatList: Array<Direct.ChatItem> = [
         lastMessage: "마지막으로 상대가 보낸 메세지",
         isImLast: false,
     },{
-        id: 1,
+        id: 5,
         avatarImg:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
         userName: "붕어빵",
@@ -56,7 +56,7 @@ const dummyChatList: Array<Direct.ChatItem> = [
         lastMessage: "마지막으로 상대가 보낸 메세지",
         isImLast: false,
     },{
-        id: 1,
+        id: 6,
         avatarImg:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
         userName: "붕어빵",
@@ -64,7 +64,7 @@ const dummyChatList: Array<Direct.ChatItem> = [
         lastMessage: "마지막으로 상대가 보낸 메세지",
         isImLast: false,
     },{
-        id: 1,
+        id: 7,
         avatarImg:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
         userName: "붕어빵",
@@ -72,7 +72,7 @@ const dummyChatList: Array<Direct.ChatItem> = [
         lastMessage: "마지막으로 상대가 보낸 메세지",
         isImLast: false,
     },{
-        id: 1,
+        id: 8,
         avatarImg:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
         userName: "붕어빵",
@@ -80,7 +80,7 @@ const dummyChatList: Array<Direct.ChatItem> = [
         lastMessage: "마지막으로 상대가 보낸 메세지",
         isImLast: false,
     },{
-        id: 1,
+        id: 9,
         avatarImg:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
         userName: "붕어빵",
@@ -88,7 +88,7 @@ const dummyChatList: Array<Direct.ChatItem> = [
         lastMessage: "마지막으로 상대가 보낸 메세지",
         isImLast: false,
     },{
-        id: 1,
+        id: 10,
         avatarImg:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
         userName: "붕어빵",
@@ -96,7 +96,7 @@ const dummyChatList: Array<Direct.ChatItem> = [
         lastMessage: "마지막으로 상대가 보낸 메세지",
         isImLast: false,
     },{
-        id: 1,
+        id: 11,
         avatarImg:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
         userName: "붕어빵",
@@ -104,7 +104,7 @@ const dummyChatList: Array<Direct.ChatItem> = [
         lastMessage: "마지막으로 상대가 보낸 메세지",
         isImLast: false,
     },{
-        id: 1,
+        id: 12,
         avatarImg:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
         userName: "붕어빵",
@@ -112,7 +112,7 @@ const dummyChatList: Array<Direct.ChatItem> = [
         lastMessage: "마지막으로 상대가 보낸 메세지",
         isImLast: false,
     },{
-        id: 1,
+        id: 13,
         avatarImg:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
         userName: "붕어빵",
