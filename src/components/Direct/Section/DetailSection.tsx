@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Modal from "components/Common/Modal/Modal";
 import DeleteChatModal from "components/Direct/Section/Modals/DeleteChatModal";
 import BlockModal from "components/Direct/Section/Modals/BlockModal";
 import ReportModal from "components/Direct/Section/Modals/ReportModal";
+import NewChatModal from "./Modals/NewChatModal/NewChatModal";
 
 
 interface modalVisibleType {
     deleteChat: boolean;
     block: boolean;
     report: boolean;
+    newChat: boolean;
 }
 
 
@@ -17,6 +18,7 @@ const initialModalVisibleState = {
     deleteChat: false,
     block: false,
     report: false,
+    newChat:false
 };
 
 const DetailSectionContainer = styled.div`
@@ -115,6 +117,9 @@ const DetailSection = () => {
             case "report":
                 setModalVisible({ ...modalVisible, report: true });
                 break;
+            case "newChat":
+                setModalVisible({ ...modalVisible, newChat: true });
+                break;
             default:
                 break;
         }
@@ -149,9 +154,10 @@ const DetailSection = () => {
                     openModal("block");
                 }}>차단
                 </div>
-                <div onClick={()=>{
-                    openModal("report")
-                }}>신고</div>
+                <div onClick={() => {
+                    openModal("report");
+                }}>신고
+                </div>
             </div>
 
             {/*under this point is modal section*/}
@@ -163,6 +169,9 @@ const DetailSection = () => {
             }
             {
                 modalVisible.report && <ReportModal visible={modalVisible.report} onClose={closeModal} />
+            }
+            {
+                modalVisible.newChat && <NewChatModal visible={modalVisible.newChat} onClose={closeModal} />
             }
         </DetailSectionContainer>
     );
