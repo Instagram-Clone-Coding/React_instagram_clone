@@ -39,39 +39,6 @@ const Rotate = styled.span`
     padding: 8px;
 `;
 
-const HeaderTab = styled.div`
-    display: flex;
-    & > nav {
-        display: flex;
-        width: 60%;
-    }
-`;
-
-const TabLink = styled(NavLink)`
-    flex: 1;
-
-    display: inline-block;
-    padding: 12px 0;
-
-    font-weight: 600;
-    text-align: center;
-    text-decoration: none;
-    opacity: 1;
-    z-index: 1;
-    color: ${theme.color.bd_gray};
-
-    border-bottom: 1px solid ${theme.color.bd_gray};
-
-    &.active {
-        color: rgba(var(--i1d, 38, 38, 38), 1);
-        border-color: rgba(var(--i1d, 38, 38, 38), 1);
-    }
-`;
-
-const BlankLink = styled.div`
-    flex: 1;
-    border-bottom: 1px solid ${theme.color.bd_gray};
-`;
 
 const AsideHeader = () => {
     return (
@@ -85,19 +52,6 @@ const AsideHeader = () => {
                 </NickWrapper>
                 <DmWrite />
             </HeaderTop>
-
-            {/*  */}
-            <HeaderTab>
-                <nav>
-                    <TabLink exact to="/direct">
-                        주요
-                    </TabLink>
-                    <TabLink exact to="/direct/general">
-                        일반
-                    </TabLink>
-                </nav>
-                <BlankLink />
-            </HeaderTab>
         </Container>
     );
 };
