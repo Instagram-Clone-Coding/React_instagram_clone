@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authSlice from "features/Auth/authSlice";
+import { directReducer } from "app/ducks/direct/DirectSlice";
 
 export const store = configureStore({
     reducer: {
-        auth: authSlice,
+        // auth: authSlice,
+        direct:directReducer
     },
 });
 

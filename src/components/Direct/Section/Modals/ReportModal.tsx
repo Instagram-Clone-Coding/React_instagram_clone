@@ -4,7 +4,6 @@ import Modal from "../../../Common/Modal/Modal";
 import ModalTitleContent from "../../../Common/Modal/ModalContent/ModalTitleContent";
 
 interface ReportModalProps {
-    onClose: () => void;
     visible: boolean;
 }
 
@@ -12,9 +11,9 @@ const ReportModalContainer = styled.div`
 
 `;
 
-const ReportModal = ({ onClose, visible }: ReportModalProps) => {
+const ReportModal = ({ visible }: ReportModalProps) => {
     return (
-        <Modal onClose={onClose} visible={visible} maskClosable={true} closable={true}>
+        <Modal visible={visible} maskClosable={true} closable={true}>
             <ReportModalContainer>
                        <div className="title">신고</div>
             </ReportModalContainer>

@@ -2,10 +2,11 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import styled, { keyframes } from "styled-components";
 import Portal from "components/Common/Modal/Portal";
+import { useAppDispatch } from "../../../app/hooks";
+import { closeModal } from "../../../app/ducks/direct/DirectSlice";
 
 
 interface ModalProps {
-    onClose: () => void;
     maskClosable: boolean;
     closable: boolean;
     visible: boolean;
@@ -14,23 +15,23 @@ interface ModalProps {
 
 
 const Modal = ({
-                   onClose,
                    maskClosable,
                    closable,
                    visible,
                    children,
                }: ModalProps) => {
 
+
+    const dispatch = useAppDispatch()
+
     const onMaskClick = (e: MouseEvent) => {
         if (e.target === e.currentTarget) {
-            onClose();
+            dispatch(closeModal())
         }
     };
 
     const close = () => {
-        if (onClose) {
-            onClose();
-        }
+            dispatch(closeModal())
     };
 
     // useEffect(() => {

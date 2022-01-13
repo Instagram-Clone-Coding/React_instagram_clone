@@ -4,23 +4,8 @@ import DeleteChatModal from "components/Direct/Section/Modals/DeleteChatModal";
 import BlockModal from "components/Direct/Section/Modals/BlockModal";
 import ReportModal from "components/Direct/Section/Modals/ReportModal";
 import NewChatModal from "./Modals/NewChatModal/NewChatModal";
-import { useAppDispatch } from "../../../app/hooks";
-import {directActions} from "app/ducks/direct/DirectSlice";
-
-interface modalVisibleType {
-    deleteChat: boolean;
-    block: boolean;
-    report: boolean;
-    newChat: boolean;
-}
-
-
-const initialModalVisibleState = {
-    deleteChat: false,
-    block: false,
-    report: false,
-    newChat: false,
-};
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { openModal, closeModal } from "app/ducks/direct/DirectSlice";
 
 const DetailSectionContainer = styled.div`
   height: 100%;
@@ -103,44 +88,8 @@ const DetailSectionContainer = styled.div`
 `;
 
 const DetailSection = () => {
-
-
     const dispatch = useAppDispatch();
-
-    const openDELETE =  (e: any) => {
-        e.preventDefault();
-        dispatch(
-            directActions.hehehe("asdasd")
-        );
-    };
-
-
-    const [modalVisible, setModalVisible] = useState<modalVisibleType>(initialModalVisibleState);
-
-    const openModal = (modalName: string) => {
-        switch (modalName) {
-            case "deleteChat":
-                setModalVisible({ ...modalVisible, deleteChat: true });
-                break;
-            case "block":
-                setModalVisible({ ...modalVisible, block: true });
-                break;
-            case "report":
-                setModalVisible({ ...modalVisible, report: true });
-                break;
-            case "newChat":
-                setModalVisible({ ...modalVisible, newChat: true });
-                break;
-            default:
-                break;
-        }
-    };
-
-
-    const closeModal = () => {
-        setModalVisible(initialModalVisibleState);
-    };
-
+    const { deleteChat, block, report } = useAppSelector((state => state.direct));
     return (
         <DetailSectionContainer>
             <div className="direct-notification-check">
@@ -157,33 +106,29 @@ const DetailSection = () => {
                 </div>
             </div>
             <div className="various-option-container">
-                <div onClick={(e) => {
-                    // openModal("deleteChat");
-                    openDELETE(e);
+                <div onClick={() => {
+                    dispatch(openModal("deleteChat"));
                 }}>채팅 삭제
                 </div>
                 <div onClick={() => {
-                    openModal("block");
+                    dispatch(openModal("block"));
                 }}>차단
                 </div>
                 <div onClick={() => {
-                    openModal("report");
+                    dispatch(openModal("report"));
                 }}>신고
                 </div>
             </div>
 
             {/*under this point is modal section*/}
             {
-                modalVisible.deleteChat && <DeleteChatModal visible={modalVisible.deleteChat} onClose={closeModal} />
+                deleteChat && <DeleteChatModal visible={deleteChat} />
             }
             {
-                modalVisible.block && <BlockModal visible={modalVisible.block} onClose={closeModal} />
+                block && <BlockModal visible={block} />
             }
             {
-                modalVisible.report && <ReportModal visible={modalVisible.report} onClose={closeModal} />
-            }
-            {
-                modalVisible.newChat && <NewChatModal visible={modalVisible.newChat} onClose={closeModal} />
+                report && <ReportModal visible={report} />
             }
         </DetailSectionContainer>
     );

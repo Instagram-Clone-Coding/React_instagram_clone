@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import { useAppDispatch } from "../../../../app/hooks";
+import { closeModal } from "../../../../app/ducks/direct/DirectSlice";
 
 
 interface ModalButtonContentProps {
     actionName: string;
-    onClose : () => void;
 }
 
 const ModalButtonContentContainer = styled.div`
@@ -23,11 +24,16 @@ const ModalButtonContentContainer = styled.div`
 `;
 
 
-const ModalButtonContent = ({ actionName ,onClose} : ModalButtonContentProps) => {
+const ModalButtonContent = ({ actionName} : ModalButtonContentProps) => {
+
+    const dispatch = useAppDispatch();
+
     return (
         <ModalButtonContentContainer>
             <button>{actionName}</button>
-            <button onClick={onClose}>취소</button>
+            <button onClick={()=>{
+                dispatch(closeModal())
+            }}>취소</button>
         </ModalButtonContentContainer>
     );
 };

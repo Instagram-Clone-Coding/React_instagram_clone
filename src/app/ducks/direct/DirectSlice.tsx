@@ -1,5 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { openModals } from "app/ducks/direct/DirectThunk";
+import { createSlice, current } from "@reduxjs/toolkit";
 
 export interface InitialStateType {
     deleteChat: boolean;
@@ -16,34 +15,38 @@ const initialState: InitialStateType = {
 };
 
 const directSlice = createSlice({
-    name: "direct",
+    name: "modal",
     initialState,
     reducers: {
-        hehehe : (state,action) => {
-            console.log(state);
-            console.log(action);
-        }
+        openModal: (state, action) => {
+            switch (action.payload) {
+                case "deleteChat":
+                    state.deleteChat = true
+                    break;
+                case "block":
+                    state.block = true
+                    break;
+                case "report":
+                    state.report = true
+                    break;
+                case "newChat":
+                    state.newChat = true
+                    break;
+            }
+        },
+        closeModal: (state) => {
+            // 이거 state = initialState 하면 왜 작동을 안하는지 궁금합니다....
+            state.deleteChat = false;
+            state.block = false;
+            state.report = false;
+            state.newChat = false;
+
+        },
     },
     extraReducers: (build) => {
-        build.addCase(openModals.pending, (state, action) => {
-                console.log(state);
-                console.log(action);
-                console.log(action.payload);
 
-            },
-        ).addCase(openModals.fulfilled, (state, action) => {
-                state.deleteChat = true;
-                console.log(state);
-                console.log(action.payload);
-            },
-        ).addCase(openModals.rejected, (state, action) => {
-                console.log(state);
-                console.log(action);
-                console.log(action.payload);
-            },
-        );
     },
 });
 
+export const { openModal,closeModal } = directSlice.actions;
 export const directReducer = directSlice.reducer;
-export const directActions = directSlice.actions

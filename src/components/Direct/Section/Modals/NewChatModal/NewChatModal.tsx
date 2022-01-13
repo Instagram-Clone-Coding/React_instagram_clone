@@ -6,7 +6,6 @@ import NewChatSearchBar from "./NewChatSearchBar";
 import NewChatFriendList from "./NewChatFriendList";
 
 interface NewChatModalProps {
-    onClose: () => void;
     visible: boolean;
 }
 
@@ -15,15 +14,15 @@ const NewChatModalContainer = styled.div`
 `;
 
 
-const NewChatModal = ({ onClose , visible }: NewChatModalProps) => {
+const NewChatModal = ({ visible }: NewChatModalProps) => {
 
 
     return (
-        <Modal onClose={onClose} visible={visible} closable={true} maskClosable={true}>
+        <Modal visible={visible} closable={true} maskClosable={true}>
             <NewChatModalContainer>
-                <NewChatModalTitle/>
-                <NewChatSearchBar/>
-                <NewChatFriendList/>
+                <NewChatModalTitle />
+                <NewChatSearchBar />
+                <NewChatFriendList />
             </NewChatModalContainer>
         </Modal>
     );

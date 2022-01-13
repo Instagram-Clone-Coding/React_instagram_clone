@@ -2,9 +2,15 @@ import styled from "styled-components";
 import { ReactComponent as ArrowUp } from "assets/Svgs/arrow-up.svg";
 import { ReactComponent as DmWrite } from "assets/Svgs/dm-write.svg";
 import theme from "styles/theme";
-import { NavLink } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { openModal } from "../../../app/ducks/direct/DirectSlice";
+import NewChatModal from "../Section/Modals/NewChatModal/NewChatModal";
 
-const Container = styled.header``;
+const Container = styled.header`
+  svg{
+    cursor: pointer;
+  }
+`;
 
 const HeaderTop = styled.div`
     display: flex;
@@ -41,6 +47,10 @@ const Rotate = styled.span`
 
 
 const AsideHeader = () => {
+
+    const dispatch = useAppDispatch();
+    const {newChat} = useAppSelector((state => state.direct))
+
     return (
         <Container>
             <HeaderTop>
@@ -50,8 +60,14 @@ const AsideHeader = () => {
                         <ArrowUp />
                     </Rotate>
                 </NickWrapper>
-                <DmWrite />
+                <DmWrite onClick={()=>{
+                    dispatch(openModal("newChat"))
+                }} />
             </HeaderTop>
+
+            {
+                newChat && <NewChatModal visible={newChat} />
+            }
         </Container>
     );
 };
