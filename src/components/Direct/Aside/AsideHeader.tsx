@@ -3,8 +3,8 @@ import { ReactComponent as ArrowUp } from "assets/Svgs/arrow-up.svg";
 import { ReactComponent as DmWrite } from "assets/Svgs/dm-write.svg";
 import theme from "styles/theme";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { openModal } from "../../../app/ducks/direct/DirectSlice";
-import NewChatModal from "../Section/Modals/NewChatModal/NewChatModal";
+import { openModal } from "app/ducks/direct/DirectSlice";
+import NewChatModal from "components/Direct/Section/Modals/NewChatModal/NewChatModal";
 
 const Container = styled.header`
   svg{
