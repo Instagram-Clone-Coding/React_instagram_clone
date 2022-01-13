@@ -1,6 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import DeleteChatModal from "components/Direct/Section/Modals/DeleteChatModal";
+import BlockModal from "components/Direct/Section/Modals/BlockModal";
+import ReportModal from "components/Direct/Section/Modals/ReportModal";
+import NewChatModal from "./Modals/NewChatModal/NewChatModal";
+import { useAppDispatch } from "../../../app/hooks";
+import {directActions} from "app/ducks/direct/DirectSlice";
 
+interface modalVisibleType {
+    deleteChat: boolean;
+    block: boolean;
+    report: boolean;
+    newChat: boolean;
+}
+
+
+const initialModalVisibleState = {
+    deleteChat: false,
+    block: false,
+    report: false,
+    newChat: false,
+};
 
 const DetailSectionContainer = styled.div`
   height: 100%;
@@ -8,11 +28,11 @@ const DetailSectionContainer = styled.div`
   flex-direction: column;
   flex: 1 1 auto;
 
-  & > div{
+  & > div {
     border-bottom: 1px solid rgba(var(--b6a, 219, 219, 219), 1);
 
   }
-  
+
   .direct-notification-check {
     padding: 20px 16px 16px;
     display: flex;
@@ -74,14 +94,53 @@ const DetailSectionContainer = styled.div`
     display: flex;
     flex-direction: column;
 
-    div{
+    div {
       margin: 12px 16px;
       color: #ed4956;
+      cursor: pointer;
     }
   }
 `;
 
 const DetailSection = () => {
+
+
+    const dispatch = useAppDispatch();
+
+    const openDELETE =  (e: any) => {
+        e.preventDefault();
+        dispatch(
+            directActions.hehehe("asdasd")
+        );
+    };
+
+
+    const [modalVisible, setModalVisible] = useState<modalVisibleType>(initialModalVisibleState);
+
+    const openModal = (modalName: string) => {
+        switch (modalName) {
+            case "deleteChat":
+                setModalVisible({ ...modalVisible, deleteChat: true });
+                break;
+            case "block":
+                setModalVisible({ ...modalVisible, block: true });
+                break;
+            case "report":
+                setModalVisible({ ...modalVisible, report: true });
+                break;
+            case "newChat":
+                setModalVisible({ ...modalVisible, newChat: true });
+                break;
+            default:
+                break;
+        }
+    };
+
+
+    const closeModal = () => {
+        setModalVisible(initialModalVisibleState);
+    };
+
     return (
         <DetailSectionContainer>
             <div className="direct-notification-check">
@@ -98,10 +157,34 @@ const DetailSection = () => {
                 </div>
             </div>
             <div className="various-option-container">
-                <div>채팅 삭제</div>
-                <div>차단</div>
-                <div>신고</div>
+                <div onClick={(e) => {
+                    // openModal("deleteChat");
+                    openDELETE(e);
+                }}>채팅 삭제
+                </div>
+                <div onClick={() => {
+                    openModal("block");
+                }}>차단
+                </div>
+                <div onClick={() => {
+                    openModal("report");
+                }}>신고
+                </div>
             </div>
+
+            {/*under this point is modal section*/}
+            {
+                modalVisible.deleteChat && <DeleteChatModal visible={modalVisible.deleteChat} onClose={closeModal} />
+            }
+            {
+                modalVisible.block && <BlockModal visible={modalVisible.block} onClose={closeModal} />
+            }
+            {
+                modalVisible.report && <ReportModal visible={modalVisible.report} onClose={closeModal} />
+            }
+            {
+                modalVisible.newChat && <NewChatModal visible={modalVisible.newChat} onClose={closeModal} />
+            }
         </DetailSectionContainer>
     );
 };

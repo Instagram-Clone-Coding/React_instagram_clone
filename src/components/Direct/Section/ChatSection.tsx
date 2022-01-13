@@ -24,7 +24,6 @@ const ChatSection = () => {
             <ChatBubble me={true} message={"saddasdasd"} />
             <ChatBubble me={false} message={"saddasdasd"} />
             <ChatBubble me={true} message={"saddasdasd"} />
-
         </ChatSectionContainer>
     );
 };
