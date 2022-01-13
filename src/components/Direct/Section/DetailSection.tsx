@@ -4,7 +4,8 @@ import DeleteChatModal from "components/Direct/Section/Modals/DeleteChatModal";
 import BlockModal from "components/Direct/Section/Modals/BlockModal";
 import ReportModal from "components/Direct/Section/Modals/ReportModal";
 import NewChatModal from "./Modals/NewChatModal/NewChatModal";
-
+import { useAppDispatch } from "../../../app/hooks";
+import {directActions} from "app/ducks/direct/DirectSlice";
 
 interface modalVisibleType {
     deleteChat: boolean;
@@ -18,7 +19,7 @@ const initialModalVisibleState = {
     deleteChat: false,
     block: false,
     report: false,
-    newChat:false
+    newChat: false,
 };
 
 const DetailSectionContainer = styled.div`
@@ -104,6 +105,16 @@ const DetailSectionContainer = styled.div`
 const DetailSection = () => {
 
 
+    const dispatch = useAppDispatch();
+
+    const openDELETE =  (e: any) => {
+        e.preventDefault();
+        dispatch(
+            directActions.hehehe("asdasd")
+        );
+    };
+
+
     const [modalVisible, setModalVisible] = useState<modalVisibleType>(initialModalVisibleState);
 
     const openModal = (modalName: string) => {
@@ -146,8 +157,9 @@ const DetailSection = () => {
                 </div>
             </div>
             <div className="various-option-container">
-                <div onClick={() => {
-                    openModal("deleteChat");
+                <div onClick={(e) => {
+                    // openModal("deleteChat");
+                    openDELETE(e);
                 }}>채팅 삭제
                 </div>
                 <div onClick={() => {

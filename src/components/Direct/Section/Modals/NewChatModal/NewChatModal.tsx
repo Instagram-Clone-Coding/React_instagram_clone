@@ -16,6 +16,8 @@ const NewChatModalContainer = styled.div`
 
 
 const NewChatModal = ({ onClose , visible }: NewChatModalProps) => {
+
+
     return (
         <Modal onClose={onClose} visible={visible} closable={true} maskClosable={true}>
             <NewChatModalContainer>
