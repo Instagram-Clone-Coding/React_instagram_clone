@@ -4,8 +4,12 @@ import ChatBubble from "components/Direct/Section/ChatBubble/ChatBubble";
 
 
 const ChatSectionContainer = styled.div`
-  height: calc(100vh - 200px);
+  height: calc(100vh - 240px);
   overflow-y: auto;
+
+  @media (max-width: 935px) {
+    height: calc(100vh - 200px);
+  }
 `;
 const ChatSection = () => {
     return (
