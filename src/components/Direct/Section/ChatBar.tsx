@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { ReactComponent as Emoji } from "assets/Svgs/direct-emoji-icon.svg";
 import { ReactComponent as ImageUpload } from "assets/Svgs/direct-image-upload.svg";
 import { ReactComponent as Heart } from "assets/Svgs/heart.svg";
+import Picker, { IEmojiData } from "emoji-picker-react";
 
 interface ChatBarType {
     message: string;
@@ -20,6 +21,14 @@ const ChatBarContainer = styled.div<ChatBarContainerType>`
   width: 100%;
   background-color: white;
   z-index: 1;
+
+  .emoji-picker-react {
+    width: 50% !important;
+    @media (max-width: 970px) {
+      width: 100% !important;      
+    }
+  }
+
   .input-container {
     border: 1px solid rgba(var(--b6a, 219, 219, 219), 1);
     border-radius: 22px;
@@ -28,6 +37,7 @@ const ChatBarContainer = styled.div<ChatBarContainerType>`
     padding-right: 8px;
     display: flex;
     align-items: center;
+
 
     svg {
       margin: 8px;
@@ -42,6 +52,7 @@ const ChatBarContainer = styled.div<ChatBarContainerType>`
       overflow: hidden;
       height: 18px;
       background-color: white;
+
       &:focus {
         outline: none;
       }
@@ -60,13 +71,18 @@ const ChatBar = ({ message, setMessage }: ChatBarType) => {
 
 
     const [sendButtonClicked, setSendButtonClicked] = useState<boolean>(false);
-    const [image,setImage] = useState<File>()
+    const [image, setImage] = useState<File>();
+    const [showPicker, setShowPicker] = useState(false);
     const sendMessage = () => {
         // Todo : axios
         console.log(message);
         setMessage("");
     };
 
+    const onEmojiClick = (event: React.MouseEvent, emojiObject: IEmojiData) => {
+        setMessage(prevInput => prevInput + emojiObject.emoji);
+        setShowPicker(false);
+    };
 
     const messageChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setMessage(event.target.value);
@@ -91,29 +107,33 @@ const ChatBar = ({ message, setMessage }: ChatBarType) => {
         }
     };
 
-    const imageUploadHandler = (e:ChangeEvent<HTMLInputElement>) => {
-    }
+    const imageUploadHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    };
 
 
     return (
         <ChatBarContainer sendButtonClicked={sendButtonClicked}>
+            {showPicker && <Picker
+                pickerStyle={{ width: "100%" }}
+                onEmojiClick={onEmojiClick} />}
             <div className="input-container">
-                <Emoji />
+                <Emoji onClick={() => setShowPicker(!showPicker)} />
+
                 <textarea value={message} placeholder="메시지 입력..." className="chat-input" onChange={messageChangeHandler}
                           onKeyPress={pressEnterHandler} />
                 {message.length === 0 ?
                     <>
                         <label htmlFor={"img"}>
 
-                        <ImageUpload />
+                            <ImageUpload />
                         </label>
                         <input
-                        onChange={imageUploadHandler}
-                        type="file"
-                        id="img"
-                        accept="image/*"
-                        style={{ display: "none" }}
-                    />
+                            onChange={imageUploadHandler}
+                            type="file"
+                            id="img"
+                            accept="image/*"
+                            style={{ display: "none" }}
+                        />
                         <Heart />
                     </>
                     : <button onClick={sendButtonClickHandler} onMouseDown={sendButtonMouseDownHandler}
