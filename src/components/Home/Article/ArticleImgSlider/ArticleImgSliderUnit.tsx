@@ -7,7 +7,6 @@ import styled from "styled-components";
 const StyledArticleImgSliderUnit = styled.div`
     width: 100%;
     scroll-snap-align: center;
-    background-color: red;
     position: relative;
     & > .avatar {
         position: absolute;

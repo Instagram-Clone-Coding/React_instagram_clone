@@ -87,6 +87,7 @@ const StyledImgSlider = styled.div<SliderProps>`
         &::-webkit-scrollbar {
             display: none; /* Chrome, Safari, Opera*/
         }
+        background-color: black;
         .img-slider {
             display: flex;
             align-items: center;
