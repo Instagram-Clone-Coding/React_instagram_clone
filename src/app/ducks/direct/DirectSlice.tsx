@@ -43,7 +43,6 @@ const directSlice = createSlice({
             }
         },
         closeModal: (state) => {
-            // 이거 state = initialState 하면 왜 작동을 안하는지 궁금합니다....
             state.deleteChat = false;
             state.block = false;
             state.report = false;
