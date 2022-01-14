@@ -105,7 +105,7 @@ const StoriesCard = styled(Card)`
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            z-index: 101;
+            /* z-index: 101; */
             width: 45px;
             height: 45px;
             cursor: pointer;

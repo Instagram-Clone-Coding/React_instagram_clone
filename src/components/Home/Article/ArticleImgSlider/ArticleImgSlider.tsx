@@ -68,7 +68,7 @@ const StyledImgSlider = styled.div<SliderProps>`
     }
     .img-heart {
         position: absolute;
-        z-index: 101;
+        z-index: 2;
         background: url(${sprite2}) no-repeat 2.584% 6.902%;
         background-size: 440px 411px;
         width: 111px;
@@ -76,9 +76,6 @@ const StyledImgSlider = styled.div<SliderProps>`
         opacity: 0;
         animation: whiteHeartAnimation 1s;
     }
-    /* .img-heart.clicked {
-        animation: whiteHeartAnimation 1s;
-    } */
     .img-wrap {
         width: 100%;
         display: flex;
@@ -115,7 +112,7 @@ const StyledImgSlider = styled.div<SliderProps>`
         position: absolute;
         background-size: 440px 411px;
         cursor: pointer;
-        z-index: 999;
+        /* z-index: 999; */
     }
     .img-dots {
         position: absolute;
