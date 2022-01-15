@@ -2,10 +2,10 @@ import styled from "styled-components";
 import { ReactComponent as ArrowUp } from "assets/Svgs/arrow-up.svg";
 import { ReactComponent as DmWrite } from "assets/Svgs/dm-write.svg";
 import theme from "styles/theme";
-import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "app/hooks";
 import { openModal } from "app/ducks/direct/DirectSlice";
 import NewChatModal from "components/Direct/Section/Modals/NewChatModal/NewChatModal";
-import ConvertAccountModal from "../Section/Modals/ConvertAccountModal";
+import ConvertAccountModal from "components/Direct/Section/Modals/ConvertAccountModal";
 
 const Container = styled.header`
   svg {

@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import DeleteChatModal from "components/Direct/Section/Modals/DeleteChatModal";
 import BlockModal from "components/Direct/Section/Modals/BlockModal";
 import ReportModal from "components/Direct/Section/Modals/ReportModal";
-import NewChatModal from "./Modals/NewChatModal/NewChatModal";
-import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { openModal, closeModal } from "app/ducks/direct/DirectSlice";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import { openModal } from "app/ducks/direct/DirectSlice";
 
 const DetailSectionContainer = styled.div`
   height: 100%;
