@@ -50,7 +50,7 @@ const Rotate = styled.span`
 const AsideHeader = () => {
 
     const dispatch = useAppDispatch();
-    const { newChat, convertAccount } = useAppSelector((state => state.direct));
+    const { modal } = useAppSelector((state => state.direct));
 
     return (
         <Container>
@@ -69,10 +69,10 @@ const AsideHeader = () => {
             </HeaderTop>
 
             {
-                newChat && <NewChatModal visible={newChat} />
+                modal === "newChat" && <NewChatModal visible={modal === "newChat"} />
             }
             {
-                convertAccount && <ConvertAccountModal visible={convertAccount} />
+                modal === "convertAccount" && <ConvertAccountModal visible={modal === "convertAccount"} />
             }
         </Container>
     );

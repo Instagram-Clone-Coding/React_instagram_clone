@@ -88,7 +88,7 @@ const DetailSectionContainer = styled.div`
 
 const DetailSection = () => {
     const dispatch = useAppDispatch();
-    const { deleteChat, block, report } = useAppSelector((state => state.direct));
+    const { modal } = useAppSelector((state => state.direct));
     return (
         <DetailSectionContainer>
             <div className="direct-notification-check">
@@ -121,13 +121,13 @@ const DetailSection = () => {
 
             {/*under this point is modal section*/}
             {
-                deleteChat && <DeleteChatModal visible={deleteChat} />
+                modal === "deleteChat" && <DeleteChatModal visible={modal === "deleteChat"} />
             }
             {
-                block && <BlockModal visible={block} />
+                modal === "block" && <BlockModal visible={modal === "block"} />
             }
             {
-                report && <ReportModal visible={report} />
+                modal === "report" && <ReportModal visible={modal === "report"} />
             }
         </DetailSectionContainer>
     );
