@@ -1,5 +1,5 @@
 import Home from "pages/Home";
-import SignUp from "components/Signup/SignUp";
+import SignUp from "pages/SignUp";
 import Login from "pages/Login";
 import Direct from "pages/Direct";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
