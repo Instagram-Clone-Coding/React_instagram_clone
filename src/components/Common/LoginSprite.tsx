@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import sprite from "assets/Images/loginPageSprite.png";
-import { Login } from "@type";
 
 const ImgSprite = styled.div<Login.ImageProps>`
     background-repeat: no-repeat;

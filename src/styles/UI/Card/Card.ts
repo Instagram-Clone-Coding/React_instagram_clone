@@ -1,4 +1,3 @@
-import { UI } from "@type";
 import styled from "styled-components";
 
 const Card = styled.div<UI.CardProps>`

@@ -1,4 +1,3 @@
-import { UI } from "@type";
 import styled from "styled-components";
 
 const Button = styled.button<UI.ButtonProps>`

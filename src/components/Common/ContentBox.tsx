@@ -1,5 +1,3 @@
-import { Login } from "@type";
-
 import styled from "styled-components";
 import Card from "styles/UI/Card/Card";
 

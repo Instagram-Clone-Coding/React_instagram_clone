@@ -1,13 +1,11 @@
 import styled, { css } from "styled-components";
 import ImgSprite from "components/Common/LoginSprite";
 import { Link, useHistory } from "react-router-dom";
-import Button from "styles/UI/Button/Button";
 import Line from "components/Common/Line";
 import FacebookLogin from "../../Common/FacebookLogin";
 import Input from "components/Common/Input";
 import { useState, MouseEvent } from "react";
-
-import { Login } from "@type";
+import SubmitButton from "components/Common/SubmitButton";
 
 import { useAppDispatch } from "app/hooks";
 import { setUserInfo } from "features/Auth/authSlice";
@@ -76,7 +74,7 @@ const LoginFormAndButton = () => {
                 inputName="password"
                 setUserData={changeUserData}
             />
-            <LoginButton
+            <SubmitButton
                 type="submit"
                 disabled={
                     userData.id.length > 0 && userData.password.length > 5
@@ -86,7 +84,7 @@ const LoginFormAndButton = () => {
                 onClick={(e) => callSignInAPI(e, dispatch, history)}
             >
                 로그인
-            </LoginButton>
+            </SubmitButton>
         </>
     );
 };
@@ -140,15 +138,5 @@ const FlexColumn = styled.div`
 const FormContainer = styled.div`
     .logo {
         margin: 22px auto 12px;
-    }
-`;
-
-const LoginButton = styled(Button)`
-    margin: 8px 40px;
-    opacity: 1;
-    border: 1px solid transparent;
-    &:disabled {
-        opacity: 0.3;
-        pointer-events: none;
     }
 `;

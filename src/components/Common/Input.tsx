@@ -1,5 +1,3 @@
-import { Login } from "@type";
-
 import styled, { css } from "styled-components";
 import React, { useEffect, useState, useCallback } from "react";
 
@@ -13,7 +11,7 @@ export default function Input(props: Login.InputProps) {
     const [passwordMessage, setPasswordMessage] = useState("");
 
     useEffect(() => {
-        const typeCheck = inputName === "id" ? "text" : "password";
+        const typeCheck = inputName === "password" ? "password" : "text";
         setTextType(typeCheck);
         setPasswordMessage(message.show);
     }, []);

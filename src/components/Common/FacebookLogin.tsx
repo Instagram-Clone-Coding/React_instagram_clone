@@ -1,10 +1,8 @@
 import ImgSprite from "components/Common/LoginSprite";
 import styled from "styled-components";
-import Button, { ButtonType } from "styles/UI/Button/Button";
+import Button from "styles/UI/Button/Button";
 
-import { Login } from "@type";
-
-export default function FacebookLogin({ bgColor, color }: ButtonType) {
+export default function FacebookLogin({ bgColor, color }: UI.ButtonProps) {
     return (
         <FacebookButtonContainer>
             <Button bgColor={bgColor} color={color}>
@@ -44,6 +42,7 @@ const FacebookButtonContainer = styled.div`
 
     & > button {
         width: 100%;
+        border: 1px solid transparent;
 
         & > div {
             display: inline-block;

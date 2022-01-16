@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { Login } from "@type";
 
 function FooterTextPiece(props: Login.FooterTextProps) {
     return (

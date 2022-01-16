@@ -4,8 +4,6 @@ import Suggest from "../../Common/Suggest";
 import ContentBox from "components/Common/ContentBox";
 import Appdownload from "components/Common/AppDownload";
 
-import { Login } from "@type";
-
 export function LoginForm() {
     return (
         <FormContainer>
