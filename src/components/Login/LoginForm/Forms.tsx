@@ -7,7 +7,7 @@ import Input from "components/Common/Input";
 import { useState, MouseEvent } from "react";
 import SubmitButton from "components/Common/SubmitButton";
 
-import { useAppDispatch } from "app/hooks";
+import { useAppDispatch } from "app/store/hooks";
 import { setUserInfo } from "features/Auth/authSlice";
 
 export default function Forms() {
