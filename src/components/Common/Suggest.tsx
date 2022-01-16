@@ -4,20 +4,20 @@ import styled from "styled-components";
 
 export default function Suggest() {
     const { pathname } = useLocation();
-    const [stateKey, setStateKey] = useState("");
+    const [stateKey, setStateKey] = useState("signin");
     const [stateLink, setStateLink] = useState("");
 
     useEffect(() => {
         for (let key of Object.keys(MessageState)) {
             if (pathname.includes(key) && stateKey !== undefined) {
                 setStateKey(key);
-            } else {
-                setStateLink(key);
+                continue;
             }
+            setStateLink(key);
         }
     }, [pathname, stateKey]);
 
-    const [question, suggest] = stateKey && MessageState[stateKey];
+    const [question, suggest] = MessageState[stateKey];
 
     return (
         <SentenceContainer>
