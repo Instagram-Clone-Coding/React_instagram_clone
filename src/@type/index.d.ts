@@ -1,12 +1,5 @@
-// 여기에 쓰는건 어때요?
-export declare module globalType {
-    //
-    export interface asd {}
-}
-
-// export 제거해도 동작** export 제거하기
-export declare module Direct {
-    export interface ChatItem {
+declare module Direct {
+    interface ChatItem {
         id: number;
         avatarImg: string;
         userName: string;
@@ -29,25 +22,25 @@ declare module UI {
     }
 }
 
-export declare module Login {
-    export interface FooterTextProps {
+declare module Login {
+    interface FooterTextProps {
         text: string;
         url?: string;
     }
 
-    export interface ImageProps {
+    interface ImageProps {
         width: number;
         height: number;
         position: string;
     }
 
-    export interface InputProps {
+    interface InputProps {
         innerText: string;
         inputName: string;
         setUserData: Function;
     }
 
-    export interface NewCardProps {
+    interface NewCardProps {
         padding: string;
         margin: string;
     }
