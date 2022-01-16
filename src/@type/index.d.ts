@@ -4,6 +4,7 @@ export declare module globalType {
     export interface asd {}
 }
 
+// export 제거해도 동작** export 제거하기
 export declare module Direct {
     export interface ChatItem {
         id: number;
@@ -12,6 +13,19 @@ export declare module Direct {
         lastLoggedIn: string;
         lastMessage: string;
         isImLast: boolean;
+    }
+}
+
+declare module UI {
+    interface ButtonProps {
+        bgColor?: string;
+        radius?: number;
+        color?: string;
+    }
+
+    interface CardProps {
+        isNav?: boolean;
+        radius?: number;
     }
 }
 
