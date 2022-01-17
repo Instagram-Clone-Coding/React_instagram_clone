@@ -62,18 +62,18 @@ interface ModalProps {
 }
 
 const ModalCard = ({
-                       modalType = "positioned",
-                       modalPosition,
-                       onModalOn,
-                       onModalOff,
-                       children,
-                   }: ModalProps) => {
+    modalType = "positioned",
+    modalPosition,
+    onModalOn,
+    onModalOff,
+    children,
+}: ModalProps) => {
     const modalRef = useRef() as React.MutableRefObject<HTMLDivElement>;
     const isUpperThanHalfPosition = useMemo(
         () =>
             modalPosition !== undefined &&
             (modalPosition.top + modalPosition.bottom) / 2 <
-            window.innerHeight / 2,
+                window.innerHeight / 2,
         [modalPosition],
     );
 

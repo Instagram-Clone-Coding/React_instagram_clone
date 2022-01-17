@@ -13,7 +13,11 @@
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.3.0",
     "@types/styled-components": "^5.1.14",
+<<<<<<< HEAD
     "emoji-picker-react": "^3.5.0",
+=======
+    "axios": "^0.24.0",
+>>>>>>> origin/feature/home-redux
     "moment": "^2.29.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
