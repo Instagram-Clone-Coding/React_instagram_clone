@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { useAppDispatch } from "../../../../app/hooks";
-import { closeModal } from "../../../../app/ducks/direct/DirectSlice";
+import { closeModal } from "app/store/ducks/direct/DirectSlice";
+import { useAppDispatch } from "app/store/hooks";
 
 
 interface ModalButtonContentProps {

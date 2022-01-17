@@ -3,8 +3,8 @@ import styled from "styled-components";
 import ModalTitleContent from "components/Common/Modal/ModalContent/ModalTitleContent";
 import ModalButtonContent from "components/Common/Modal/ModalContent/ModalButtonContent";
 import ModalCard from "styles/UI/ModalCard";
-import { closeModal, openModal } from "app/ducks/direct/DirectSlice";
-import { useAppDispatch } from "app/hooks";
+import { closeModal, openModal } from "app/store/ducks/direct/DirectSlice";
+import { useAppDispatch } from "app/store/hooks";
 
 
 interface DeleteChatModalProps {

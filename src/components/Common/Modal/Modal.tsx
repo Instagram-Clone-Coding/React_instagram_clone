@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import styled, { keyframes } from "styled-components";
 import Portal from "components/Common/Modal/Portal";
-import { useAppDispatch } from "../../../app/hooks";
-import { closeModal } from "../../../app/ducks/direct/DirectSlice";
+import { closeModal } from "../../../app/store/ducks/direct/DirectSlice";
+import { useAppDispatch } from "../../../app/store/hooks";
 
 
 interface ModalProps {

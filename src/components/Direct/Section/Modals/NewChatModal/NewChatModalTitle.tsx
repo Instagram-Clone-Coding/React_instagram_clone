@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { ReactComponent as Close } from "assets/Svgs/close.svg";
-import { useAppDispatch } from "../../../../../app/hooks";
-import { closeModal } from "../../../../../app/ducks/direct/DirectSlice";
+import { closeModal } from "app/store/ducks/direct/DirectSlice";
+import { useAppDispatch } from "app/store/hooks";
 
 
 const NewChatModalTitleContainer = styled.div`

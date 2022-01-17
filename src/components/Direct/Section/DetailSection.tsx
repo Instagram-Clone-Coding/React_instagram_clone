@@ -3,8 +3,8 @@ import styled from "styled-components";
 import DeleteChatModal from "components/Direct/Section/Modals/DeleteChatModal";
 import BlockModal from "components/Direct/Section/Modals/BlockModal";
 import ReportModal from "components/Direct/Section/Modals/ReportModal";
-import { useAppDispatch, useAppSelector } from "app/hooks";
-import { openModal } from "app/ducks/direct/DirectSlice";
+import { openModal } from "app/store/ducks/direct/DirectSlice";
+import { useAppDispatch, useAppSelector } from "app/store/hooks";
 
 const DetailSectionContainer = styled.div`
   height: 100%;
