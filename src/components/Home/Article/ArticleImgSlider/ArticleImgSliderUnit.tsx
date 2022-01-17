@@ -85,7 +85,7 @@ const ArticleImgSliderUnit = ({
                         isImgHashTagsOn={isImgHashTagsOn}
                     />
                 ))}
-            <img src={imageDTO.image.imageUrl} alt={imageDTO.image.imageName} />
+            <img src={imageDTO.postImageUrl} alt={imageDTO.postImageUrl} />
         </StyledArticleImgSliderUnit>
     );
 };

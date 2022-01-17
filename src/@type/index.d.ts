@@ -37,12 +37,7 @@ declare module HomeType {
 
     export interface PostImageDTOProps {
         id: number;
-        image: {
-            imageName: string;
-            imageType: string;
-            imageUUID: string;
-            imageUrl: string;
-        };
+        postImageUrl: string;
         postTagDTOs: PostImgTagDTOProps[];
         // 받아온 후 처리
     }
@@ -63,37 +58,17 @@ declare module HomeType {
         // comment 몇 개 가져오기
     }
 
-    // interface CommentProps {
-    //     username: string;
-    //     comment: string;
-    // }
     export interface homeModalProps {
         activatedModal: activatedModalType;
         handledObj: null;
     }
     export interface homeStateProps {
         storiesScrollPosition: storiesScrollPositionType;
-        // articles: {
-        //     imgs: string[];
-        //     location: string;
-        //     hashtags: string[];
-        //     text: string;
-        //     owner: {
-        //         username: string;
-        //         avatarUrl: string;
-        //     };
-        //     likes: string[];
-        //     comments: {
-        //         username: string;
-        //         comment: string;
-        //     }[];
-        //     createdAt: number;
-        // }[]; // 백엔드에서 댓글과 이 게시물에 내가 좋아요를 눌렀는지까지 보내주는지 등등
-        // // request와 response에 대해 소통 필요
         articles: ArticleProps[];
         // location?
         isLoading: boolean; // 더미 로딩
         isExtraArticleLoading: boolean;
+        extraArticlesCount: number;
         isAsyncError: boolean;
         hoveredUser: {
             avatarUrl: string;

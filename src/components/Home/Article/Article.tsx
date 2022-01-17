@@ -9,7 +9,7 @@ import CommentForm from "components/Home/Article/CommentForm";
 import { HomeType } from "@type";
 import useGapText from "Hooks/useGapText";
 import useOnView from "Hooks/useOnView";
-import { useAppDispatch } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/hooks";
 import { getExtraArticle } from "app/store/ducks/home/homThunk";
 
 const ArticleCard = styled(Card)`
@@ -31,13 +31,22 @@ const ArticleCard = styled(Card)`
     }
 `;
 
+const token = {
+    accessToken:
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MjQxODcxMH0.a54MJzWdP3Mjs1yXG33v7ti0SpHcN7IzqfwQ9nFdVSjmhriTcFA_tc5yHFWyLA_PRCH3A_TUk0WPRQ_0dEacjw",
+    refreshToken:
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjQyNzQxNDY4fQ.8mHe22G6uu6F_HB-5G8A7voUNLb5oRAuX84xlKWFUZeccsi_Y3DHMh1fC7w3uEG3UATvNc5U9PBPvF6hW1vpZw",
+};
+
 // 아마 여기 articleData는 상위 HomeSection 컴포넌트에서 가져와야 하지 않을까
 const Article = ({
     article,
     isObserving,
+    isLast,
 }: {
     article: HomeType.ArticleProps;
     isObserving: boolean;
+    isLast: boolean;
 }) => {
     // data state
     const followingUserWhoLikesArticle =
@@ -47,22 +56,29 @@ const Article = ({
     const gapText = useGapText(article.postUploadDate);
     const articleRef = useRef<HTMLDivElement>(null);
     const isVisible = useOnView(articleRef);
+    const extraArticlesCount = useAppSelector(
+        ({ home }) => home.extraArticlesCount,
+    );
     const dispatch = useAppDispatch();
 
     useEffect(() => {
         const dispatchExtraArticle = async () => {
             console.log("start");
             try {
-                await dispatch(getExtraArticle({ token: "" }));
+                await dispatch(
+                    getExtraArticle({
+                        token: token.accessToken,
+                        page: extraArticlesCount + 1,
+                    }),
+                );
             } catch (error) {
                 console.log(error);
             }
         };
 
         isObserving && isVisible && dispatchExtraArticle(); // 이 때 비동기 작업 및 무한 스크롤
+        // isLast && isVisible && dispatchExtraArticle();
     }, [isObserving, isVisible, dispatch]);
-
-    // isObserving && isVisible && console.log("start"); // 이 때 비동기 작업 및 무한 스크롤
 
     const toggleLikeHandler = (): void => {
         setIsliked((prev: boolean) => !prev);
