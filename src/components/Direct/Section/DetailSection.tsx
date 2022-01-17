@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import DeleteChatModal from "components/Direct/Section/Modals/DeleteChatModal";
 import BlockModal from "components/Direct/Section/Modals/BlockModal";
 import ReportModal from "components/Direct/Section/Modals/ReportModal";
-import NewChatModal from "./Modals/NewChatModal/NewChatModal";
-import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { openModal, closeModal } from "app/ducks/direct/DirectSlice";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import { openModal } from "app/ducks/direct/DirectSlice";
 
 const DetailSectionContainer = styled.div`
   height: 100%;
@@ -89,7 +88,7 @@ const DetailSectionContainer = styled.div`
 
 const DetailSection = () => {
     const dispatch = useAppDispatch();
-    const { deleteChat, block, report } = useAppSelector((state => state.direct));
+    const { modal } = useAppSelector((state => state.direct));
     return (
         <DetailSectionContainer>
             <div className="direct-notification-check">
@@ -122,13 +121,13 @@ const DetailSection = () => {
 
             {/*under this point is modal section*/}
             {
-                deleteChat && <DeleteChatModal visible={deleteChat} />
+                modal === "deleteChat" && <DeleteChatModal visible={modal === "deleteChat"} />
             }
             {
-                block && <BlockModal visible={block} />
+                modal === "block" && <BlockModal visible={modal === "block"} />
             }
             {
-                report && <ReportModal visible={report} />
+                modal === "report" && <ReportModal visible={modal === "report"} />
             }
         </DetailSectionContainer>
     );
