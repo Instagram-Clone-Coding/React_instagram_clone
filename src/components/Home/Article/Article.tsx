@@ -38,16 +38,14 @@ const token = {
         "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjQyNzQxNDY4fQ.8mHe22G6uu6F_HB-5G8A7voUNLb5oRAuX84xlKWFUZeccsi_Y3DHMh1fC7w3uEG3UATvNc5U9PBPvF6hW1vpZw",
 };
 
-// 아마 여기 articleData는 상위 HomeSection 컴포넌트에서 가져와야 하지 않을까
-const Article = ({
-    article,
-    isObserving,
-    isLast,
-}: {
+interface ArticleComponentPros {
     article: HomeType.ArticleProps;
     isObserving: boolean;
     isLast: boolean;
-}) => {
+}
+
+// 아마 여기 articleData는 상위 HomeSection 컴포넌트에서 가져와야 하지 않을까
+const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
     // data state
     const followingUserWhoLikesArticle =
         article.followingMemberUsernameLikedPost;
