@@ -1,14 +1,15 @@
 import styled, { css } from "styled-components";
 import ImgSprite from "components/Common/LoginSprite";
-import { Link, useHistory } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Line from "components/Common/Line";
 import FacebookLogin from "../../Common/FacebookLogin";
 import Input from "components/Common/Input";
 import { useState, MouseEvent } from "react";
 import SubmitButton from "components/Common/SubmitButton";
 
-import { useAppDispatch } from "app/store/hooks";
-import { setUserInfo } from "features/Auth/authSlice";
+import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { signIn } from "app/store/ducks/auth/signinThunk";
+import { setUserName } from "app/store/ducks/auth/signinSlice";
 
 export default function Forms() {
     return (
@@ -38,15 +39,17 @@ export default function Forms() {
 const callSignInAPI = (
     e: MouseEvent<HTMLButtonElement>,
     dispatch: Function,
-    history: any,
+    userData: { id: string; password: string },
 ) => {
     e.preventDefault();
-    dispatch(
-        setUserInfo({
-            name: "minsoo",
-        }),
-    );
-    history.replace("/");
+    const requestSignIn = async () =>
+        await dispatch(
+            signIn({
+                id: userData.id,
+                password: userData.password,
+            }),
+        ).unwrap();
+    requestSignIn();
 };
 
 const LoginFormAndButton = () => {
@@ -60,7 +63,11 @@ const LoginFormAndButton = () => {
     };
 
     const dispatch = useAppDispatch();
-    const history = useHistory();
+    const isLogin = useAppSelector((state) => state.auth.isLogin);
+    if (isLogin) {
+        dispatch(setUserName({ username: userData.id }));
+        return <Redirect to="/" />;
+    }
 
     return (
         <>
@@ -81,7 +88,7 @@ const LoginFormAndButton = () => {
                         ? false
                         : true
                 }
-                onClick={(e) => callSignInAPI(e, dispatch, history)}
+                onClick={(e) => callSignInAPI(e, dispatch, userData)}
             >
                 로그인
             </SubmitButton>

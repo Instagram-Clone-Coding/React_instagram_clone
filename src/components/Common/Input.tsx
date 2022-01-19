@@ -48,6 +48,7 @@ export default function Input(props: Login.InputProps) {
                 <Label animation={animation}>
                     <Span>{innerText}</Span>
                     <WritingForm
+                        // onBlur={}
                         onChange={handleText}
                         type={textType}
                         value={userAnswer}
@@ -65,6 +66,7 @@ export default function Input(props: Login.InputProps) {
         </Wrapper>
     );
 }
+// input > onBlur > 유효성검증에 이용하기**
 
 // props
 const message = {
