@@ -56,3 +56,21 @@ export const getExtraArticle = createAsyncThunk<
         throw ThunkOptions.rejectWithValue(error);
     }
 });
+
+export const getMiniProfile = createAsyncThunk<
+    any,
+    { token: string; username: string }
+>("home/getMiniProfile", async (payload, ThunkOptions) => {
+    const config = {
+        headers: { Authorization: `Bearer ${payload.token}` },
+    };
+    try {
+        const data = await axios.get(
+            `http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/accounts/${payload.username}/mini`,
+            config,
+        );
+        return data;
+    } catch (error) {
+        throw ThunkOptions.rejectWithValue(error);
+    }
+});
