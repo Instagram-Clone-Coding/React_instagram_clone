@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import DeleteChatModal from "components/Direct/Section/Modals/DeleteChatModal";
 import BlockModal from "components/Direct/Section/Modals/BlockModal";
-import ReportModal from "components/Direct/Section/Modals/ReportModal";
-import { openModal } from "app/store/ducks/direct/DirectSlice";
+import ReportModal from "components/Home/Modals/ReportModal";
+import { closeModal, openModal } from "app/store/ducks/direct/DirectSlice";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
 
 const DetailSectionContainer = styled.div`
@@ -121,13 +121,20 @@ const DetailSection = () => {
 
             {/*under this point is modal section*/}
             {
-                modal === "deleteChat" && <DeleteChatModal visible={modal === "deleteChat"} />
+                modal === "deleteChat" && <DeleteChatModal />
             }
             {
-                modal === "block" && <BlockModal visible={modal === "block"} />
+                modal === "block" && <BlockModal />
             }
             {
-                modal === "report" && <ReportModal visible={modal === "report"} />
+                modal === "report" && <ReportModal
+                    onModalOn={() => {
+                        dispatch(openModal("report"));
+                    }}
+                    onModalOff={() => {
+                        dispatch(closeModal());
+                }}
+                />
             }
         </DetailSectionContainer>
     );

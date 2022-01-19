@@ -1,30 +1,33 @@
 import React from "react";
 import styled from "styled-components";
-import Modal from "components/Common/Modal/Modal";
 import NewChatModalTitle from "./NewChatModalTitle";
 import NewChatSearchBar from "./NewChatSearchBar";
 import NewChatFriendList from "./NewChatFriendList";
+import ModalCard from "styles/UI/ModalCard";
+import { useAppDispatch } from "app/store/hooks";
+import { closeModal, openModal } from "app/store/ducks/direct/DirectSlice";
 
-interface NewChatModalProps {
-    visible: boolean;
-}
 
 const NewChatModalContainer = styled.div`
 
 `;
 
 
-const NewChatModal = ({ visible }: NewChatModalProps) => {
-
+const NewChatModal = () => {
+    const dispatch = useAppDispatch();
 
     return (
-        <Modal visible={visible} closable={true} maskClosable={true}>
+        <ModalCard modalType={"withBackDrop"} onModalOn={() => {
+            dispatch(openModal("newChat"));
+        }} onModalOff={() => {
+            dispatch(closeModal());
+        }}>
             <NewChatModalContainer>
                 <NewChatModalTitle />
                 <NewChatSearchBar />
                 <NewChatFriendList />
             </NewChatModalContainer>
-        </Modal>
+        </ModalCard>
     );
 };
 

@@ -7,25 +7,19 @@ import { closeModal, openModal } from "app/store/ducks/direct/DirectSlice";
 import { useAppDispatch } from "app/store/hooks";
 
 
-interface DeleteChatModalProps {
-    visible: boolean;
-}
 
 const DeleteChatModalContainer = styled.div`
   padding-top: 20px;
 `;
 
 
-const DeleteChatModal = ({ visible }: DeleteChatModalProps) => {
+const DeleteChatModal = () => {
     const dispatch = useAppDispatch();
-
-
-
     return (
         <ModalCard modalType={"withBackDrop"} onModalOn={() => {
-            dispatch(openModal("deleteChat"))
+            dispatch(openModal("deleteChat"));
         }} onModalOff={() => {
-            closeModal()
+            dispatch(closeModal());
         }}>
             <DeleteChatModalContainer>
                 <ModalTitleContent title={"채팅을 삭제하시겠어요?"}

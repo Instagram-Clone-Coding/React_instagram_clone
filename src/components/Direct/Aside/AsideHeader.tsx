@@ -69,10 +69,10 @@ const AsideHeader = () => {
             </HeaderTop>
 
             {
-                modal === "newChat" && <NewChatModal visible={modal === "newChat"} />
+                modal === "newChat" && <NewChatModal />
             }
             {
-                modal === "convertAccount" && <ConvertAccountModal visible={modal === "convertAccount"} />
+                modal === "convertAccount" && <ConvertAccountModal  />
             }
         </Container>
     );

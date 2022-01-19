@@ -8,7 +8,7 @@ interface ReportModalProps {
 }
 
 const ReportModalContainer = styled.div`
-
+    
 `;
 
 const ReportModal = ({ visible }: ReportModalProps) => {

@@ -1,14 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import Modal from "../../../Common/Modal/Modal";
 import { ReactComponent as Checked } from "assets/Svgs/filled-checked-icon.svg";
+import ModalCard from "styles/UI/ModalCard";
+import { useAppDispatch } from "app/store/hooks";
+import { closeModal, openModal } from "app/store/ducks/direct/DirectSlice";
 
-interface ConvertAccountModalProps {
-    visible: boolean;
-}
 
 const ConvertAccountModalContainer = styled.div`
-  margin-top: -20px;
+  padding-top: 20px;
   text-align: center;
   font-size: 1rem;
   font-weight: 600;
@@ -42,15 +41,23 @@ const ConvertAccountModalContainer = styled.div`
   .to-login-button {
     border-top: 1px solid #dbdbdb;
     padding: 20px;
+
     button {
       color: #0096F5;
     }
   }
 `;
 
-const ConvertAccountModal = ({ visible }: ConvertAccountModalProps) => {
+const ConvertAccountModal = () => {
+
+    const dispatch = useAppDispatch();
+
     return (
-        <Modal closable={true} maskClosable={true} visible={visible}>
+        <ModalCard modalType={"withBackDrop"} onModalOn={() => {
+            dispatch(openModal("convertAccount"));
+        }} onModalOff={() => {
+            dispatch(closeModal());
+        }}>
             <ConvertAccountModalContainer>
                 <h1>계정 전환</h1>
                 <div className="accounts-section">
@@ -80,7 +87,7 @@ const ConvertAccountModal = ({ visible }: ConvertAccountModalProps) => {
                     </button>
                 </div>
             </ConvertAccountModalContainer>
-        </Modal>
+        </ModalCard>
     );
 };
 
