@@ -7,8 +7,8 @@ import ArticleMainIcons from "components/Home/Article/ArticleMainIcons";
 import ArticleMain from "components/Home/Article/ArticleMain";
 import CommentForm from "components/Home/Article/CommentForm";
 import { HomeType } from "@type";
-import useGapText from "Hooks/useGapText";
-import useOnView from "Hooks/useOnView";
+import useGapText from "hooks/useGapText";
+import useOnView from "hooks/useOnView";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
 import {
     deleteLike,
