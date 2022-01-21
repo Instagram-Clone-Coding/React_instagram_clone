@@ -84,26 +84,18 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
     }, [isObserving, isVisible, dispatch]);
 
     const dispatchPostLike = async () => {
-        try {
-            await dispatch(
-                postLike({ token: token.accessToken, postId: article.postId }),
-            );
-        } catch (error) {
-            console.log("좋아요 실패");
-        }
+        await dispatch(
+            postLike({ token: token.accessToken, postId: article.postId }),
+        );
     };
 
     const dispatchDeleteLike = async () => {
-        try {
-            await dispatch(
-                deleteLike({
-                    token: token.accessToken,
-                    postId: article.postId,
-                }),
-            );
-        } catch (error) {
-            console.log("좋아요 실패");
-        }
+        await dispatch(
+            deleteLike({
+                token: token.accessToken,
+                postId: article.postId,
+            }),
+        );
     };
 
     const toggleLikeHandler = (): void => {
