@@ -3,7 +3,7 @@ import ModalCard from "styles/UI/ModalCard";
 import ModalHeader from "./ModalHeader";
 import direct from "../../../assets/Images/direct.png";
 import sprite3 from "../../../assets/Images/sprite3.png";
-import useCopy from "Hooks/useCopy";
+import useCopy from "hooks/useCopy";
 
 const ShareWithModalInner = styled.div`
     .shareWithModal-options {
