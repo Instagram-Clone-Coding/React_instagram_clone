@@ -1,4 +1,4 @@
-import useCopy from "Hooks/useCopy";
+import useCopy from "hooks/useCopy";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import ModalCard from "styles/UI/ModalCard";
