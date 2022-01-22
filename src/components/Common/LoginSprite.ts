@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import sprite from "assets/Images/loginPageSprite.png";
 
-const ImgSprite = styled.div<Login.ImageProps>`
+const ImageSprite = styled.div<Login.ImageProps>`
     background-repeat: no-repeat;
     background: url(${sprite});
     width: ${(props) => props.width}px;
@@ -9,4 +9,4 @@ const ImgSprite = styled.div<Login.ImageProps>`
     background-position: ${(props) => props.position};
 `;
 
-export default ImgSprite;
+export default ImageSprite;

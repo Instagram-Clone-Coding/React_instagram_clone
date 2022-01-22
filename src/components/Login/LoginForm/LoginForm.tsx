@@ -1,30 +1,9 @@
 import styled from "styled-components";
-import Forms from "./Forms";
 import Suggest from "../../Common/Suggest";
 import ContentBox from "components/Common/ContentBox";
 import Appdownload from "components/Common/AppDownload";
+import FormLayout from "./FormLayout";
 
-export function LoginForm() {
-    return (
-        <FormContainer>
-            <ContentBox padding={Props.padding} margin={Props.margin}>
-                <Forms />
-            </ContentBox>
-            <ContentBox padding={Props.padding} margin={Props.margin}>
-                <Suggest />
-            </ContentBox>
-            <Appdownload />
-        </FormContainer>
-    );
-}
-
-// Props
-const Props: Login.NewCardProps = {
-    padding: `10px 0`,
-    margin: `0 0 10px`,
-};
-
-// style
 const FormContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -33,3 +12,22 @@ const FormContainer = styled.div`
     max-width: 350px;
     flex-grow: 1;
 `;
+
+const Props: Login.NewCardProps = {
+    padding: `10px 0`,
+    margin: `0 0 10px`,
+};
+
+export function LoginForm() {
+    return (
+        <FormContainer>
+            <ContentBox padding={Props.padding} margin={Props.margin}>
+                <FormLayout />
+            </ContentBox>
+            <ContentBox padding={Props.padding} margin={Props.margin}>
+                <Suggest currentRouter="signin" />
+            </ContentBox>
+            <Appdownload />
+        </FormContainer>
+    );
+}

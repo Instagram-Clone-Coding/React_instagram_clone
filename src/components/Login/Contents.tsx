@@ -2,15 +2,6 @@ import styled from "styled-components";
 import { LoginForm } from "./LoginForm/LoginForm";
 import { ShowingInstagram } from "./InstagramSlider/ShowingInsta";
 
-export function Contents() {
-    return (
-        <ContentContainer>
-            <ShowingInstagram />
-            <LoginForm />
-        </ContentContainer>
-    );
-}
-
 const ContentContainer = styled.main`
     display: flex;
     justify-content: center;
@@ -19,3 +10,12 @@ const ContentContainer = styled.main`
     width: 100%;
     max-width: 935px;
 `;
+
+export function Contents() {
+    return (
+        <ContentContainer>
+            <ShowingInstagram />
+            <LoginForm />
+        </ContentContainer>
+    );
+}

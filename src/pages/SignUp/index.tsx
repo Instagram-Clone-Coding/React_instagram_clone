@@ -5,27 +5,20 @@ import Appdownload from "components/Common/AppDownload";
 import ContentBox from "components/Common/ContentBox";
 import Suggest from "components/Common/Suggest";
 
-export default function SignUp() {
-    return (
-        <Container>
-            <FormContainer>
-                <ContentBox padding={Props.padding} margin={Props.margin}>
-                    <SignUpForm />
-                </ContentBox>
-                <ContentBox padding={Props.padding} margin={Props.margin}>
-                    <Suggest />
-                </ContentBox>
-                <Appdownload />
-            </FormContainer>
-            <Footer />
-        </Container>
-    );
-}
-
 const Container = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
+
+    .formContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-top: 30px;
+        max-width: 350px;
+        margin-bottom: 32px;
+        flex-grow: 1;
+    }
 `;
 
 const Props: Login.NewCardProps = {
@@ -33,12 +26,19 @@ const Props: Login.NewCardProps = {
     margin: `0 0 10px`,
 };
 
-const FormContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-top: 30px;
-    max-width: 350px;
-    margin-bottom: 32px;
-    flex-grow: 1;
-`;
+export default function SignUp() {
+    return (
+        <Container>
+            <div className="formContainer">
+                <ContentBox padding={Props.padding} margin={Props.margin}>
+                    <SignUpForm />
+                </ContentBox>
+                <ContentBox padding={Props.padding} margin={Props.margin}>
+                    <Suggest currentRouter="emailsignup" />
+                </ContentBox>
+                <Appdownload />
+            </div>
+            <Footer />
+        </Container>
+    );
+}
