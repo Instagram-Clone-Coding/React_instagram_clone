@@ -5,7 +5,7 @@ import Edit from "assets/Images/slider/ImageEdit.jpg";
 import takephoto from "assets/Images/slider/takePhoto.jpg";
 import talk from "assets/Images/slider/talk.jpg";
 import InstagramImg from "assets/Images/slider/instagram.jpg";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 /**
  * index로 배경 이미지, 애니메이션으로 보여줄 이미지를 선택한다.
@@ -59,10 +59,15 @@ const IMAGE_LENGTH = SlideImage.length;
 export function ShowingInstagram() {
     const [index, setIndex] = useState(-1);
 
-    setTimeout(() => {
-        const updateIndex = index + 1 === IMAGE_LENGTH ? 0 : index + 1;
-        setIndex(updateIndex);
-    }, 5000);
+    useEffect(() => {
+        const TimerId = setInterval(() => {
+            const updateIndex = index + 1 === IMAGE_LENGTH ? 0 : index + 1;
+            setIndex(updateIndex);
+        }, 5000);
+        return function clean() {
+            clearInterval(TimerId);
+        };
+    }, [index]);
 
     return (
         <SliderContainer>
