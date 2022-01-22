@@ -9,10 +9,11 @@ export const signIn = createAsyncThunk<Token, SignInRequestType>(
         try {
             const response = await axios.post(
                 `http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/login`,
-                { password: payload.password, username: payload.id },
+                { password: payload.password, username: payload.username },
                 // payload를 그대로 이용하면 안됨
                 // A non-serializable value was detected in an action, in the path: `payload`
             );
+            // response.data.status === 200 -> username dispatch 하기 **여기서 처리하기
             return response.data;
         } catch (error) {
             throw ThunkOptions.rejectWithValue(error);
@@ -36,16 +37,13 @@ export const reissueToken = createAsyncThunk<Token, void>(
 
 export const saveToken = (user: string, token: Token) => {
     const { type, accessToken, refreshToken } = token.data;
-    // 고려해야할 것
-    // 계정전환 -> 쿠키 복수로 저장** -> access refresh? 둘 다?
 
     // accessToken
     axios.defaults.headers.common[`Authorization`] = `${type} ${accessToken}`;
 
     // refreshToken
+    // 백엔드에서 생성해, 공유함
 
     // 토큰재발급
-    const TOKEN_EXPIRY_TIME = 10 * 60;
-    setTimeout(reissueToken, TOKEN_EXPIRY_TIME - 30000);
-    // accessToken 만료기간 추가되면, 대체하기(다음 배포때 추가한다고 확인받음)
+    // jwt토큰 decode해서 accessToken 만료기간 파싱해 이용해야함
 };

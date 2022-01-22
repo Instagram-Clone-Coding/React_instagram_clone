@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { saveToken, signIn } from "./signinThunk";
-import { Token } from "./signinThunk.type";
 
-export interface AuthState {
+export interface AuthStateProps {
     username: string;
     isLogin: boolean;
     isLoading: boolean;
@@ -13,40 +12,38 @@ interface UserInfo {
     username: string;
 }
 
-const initialState: AuthState = {
+const initialState: AuthStateProps = {
     username: "",
     isLoading: false,
     isLogin: false,
     isAsyncError: false,
 };
 
-export const signInSlice = createSlice({
-    name: "signIn",
+export const authSlice = createSlice({
+    name: "auth",
     initialState,
     reducers: {
         setUserName: (state, action: PayloadAction<UserInfo>) => {
             state.username = action.payload.username;
-        },
+        }, // thunkQption.dispatch
     },
     extraReducers: (bulid) => {
         bulid
             .addCase(signIn.pending, (state) => {
                 state.isLoading = true;
+                state.isAsyncError = false;
             })
-            .addCase(
-                signIn.fulfilled,
-                (state, action: PayloadAction<Token>) => {
-                    state.isLoading = false;
-                    state.isLogin = true;
-                    saveToken(state.username, action.payload);
-                },
-            )
+            .addCase(signIn.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isLogin = true;
+                saveToken(state.username, action.payload);
+            })
             .addCase(signIn.rejected, (state) => {
                 state.isAsyncError = true;
             });
     },
 });
 
-export const { setUserName } = signInSlice.actions;
+export const { setUserName } = authSlice.actions;
 
-export default signInSlice.reducer;
+export default authSlice.reducer;

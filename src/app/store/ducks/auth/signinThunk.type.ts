@@ -1,5 +1,5 @@
 export interface SignInRequestType {
-    id: string;
+    username: string;
     password: string;
 }
 
