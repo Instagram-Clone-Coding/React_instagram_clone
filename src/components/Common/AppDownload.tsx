@@ -2,27 +2,29 @@ import styled from "styled-components";
 import apple from "assets/Images/appStore.png";
 import android from "assets/Images/googlePlay.png";
 
-export default function Appdownload() {
-    return (
-        <DownloadStyle>
-            <p>앱을 다운로드하세요.</p>
-            <AppImageStyle>
-                {props.map((downloadData, idx) => {
-                    return (
-                        <a href={downloadData.url} key={idx}>
-                            <img
-                                src={downloadData.src}
-                                alt={downloadData.alt}
-                            />
-                        </a>
-                    );
-                })}
-            </AppImageStyle>
-        </DownloadStyle>
-    );
-}
+const DownloadStyle = styled.div`
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    & > p {
+        margin: 10px 20px;
+    }
+    .appImage {
+        display: flex;
+        justify-content: center;
+        margin: 10px 0;
+        & > a {
+            margin-right: 8px;
+        }
+        & > a:last-child {
+            margin-right: 0;
+        }
+        & > a > img {
+            height: 40px;
+        }
+    }
+`;
 
-// props
 const props = [
     {
         url: "https://apps.apple.com/app/instagram/id389801252?vt=lo",
@@ -36,27 +38,22 @@ const props = [
     },
 ];
 
-// style
-const DownloadStyle = styled.div`
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    & > p {
-        margin: 10px 20px;
-    }
-`;
-
-const AppImageStyle = styled.div`
-    display: flex;
-    justify-content: center;
-    margin: 10px 0;
-    & > a {
-        margin-right: 8px;
-    }
-    & > a:last-child {
-        margin-right: 0;
-    }
-    & > a > img {
-        height: 40px;
-    }
-`;
+export default function Appdownload() {
+    return (
+        <DownloadStyle>
+            <p>앱을 다운로드하세요.</p>
+            <div className="appImage">
+                {props.map((downloadData, idx) => {
+                    return (
+                        <a href={downloadData.url} key={idx}>
+                            <img
+                                src={downloadData.src}
+                                alt={downloadData.alt}
+                            />
+                        </a>
+                    );
+                })}
+            </div>
+        </DownloadStyle>
+    );
+}

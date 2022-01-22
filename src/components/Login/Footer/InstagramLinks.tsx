@@ -2,21 +2,13 @@ import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import FooterRow from "./FooterRow";
 
-function InstagramLinks() {
-    const { pathname } = useLocation();
-    const isLoginPage = pathname.includes(`signin`);
+const Links = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: 24px;
+    width: 100%;
+`;
 
-    return (
-        <Links>
-            <FooterRow content={InstagramRelateLink} />
-            {isLoginPage && <FooterRow content={SearchResult} />}
-        </Links>
-    );
-}
-
-export default InstagramLinks;
-
-//props
 const InstagramRelateLink = [
     { text: "Meta", url: "https://about.facebook.com/meta" },
     { text: "소개", url: "https://about.instagram.com/" },
@@ -69,10 +61,16 @@ const SearchResult = [
     },
 ];
 
-// style
-const Links = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin-top: 24px;
-    width: 100%;
-`;
+function InstagramLinks() {
+    const { pathname } = useLocation();
+    const isLoginPage = pathname.includes(`signin`);
+
+    return (
+        <Links>
+            <FooterRow content={InstagramRelateLink} />
+            {isLoginPage && <FooterRow content={SearchResult} />}
+        </Links>
+    );
+}
+
+export default InstagramLinks;

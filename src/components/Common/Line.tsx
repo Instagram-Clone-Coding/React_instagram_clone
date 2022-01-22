@@ -1,15 +1,5 @@
 import styled from "styled-components";
 
-export default function Line() {
-    return (
-        <LineStyle>
-            <div />
-            <span>또는</span>
-            <div />
-        </LineStyle>
-    );
-}
-
 const LineStyle = styled.div`
     margin: 10px 40px 18px;
     display: flex;
@@ -31,3 +21,13 @@ const LineStyle = styled.div`
         position: relative;
     }
 `;
+
+export default function Line() {
+    return (
+        <LineStyle>
+            <div />
+            <span>또는</span>
+            <div />
+        </LineStyle>
+    );
+}

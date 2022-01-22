@@ -3,6 +3,12 @@ import FooterTextPiece from "./FooterTextPiece";
 import styled from "styled-components";
 import FooterContentProps from "./FooterText.type";
 
+const FlexRow = styled.div`
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+`;
+
 function FooterRow(props: FooterContentProps) {
     return (
         <FlexRow>
@@ -14,9 +20,3 @@ function FooterRow(props: FooterContentProps) {
 }
 
 export default FooterRow;
-
-//style
-const FlexRow = styled.div`
-    display: flex;
-    justify-content: center;
-`;

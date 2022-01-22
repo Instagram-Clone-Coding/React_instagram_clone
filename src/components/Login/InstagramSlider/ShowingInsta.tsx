@@ -23,10 +23,7 @@ import { useState } from "react";
  *
  */
 
-const SlideImage = [home, Edit, talk, takephoto, InstagramImg];
-const IMAGE_LENGTH = SlideImage.length;
-
-const Background = styled.div`
+const SliderContainer = styled.div`
     background-image: url(${PhoneImg});
     background-size: 454px 618px;
     height: 618px;
@@ -36,15 +33,10 @@ const Background = styled.div`
     @media (max-width: 875px) {
         display: none;
     }
-`;
 
-interface imageStateProps {
-    show: Boolean;
-    background: Boolean;
-}
-
-const Slider = styled.div`
-    margin: 99px 0 0 151px;
+    .slider {
+        margin: 99px 0 0 151px;
+    }
 `;
 
 const Image = styled.img<imageStateProps>`
@@ -56,6 +48,14 @@ const Image = styled.img<imageStateProps>`
     ${(props) => props.show && `transition: opacity 1.5s ease-in;`}
 `;
 
+interface imageStateProps {
+    show: Boolean;
+    background: Boolean;
+}
+
+const SlideImage = [home, Edit, talk, takephoto, InstagramImg];
+const IMAGE_LENGTH = SlideImage.length;
+
 export function ShowingInstagram() {
     const [index, setIndex] = useState(-1);
 
@@ -65,8 +65,8 @@ export function ShowingInstagram() {
     }, 5000);
 
     return (
-        <Background>
-            <Slider>
+        <SliderContainer>
+            <div className="slider">
                 {SlideImage.map((img, order) => {
                     const isBackground = order === index ? true : false;
                     const isShow =
@@ -80,7 +80,7 @@ export function ShowingInstagram() {
                         />
                     );
                 })}
-            </Slider>
-        </Background>
+            </div>
+        </SliderContainer>
     );
 }
