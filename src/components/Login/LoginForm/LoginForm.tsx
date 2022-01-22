@@ -11,7 +11,7 @@ export function LoginForm() {
                 <Forms />
             </ContentBox>
             <ContentBox padding={Props.padding} margin={Props.margin}>
-                <Suggest />
+                <Suggest currentRouter="signin" />
             </ContentBox>
             <Appdownload />
         </FormContainer>

@@ -13,7 +13,7 @@ export default function SignUp() {
                     <SignUpForm />
                 </ContentBox>
                 <ContentBox padding={Props.padding} margin={Props.margin}>
-                    <Suggest />
+                    <Suggest currentRouter="emailsignup" />
                 </ContentBox>
                 <Appdownload />
             </FormContainer>
