@@ -5,7 +5,7 @@ import Edit from "assets/Images/slider/ImageEdit.jpg";
 import takephoto from "assets/Images/slider/takePhoto.jpg";
 import talk from "assets/Images/slider/talk.jpg";
 import InstagramImg from "assets/Images/slider/instagram.jpg";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 /**
  * index로 배경 이미지, 애니메이션으로 보여줄 이미지를 선택한다.
@@ -22,25 +22,52 @@ import { useEffect, useState } from "react";
  *    --> 모듈러 연산을 이용함.
  *
  */
+
+const SlideImage = [home, Edit, talk, takephoto, InstagramImg];
+const IMAGE_LENGTH = SlideImage.length;
+
+const Background = styled.div`
+    background-image: url(${PhoneImg});
+    background-size: 454px 618px;
+    height: 618px;
+    margin-left: -35px;
+    margin-right: -15px;
+    flex-basis: 454px;
+    @media (max-width: 875px) {
+        display: none;
+    }
+`;
+
+interface imageStateProps {
+    show: Boolean;
+    background: Boolean;
+}
+
+const Slider = styled.div`
+    margin: 99px 0 0 151px;
+`;
+
+const Image = styled.img<imageStateProps>`
+    position: absolute;
+    opacity: ${(props) => (props.show || props.background ? 1 : 0)};
+    z-index: ${(props) => (props.show ? 2 : 1)};
+    visibility: ${(props) =>
+        props.show || props.background ? `visible` : `hidden`};
+    ${(props) => props.show && `transition: opacity 1.5s ease-in;`}
+`;
+
 export function ShowingInstagram() {
     const [index, setIndex] = useState(-1);
-    const IMAGE_LENGTH = SlideImg.length;
 
-    useEffect(() => {
-        const TimerId = setInterval(() => {
-            const updateIndex = index + 1 === IMAGE_LENGTH ? 0 : index + 1;
-            setIndex(updateIndex);
-        }, 5000);
-
-        return function clean() {
-            clearInterval(TimerId);
-        };
-    }, [index, IMAGE_LENGTH]);
+    setTimeout(() => {
+        const updateIndex = index + 1 === IMAGE_LENGTH ? 0 : index + 1;
+        setIndex(updateIndex);
+    }, 5000);
 
     return (
         <Background>
             <Slider>
-                {SlideImg.map((img, order) => {
+                {SlideImage.map((img, order) => {
                     const isBackground = order === index ? true : false;
                     const isShow =
                         order === (index + 1) % IMAGE_LENGTH ? true : false;
@@ -57,35 +84,3 @@ export function ShowingInstagram() {
         </Background>
     );
 }
-
-const SlideImg = [home, Edit, talk, takephoto, InstagramImg];
-
-const Background = styled.div`
-    background-image: url(${PhoneImg});
-    background-size: 454px 618px;
-    height: 618px;
-    margin-left: -35px;
-    margin-right: -15px;
-    flex-basis: 454px;
-    @media (max-width: 875px) {
-        display: none;
-    }
-`;
-
-interface imgStateProps {
-    show: Boolean;
-    background: Boolean;
-}
-
-const Slider = styled.div`
-    margin: 99px 0 0 151px;
-`;
-
-const Image = styled.img<imgStateProps>`
-    position: absolute;
-    opacity: ${(props) => (props.show || props.background ? 1 : 0)};
-    z-index: ${(props) => (props.show ? 2 : 1)};
-    visibility: ${(props) =>
-        props.show || props.background ? `visible` : `hidden`};
-    ${(props) => props.show && `transition: opacity 1.5s ease-in;`}
-`;
