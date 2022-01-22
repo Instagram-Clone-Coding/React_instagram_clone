@@ -39,52 +39,59 @@ export default function Forms() {
 const callSignInAPI = (
     e: MouseEvent<HTMLButtonElement>,
     dispatch: Function,
-    userData: { id: string; password: string },
+    userData: { username: string; password: string },
 ) => {
     e.preventDefault();
     const requestSignIn = async () =>
         await dispatch(
             signIn({
-                id: userData.id,
+                username: userData.username,
                 password: userData.password,
             }),
-        ).unwrap();
+        ).unwrap(); // try catch하기 -> 에러처리
     requestSignIn();
 };
 
 const LoginFormAndButton = () => {
     const [userData, setUserData] = useState({
-        id: "",
+        username: "",
         password: "",
-    });
+    }); // useReducer
 
-    const changeUserData = (changed: { id?: string; password?: string }) => {
-        setUserData({ ...userData, ...changed });
+    const changeUserData = (changed: {
+        username?: string;
+        password?: string;
+    }) => {
+        setUserData((prev) => ({ ...prev, ...changed }));
     };
 
     const dispatch = useAppDispatch();
     const isLogin = useAppSelector((state) => state.auth.isLogin);
     if (isLogin) {
-        dispatch(setUserName({ username: userData.id }));
-        return <Redirect to="/" />;
+        dispatch(setUserName({ username: userData.username })); // thunk에서 처리하기
+        return <Redirect to="/" />; // 해당 라우트 최상단에서 처리 **
     }
 
     return (
         <>
             <Input
-                innerText={placeholder.id}
-                inputName="id"
-                setUserData={changeUserData}
+                value={userData.username}
+                type="text"
+                inputName="username"
+                innerText={placeholder.username}
+                onUserDataUpdater={changeUserData}
             />
             <Input
-                innerText={placeholder.password}
+                value={userData.password}
+                type="password"
                 inputName="password"
-                setUserData={changeUserData}
+                innerText={placeholder.password}
+                onUserDataUpdater={changeUserData}
             />
             <SubmitButton
                 type="submit"
                 disabled={
-                    userData.id.length > 0 && userData.password.length > 5
+                    userData.username.length > 0 && userData.password.length > 5
                         ? false
                         : true
                 }
@@ -104,7 +111,7 @@ const instagramImage: Login.ImageProps = {
 };
 
 const placeholder = {
-    id: "전화번호, 사용자 이름 또는 이메일",
+    username: "사용자 이름",
     password: "비밀번호",
 };
 

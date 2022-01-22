@@ -35,9 +35,11 @@ declare module Login {
     }
 
     interface InputProps {
+        inputName: "email" | "name" | "username" | "password" | "id";
         innerText: string;
-        inputName: string;
-        setUserData: Function;
+        onUserDataUpdater: Function;
+        type: "text" | "password";
+        value: string;
     }
 
     interface NewCardProps {

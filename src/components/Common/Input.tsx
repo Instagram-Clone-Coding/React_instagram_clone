@@ -1,57 +1,43 @@
 import styled, { css } from "styled-components";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState } from "react";
 
 export default function Input(props: Login.InputProps) {
-    const { innerText, inputName, setUserData } = props;
+    const { innerText, onUserDataUpdater, type, inputName, value } = props;
 
-    const [textType, setTextType] = useState("text");
-    const [animation, setAnimation] = useState(false);
-    const [userAnswer, setAnswer] = useState("");
+    const [isSmallInnerText, setInnerTextSize] = useState(false);
+    const [inputType, setInputType] = useState(type);
     const [isShowPassword, setShowPassword] = useState(false);
-    const [passwordMessage, setPasswordMessage] = useState("");
+    const [passwordMessage, setPasswordMessage] = useState<
+        "비밀번호 표시" | "숨기기"
+    >("비밀번호 표시");
 
-    useEffect(() => {
-        const typeCheck = inputName === "password" ? "password" : "text";
-        setTextType(typeCheck);
-        setPasswordMessage(message.show);
-    }, []);
+    const handleText = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        const userInput = { [name]: value };
+        const hasValue = value.length ? true : false;
+        onUserDataUpdater(userInput);
+        setInnerTextSize(hasValue);
+        setShowPassword(inputName === "password" && hasValue);
+    };
 
-    const handleText = useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>) => {
-            const { name, value } = event.target;
-            const updated = { [name]: value };
-            const visible = value.length ? true : false;
-            setUserData(updated);
-            setAnswer(value);
-            setAnimation(visible);
-            setShowPassword(inputName === "password" && visible);
-        },
-        [setUserData],
-    );
-
-    const handlePasswordBtn = useCallback(
-        (event: React.MouseEvent<HTMLButtonElement>) => {
-            event.preventDefault();
-            if (textType === "password") {
-                setPasswordMessage(message.hide);
-                return setTextType("text");
-            }
-            setPasswordMessage(message.show);
-            setTextType("password");
-        },
-        [textType],
-    );
+    const handlePasswordBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        setInputType(inputType === "password" ? "text" : "password");
+        setPasswordMessage(
+            inputType === "password" ? "숨기기" : "비밀번호 표시",
+        );
+    };
 
     return (
         <Wrapper>
             <InputContent>
-                <Label animation={animation}>
+                <Label isSmallInnerText={isSmallInnerText}>
                     <Span>{innerText}</Span>
                     <WritingForm
                         // onBlur={}
                         onChange={handleText}
-                        type={textType}
-                        value={userAnswer}
+                        type={inputType}
+                        value={value}
                         name={inputName}
                     />
                 </Label>
@@ -66,13 +52,6 @@ export default function Input(props: Login.InputProps) {
         </Wrapper>
     );
 }
-// input > onBlur > 유효성검증에 이용하기**
-
-// props
-const message = {
-    show: "비밀번호 표시",
-    hide: "숨기기",
-};
 
 // style
 const Wrapper = styled.div`
@@ -90,7 +69,7 @@ const InputContent = styled.div`
     align-items: center;
 `;
 
-const Label = styled.label<{ animation: Boolean }>`
+const Label = styled.label<{ isSmallInnerText: Boolean }>`
     height: 36px;
     flex: 1 0 0;
     padding: 0;
@@ -100,7 +79,7 @@ const Label = styled.label<{ animation: Boolean }>`
     cursor: text;
 
     ${(props) =>
-        props.animation &&
+        props.isSmallInnerText &&
         css`
             & > span {
                 transform: scale(0.83333) translateY(-10px);
