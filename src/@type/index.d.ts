@@ -37,9 +37,10 @@ declare module Login {
     interface InputProps {
         inputName: "email" | "name" | "username" | "password" | "id";
         innerText: string;
-        onUserDataUpdater: Function;
-        type: "text" | "password";
         value: string;
+        type: "text" | "password";
+        onUserDataUpdater: Function;
+        validator?: Function;
     }
 
     interface NewCardProps {

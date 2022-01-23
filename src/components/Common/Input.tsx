@@ -74,6 +74,7 @@ const InputContainer = styled.div<InputProps>`
 export default function Input(props: Login.InputProps) {
     const { innerText, onUserDataUpdater, type, inputName, value } = props;
 
+    // props.validator 가 있으면, 관리해야함** -> password랑 비슷함
     const [isSmallInnerText, setInnerTextSize] = useState(false);
     const [inputType, setInputType] = useState(type);
     const [isShowPassword, setShowPassword] = useState(false);

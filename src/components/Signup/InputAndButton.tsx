@@ -1,14 +1,20 @@
 import Input from "components/Common/Input";
 import SubmitButton from "components/Common/SubmitButton";
 import { useState } from "react";
+import {
+    isValidEmailForm,
+    isValidName,
+    isValidPassword,
+    isValidUsername,
+} from "./validator";
 
 type inputName = "email" | "name" | "username" | "password";
 
-const inputData: Array<[inputName, string]> = [
-    ["email", "이메일 주소"],
-    ["name", "성명"],
-    ["username", "사용자 이름"],
-    ["password", "비밀번호"],
+const inputData: Array<[inputName, string, Function]> = [
+    ["email", "이메일 주소", isValidEmailForm],
+    ["name", "성명", isValidName],
+    ["username", "사용자 이름", isValidUsername],
+    ["password", "비밀번호", isValidPassword],
 ];
 
 export default function InputAndButton() {
@@ -31,7 +37,7 @@ export default function InputAndButton() {
     return (
         <>
             {inputData.map((data, index) => {
-                const [inputName, value] = data;
+                const [inputName, value, validator] = data;
                 const inputType =
                     inputName === "password" ? "password" : "text";
 
@@ -42,6 +48,7 @@ export default function InputAndButton() {
                         inputName={inputName}
                         type={inputType}
                         innerText={value}
+                        validator={validator}
                         onUserDataUpdater={changeUserData}
                     />
                 );
