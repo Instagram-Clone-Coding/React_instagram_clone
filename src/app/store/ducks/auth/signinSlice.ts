@@ -19,7 +19,7 @@ const initialState: AuthStateProps = {
     isAsyncError: false,
 };
 
-export const authSlice = createSlice({
+const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
@@ -46,4 +46,4 @@ export const authSlice = createSlice({
 
 export const { setUserName } = authSlice.actions;
 
-export default authSlice.reducer;
+export const authReducer = authSlice.reducer;

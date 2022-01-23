@@ -1,6 +1,11 @@
 import styled from "styled-components";
 
-const Card = styled.div<UI.CardProps>`
+export interface CardProps {
+    isNav?: boolean;
+    radius?: number;
+}
+
+const Card = styled.div<CardProps>`
     border: 1px solid
         ${(props) => (props.isNav ? "none" : props.theme.color.bd_gray)};
     border-bottom: 1px solid

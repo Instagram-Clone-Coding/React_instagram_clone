@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import signinSlice from "./ducks/auth/signinSlice";
+import { authReducer } from "app/store/ducks/auth/signinSlice";
+import { homeReducer } from "app/store/ducks/home/homeSlice";
 
 export const store = configureStore({
     reducer: {
-        auth: signinSlice,
+        auth: authReducer,
+        home: homeReducer,
     },
 });
 

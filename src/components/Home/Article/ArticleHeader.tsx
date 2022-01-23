@@ -1,24 +1,45 @@
+import StoryCircle from "components/Common/StoryCircle";
+import Username from "components/Common/Username";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-import Username from "../Username";
+import ArticleMenuModal from "../Modals/ArticleMenuModal";
+import FollowingModal from "../Modals/FollowingModal";
+import HoverModal from "../Modals/HoverModal";
+import ReportModal from "../Modals/ReportModal";
+import ShareWithModal from "../Modals/SharerWithModal";
+import { ReactComponent as ThreeDots } from "../../../assets/Svgs/threeDots.svg";
 
 const StyledArticleHeader = styled.header`
     height: 60px;
     padding: 16px;
     display: flex;
+    align-items: center;
     position: relative;
-    img {
-        min-width: 32px;
-        min-height: 32px;
-        border-radius: 50%;
-        cursor: pointer;
-    }
+
     .header-content {
-        margin-left: 14px;
         flex: 1;
-        div:nth-child(2) {
+        margin-left: 14px;
+        a {
+            text-decoration: none;
+            display: block;
+        }
+        & > a {
             font-size: 12px;
             line-height: 15px;
             cursor: pointer;
+        }
+        & > .header-mainContent {
+            display: flex;
+        }
+        .header-followBox {
+            & > span {
+                margin: 0 4px;
+            }
+            & > button {
+                margin-left: 2px;
+                color: ${(props) => props.theme.color.blue};
+            }
         }
     }
     .header-dots {
@@ -35,31 +56,148 @@ const StyledArticleHeader = styled.header`
     }
 `;
 
-const ArticleHeader = ({ article }: any) => {
+const HEADER_STORY_CIRCLE = 42 / 64;
+
+interface ArticleHeaderProps {
+    memberImageUrl: string;
+    memberNickname: string;
+    location?: string;
+}
+
+const ArticleHeader = ({
+    memberImageUrl,
+    memberNickname,
+    location,
+}: ArticleHeaderProps) => {
+    const [isHoverModalActivated, setIsHoverModalActivated] = useState(false);
+    const [isDotModalActivated, setIsDotModalActivated] = useState(false);
+    const [isReportModalActivated, setIsReportModalActivated] = useState(false);
+    const [isFollowingModalActivated, setIsFollowingModalActivated] =
+        useState(false);
+    const [isShareWithModalActivated, setIsShareWithModalActivated] =
+        useState(false);
+
+    const [modalPositionObj, setModalPositionObj] = useState<DOMRect>();
+    const [isFollowing, setIsFollowing] = useState(false); // followingModal의 isFollowing과 연결할 것
+
+    const mouseEnterHandler = (
+        event:
+            | React.MouseEvent<HTMLSpanElement>
+            | React.MouseEvent<HTMLDivElement>,
+    ) => {
+        setModalPositionObj(event?.currentTarget.getBoundingClientRect());
+        setIsHoverModalActivated(true);
+    };
+
+    const mouseLeaveHandler = () => {
+        setIsHoverModalActivated(false);
+    };
+
+    const followHandler = () => {
+        // follow
+        setIsFollowing(true);
+    };
+
+    const unfollowHandler = () => {
+        // unfollow하기 전에 modal에서 재차 확인
+        setIsFollowingModalActivated(true);
+    };
+
+    const cloaseArticleMenuModalAndOpenReportModal = () => {
+        setIsDotModalActivated(false);
+        setIsReportModalActivated(true);
+    };
+
+    const cloaseArticleMenuModalAndOpenShareWithModal = () => {
+        setIsDotModalActivated(false);
+        setIsShareWithModalActivated(true);
+    };
+
     return (
         <StyledArticleHeader>
-            <img src={article.owner.avatarUrl} alt={article.owner.username} />
+            {isHoverModalActivated && (
+                <HoverModal
+                    isFollowing={isFollowing}
+                    onFollowChange={(a: boolean) => setIsFollowing(a)}
+                    username={memberNickname}
+                    modalPosition={modalPositionObj}
+                    onMouseEnter={() => setIsHoverModalActivated(true)}
+                    onMouseLeave={() => setIsHoverModalActivated(false)}
+                    onFollowingModalOn={() =>
+                        setIsFollowingModalActivated(true)
+                    }
+                />
+            )}
+            {isFollowing && isFollowingModalActivated && (
+                <FollowingModal
+                    onUnfollow={() => setIsFollowing(false)}
+                    onModalOn={() => setIsFollowingModalActivated(true)}
+                    onModalOff={() => setIsFollowingModalActivated(false)}
+                    username={memberNickname}
+                    avatarUrl={memberImageUrl}
+                />
+            )}
+            {isDotModalActivated && (
+                <ArticleMenuModal
+                    isFollowing={isFollowing}
+                    onUnfollow={unfollowHandler}
+                    onModalOn={() => setIsDotModalActivated(true)}
+                    onModalOff={() => setIsDotModalActivated(false)}
+                    onReportModalOn={cloaseArticleMenuModalAndOpenReportModal}
+                    onShareWithModalOn={
+                        cloaseArticleMenuModalAndOpenShareWithModal
+                    }
+                />
+            )}
+            {isReportModalActivated && (
+                <ReportModal
+                    onModalOn={() => setIsReportModalActivated(true)}
+                    onModalOff={() => setIsReportModalActivated(false)}
+                />
+            )}
+            {isShareWithModalActivated && (
+                <ShareWithModal
+                    onModalOn={() => setIsShareWithModalActivated(true)}
+                    onModalOff={() => setIsShareWithModalActivated(false)}
+                    username={memberNickname}
+                />
+            )}
+            <StoryCircle
+                type="unread" // 백엔드 소통하여 읽었는지 여부 확인
+                avatarUrl={memberImageUrl}
+                username={memberNickname}
+                scale={HEADER_STORY_CIRCLE}
+                onMouseEnter={mouseEnterHandler}
+                onMouseLeave={mouseLeaveHandler}
+            />
             <div className="header-content">
-                <Username>{article.owner.username}</Username>
-                <div>{article.location}</div>
+                <div className="header-mainContent">
+                    <Username
+                        onMouseEnter={mouseEnterHandler}
+                        onMouseLeave={mouseLeaveHandler}
+                    >
+                        <Link to={`/${memberNickname}`}>{memberNickname}</Link>
+                    </Username>
+                    {!isFollowing && (
+                        <div className="header-followBox">
+                            <span>•</span>
+                            <button onClick={followHandler}>팔로우</button>
+                        </div>
+                    )}
+                </div>
+                <Link to={`/explore/locations/:id/${location}`}>
+                    {/* location id */}
+                    {location}
+                </Link>
             </div>
-            <div className="header-dots">
-                <svg
-                    aria-label="옵션 더 보기"
-                    color="#262626"
-                    fill="#262626"
-                    height="24"
-                    role="img"
-                    viewBox="0 0 24 24"
-                    width="24"
-                >
-                    <circle cx="12" cy="12" r="1.5"></circle>
-                    <circle cx="6.5" cy="12" r="1.5"></circle>
-                    <circle cx="17.5" cy="12" r="1.5"></circle>
-                </svg>
+            <div
+                className="header-dots"
+                onClick={() => setIsDotModalActivated(true)}
+            >
+                <ThreeDots />
             </div>
         </StyledArticleHeader>
     );
 };
 
-export default ArticleHeader;
+export default React.memo(ArticleHeader);

@@ -7,4 +7,5 @@ const Username = styled.span`
         text-decoration: underline;
     }
 `;
+
 export default Username;
