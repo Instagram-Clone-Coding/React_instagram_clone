@@ -1,13 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { authReducer } from "app/store/ducks/auth/signinSlice";
 import { homeReducer } from "app/store/ducks/home/homeSlice";
-import authSlice from "features/Auth/authSlice";
 import { directReducer } from "app/store/ducks/direct/DirectSlice";
+
 
 export const store = configureStore({
     reducer: {
-        // auth: authSlice,
         direct:directReducer,
-        home: homeReducer
+        auth: authReducer,
+        home: homeReducer,
     },
 });
 

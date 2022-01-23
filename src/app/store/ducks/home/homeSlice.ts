@@ -21,13 +21,9 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
         postImageDTOs: [
             {
                 id: 12,
-                image: {
-                    imageName: "dummy",
-                    imageType: "JPG",
-                    imageUUID: "dummy",
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-                },
+
+                postImageUrl:
+                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
                 postTagDTOs: [
                     {
                         id: 12,
@@ -49,13 +45,9 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
             },
             {
                 id: 13,
-                image: {
-                    imageName: "dummy",
-                    imageType: "JPG",
-                    imageUUID: "dummy",
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-                },
+
+                postImageUrl:
+                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
                 postTagDTOs: [
                     {
                         id: 12,
@@ -69,13 +61,9 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
             },
             {
                 id: 14,
-                image: {
-                    imageName: "dummy",
-                    imageType: "JPG",
-                    imageUUID: "dummy",
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-                },
+
+                postImageUrl:
+                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
                 postTagDTOs: [
                     {
                         id: 12,
@@ -115,13 +103,9 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
         postImageDTOs: [
             {
                 id: 12,
-                image: {
-                    imageName: "dummy",
-                    imageType: "JPG",
-                    imageUUID: "dummy",
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-                },
+
+                postImageUrl:
+                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
                 postTagDTOs: [
                     {
                         id: 12,
@@ -143,13 +127,9 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
             },
             {
                 id: 13,
-                image: {
-                    imageName: "dummy",
-                    imageType: "JPG",
-                    imageUUID: "dummy",
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-                },
+
+                postImageUrl:
+                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
                 postTagDTOs: [
                     {
                         id: 12,
@@ -163,13 +143,9 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
             },
             {
                 id: 14,
-                image: {
-                    imageName: "dummy",
-                    imageType: "JPG",
-                    imageUUID: "dummy",
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-                },
+
+                postImageUrl:
+                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
                 postTagDTOs: [
                     {
                         id: 12,
@@ -209,13 +185,9 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
         postImageDTOs: [
             {
                 id: 12,
-                image: {
-                    imageName: "dummy",
-                    imageType: "JPG",
-                    imageUUID: "dummy",
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-                },
+
+                postImageUrl:
+                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
                 postTagDTOs: [
                     {
                         id: 12,
@@ -237,13 +209,9 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
             },
             {
                 id: 13,
-                image: {
-                    imageName: "dummy",
-                    imageType: "JPG",
-                    imageUUID: "dummy",
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-                },
+
+                postImageUrl:
+                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
                 postTagDTOs: [
                     {
                         id: 12,
@@ -257,13 +225,9 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
             },
             {
                 id: 14,
-                image: {
-                    imageName: "dummy",
-                    imageType: "JPG",
-                    imageUUID: "dummy",
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-                },
+
+                postImageUrl:
+                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
                 postTagDTOs: [
                     {
                         id: 12,
@@ -303,13 +267,9 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
         postImageDTOs: [
             {
                 id: 12,
-                image: {
-                    imageName: "dummy",
-                    imageType: "JPG",
-                    imageUUID: "dummy",
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-                },
+
+                postImageUrl:
+                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
                 postTagDTOs: [
                     {
                         id: 12,
@@ -331,13 +291,9 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
             },
             {
                 id: 13,
-                image: {
-                    imageName: "dummy",
-                    imageType: "JPG",
-                    imageUUID: "dummy",
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-                },
+
+                postImageUrl:
+                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
                 postTagDTOs: [
                     {
                         id: 12,
@@ -351,13 +307,9 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
             },
             {
                 id: 14,
-                image: {
-                    imageName: "dummy",
-                    imageType: "JPG",
-                    imageUUID: "dummy",
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-                },
+
+                postImageUrl:
+                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
                 postTagDTOs: [
                     {
                         id: 12,
@@ -397,13 +349,9 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
         postImageDTOs: [
             {
                 id: 12,
-                image: {
-                    imageName: "dummy",
-                    imageType: "JPG",
-                    imageUUID: "dummy",
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-                },
+
+                postImageUrl:
+                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
                 postTagDTOs: [
                     {
                         id: 12,
@@ -425,13 +373,9 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
             },
             {
                 id: 13,
-                image: {
-                    imageName: "dummy",
-                    imageType: "JPG",
-                    imageUUID: "dummy",
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-                },
+
+                postImageUrl:
+                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
                 postTagDTOs: [
                     {
                         id: 12,
@@ -445,13 +389,9 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
             },
             {
                 id: 14,
-                image: {
-                    imageName: "dummy",
-                    imageType: "JPG",
-                    imageUUID: "dummy",
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-                },
+
+                postImageUrl:
+                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
                 postTagDTOs: [
                     {
                         id: 12,
@@ -491,13 +431,9 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
         postImageDTOs: [
             {
                 id: 12,
-                image: {
-                    imageName: "dummy",
-                    imageType: "JPG",
-                    imageUUID: "dummy",
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-                },
+
+                postImageUrl:
+                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
                 postTagDTOs: [
                     {
                         id: 12,
@@ -519,13 +455,9 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
             },
             {
                 id: 13,
-                image: {
-                    imageName: "dummy",
-                    imageType: "JPG",
-                    imageUUID: "dummy",
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-                },
+
+                postImageUrl:
+                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
                 postTagDTOs: [
                     {
                         id: 12,
@@ -539,13 +471,9 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
             },
             {
                 id: 14,
-                image: {
-                    imageName: "dummy",
-                    imageType: "JPG",
-                    imageUUID: "dummy",
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-                },
+
+                postImageUrl:
+                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
                 postTagDTOs: [
                     {
                         id: 12,
@@ -587,13 +515,9 @@ const EXTRA_ARTICLES: HomeType.ArticleProps = {
     postImageDTOs: [
         {
             id: 12,
-            image: {
-                imageName: "dummy",
-                imageType: "JPG",
-                imageUUID: "dummy",
-                imageUrl:
-                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            },
+            postImageUrl:
+                "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+
             postTagDTOs: [
                 {
                     id: 12,
@@ -615,13 +539,9 @@ const EXTRA_ARTICLES: HomeType.ArticleProps = {
         },
         {
             id: 13,
-            image: {
-                imageName: "dummy",
-                imageType: "JPG",
-                imageUUID: "dummy",
-                imageUrl:
-                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            },
+            postImageUrl:
+                "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
+
             postTagDTOs: [
                 {
                     id: 12,
@@ -635,13 +555,8 @@ const EXTRA_ARTICLES: HomeType.ArticleProps = {
         },
         {
             id: 14,
-            image: {
-                imageName: "dummy",
-                imageType: "JPG",
-                imageUUID: "dummy",
-                imageUrl:
-                    "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            },
+            postImageUrl:
+                "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
             postTagDTOs: [
                 {
                     id: 12,
@@ -675,6 +590,7 @@ const initialState: HomeType.homeStateProps = {
     articles: [],
     isLoading: true, /// dummy
     isExtraArticleLoading: false,
+    extraArticlesCount: 0,
     isAsyncError: false,
     hoveredUser: null,
     isCopiedNotification: false,
@@ -710,6 +626,9 @@ const homeSlice = createSlice({
                 handledObj: null,
             };
         },
+        increaseExtraArticlesCount: (state) => {
+            state.extraArticlesCount++;
+        },
     },
     extraReducers: (build) => {
         build
@@ -720,8 +639,8 @@ const homeSlice = createSlice({
             .addCase(
                 getHomeArticles.fulfilled,
                 (state, action: PayloadAction<HomeType.ArticleProps[]>) => {
-                    state.isLoading = false;
                     state.articles = action.payload;
+                    state.isLoading = false;
                 },
             )
             .addCase(getHomeArticles.rejected, (state) => {
@@ -733,19 +652,13 @@ const homeSlice = createSlice({
                 state.isExtraArticleLoading = true;
                 state.isAsyncError = false;
             })
-            .addCase(
-                getExtraArticle.fulfilled,
-                // (state, action: PayloadAction<HomeType.ArticleProps>) => {
-                (state, action) => {
-                    state.isExtraArticleLoading = false;
-                    // state.articles.push(action.payload);
-                    state.articles.push(EXTRA_ARTICLES);
-                },
-            )
+            .addCase(getExtraArticle.fulfilled, (state, action) => {
+                state.isExtraArticleLoading = false;
+                state.articles.push(action.payload);
+            })
             .addCase(getExtraArticle.rejected, (state, action) => {
                 state.isExtraArticleLoading = false;
                 state.isAsyncError = true;
-                state.articles.push(EXTRA_ARTICLES); // 엑세스 토큰 관련 코드 받으면 수정
             });
     },
 });

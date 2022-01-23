@@ -140,16 +140,19 @@ Frontend
     );
     ```
 
-5. interface 관리
+5. 타입 관리
 
-    최상위 컴포넌트 폴더 내부에 d.ts 파일 생성
+-   전역적으로 재사용될 타입: `src/@types/index.d.ts`에서 `declare`하여 정리(import, export 필요 없음)
+-   단 하나의 컴포넌트에만 쓰이는 타입은 해당 파일 내부에 선언해도 무관
+-   타입 선언 방식: interface(대부분의 타입) + type alias(원시 타입)
 
--   파일(폴더) 네이밍 : Pascal Case(components, pages 제외)
+6.  파일(폴더) 네이밍 : Pascal Case(components, pages 제외)
+
     ```ts
     ExampleFileName;
     ```
 
-6.  컴포넌트 폴더 구조 관리
+7.  컴포넌트 폴더 구조 관리
 
     ```txt
     /SomeComponent
@@ -184,6 +187,15 @@ refactor: 코드 리팩토링에 대한 커밋
 │ Index.tsx
 │ react-app-env.d.ts
 │ Routes.tsx
+├── /@type
+│ └── index.d.ts
+├── /app/store
+│ ├── /ducks
+│ │ └── /각 기능 단위 폴더 이름
+│ │   └── ...Slice.ts
+│ │   └── ...Thunk.ts
+│ ├── hooks.ts
+│ └── store.ts
 ├── /assets
 │ ├── Images
 │ └── Svgs
