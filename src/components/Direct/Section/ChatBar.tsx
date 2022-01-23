@@ -68,6 +68,7 @@ const ChatBarContainer = styled.div<ChatBarContainerType>`
 
 
 const ChatBar = ({ message, setMessage }: ChatBarType) => {
+    // message to be trimed
 
 
     const [sendButtonClicked, setSendButtonClicked] = useState<boolean>(false);
@@ -121,7 +122,7 @@ const ChatBar = ({ message, setMessage }: ChatBarType) => {
 
                 <textarea value={message} placeholder="메시지 입력..." className="chat-input" onChange={messageChangeHandler}
                           onKeyPress={pressEnterHandler} />
-                {message.length === 0 ?
+                {message.trim().length === 0 ?
                     <>
                         <label htmlFor={"img"}>
 

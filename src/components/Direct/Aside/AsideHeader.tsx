@@ -51,7 +51,7 @@ const AsideHeader = () => {
 
     const dispatch = useAppDispatch();
     const { modal } = useAppSelector((state => state.direct));
-
+        // styled-components => sass
     return (
         <Container>
             <HeaderTop>
@@ -67,7 +67,6 @@ const AsideHeader = () => {
                     dispatch(openModal("newChat"));
                 }} />
             </HeaderTop>
-
             {
                 modal === "newChat" && <NewChatModal />
             }
