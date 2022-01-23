@@ -1,7 +1,9 @@
 import styled from "styled-components";
-import HomeAside from "../../components/Home/HomeAside";
-import HomeStories from "../../components/Home/HomeStories";
-import HomeSection from "../../components/Home/HomeSection";
+import HomeAside from "components/Home/HomeAside";
+import HomeStories from "components/Home/HomeStories";
+import HomeSection from "components/Home/HomeSection";
+import Notification from "styles/UI/Notification";
+import { useAppSelector } from "app/store/hooks";
 
 const Layout = styled.div`
     padding-top: 30px;
@@ -18,7 +20,6 @@ const Layout = styled.div`
     }
     @media (max-width: 1000px) {
         max-width: 600px;
-
         main {
             margin-right: 0;
         }
@@ -26,6 +27,10 @@ const Layout = styled.div`
 `;
 
 const Home = () => {
+    const isCopiedNotification = useAppSelector(
+        (state) => state.home.isCopiedNotification,
+    );
+
     return (
         <Layout>
             <main>
@@ -33,6 +38,9 @@ const Home = () => {
                 <HomeSection />
             </main>
             <HomeAside />
+            {isCopiedNotification && (
+                <Notification text="링크를 클립보드에 복사했습니다." />
+            )}
         </Layout>
     );
 };
