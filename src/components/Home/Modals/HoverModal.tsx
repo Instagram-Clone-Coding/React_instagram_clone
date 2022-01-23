@@ -6,7 +6,7 @@ import Card from "styles/UI/Card";
 import ModalCard from "styles/UI/ModalCard";
 import Username from "../../Common/Username";
 import sprite2 from "../../../assets/Images/sprite2.png";
-import useNumberSummary from "hooks/useNumberSummary";
+import useNumberSummary from "Hooks/useNumberSummary";
 import Button from "styles/UI/Button";
 
 const StyledHoverModalInner = styled.div`

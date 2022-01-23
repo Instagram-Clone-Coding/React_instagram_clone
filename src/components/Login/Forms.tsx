@@ -1,12 +1,12 @@
 import styled, { css } from "styled-components";
-import { imageProps, ImgSprite } from "components/Common/Sprite";
+// import { imageProps, ImgSprite } from "components/Common/Sprite";
 
 import { Link, useHistory } from "react-router-dom";
 import React, { useRef, MouseEvent } from "react";
 import Button from "styles/UI/Button/Button";
 
 import { useAppDispatch } from "app/store/hooks";
-import { setUserInfo } from "features/Auth/authSlice";
+import ImageSprite from "../Common/LoginSprite";
 
 const callSignInAPI = (
     e: MouseEvent<HTMLButtonElement>,
@@ -15,9 +15,9 @@ const callSignInAPI = (
 ) => {
     e.preventDefault();
     dispatch(
-        setUserInfo({
-            name: "minsoo",
-        }),
+        // setUserInfo({
+        //     name: "minsoo",
+        // }),
     );
     history.replace("/");
 };
@@ -28,7 +28,7 @@ export function Forms() {
 
     return (
         <FormContainer>
-            <ImgSprite
+            <ImageSprite
                 width={test.width}
                 height={test.height}
                 position={test.position}
@@ -63,7 +63,7 @@ interface textProps {
 }
 
 // Props
-const test: imageProps = {
+const test: Login.ImageProps = {
     width: 175,
     height: 51,
     position: `0 -130px`,
@@ -74,7 +74,7 @@ const placeholder = {
     password: "비밀번호",
 };
 
-const facebook: imageProps = {
+const facebook: Login.ImageProps = {
     width: 16,
     height: 16,
     position: `-414px -259px`,
@@ -131,7 +131,7 @@ function Facebook() {
     return (
         <FacebookStyle>
             <button>
-                <ImgSprite
+                <ImageSprite
                     width={facebook.width}
                     height={facebook.height}
                     position={facebook.position}
@@ -157,14 +157,13 @@ const FormContainer = styled.div`
         margin: 22px auto 12px;
     }
 `;
-
 const InputContainer = styled.div`
     ${flexColumn}
     margin-bottom: 10px;
     max-width: 350px;
     width: 100%;
 
-    a {
+    a { 
         margin-top: 12px;
         font-size: 12px;
         line-height: 16px;
