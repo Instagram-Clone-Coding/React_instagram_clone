@@ -16,9 +16,9 @@ export declare module Direct {
 }
 
 declare module HomeType {
-    export type StoriesScrollPositionType = "left" | "right" | "center";
+    type StoriesScrollPositionType = "left" | "right" | "center";
 
-    export type ActivatedModalType =
+    type ActivatedModalType =
         | "hover"
         | "unfollowing"
         | "report"
@@ -26,7 +26,7 @@ declare module HomeType {
         | "shareWith"
         | null;
 
-    export interface PostImgTagDTOProps {
+    interface PostImgTagDTOProps {
         id: number;
         tag: {
             username: string;
@@ -35,7 +35,7 @@ declare module HomeType {
         };
     }
 
-    export interface PostImageDTOProps {
+    interface PostImageDTOProps {
         id: number;
         postImageUrl: string;
         postTagDTOs: PostImgTagDTOProps[];
@@ -64,14 +64,14 @@ declare module HomeType {
         left: number;
     }
 
-    export interface ModalDTOsProps {
+    interface ModalDTOsProps {
         activatedModal: ActivatedModalType;
         modalPosition?: ModalPositionProps;
         memberNickname?: string;
         memberImageUrl?: string;
         postId?: number;
     }
-    export interface homeStateProps {
+    interface homeStateProps {
         storiesScrollPosition: storiesScrollPositionType;
         articles: ArticleProps[];
         // location?
