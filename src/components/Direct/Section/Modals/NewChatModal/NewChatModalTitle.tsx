@@ -2,10 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import { ReactComponent as Close } from "assets/Svgs/close.svg";
 import { closeModal } from "app/store/ducks/direct/DirectSlice";
-import { useAppDispatch } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/hooks";
 
 
-const NewChatModalTitleContainer = styled.div`
+interface NewChatModalTitleContainerType {
+    isSelected:boolean
+}
+
+
+const NewChatModalTitleContainer = styled.div<NewChatModalTitleContainerType>`
   margin-top: -30px;
   padding: 10px 15px;
   display: flex;
@@ -21,7 +26,7 @@ const NewChatModalTitleContainer = styled.div`
 
   button {
     color: #0095f6;
-    opacity: 0.2;
+    opacity: ${props => props.isSelected ? 1.0 : 0.2};
   }
 `;
 
@@ -29,9 +34,10 @@ const NewChatModalTitle = () => {
 
 
     const dispatch = useAppDispatch()
+    const { selectedNewChatUser } = useAppSelector(state => state.direct);
 
     return (
-        <NewChatModalTitleContainer>
+        <NewChatModalTitleContainer isSelected={selectedNewChatUser !== null}>
             <Close onClick={()=>{
                 dispatch(closeModal())
             }} />

@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import ImageSprite from "components/Common/DirectSprite";
 import Button from "styles/UI/Button";
+import { useAppDispatch } from "../../../app/store/hooks";
+import { openModal } from "../../../app/store/ducks/direct/DirectSlice";
 
 
 const InboxSectionContainer = styled.div`
@@ -45,7 +47,7 @@ const paperImage: Login.ImageProps = {
 
 
 const InboxSection = () => {
-
+    const dispatch = useAppDispatch()
     return (
         <InboxSectionContainer>
 
@@ -59,7 +61,9 @@ const InboxSection = () => {
                 <span className={"content-desc"}>친구나 그룹에 비공개 사진과 메시지를 보내보세요.</span>
             </div>
             <div className="button-section">
-                <Button bgColor="#0095f6" color="#fff" >메시지 보내기</Button>
+                <Button onClick={()=>{
+                    dispatch(openModal("newChat"))
+                }} bgColor="#0095f6" color="#fff" >메시지 보내기</Button>
             </div>
 
 

@@ -1,8 +1,13 @@
 declare module Direct {
+
+
     interface ChatItem {
         id: number;
         avatarImg: string;
-        userName: string;
+        // 아이디
+        memberUsername: string;
+        //실제이름
+        memberName:string;
         lastChatDate: string;
         lastMessage: string;
         isImLast: boolean;

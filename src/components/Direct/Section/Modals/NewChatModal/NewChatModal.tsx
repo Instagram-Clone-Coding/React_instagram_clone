@@ -9,6 +9,7 @@ import { closeModal, openModal } from "app/store/ducks/direct/DirectSlice";
 
 
 const NewChatModalContainer = styled.div`
+  padding-top: 30px;
 
 `;
 

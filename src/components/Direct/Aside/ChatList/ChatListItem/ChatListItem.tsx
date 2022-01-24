@@ -64,7 +64,7 @@ const ChatListItemContainer = styled.a<ChatListItemContainerType>`
 `;
 
 
-const ChatListItem = ({ id, lastChatDate, avatarImg, userName, lastMessage, isRead }: Direct.ChatItem) => {
+const ChatListItem = ({ id, lastChatDate, avatarImg, memberName, lastMessage, isRead }: Direct.ChatItem) => {
     const calculatedTime = useGapText(lastChatDate);
     const dispatch = useAppDispatch();
     const { selectedChatItem } = useAppSelector((state => state.direct));
@@ -82,7 +82,7 @@ const ChatListItem = ({ id, lastChatDate, avatarImg, userName, lastMessage, isRe
             <div className="right-section-container">
 
                 <div className="user-nickName">
-                    {userName}님
+                    {memberName}님
                 </div>
 
                 <div className="last-info">
