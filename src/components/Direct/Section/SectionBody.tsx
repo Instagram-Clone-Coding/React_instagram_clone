@@ -6,7 +6,7 @@ import DetailSection from "./DetailSection";
 
 
 interface SectionBodyProps {
-    isDetailedView: boolean;
+    currentSectionView: Direct.currentSectionViewType;
     message: string;
     setMessage: Dispatch<SetStateAction<string>>;
 }
@@ -19,10 +19,10 @@ const SectionBodyContainer = styled.section`
 
 `;
 
-const SectionBody = ({ isDetailedView, message, setMessage }: SectionBodyProps) => {
+const SectionBody = ({ currentSectionView, message, setMessage }: SectionBodyProps) => {
     return <SectionBodyContainer>
         {
-            isDetailedView ? <DetailSection /> :
+            currentSectionView === "detail" ? <DetailSection /> :
 
                 <>
                     <ChatSection />

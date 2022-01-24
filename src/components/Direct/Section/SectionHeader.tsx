@@ -5,12 +5,12 @@ import { ReactComponent as DetailInfo } from "assets/Svgs/direct-detail-info.svg
 import { ReactComponent as DetailInfoActive } from "assets/Svgs/direct-detail-info-active.svg";
 
 interface SectionHeaderProps {
-    isDetailedView: boolean;
-    setIsDetailedView: Dispatch<SetStateAction<boolean>>;
+    currentSectionView: Direct.currentSectionViewType;
+    setCurrentSectionView: Dispatch<SetStateAction<Direct.currentSectionViewType>>;
 }
 
 interface SectionHeaderContainerType {
-    isDetailedView:boolean
+    currentSectionView:string
 }
 
 
@@ -23,7 +23,7 @@ const SectionHeaderContainer = styled.section<SectionHeaderContainerType>`
   border-bottom: 1px solid ${theme.color.bd_gray};
   
   .dummy-container{
-    display: ${(props) => !props.isDetailedView && 'none'  };
+    display: ${(props) => !(props.currentSectionView === "detail")  && 'none'  };
   }
 
   .user-profile-container {
@@ -51,18 +51,27 @@ const SectionHeaderContainer = styled.section<SectionHeaderContainerType>`
 `;
 
 
-const SectionHeader = ({ isDetailedView, setIsDetailedView }: SectionHeaderProps) => {
+const SectionHeader = ({ currentSectionView, setCurrentSectionView }: SectionHeaderProps) => {
     const viewConvertHandler = () => {
-        setIsDetailedView(!isDetailedView);
+        switch (currentSectionView){
+            case "detail":
+                setCurrentSectionView("chat");
+                break;
+            case "chat":
+                setCurrentSectionView("detail");
+                break;
+            default:
+                break;
+        }
     };
 
     return (
-        <SectionHeaderContainer isDetailedView={isDetailedView}>
+        <SectionHeaderContainer currentSectionView={currentSectionView}>
             <div className="dummy-container">
 
             </div>
             <div className="user-profile-container">
-                {isDetailedView ? <h3>상세 정보</h3> :
+                {currentSectionView === "detail" ? <h3>상세 정보</h3> :
                     <>
                     <img src="https://placeimg.com/50/50/any" alt="selected-user-image" />
                     <h3>개복치님</h3>
@@ -71,7 +80,7 @@ const SectionHeader = ({ isDetailedView, setIsDetailedView }: SectionHeaderProps
             </div>
             <div className="detail-info-container" onClick={viewConvertHandler}>
                 {
-                    isDetailedView ? <DetailInfoActive /> : <DetailInfo />
+                    currentSectionView === "detail" ? <DetailInfoActive /> : <DetailInfo />
                 }
             </div>
         </SectionHeaderContainer>

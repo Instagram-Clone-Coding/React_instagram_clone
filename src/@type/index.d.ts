@@ -7,6 +7,9 @@ declare module Direct {
         lastMessage: string;
         isImLast: boolean;
     }
+
+    type currentSectionViewType =  "inbox" | "detail" | "chat"
+
 }
 
 declare module UI {

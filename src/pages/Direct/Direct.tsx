@@ -7,15 +7,11 @@ import AsideHeader from "components/Direct/Aside/AsideHeader";
 import SectionBody from "components/Direct/Section/SectionBody";
 import SectionHeader from "components/Direct/Section/SectionHeader";
 
-interface currentSectionViewType {
-
-}
 
 const Direct = () => {
 
-    const [currentSectionView,setCurrentSectionView] = useState("inbox")
-    const [isDetailedView,setIsDetailedView] = useState<boolean>(false)
-    const [message,setMessage] = useState<string>("")
+    const [currentSectionView, setCurrentSectionView] = useState<Direct.currentSectionViewType>("chat");
+    const [message, setMessage] = useState<string>("");
 
 
     // title 변경해주는 역할
@@ -23,7 +19,6 @@ const Direct = () => {
     useEffect(() => {
         document.title = "(1) 받은 메세지함 · Direct";
     }, []);
-
 
 
     const borderStyle = `1px solid ${theme.color.bd_gray}`;
@@ -37,8 +32,8 @@ const Direct = () => {
                 </aside>
                 {/* body */}
                 <section>
-                    <SectionHeader isDetailedView={isDetailedView} setIsDetailedView={setIsDetailedView}/>
-                    <SectionBody isDetailedView={isDetailedView} message={message} setMessage={setMessage} />
+                    <SectionHeader currentSectionView={currentSectionView} setCurrentSectionView={setCurrentSectionView} />
+                    <SectionBody currentSectionView={currentSectionView} message={message} setMessage={setMessage} />
                 </section>
             </Container>
         </Layout>
@@ -48,39 +43,40 @@ const Direct = () => {
 export default Direct;
 
 const Layout = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    height: calc(100vh - 54px);
-    padding: 20px;
+  height: calc(100vh - 54px);
+  padding: 20px;
 
-    @media (max-width: 935px) {
-        padding: 0;
-    }
+  @media (max-width: 935px) {
+    padding: 0;
+  }
 `;
 
 const Container = styled.div`
-    display: flex;
+  display: flex;
 
-    width: 100%;
-    height: 100%;
-    max-width: 935px;
-    background-color: #fff;
+  width: 100%;
+  height: 100%;
+  max-width: 935px;
+  background-color: #fff;
+
+  aside {
+    width: 350px;
+  }
+
+  section {
+    flex: 1 1 auto;
+  }
+
+  @media (max-width: 935px) {
     aside {
-        width: 350px;
+      width: 300px;
     }
 
     section {
-        flex: 1 1 auto;
     }
-
-    @media (max-width: 935px) {
-        aside {
-            width: 300px;
-        }
-
-        section {
-        }
-    }
+  }
 `;
