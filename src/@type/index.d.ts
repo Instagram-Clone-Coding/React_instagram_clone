@@ -8,7 +8,7 @@ declare module Direct {
         isImLast: boolean;
     }
 
-    type currentSectionViewType =  "inbox" | "detail" | "chat"
+    type currentSectionViewType = "inbox" | "detail" | "chat"
 
 }
 
@@ -94,6 +94,7 @@ declare module HomeType {
         activatedModal: activatedModalType;
         handledObj: null;
     }
+
     export interface homeStateProps {
         storiesScrollPosition: storiesScrollPositionType;
         articles: ArticleProps[];

@@ -3,14 +3,12 @@ import styled from "styled-components";
 import theme from "styles/theme";
 import { ReactComponent as DetailInfo } from "assets/Svgs/direct-detail-info.svg";
 import { ReactComponent as DetailInfoActive } from "assets/Svgs/direct-detail-info-active.svg";
+import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { selectView } from "app/store/ducks/direct/DirectSlice";
 
-interface SectionHeaderProps {
-    currentSectionView: Direct.currentSectionViewType;
-    setCurrentSectionView: Dispatch<SetStateAction<Direct.currentSectionViewType>>;
-}
 
 interface SectionHeaderContainerType {
-    currentSectionView:string
+    view: string;
 }
 
 
@@ -21,9 +19,9 @@ const SectionHeaderContainer = styled.section<SectionHeaderContainerType>`
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid ${theme.color.bd_gray};
-  
-  .dummy-container{
-    display: ${(props) => !(props.currentSectionView === "detail")  && 'none'  };
+
+  .dummy-container {
+    display: ${(props) => !(props.view === "detail") && "none"};
   }
 
   .user-profile-container {
@@ -51,14 +49,17 @@ const SectionHeaderContainer = styled.section<SectionHeaderContainerType>`
 `;
 
 
-const SectionHeader = ({ currentSectionView, setCurrentSectionView }: SectionHeaderProps) => {
+const SectionHeader = () => {
+    const dispatch = useAppDispatch();
+    const { view } = useAppSelector((state => state.direct));
+
     const viewConvertHandler = () => {
-        switch (currentSectionView){
+        switch (view) {
             case "detail":
-                setCurrentSectionView("chat");
+                dispatch(selectView("chat"));
                 break;
             case "chat":
-                setCurrentSectionView("detail");
+                dispatch(selectView("detail"));
                 break;
             default:
                 break;
@@ -66,21 +67,21 @@ const SectionHeader = ({ currentSectionView, setCurrentSectionView }: SectionHea
     };
 
     return (
-        <SectionHeaderContainer currentSectionView={currentSectionView}>
+        <SectionHeaderContainer view={view}>
             <div className="dummy-container">
 
             </div>
             <div className="user-profile-container">
-                {currentSectionView === "detail" ? <h3>상세 정보</h3> :
+                {view === "detail" ? <h3>상세 정보</h3> :
                     <>
-                    <img src="https://placeimg.com/50/50/any" alt="selected-user-image" />
-                    <h3>개복치님</h3>
+                        <img src="https://placeimg.com/50/50/any" alt="selected-user-image" />
+                        <h3>개복치님</h3>
                     </>
-                    }
+                }
             </div>
             <div className="detail-info-container" onClick={viewConvertHandler}>
                 {
-                    currentSectionView === "detail" ? <DetailInfoActive /> : <DetailInfo />
+                    view === "detail" ? <DetailInfoActive /> : <DetailInfo />
                 }
             </div>
         </SectionHeaderContainer>

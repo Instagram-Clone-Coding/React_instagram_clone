@@ -32,8 +32,8 @@ const Direct = () => {
                 </aside>
                 {/* body */}
                 <section>
-                    <SectionHeader currentSectionView={currentSectionView} setCurrentSectionView={setCurrentSectionView} />
-                    <SectionBody currentSectionView={currentSectionView} message={message} setMessage={setMessage} />
+                    <SectionHeader />
+                    <SectionBody  message={message} setMessage={setMessage} />
                 </section>
             </Container>
         </Layout>
