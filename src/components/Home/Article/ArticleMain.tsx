@@ -1,5 +1,5 @@
 import PopHeart from "components/Common/PopHeart";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 import FollowingModal from "../Modals/FollowingModal";
 import HoverModal from "../Modals/HoverModal";
@@ -60,29 +60,39 @@ const ArticleMain = ({
     commentsCount,
     comments,
 }: MainProps) => {
+    // like state
     const [isComment1Liked, setIsComment1Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
     const [isComment2Liked, setIsComment2Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
+    // content state
     const [isFullText, setIsFullText] = useState(false);
+    // modal state
     const [isHoverModalActivated, setIsHoverModalActivated] = useState(false);
     const [isFollowingModalActivated, setIsFollowingModalActivated] =
         useState(false);
     const [modalPositionObj, setModalPositionObj] = useState<DOMRect>();
     const [hoveredUsername, setHoveredUsername] = useState("");
     const [ishoveredUserFollowing, setIsHoveredUserFollowing] = useState(false); // hover한 데이터 가져와서 적용
-    const isTextLineBreak = content.includes("\n");
-    const textArray = isTextLineBreak ? content.split("\n") : [content];
+    const isTextLineBreak = useMemo(() => content.includes("\n"), [content]);
+    const textArray = useMemo(
+        () => (isTextLineBreak ? content.split("\n") : [content]),
+        [content, isTextLineBreak],
+    );
 
-    const textSpan = !isFullText ? (
-        <span>{textArray[0]}</span>
-    ) : (
-        textArray.map((line: string, index: number) => {
-            return (
-                <span key={index}>
-                    {line}
-                    <br />
-                </span>
-            );
-        })
+    const textSpan = useMemo(
+        () =>
+            !isFullText ? (
+                <span>{textArray[0]}</span>
+            ) : (
+                textArray.map((line: string, index: number) => {
+                    return (
+                        <span key={index}>
+                            {line}
+                            <br />
+                        </span>
+                    );
+                })
+            ),
+        [isFullText, textArray],
     );
     const comment1LikeHandler = () => {
         setIsComment1Liked((prev) => !prev);

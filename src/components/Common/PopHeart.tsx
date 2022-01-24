@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { ReactComponent as RedHeart } from "../../assets/Svgs/redHeart.svg";
 import { ReactComponent as EmptyHeart } from "../../assets/Svgs/emptyHeart.svg";
+import { useState } from "react";
 
 const HeartBox = styled.div`
     display: flex;
@@ -49,17 +50,24 @@ const PopHeart = ({
     isLiked,
     onToggleLike,
 }: PopHeartProps) => {
+    const [isFirst, setIsFirst] = useState(true);
+
+    const checkFirstRenderingHandler = () => {
+        isFirst && setIsFirst(false);
+        onToggleLike();
+    };
+
     return (
-        <HeartBox onClick={onToggleLike} className={className}>
+        <HeartBox onClick={checkFirstRenderingHandler} className={className}>
             {isLiked ? (
                 <RedHeart
-                    className={isLiked ? "pop" : ""}
+                    className={isLiked && !isFirst ? "pop" : ""}
                     height={size}
                     width={size}
                 />
             ) : (
                 <EmptyHeart
-                    className={!isLiked ? "pop not" : "not"}
+                    className={!isLiked && !isFirst ? "pop not" : "not"}
                     height={size}
                     width={size}
                 />

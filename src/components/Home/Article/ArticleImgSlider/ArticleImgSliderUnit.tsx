@@ -1,4 +1,3 @@
-import { HomeType } from "@type";
 import ImgHashTagAvatar from "components/Home/Article/ArticleImgSlider/ImgHashTagAvatar";
 import ImgHashTagUsername from "components/Home/Article/ArticleImgSlider/ImgHashTagUsername";
 import React, { useState } from "react";
@@ -85,7 +84,7 @@ const ArticleImgSliderUnit = ({
                         isImgHashTagsOn={isImgHashTagsOn}
                     />
                 ))}
-            <img src={imageDTO.image.imageUrl} alt={imageDTO.image.imageName} />
+            <img src={imageDTO.postImageUrl} alt={imageDTO.postImageUrl} />
         </StyledArticleImgSliderUnit>
     );
 };
