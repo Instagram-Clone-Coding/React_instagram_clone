@@ -58,9 +58,18 @@ declare module HomeType {
         // comment 몇 개 가져오기
     }
 
-    export interface homeModalProps {
-        activatedModal: activatedModalType;
-        handledObj: null;
+    interface ModalPositionProps {
+        top: number;
+        bottom: number;
+        left: number;
+    }
+
+    export interface ModalDTOsProps {
+        activatedModal: ActivatedModalType;
+        modalPosition?: ModalPositionProps;
+        memberNickname?: string;
+        memberImageUrl?: string;
+        postId?: number;
     }
     export interface homeStateProps {
         storiesScrollPosition: storiesScrollPositionType;
@@ -86,6 +95,6 @@ declare module HomeType {
             }[]; // 최신 3개
         } | null;
         isCopiedNotification: boolean;
-        homeModal: homeModalProps;
+        modalDTOs: ModalDTOsProps;
     }
 }

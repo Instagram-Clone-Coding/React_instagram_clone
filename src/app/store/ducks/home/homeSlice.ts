@@ -594,9 +594,12 @@ const initialState: HomeType.homeStateProps = {
     isAsyncError: false,
     hoveredUser: null,
     isCopiedNotification: false,
-    homeModal: {
+    modalDTOs: {
         activatedModal: null,
-        handledObj: null,
+        memberNickname: undefined,
+        memberImageUrl: undefined,
+        modalPosition: undefined,
+        postId: undefined,
     },
 };
 
@@ -616,14 +619,18 @@ const homeSlice = createSlice({
         ) => {
             state.storiesScrollPosition = action.payload;
         },
-        startModal: (state, action: PayloadAction<HomeType.homeModalProps>) => {
-            state.homeModal = action.payload;
-            // 비동기적으로 데이터를 가져옴
+        startModal: (state, action: PayloadAction<HomeType.ModalDTOsProps>) => {
+            state.modalDTOs = {
+                ...state.modalDTOs,
+                ...action.payload,
+            }; // 전달한 modalDTO 값만 변경
         },
         resetModal: (state) => {
-            state.homeModal = {
+            state.modalDTOs = {
                 activatedModal: null,
-                handledObj: null,
+                memberNickname: undefined,
+                modalPosition: undefined,
+                postId: undefined,
             };
         },
         increaseExtraArticlesCount: (state) => {
