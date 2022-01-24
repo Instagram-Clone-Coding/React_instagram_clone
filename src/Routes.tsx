@@ -9,7 +9,7 @@ import { useAppSelector } from "app/store/hooks";
 
 const Routes = () => {
     return (
-        <BrowserRouter>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Switch>
                 <Route path="/accounts/signin" component={Login} />
                 <Route path="/accounts/emailsignup" component={SignUp} />
