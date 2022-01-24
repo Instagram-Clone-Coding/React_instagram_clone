@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import sprite2 from "assets/Images/sprite2.png";
 import styled from "styled-components";
-import { HomeType } from "@type";
 import ArticleImgSliderUnit from "components/Home/Article/ArticleImgSlider/ArticleImgSliderUnit";
 
 interface SliderProps {

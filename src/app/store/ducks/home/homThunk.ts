@@ -1,5 +1,4 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { HomeType } from "@type";
 import { homeActions } from "app/store/ducks/home/homeSlice";
 import axios from "axios";
 

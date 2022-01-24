@@ -6,7 +6,6 @@ import ArticleImgSlider from "components/Home/Article/ArticleImgSlider";
 import ArticleMainIcons from "components/Home/Article/ArticleMainIcons";
 import ArticleMain from "components/Home/Article/ArticleMain";
 import CommentForm from "components/Home/Article/CommentForm";
-import { HomeType } from "@type";
 import useGapText from "hooks/useGapText";
 import useOnView from "hooks/useOnView";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
