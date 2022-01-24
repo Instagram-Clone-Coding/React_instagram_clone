@@ -7,8 +7,13 @@ import AsideHeader from "components/Direct/Aside/AsideHeader";
 import SectionBody from "components/Direct/Section/SectionBody";
 import SectionHeader from "components/Direct/Section/SectionHeader";
 
+interface currentSectionViewType {
+
+}
+
 const Direct = () => {
 
+    const [currentSectionView,setCurrentSectionView] = useState("inbox")
     const [isDetailedView,setIsDetailedView] = useState<boolean>(false)
     const [message,setMessage] = useState<string>("")
 
