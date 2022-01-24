@@ -55,7 +55,7 @@ const StyledBackDrop = styled.div`
 
 interface ModalProps {
     modalType?: "positioned" | "withBackDrop";
-    modalPosition?: HomeType.ModalPositionProps;
+    modalPosition?: ModalType.ModalPositionProps;
     onModalOn: () => void;
     onModalOff: () => void;
     children: React.ReactNode;

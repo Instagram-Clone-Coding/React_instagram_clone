@@ -6,6 +6,7 @@ import HoverModal from "../Modals/HoverModal";
 import Username from "../../Common/Username";
 import { homeActions } from "app/store/ducks/home/homeSlice";
 import { useAppDispatch } from "app/store/hooks";
+import { modalActions } from "app/store/ducks/modal/modalSlice";
 
 const StyledMain = styled.div`
     padding: 0 16px;
@@ -109,7 +110,7 @@ const ArticleMain = ({
         const { top, bottom, left } =
             event.currentTarget.getBoundingClientRect();
         dispatch(
-            homeActions.startModal({
+            modalActions.startModal({
                 activatedModal: "hover",
                 modalPosition: {
                     top,
@@ -123,7 +124,7 @@ const ArticleMain = ({
 
     const mouseLeaveHandler = () => {
         // setIsHoverModalActivated(false);
-        dispatch(homeActions.resetModal());
+        dispatch(modalActions.resetModal());
     };
 
     const getFullText = () => setIsFullText(true);

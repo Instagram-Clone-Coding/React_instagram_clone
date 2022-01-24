@@ -1,4 +1,5 @@
 import { homeActions } from "app/store/ducks/home/homeSlice";
+import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { useAppDispatch } from "app/store/hooks";
 import useCopy from "hooks/useCopy";
 import { Link } from "react-router-dom";
@@ -61,7 +62,7 @@ const ArticleMenuModal = ({
                     className="articleMenuModal-report"
                     onClick={() =>
                         dispatch(
-                            homeActions.startModal({
+                            modalActions.startModal({
                                 activatedModal: "report",
                             }),
                         )
@@ -84,7 +85,7 @@ const ArticleMenuModal = ({
                 <div
                     onClick={() =>
                         dispatch(
-                            homeActions.startModal({
+                            modalActions.startModal({
                                 activatedModal: "shareWith",
                             }),
                         )

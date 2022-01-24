@@ -18,14 +18,6 @@ declare module Direct {
 declare module HomeType {
     type StoriesScrollPositionType = "left" | "right" | "center";
 
-    type ActivatedModalType =
-        | "hover"
-        | "unfollowing"
-        | "report"
-        | "articleMenu"
-        | "shareWith"
-        | null;
-
     interface PostImgTagDTOProps {
         id: number;
         tag: {
@@ -57,20 +49,6 @@ declare module HomeType {
         postUploadDate: string;
         // comment 몇 개 가져오기
     }
-
-    interface ModalPositionProps {
-        top: number;
-        bottom: number;
-        left: number;
-    }
-
-    interface ModalDTOsProps {
-        activatedModal: ActivatedModalType;
-        modalPosition?: ModalPositionProps;
-        memberNickname?: string;
-        memberImageUrl?: string;
-        postId?: number;
-    }
     interface homeStateProps {
         storiesScrollPosition: storiesScrollPositionType;
         articles: ArticleProps[];
@@ -95,6 +73,28 @@ declare module HomeType {
             }[]; // 최신 3개
         } | null;
         isCopiedNotification: boolean;
-        modalDTOs: ModalDTOsProps;
+    }
+}
+
+declare module ModalType {
+    type ActivatedModalType =
+        | "hover"
+        | "unfollowing"
+        | "report"
+        | "articleMenu"
+        | "shareWith"
+        | null;
+    interface ModalPositionProps {
+        top: number;
+        bottom: number;
+        left: number;
+    }
+
+    interface ModalStateProps {
+        activatedModal: ActivatedModalType;
+        modalPosition?: ModalPositionProps;
+        memberNickname?: string;
+        memberImageUrl?: string;
+        postId?: number;
     }
 }

@@ -10,6 +10,7 @@ import ArticleMenuModal from "components/Home/Modals/ArticleMenuModal";
 import ReportModal from "components/Home/Modals/ReportModal";
 import ShareWithModal from "components/Home/Modals/SharerWithModal";
 import { homeActions } from "app/store/ducks/home/homeSlice";
+import { modalActions } from "app/store/ducks/modal/modalSlice";
 
 const Layout = styled.div`
     padding-top: 30px;
@@ -34,15 +35,15 @@ const Layout = styled.div`
 
 const Home = () => {
     const {
-        isCopiedNotification,
-        modalDTOs: {
+        home: { isCopiedNotification },
+        modal: {
             activatedModal,
             modalPosition,
             memberNickname,
             memberImageUrl,
             postId,
         },
-    } = useAppSelector((state) => state.home);
+    } = useAppSelector((state) => state);
 
     const dispatch = useAppDispatch();
 
@@ -73,17 +74,17 @@ const Home = () => {
                     // modalPosition={modalPositionObj}
                     onMouseEnter={() =>
                         dispatch(
-                            homeActions.startModal({
+                            modalActions.startModal({
                                 activatedModal: "hover",
                                 memberNickname,
                                 modalPosition,
                             }),
                         )
                     }
-                    onMouseLeave={() => dispatch(homeActions.resetModal())}
+                    onMouseLeave={() => dispatch(modalActions.resetModal())}
                     onFollowingModalOn={() =>
                         dispatch(
-                            homeActions.startModal({
+                            modalActions.startModal({
                                 activatedModal: "unfollowing",
                                 memberImageUrl,
                             }),
@@ -98,14 +99,14 @@ const Home = () => {
                         // onUnfollow={() => setIsFollowing(false)}
                         onModalOn={() =>
                             dispatch(
-                                homeActions.startModal({
+                                modalActions.startModal({
                                     activatedModal: "unfollowing",
                                     memberNickname,
                                     memberImageUrl,
                                 }),
                             )
                         }
-                        onModalOff={() => dispatch(homeActions.resetModal())}
+                        onModalOff={() => dispatch(modalActions.resetModal())}
                         username={memberNickname}
                         avatarUrl={memberImageUrl}
                     />
@@ -116,14 +117,14 @@ const Home = () => {
                     // onUnfollow={unfollowHandler}
                     onModalOn={() =>
                         dispatch(
-                            homeActions.startModal({
+                            modalActions.startModal({
                                 activatedModal: "articleMenu",
                                 memberNickname,
                                 postId,
                             }),
                         )
                     }
-                    onModalOff={() => dispatch(homeActions.resetModal())}
+                    onModalOff={() => dispatch(modalActions.resetModal())}
                     // onReportModalOn={() =>
                     //     dispatch(
                     //         homeActions.startModal({
@@ -146,24 +147,24 @@ const Home = () => {
                     // onModalOn={() => setIsReportModalActivated(true)}
                     onModalOn={() =>
                         dispatch(
-                            homeActions.startModal({
+                            modalActions.startModal({
                                 activatedModal: "report",
                             }),
                         )
                     }
-                    onModalOff={() => dispatch(homeActions.resetModal())}
+                    onModalOff={() => dispatch(modalActions.resetModal())}
                 />
             )}
             {activatedModal === "shareWith" && (
                 <ShareWithModal
                     onModalOn={() =>
                         dispatch(
-                            homeActions.startModal({
+                            modalActions.startModal({
                                 activatedModal: "shareWith",
                             }),
                         )
                     }
-                    onModalOff={() => dispatch(homeActions.resetModal())}
+                    onModalOff={() => dispatch(modalActions.resetModal())}
                 />
             )}
         </Layout>

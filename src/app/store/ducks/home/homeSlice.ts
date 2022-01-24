@@ -593,13 +593,13 @@ const initialState: HomeType.homeStateProps = {
     isAsyncError: false,
     hoveredUser: null,
     isCopiedNotification: false,
-    modalDTOs: {
-        activatedModal: null,
-        memberNickname: undefined,
-        memberImageUrl: undefined,
-        modalPosition: undefined,
-        postId: undefined,
-    },
+    // modalDTOs: {
+    //     activatedModal: null,
+    //     memberNickname: undefined,
+    //     memberImageUrl: undefined,
+    //     modalPosition: undefined,
+    //     postId: undefined,
+    // },
 };
 
 const homeSlice = createSlice({
@@ -618,20 +618,20 @@ const homeSlice = createSlice({
         ) => {
             state.storiesScrollPosition = action.payload;
         },
-        startModal: (state, action: PayloadAction<HomeType.ModalDTOsProps>) => {
-            state.modalDTOs = {
-                ...state.modalDTOs,
-                ...action.payload,
-            }; // 전달한 modalDTO 값만 변경
-        },
-        resetModal: (state) => {
-            state.modalDTOs = {
-                activatedModal: null,
-                memberNickname: undefined,
-                modalPosition: undefined,
-                postId: undefined,
-            };
-        },
+        // startModal: (state, action: PayloadAction<HomeType.ModalDTOsProps>) => {
+        //     state.modalDTOs = {
+        //         ...state.modalDTOs,
+        //         ...action.payload,
+        //     }; // 전달한 modalDTO 값만 변경
+        // },
+        // resetModal: (state) => {
+        //     state.modalDTOs = {
+        //         activatedModal: null,
+        //         memberNickname: undefined,
+        //         modalPosition: undefined,
+        //         postId: undefined,
+        //     };
+        // },
         increaseExtraArticlesCount: (state) => {
             state.extraArticlesCount++;
         },
@@ -642,13 +642,10 @@ const homeSlice = createSlice({
                 state.isLoading = true;
                 state.isAsyncError = false;
             })
-            .addCase(
-                getHomeArticles.fulfilled,
-                (state, action: PayloadAction<HomeType.ArticleProps[]>) => {
-                    state.articles = action.payload;
-                    state.isLoading = false;
-                },
-            )
+            .addCase(getHomeArticles.fulfilled, (state, action) => {
+                state.articles = action.payload;
+                state.isLoading = false;
+            })
             .addCase(getHomeArticles.rejected, (state) => {
                 state.isLoading = false;
                 state.isAsyncError = true;

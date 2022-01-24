@@ -147,7 +147,7 @@ const HoverModal = ({
         userSummary ? userSummary.followsNum : 0,
     );
     const { modalPosition, memberNickname } = useAppSelector(
-        ({ home }) => home.modalDTOs,
+        ({ modal }) => modal,
     );
 
     useEffect(() => {

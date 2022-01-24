@@ -59,9 +59,9 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
     const articleRef = useRef<HTMLDivElement>(null);
     const isVisible = useOnView(articleRef);
     const {
-        extraArticlesCount,
-        modalDTOs: { activatedModal, postId, memberNickname },
-    } = useAppSelector(({ home }) => home);
+        home: { extraArticlesCount },
+        modal: { activatedModal, postId, memberNickname },
+    } = useAppSelector((state) => state);
     const dispatch = useAppDispatch();
 
     useEffect(() => {

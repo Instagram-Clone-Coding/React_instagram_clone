@@ -1,4 +1,5 @@
 import { homeActions } from "app/store/ducks/home/homeSlice";
+import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { useAppDispatch } from "app/store/hooks";
 
 const useCopy = (copyValue: string) => {
@@ -19,7 +20,7 @@ const useCopy = (copyValue: string) => {
         textarea.select();
         document.execCommand("copy");
         document.body.removeChild(textarea);
-        dispatch(homeActions.resetModal());
+        dispatch(modalActions.resetModal());
         dispatch(homeActions.notificateIsCopied());
         setTimeout(
             () => dispatch(homeActions.closeIsCopiedNotification()),

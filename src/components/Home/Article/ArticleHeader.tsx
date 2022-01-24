@@ -11,6 +11,7 @@ import ShareWithModal from "../Modals/SharerWithModal";
 import { ReactComponent as ThreeDots } from "../../../assets/Svgs/threeDots.svg";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
 import { homeActions } from "app/store/ducks/home/homeSlice";
+import { modalActions } from "app/store/ducks/modal/modalSlice";
 
 const StyledArticleHeader = styled.header`
     height: 60px;
@@ -81,7 +82,7 @@ const ArticleHeader = ({
     // const [isShareWithModalActivated, setIsShareWithModalActivated] =
     //     useState(false);
 
-    const { activatedModal } = useAppSelector(({ home }) => home.modalDTOs);
+    const activatedModal = useAppSelector(({ modal }) => modal.activatedModal);
     const dispatch = useAppDispatch();
 
     // const [modalPositionObj, setModalPositionObj] = useState<DOMRect>();
@@ -98,7 +99,7 @@ const ArticleHeader = ({
         const { top, bottom, left } =
             event.currentTarget.getBoundingClientRect();
         dispatch(
-            homeActions.startModal({
+            modalActions.startModal({
                 activatedModal: "hover",
                 modalPosition: {
                     top,
@@ -114,7 +115,7 @@ const ArticleHeader = ({
         // setTimeout(() => {
         //     activatedModal || dispatch(homeActions.resetModal());
         // }, 500);
-        dispatch(homeActions.resetModal());
+        dispatch(modalActions.resetModal());
         // setIsHoverModalActivated(false);
     };
 
@@ -206,7 +207,7 @@ const ArticleHeader = ({
                 className="header-dots"
                 onClick={() =>
                     dispatch(
-                        homeActions.startModal({
+                        modalActions.startModal({
                             activatedModal: "articleMenu",
                             postId: postId,
                             memberNickname,
