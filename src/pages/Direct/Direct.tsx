@@ -6,12 +6,16 @@ import AsideBody from "components/Direct/Aside/AsideBody";
 import AsideHeader from "components/Direct/Aside/AsideHeader";
 import SectionBody from "components/Direct/Section/SectionBody";
 import SectionHeader from "components/Direct/Section/SectionHeader";
+import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import InboxSection from "../../components/Direct/Section/InboxSection";
 
 
 const Direct = () => {
 
     const [currentSectionView, setCurrentSectionView] = useState<Direct.currentSectionViewType>("chat");
     const [message, setMessage] = useState<string>("");
+    const dispatch = useAppDispatch();
+    const { view } = useAppSelector((state => state.direct));
 
 
     // title 변경해주는 역할
@@ -32,8 +36,13 @@ const Direct = () => {
                 </aside>
                 {/* body */}
                 <section>
-                    <SectionHeader />
-                    <SectionBody  message={message} setMessage={setMessage} />
+                    {
+                        view === "inbox" ? <InboxSection /> : <>
+                            <SectionHeader />
+                            <SectionBody message={message} setMessage={setMessage} />
+                        </>
+                    }
+
                 </section>
             </Container>
         </Layout>
