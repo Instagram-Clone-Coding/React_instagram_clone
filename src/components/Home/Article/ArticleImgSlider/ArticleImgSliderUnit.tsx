@@ -1,4 +1,3 @@
-import { HomeType } from "@type";
 import ImgHashTagAvatar from "components/Home/Article/ArticleImgSlider/ImgHashTagAvatar";
 import ImgHashTagUsername from "components/Home/Article/ArticleImgSlider/ImgHashTagUsername";
 import React, { useState } from "react";

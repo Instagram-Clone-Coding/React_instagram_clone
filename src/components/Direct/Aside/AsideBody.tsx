@@ -1,6 +1,5 @@
 import ChatList from "./ChatList";
 // 이런 식으로 type을 가져와서 제가 필요한 모듈을 가져와요
-import { Direct } from "@type";
 
 // 그 다음 그 모듈 안에서 제가 export 한 타입을 가져와서 사용하는 방식입니다.
 

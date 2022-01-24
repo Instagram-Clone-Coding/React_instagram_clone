@@ -1,11 +1,11 @@
 // 여기에 쓰는건 어때요?
-export declare module globalType {
+declare module globalType {
     //
-    export interface asd {}
+    interface asd {}
 }
 
-export declare module Direct {
-    export interface ChatItem {
+declare module Direct {
+    interface ChatItem {
         id: number;
         avatarImg: string;
         userName: string;
