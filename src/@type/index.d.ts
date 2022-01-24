@@ -3,9 +3,10 @@ declare module Direct {
         id: number;
         avatarImg: string;
         userName: string;
-        lastLoggedIn: string;
+        lastChatDate: string;
         lastMessage: string;
         isImLast: boolean;
+        isRead:boolean;
     }
 
     type currentSectionViewType = "inbox" | "detail" | "chat"

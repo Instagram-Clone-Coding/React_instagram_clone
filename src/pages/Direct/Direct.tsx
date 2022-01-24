@@ -37,10 +37,11 @@ const Direct = () => {
                 {/* body */}
                 <section>
                     {
-                        view === "inbox" ? <InboxSection /> : <>
-                            <SectionHeader />
-                            <SectionBody message={message} setMessage={setMessage} />
-                        </>
+                        view === "inbox" ? <InboxSection /> :
+                            <>
+                                <SectionHeader />
+                                <SectionBody message={message} setMessage={setMessage} />
+                            </>
                     }
 
                 </section>

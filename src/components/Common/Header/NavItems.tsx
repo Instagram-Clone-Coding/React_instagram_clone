@@ -15,6 +15,8 @@ import { ReactComponent as Heart } from "assets/Svgs/heart.svg";
 import { ReactComponent as HeartActive } from "assets/Svgs/heart-active.svg";
 
 import { NavLink } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../../app/store/hooks";
+import { selectView } from "../../../app/store/ducks/direct/DirectSlice";
 
 const Container = styled.div`
     flex: 1 0 0%;
@@ -42,40 +44,45 @@ const AvatarWrapper = styled(NavItemWrapper)`
     }
 `;
 
-const navItems = [
-    {
-        id: "홈",
-        path: "/",
-        component: <Home />,
-        activeComponent: <HomeActive />,
-    },
-    {
-        id: "메세지",
-        path: "/direct",
-        component: <Direct />,
-        activeComponent: <DirectActive />,
-    },
-    {
-        id: "새 글 작성",
-        path: "/",
-        component: <NewArticle />,
-        activeComponent: <NewArticleActive />,
-    },
-    {
-        id: "사람 찾기",
-        path: "/",
-        component: <Map />,
-        activeComponent: <MapActive />,
-    },
-    {
-        id: "피드 활동",
-        path: "/",
-        component: <Heart />,
-        activeComponent: <HeartActive />,
-    },
-];
 
 const NavItems = () => {
+
+    const dispatch = useAppDispatch();
+    const { view } = useAppSelector((state => state.direct));
+
+    const navItems = [
+        {
+            id: "홈",
+            path: "/",
+            component: <Home />,
+            activeComponent: <HomeActive />,
+        },
+        {
+            id: "메세지",
+            path: "/direct",
+            component: <Direct onClick={()=>{dispatch(selectView("inbox"))}} />,
+            activeComponent: <DirectActive onClick={()=>{dispatch(selectView("inbox"))}} />,
+        },
+        {
+            id: "새 글 작성",
+            path: "/",
+            component: <NewArticle />,
+            activeComponent: <NewArticleActive />,
+        },
+        {
+            id: "사람 찾기",
+            path: "/",
+            component: <Map />,
+            activeComponent: <MapActive />,
+        },
+        {
+            id: "피드 활동",
+            path: "/",
+            component: <Heart />,
+            activeComponent: <HeartActive />,
+        },
+    ];
+
     return (
         <Container>
             <NavLitemContainer>

@@ -1,49 +1,110 @@
 import styled from "styled-components";
-import moment from "moment";
-import "moment/locale/ko";
+import useGapText from "Hooks/useGapText";
+import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { selectChatItem, selectView } from "app/store/ducks/direct/DirectSlice";
 
-const Container = styled.a`
-    display: flex;
-    padding: 8px 20px;
-    align-items: center;
 
-    &:hover {
-        background-color: rgba(var(--b3f, 250, 250, 250), 1);
-    }
-`;
+interface ChatListItemContainerType {
+    isRead: boolean;
+    isSelected: boolean;
+}
 
-const Avatar = styled.img`
+const ChatListItemContainer = styled.a<ChatListItemContainerType>`
+  display: flex;
+  padding: 8px 20px;
+  align-items: center;
+  cursor: pointer;
+  background-color: ${props => props.isSelected ? "rgb(239,239,239)" : "#fff"};
+
+  
+
+  .user-image {
     width: 56px;
     border-radius: 50%;
     margin-right: 12px;
-`;
+  }
 
-const ChatInfoWrapper = styled.div`
+  .right-section-container {
     flex: 1;
+
+    .user-nickName {
+      font-weight: ${props => props.isRead ? 400 : 600};
+
+    }
+
+    .last-info {
+      display: flex;
+      font-size: 14px;
+      color: ${props => props.isRead ? "#8e8e8e" : "#000"};
+
+      .last-chat-container {
+        white-space: nowrap;
+        margin-right: 2px;
+        max-width: 150px;
+        display: inline;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: ${props => props.isRead ? 400 : 600};
+      }
+
+      .last-date-container {
+        margin-left: 2px;
+        color: #8e8e8e;
+      }
+    }
+  }
+
+  .blue-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #0095f6;
+    border-radius: 50%;
+  }
+
 `;
 
-const ChatInfoText = styled.p`
-    font-size: 14px;
-`;
 
-const ChatSubInfo = styled(ChatInfoText)`
-    margin-top: 8px;
-`;
+const ChatListItem = ({ id, lastChatDate, avatarImg, userName, lastMessage, isRead }: Direct.ChatItem) => {
+    const calculatedTime = useGapText(lastChatDate);
+    const dispatch = useAppDispatch();
+    const { selectedChatItem } = useAppSelector((state => state.direct));
 
-const ChatListItem = (props: Direct.ChatItem) => {
-    const carculatedTime = moment(
-        props.lastLoggedIn,
-        "YYYY.MM.DD h:mm:ss",
-    ).fromNow();
+    const chatListClickHandler = () => {
+        // 클릭한거 읽은거였으면 읽음 처리해주는 로직 필요
+
+        dispatch(selectChatItem(id));
+        dispatch(selectView("chat"))
+    }
 
     return (
-        <Container>
-            <Avatar src={props.avatarImg} />
-            <ChatInfoWrapper>
-                <ChatInfoText>{props.userName}</ChatInfoText>
-                <ChatSubInfo>{carculatedTime}</ChatSubInfo>
-            </ChatInfoWrapper>
-        </Container>
+        <ChatListItemContainer isRead={isRead} isSelected={selectedChatItem === id} onClick={chatListClickHandler}>
+            <img src={avatarImg} alt="avatarImg" className="user-image" />
+            <div className="right-section-container">
+
+                <div className="user-nickName">
+                    {userName}님
+                </div>
+
+                <div className="last-info">
+                    <div className="last-chat-container">
+                        {lastMessage}
+                    </div>
+                    <span className={"dot"}>
+                    ·
+                    </span>
+                    <div className="last-date-container">
+                        {calculatedTime}
+                    </div>
+
+                </div>
+            </div>
+            {
+                !isRead &&
+                <div className="blue-dot">
+                </div>
+
+            }
+        </ChatListItemContainer>
     );
 };
 

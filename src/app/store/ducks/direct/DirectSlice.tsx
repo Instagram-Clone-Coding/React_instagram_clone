@@ -5,14 +5,15 @@ type modalType = "deleteChat" | "block" | "report" | "newChat" | "convertAccount
 
 export interface InitialStateType {
     modal: modalType;
-    view : Direct.currentSectionViewType;
-
+    view: Direct.currentSectionViewType;
+    selectedChatItem: number | null;
 }
 
 
 const initialState: InitialStateType = {
     modal: null,
-    view: "chat"
+    view: "inbox",
+    selectedChatItem : null
 };
 
 const directSlice = createSlice({
@@ -20,13 +21,16 @@ const directSlice = createSlice({
     initialState,
     reducers: {
         openModal: (state, action) => {
-            state.modal = action.payload
+            state.modal = action.payload;
         },
         closeModal: (state) => {
             state.modal = null;
         },
-        selectView : (state,action) => {
-            state.view = action.payload
+        selectView: (state, action) => {
+            state.view = action.payload;
+        },
+        selectChatItem:(state,action) => {
+            state.selectedChatItem = action.payload;
         }
     },
     extraReducers: (build) => {
@@ -35,5 +39,5 @@ const directSlice = createSlice({
 });
 ;
 
-export const { openModal, closeModal,selectView } = directSlice.actions;
+export const { openModal, closeModal, selectView,selectChatItem } = directSlice.actions;
 export const directReducer = directSlice.reducer;

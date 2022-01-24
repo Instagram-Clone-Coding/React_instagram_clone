@@ -19,6 +19,7 @@ const SectionBodyContainer = styled.section`
 
 `;
 
+
 const SectionBody = ({ message, setMessage }: SectionBodyProps) => {
     const dispatch = useAppDispatch();
     const { view } = useAppSelector((state => state.direct));
