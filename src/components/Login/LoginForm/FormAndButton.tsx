@@ -2,7 +2,7 @@ import Input from "components/Common/Input";
 import { useState, MouseEvent } from "react";
 import SubmitButton from "components/Common/SubmitButton";
 
-import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { signIn } from "app/store/ducks/auth/signinThunk";
 import { setUserName } from "app/store/ducks/auth/signinSlice";
 import { Redirect } from "react-router-dom";

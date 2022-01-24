@@ -5,7 +5,7 @@ import Direct from "pages/Direct";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import Header from "components/Common/Header";
 
-import { useAppSelector } from "app/store/hooks";
+import { useAppSelector } from "app/store/Hooks";
 
 const Routes = () => {
     return (

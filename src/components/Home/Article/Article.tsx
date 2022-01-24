@@ -9,7 +9,7 @@ import CommentForm from "components/Home/Article/CommentForm";
 import { HomeType } from "@type";
 import useGapText from "hooks/useGapText";
 import useOnView from "hooks/useOnView";
-import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { getExtraArticle } from "app/store/ducks/home/homThunk";
 
 const ArticleCard = styled(Card)`
