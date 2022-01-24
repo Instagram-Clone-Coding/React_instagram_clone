@@ -4,6 +4,7 @@ import ModalHeader from "./ModalHeader";
 import direct from "../../../assets/Images/direct.png";
 import sprite3 from "../../../assets/Images/sprite3.png";
 import useCopy from "hooks/useCopy";
+import { useAppSelector } from "app/store/hooks";
 
 const ShareWithModalInner = styled.div`
     .shareWithModal-options {
@@ -83,7 +84,7 @@ const ShareWithModalInner = styled.div`
 interface ShareWithModalProps {
     onModalOn: () => void;
     onModalOff: () => void;
-    username: string;
+    // username: string;
 }
 
 const DUMMY_P_ID = "CWWCI-eINvr"; // 게시물 id
@@ -96,9 +97,10 @@ const DUMMY_BASE_URL = "https://www.instagram.com"; // 원래 root url: window.l
 const ShareWithModal = ({
     onModalOn,
     onModalOff,
-    username,
-}: ShareWithModalProps) => {
+}: // username, // appselector를 통해 가져오면 됨
+ShareWithModalProps) => {
     const copyHandler = useCopy(DUMMY_BASE_URL + "/p/" + DUMMY_P_ID);
+    const { memberNickname } = useAppSelector(({ home }) => home.modalDTOs);
 
     return (
         <ModalCard
@@ -159,7 +161,7 @@ const ShareWithModal = ({
                     </a>
                     <a
                         className="shareWithModal-email"
-                        href={`mailto:?subject=@${username}님의 이 인스타그램 게시물 보기&body=@${username}님의 이 인스타그램 게시물 보기 %20${
+                        href={`mailto:?subject=@${memberNickname}님의 이 인스타그램 게시물 보기&body=@${memberNickname}님의 이 인스타그램 게시물 보기 %20${
                             DUMMY_BASE_URL + "/p/" + DUMMY_P_ID
                         }%3Futm_source%3Dig_web_button_share_sheet`}
                         target="_top"

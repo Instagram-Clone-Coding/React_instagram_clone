@@ -4,6 +4,8 @@ import styled from "styled-components";
 import FollowingModal from "../Modals/FollowingModal";
 import HoverModal from "../Modals/HoverModal";
 import Username from "../../Common/Username";
+import { homeActions } from "app/store/ducks/home/homeSlice";
+import { useAppDispatch } from "app/store/hooks";
 
 const StyledMain = styled.div`
     padding: 0 16px;
@@ -63,12 +65,13 @@ const ArticleMain = ({
     const [isComment1Liked, setIsComment1Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
     const [isComment2Liked, setIsComment2Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
     const [isFullText, setIsFullText] = useState(false);
-    const [isHoverModalActivated, setIsHoverModalActivated] = useState(false);
-    const [isFollowingModalActivated, setIsFollowingModalActivated] =
-        useState(false);
-    const [modalPositionObj, setModalPositionObj] = useState<DOMRect>();
-    const [hoveredUsername, setHoveredUsername] = useState("");
-    const [ishoveredUserFollowing, setIsHoveredUserFollowing] = useState(false); // hover한 데이터 가져와서 적용
+    const dispatch = useAppDispatch();
+    // const [isHoverModalActivated, setIsHoverModalActivated] = useState(false);
+    // const [isFollowingModalActivated, setIsFollowingModalActivated] =
+    //     useState(false);
+    // const [modalPositionObj, setModalPositionObj] = useState<DOMRect>();
+    // const [hoveredUsername, setHoveredUsername] = useState("");
+    // const [ishoveredUserFollowing, setIsHoveredUserFollowing] = useState(false); // hover한 데이터 가져와서 적용
     const isTextLineBreak = content.includes("\n");
     const textArray = isTextLineBreak ? content.split("\n") : [content];
 
@@ -98,19 +101,35 @@ const ArticleMain = ({
             | React.MouseEvent<HTMLSpanElement>
             | React.MouseEvent<HTMLDivElement>,
     ) => {
-        setHoveredUsername(event.currentTarget.innerText);
-        setModalPositionObj(event?.currentTarget.getBoundingClientRect());
-        setIsHoverModalActivated(true);
+        // setHoveredUsername(event.currentTarget.innerText);
+        // setModalPositionObj(event?.currentTarget.getBoundingClientRect());
+        // setIsHoverModalActivated(true);
+
+        if (!event) return;
+        const { top, bottom, left } =
+            event.currentTarget.getBoundingClientRect();
+        dispatch(
+            homeActions.startModal({
+                activatedModal: "hover",
+                modalPosition: {
+                    top,
+                    bottom,
+                    left,
+                },
+                memberNickname: event.currentTarget.innerText, // 이후 체크
+            }),
+        );
     };
 
     const mouseLeaveHandler = () => {
-        setIsHoverModalActivated(false);
+        // setIsHoverModalActivated(false);
+        dispatch(homeActions.resetModal());
     };
 
     const getFullText = () => setIsFullText(true);
     return (
         <StyledMain>
-            {isHoverModalActivated && (
+            {/* {isHoverModalActivated && (
                 <HoverModal
                     isFollowing={ishoveredUserFollowing} // hover username 데이터 가져오면 필요 없음
                     onFollowChange={(a: boolean) =>
@@ -135,7 +154,7 @@ const ArticleMain = ({
                     username={hoveredUsername}
                     avatarUrl={memberImageUrl} // 원래 FollowingModal 내부에서 username에 따라 받아와야 함.
                 />
-            )}
+            )} */}
             <div className="article-likeInfo">
                 {followingUserWhoLikesArticle ? (
                     <div>

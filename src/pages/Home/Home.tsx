@@ -3,7 +3,13 @@ import HomeAside from "components/Home/HomeAside";
 import HomeStories from "components/Home/HomeStories";
 import HomeSection from "components/Home/HomeSection";
 import Notification from "styles/UI/Notification";
-import { useAppSelector } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import HoverModal from "components/Home/Modals/HoverModal";
+import FollowingModal from "components/Home/Modals/FollowingModal";
+import ArticleMenuModal from "components/Home/Modals/ArticleMenuModal";
+import ReportModal from "components/Home/Modals/ReportModal";
+import ShareWithModal from "components/Home/Modals/SharerWithModal";
+import { homeActions } from "app/store/ducks/home/homeSlice";
 
 const Layout = styled.div`
     padding-top: 30px;
@@ -27,9 +33,27 @@ const Layout = styled.div`
 `;
 
 const Home = () => {
-    const isCopiedNotification = useAppSelector(
-        (state) => state.home.isCopiedNotification,
-    );
+    const {
+        isCopiedNotification,
+        modalDTOs: {
+            activatedModal,
+            modalPosition,
+            memberNickname,
+            memberImageUrl,
+            postId,
+        },
+    } = useAppSelector((state) => state.home);
+
+    const dispatch = useAppDispatch();
+
+    // const mouseEnterHandler = (
+    //     event:
+    //         | React.MouseEvent<HTMLSpanElement>
+    //         | React.MouseEvent<HTMLDivElement>,
+    // ) => {
+    //     setModalPositionObj(event?.currentTarget.getBoundingClientRect());
+    //     setIsHoverModalActivated(true);
+    // };
 
     return (
         <Layout>
@@ -40,6 +64,107 @@ const Home = () => {
             <HomeAside />
             {isCopiedNotification && (
                 <Notification text="링크를 클립보드에 복사했습니다." />
+            )}
+            {activatedModal === "hover" && (
+                <HoverModal
+                    // isFollowing={isFollowing}
+                    // onFollowChange={(a: boolean) => setIsFollowing(a)}
+                    // username={memberNickname}
+                    // modalPosition={modalPositionObj}
+                    onMouseEnter={() =>
+                        dispatch(
+                            homeActions.startModal({
+                                activatedModal: "hover",
+                                memberNickname,
+                                modalPosition,
+                            }),
+                        )
+                    }
+                    onMouseLeave={() => dispatch(homeActions.resetModal())}
+                    onFollowingModalOn={() =>
+                        dispatch(
+                            homeActions.startModal({
+                                activatedModal: "unfollowing",
+                                memberImageUrl,
+                            }),
+                        )
+                    }
+                />
+            )}
+            {activatedModal === "unfollowing" &&
+                memberNickname &&
+                memberImageUrl && (
+                    <FollowingModal
+                        // onUnfollow={() => setIsFollowing(false)}
+                        onModalOn={() =>
+                            dispatch(
+                                homeActions.startModal({
+                                    activatedModal: "unfollowing",
+                                    memberNickname,
+                                    memberImageUrl,
+                                }),
+                            )
+                        }
+                        onModalOff={() => dispatch(homeActions.resetModal())}
+                        username={memberNickname}
+                        avatarUrl={memberImageUrl}
+                    />
+                )}
+            {activatedModal === "articleMenu" && memberNickname && postId && (
+                <ArticleMenuModal
+                    // isFollowing={isFollowing} 팔로우한 사람의 게시물만 보니까 당연히 처음엔 true
+                    // onUnfollow={unfollowHandler}
+                    onModalOn={() =>
+                        dispatch(
+                            homeActions.startModal({
+                                activatedModal: "articleMenu",
+                                memberNickname,
+                                postId,
+                            }),
+                        )
+                    }
+                    onModalOff={() => dispatch(homeActions.resetModal())}
+                    // onReportModalOn={() =>
+                    //     dispatch(
+                    //         homeActions.startModal({
+                    //             activatedModal: "report", // 게시물, 등등은 이미 articleMenu에서 결정
+                    //         }),
+                    //     )
+                    // }
+                    // onShareWithModalOn={() =>
+                    //     dispatch(
+                    //         homeActions.startModal({
+                    //             activatedModal: "shareWith", // 게시물, 등등은 이미 articleMenu에서 결정
+                    //         }),
+                    //     )
+                    // }
+                />
+            )}
+            {/* 아래 두 모달은 이전 모달을 거쳐야 하므로 필요없는 data는 action에 담지 않음 */}
+            {activatedModal === "report" && (
+                <ReportModal
+                    // onModalOn={() => setIsReportModalActivated(true)}
+                    onModalOn={() =>
+                        dispatch(
+                            homeActions.startModal({
+                                activatedModal: "report",
+                            }),
+                        )
+                    }
+                    onModalOff={() => dispatch(homeActions.resetModal())}
+                />
+            )}
+            {activatedModal === "shareWith" && (
+                <ShareWithModal
+                    onModalOn={() =>
+                        dispatch(
+                            homeActions.startModal({
+                                activatedModal: "shareWith",
+                            }),
+                        )
+                    }
+                    onModalOff={() => dispatch(homeActions.resetModal())}
+                />
             )}
         </Layout>
     );

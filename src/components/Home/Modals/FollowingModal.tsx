@@ -1,3 +1,5 @@
+import { homeActions } from "app/store/ducks/home/homeSlice";
+import { useAppDispatch } from "app/store/hooks";
 import StoryCircle from "components/Common/StoryCircle";
 import styled from "styled-components";
 import ModalCard from "styles/UI/ModalCard";
@@ -36,7 +38,7 @@ const FollowingModalInner = styled.div`
 `;
 
 interface FollowingModalProps {
-    onUnfollow: () => void;
+    // onUnfollow: () => void;
     onModalOn: () => void;
     onModalOff: () => void;
     username: string;
@@ -46,16 +48,18 @@ interface FollowingModalProps {
 const MODAL_CIRCLE_SIZE = 90 / 64;
 
 const FollowingModal = ({
-    onUnfollow,
+    // onUnfollow,
     onModalOn,
     onModalOff,
     username,
     avatarUrl,
 }: FollowingModalProps) => {
+    const dispatch = useAppDispatch();
     const unFollowHandler = () => {
         // 언팔로우
-        onUnfollow();
-        onModalOff();
+        // onUnfollow(); //dispatch, thunk로 해결
+        // onModalOff();
+        dispatch(homeActions.resetModal());
     };
 
     return (

@@ -8,6 +8,7 @@ import Username from "../../Common/Username";
 import sprite2 from "../../../assets/Images/sprite2.png";
 import useNumberSummary from "hooks/useNumberSummary";
 import Button from "styles/UI/Button";
+import { useAppSelector } from "app/store/hooks";
 
 const StyledHoverModalInner = styled.div`
     width: 100%;
@@ -101,10 +102,10 @@ const StyledHoverModalInner = styled.div`
 `;
 
 interface HoverModalProps {
-    isFollowing?: boolean;
-    onFollowChange: (a: boolean) => void;
-    username: string;
-    modalPosition?: DOMRect;
+    // isFollowing?: boolean;
+    // onFollowChange: (a: boolean) => void;
+    // username: string;
+    // modalPosition?: DOMRect;
     onMouseEnter: () => void;
     onMouseLeave: () => void;
     onFollowingModalOn: () => void;
@@ -127,10 +128,10 @@ interface UserSummaryProps {
 }
 
 const HoverModal = ({
-    isFollowing,
-    onFollowChange,
-    username,
-    modalPosition,
+    // isFollowing,
+    // onFollowChange,
+    // username,
+    // modalPosition,
     onMouseEnter,
     onMouseLeave,
     onFollowingModalOn,
@@ -145,6 +146,10 @@ const HoverModal = ({
     const followsNumSummary = useNumberSummary(
         userSummary ? userSummary.followsNum : 0,
     );
+    const { modalPosition, memberNickname } = useAppSelector(
+        ({ home }) => home.modalDTOs,
+    );
+
     useEffect(() => {
         // get username summary
         const fetchedUserSummary = {
@@ -183,23 +188,23 @@ const HoverModal = ({
             onModalOn={onMouseEnter}
             onModalOff={onMouseLeave}
         >
-            {userSummary && (
+            {userSummary && memberNickname && (
                 <StyledHoverModalInner>
                     <div className="hoverModal-top">
-                        <Link to={`/${username}`}>
+                        <Link to={`/${memberNickname}`}>
                             <StoryCircle
                                 type="default"
                                 avatarUrl={userSummary.avatarUrl}
-                                username={username}
+                                username={memberNickname}
                                 scale={1}
                             />
                         </Link>
                         <div className="hoverModal-top-info">
                             <Link
-                                to={`/${username}`}
+                                to={`/${memberNickname}`}
                                 className="hoverModal-top-username"
                             >
-                                <Username>{username}</Username>
+                                <Username>{memberNickname}</Username>
                                 {userSummary.verified && (
                                     <span className="hoverModal-top-verified">
                                         인증됨
@@ -242,9 +247,8 @@ const HoverModal = ({
                         ))}
                     </div>
                     <div className="hoverModal-btns">
-                        {isFollowing ? (
+                        {/* {isFollowing ? (
                             <>
-                                {/* 이 아이디가 어떤 id인지 모르겠음 */}
                                 <Link to="/direct/t/id">
                                     <Card>메세지 보내기</Card>
                                 </Link>
@@ -258,7 +262,7 @@ const HoverModal = ({
                             <Button onClick={() => onFollowChange(true)}>
                                 팔로우
                             </Button>
-                        )}
+                        )} */}
                     </div>
                 </StyledHoverModalInner>
             )}

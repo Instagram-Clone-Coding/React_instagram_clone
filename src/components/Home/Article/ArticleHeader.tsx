@@ -9,6 +9,8 @@ import HoverModal from "../Modals/HoverModal";
 import ReportModal from "../Modals/ReportModal";
 import ShareWithModal from "../Modals/SharerWithModal";
 import { ReactComponent as ThreeDots } from "../../../assets/Svgs/threeDots.svg";
+import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { homeActions } from "app/store/ducks/home/homeSlice";
 
 const StyledArticleHeader = styled.header`
     height: 60px;
@@ -61,23 +63,28 @@ const HEADER_STORY_CIRCLE = 42 / 64;
 interface ArticleHeaderProps {
     memberImageUrl: string;
     memberNickname: string;
+    postId: number;
     location?: string;
 }
 
 const ArticleHeader = ({
     memberImageUrl,
     memberNickname,
+    postId,
     location,
 }: ArticleHeaderProps) => {
-    const [isHoverModalActivated, setIsHoverModalActivated] = useState(false);
-    const [isDotModalActivated, setIsDotModalActivated] = useState(false);
-    const [isReportModalActivated, setIsReportModalActivated] = useState(false);
-    const [isFollowingModalActivated, setIsFollowingModalActivated] =
-        useState(false);
-    const [isShareWithModalActivated, setIsShareWithModalActivated] =
-        useState(false);
+    // const [isHoverModalActivated, setIsHoverModalActivated] = useState(false);
+    // const [isDotModalActivated, setIsDotModalActivated] = useState(false);
+    // const [isReportModalActivated, setIsReportModalActivated] = useState(false);
+    // const [isFollowingModalActivated, setIsFollowingModalActivated] =
+    //     useState(false);
+    // const [isShareWithModalActivated, setIsShareWithModalActivated] =
+    //     useState(false);
 
-    const [modalPositionObj, setModalPositionObj] = useState<DOMRect>();
+    const { activatedModal } = useAppSelector(({ home }) => home.modalDTOs);
+    const dispatch = useAppDispatch();
+
+    // const [modalPositionObj, setModalPositionObj] = useState<DOMRect>();
     const [isFollowing, setIsFollowing] = useState(false); // followingModal의 isFollowing과 연결할 것
 
     const mouseEnterHandler = (
@@ -85,12 +92,30 @@ const ArticleHeader = ({
             | React.MouseEvent<HTMLSpanElement>
             | React.MouseEvent<HTMLDivElement>,
     ) => {
-        setModalPositionObj(event?.currentTarget.getBoundingClientRect());
-        setIsHoverModalActivated(true);
+        // se  tModalPositionObj(event?.currentTarget.getBoundingClientRect());
+        // setIsHoverModalActivated(true);
+        if (!event) return;
+        const { top, bottom, left } =
+            event.currentTarget.getBoundingClientRect();
+        dispatch(
+            homeActions.startModal({
+                activatedModal: "hover",
+                modalPosition: {
+                    top,
+                    bottom,
+                    left,
+                },
+                memberNickname,
+            }),
+        );
     };
 
     const mouseLeaveHandler = () => {
-        setIsHoverModalActivated(false);
+        // setTimeout(() => {
+        //     activatedModal || dispatch(homeActions.resetModal());
+        // }, 500);
+        dispatch(homeActions.resetModal());
+        // setIsHoverModalActivated(false);
     };
 
     const followHandler = () => {
@@ -98,37 +123,24 @@ const ArticleHeader = ({
         setIsFollowing(true);
     };
 
-    const unfollowHandler = () => {
-        // unfollow하기 전에 modal에서 재차 확인
-        setIsFollowingModalActivated(true);
-    };
+    // const unfollowHandler = () => {
+    //     // unfollow하기 전에 modal에서 재차 확인
+    //     setIsFollowingModalActivated(true);
+    // };
 
-    const cloaseArticleMenuModalAndOpenReportModal = () => {
-        setIsDotModalActivated(false);
-        setIsReportModalActivated(true);
-    };
+    // const cloaseArticleMenuModalAndOpenReportModal = () => {
+    //     setIsDotModalActivated(false);
+    //     setIsReportModalActivated(true);
+    // };
 
-    const cloaseArticleMenuModalAndOpenShareWithModal = () => {
-        setIsDotModalActivated(false);
-        setIsShareWithModalActivated(true);
-    };
+    // const cloaseArticleMenuModalAndOpenShareWithModal = () => {
+    //     setIsDotModalActivated(false);
+    //     setIsShareWithModalActivated(true);
+    // };
 
     return (
         <StyledArticleHeader>
-            {isHoverModalActivated && (
-                <HoverModal
-                    isFollowing={isFollowing}
-                    onFollowChange={(a: boolean) => setIsFollowing(a)}
-                    username={memberNickname}
-                    modalPosition={modalPositionObj}
-                    onMouseEnter={() => setIsHoverModalActivated(true)}
-                    onMouseLeave={() => setIsHoverModalActivated(false)}
-                    onFollowingModalOn={() =>
-                        setIsFollowingModalActivated(true)
-                    }
-                />
-            )}
-            {isFollowing && isFollowingModalActivated && (
+            {/* {isFollowing && activatedModal === "unfollowing" && (
                 <FollowingModal
                     onUnfollow={() => setIsFollowing(false)}
                     onModalOn={() => setIsFollowingModalActivated(true)}
@@ -137,7 +149,7 @@ const ArticleHeader = ({
                     avatarUrl={memberImageUrl}
                 />
             )}
-            {isDotModalActivated && (
+            {activatedModal === "articleMenu" && (
                 <ArticleMenuModal
                     isFollowing={isFollowing}
                     onUnfollow={unfollowHandler}
@@ -149,19 +161,19 @@ const ArticleHeader = ({
                     }
                 />
             )}
-            {isReportModalActivated && (
+            {activatedModal === "report" && (
                 <ReportModal
                     onModalOn={() => setIsReportModalActivated(true)}
                     onModalOff={() => setIsReportModalActivated(false)}
                 />
             )}
-            {isShareWithModalActivated && (
+            {activatedModal === "shareWith" && (
                 <ShareWithModal
                     onModalOn={() => setIsShareWithModalActivated(true)}
                     onModalOff={() => setIsShareWithModalActivated(false)}
                     username={memberNickname}
                 />
-            )}
+            )} */}
             <StoryCircle
                 type="unread" // 백엔드 소통하여 읽었는지 여부 확인
                 avatarUrl={memberImageUrl}
@@ -192,7 +204,16 @@ const ArticleHeader = ({
             </div>
             <div
                 className="header-dots"
-                onClick={() => setIsDotModalActivated(true)}
+                onClick={() =>
+                    dispatch(
+                        homeActions.startModal({
+                            activatedModal: "articleMenu",
+                            postId: postId,
+                            memberNickname,
+                            memberImageUrl,
+                        }),
+                    )
+                }
             >
                 <ThreeDots />
             </div>

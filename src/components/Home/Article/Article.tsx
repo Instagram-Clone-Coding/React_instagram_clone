@@ -11,6 +11,11 @@ import useGapText from "hooks/useGapText";
 import useOnView from "hooks/useOnView";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
 import { getExtraArticle } from "app/store/ducks/home/homThunk";
+import FollowingModal from "components/Home/Modals/FollowingModal";
+import ArticleMenuModal from "components/Home/Modals/ArticleMenuModal";
+import ReportModal from "components/Home/Modals/ReportModal";
+import ShareWithModal from "components/Home/Modals/SharerWithModal";
+import { homeActions } from "app/store/ducks/home/homeSlice";
 
 const ArticleCard = styled(Card)`
     margin-bottom: 24px;
@@ -33,7 +38,7 @@ const ArticleCard = styled(Card)`
 
 const token = {
     accessToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MjQxODcxMH0.a54MJzWdP3Mjs1yXG33v7ti0SpHcN7IzqfwQ9nFdVSjmhriTcFA_tc5yHFWyLA_PRCH3A_TUk0WPRQ_0dEacjw",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0Mjc3OTY0NH0.Aim3h6qIvauthIAyQrmAFU0w8NAf4ZGNOIbqIKZpE0o88HCMkxJ3RlPbck7BqcO4e41g1Cpdr0HtFT1jAP2EKg",
     refreshToken:
         "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjQyNzQxNDY4fQ.8mHe22G6uu6F_HB-5G8A7voUNLb5oRAuX84xlKWFUZeccsi_Y3DHMh1fC7w3uEG3UATvNc5U9PBPvF6hW1vpZw",
 };
@@ -54,9 +59,10 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
     const gapText = useGapText(article.postUploadDate);
     const articleRef = useRef<HTMLDivElement>(null);
     const isVisible = useOnView(articleRef);
-    const extraArticlesCount = useAppSelector(
-        ({ home }) => home.extraArticlesCount,
-    );
+    const {
+        extraArticlesCount,
+        modalDTOs: { activatedModal, postId, memberNickname },
+    } = useAppSelector(({ home }) => home);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -92,6 +98,7 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
             <ArticleHeader
                 memberImageUrl={article.memberImageUrl}
                 memberNickname={article.memberNickname}
+                postId={article.postId}
             />
             <ArticleImgSlider
                 imageDTOs={article.postImageDTOs}
