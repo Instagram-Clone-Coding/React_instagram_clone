@@ -56,7 +56,7 @@ interface imageStateProps {
 const SlideImage = [home, Edit, talk, takephoto, InstagramImg];
 const IMAGE_LENGTH = SlideImage.length;
 
-export function ShowingInstagram() {
+export default function ShowingInstagram() {
     const [index, setIndex] = useState(-1);
 
     useEffect(() => {

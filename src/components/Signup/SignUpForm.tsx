@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import FacebookLogin from "components/Common/FacebookLogin";
 import Line from "components/Common/Line";
-import InputAndButton from "./InputAndButton";
 import ImageSprite from "components/Common/LoginSprite";
+import InputAndButton from "components/Signup/InputAndButton";
 
 const SignUpFormContainer = styled.div`
     display: flex;

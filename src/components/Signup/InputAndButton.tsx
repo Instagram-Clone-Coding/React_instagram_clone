@@ -1,12 +1,12 @@
+import { useState } from "react";
 import Input from "components/Common/Input";
 import SubmitButton from "components/Common/SubmitButton";
-import { useState } from "react";
 import {
     isValidEmailForm,
     isValidName,
     isValidPassword,
     isValidUsername,
-} from "./validator";
+} from "components/Signup/validator";
 
 type inputName = "email" | "name" | "username" | "password";
 

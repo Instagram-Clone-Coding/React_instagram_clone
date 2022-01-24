@@ -2,8 +2,8 @@ import styled from "styled-components";
 import ImageSprite from "components/Common/LoginSprite";
 import { Link } from "react-router-dom";
 import Line from "components/Common/Line";
-import FacebookLogin from "../../Common/FacebookLogin";
-import LoginFormAndButton from "./FormAndButton";
+import FacebookLogin from "components/Common/FacebookLogin";
+import LoginFormAndButton from "components/Login/LoginForm/FormAndButton";
 
 const FormContainer = styled.div`
     .logo {

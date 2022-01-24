@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { LoginForm } from "./LoginForm/LoginForm";
-import { ShowingInstagram } from "./InstagramSlider/ShowingInsta";
+import ShowingInstagram from "components/Login/InstagramSlider/ShowingInsta";
+import LoginForm from "components/Login/LoginForm/LoginForm";
 
 const ContentContainer = styled.main`
     display: flex;

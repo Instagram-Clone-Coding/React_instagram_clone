@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import FooterRow from "./FooterRow";
-import InstagramLinks from "./InstagramLinks";
+import FooterRow from "components/Login/Footer/FooterRow";
+import InstagramLinks from "components/Login/Footer/InstagramLinks";
 
 const FooterContainer = styled.div`
     display: flex;
