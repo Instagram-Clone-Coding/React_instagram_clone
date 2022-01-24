@@ -9,7 +9,6 @@ import FollowingModal from "components/Home/Modals/FollowingModal";
 import ArticleMenuModal from "components/Home/Modals/ArticleMenuModal";
 import ReportModal from "components/Home/Modals/ReportModal";
 import ShareWithModal from "components/Home/Modals/SharerWithModal";
-import { homeActions } from "app/store/ducks/home/homeSlice";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 
 const Layout = styled.div`
@@ -125,26 +124,11 @@ const Home = () => {
                         )
                     }
                     onModalOff={() => dispatch(modalActions.resetModal())}
-                    // onReportModalOn={() =>
-                    //     dispatch(
-                    //         homeActions.startModal({
-                    //             activatedModal: "report", // 게시물, 등등은 이미 articleMenu에서 결정
-                    //         }),
-                    //     )
-                    // }
-                    // onShareWithModalOn={() =>
-                    //     dispatch(
-                    //         homeActions.startModal({
-                    //             activatedModal: "shareWith", // 게시물, 등등은 이미 articleMenu에서 결정
-                    //         }),
-                    //     )
-                    // }
                 />
             )}
             {/* 아래 두 모달은 이전 모달을 거쳐야 하므로 필요없는 data는 action에 담지 않음 */}
             {activatedModal === "report" && (
                 <ReportModal
-                    // onModalOn={() => setIsReportModalActivated(true)}
                     onModalOn={() =>
                         dispatch(
                             modalActions.startModal({

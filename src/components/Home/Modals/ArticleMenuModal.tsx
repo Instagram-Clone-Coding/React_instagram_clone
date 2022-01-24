@@ -1,4 +1,3 @@
-import { homeActions } from "app/store/ducks/home/homeSlice";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { useAppDispatch } from "app/store/hooks";
 import useCopy from "hooks/useCopy";

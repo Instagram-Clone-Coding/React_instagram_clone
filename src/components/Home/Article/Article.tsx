@@ -10,11 +10,6 @@ import useGapText from "hooks/useGapText";
 import useOnView from "hooks/useOnView";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
 import { getExtraArticle } from "app/store/ducks/home/homThunk";
-import FollowingModal from "components/Home/Modals/FollowingModal";
-import ArticleMenuModal from "components/Home/Modals/ArticleMenuModal";
-import ReportModal from "components/Home/Modals/ReportModal";
-import ShareWithModal from "components/Home/Modals/SharerWithModal";
-import { homeActions } from "app/store/ducks/home/homeSlice";
 
 const ArticleCard = styled(Card)`
     margin-bottom: 24px;
@@ -58,10 +53,7 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
     const gapText = useGapText(article.postUploadDate);
     const articleRef = useRef<HTMLDivElement>(null);
     const isVisible = useOnView(articleRef);
-    const {
-        home: { extraArticlesCount },
-        modal: { activatedModal, postId, memberNickname },
-    } = useAppSelector((state) => state);
+    const { extraArticlesCount } = useAppSelector(({ home }) => home);
     const dispatch = useAppDispatch();
 
     useEffect(() => {

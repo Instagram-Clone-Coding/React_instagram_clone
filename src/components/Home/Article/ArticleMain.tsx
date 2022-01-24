@@ -1,10 +1,7 @@
 import PopHeart from "components/Common/PopHeart";
 import React, { useState } from "react";
 import styled from "styled-components";
-import FollowingModal from "../Modals/FollowingModal";
-import HoverModal from "../Modals/HoverModal";
 import Username from "../../Common/Username";
-import { homeActions } from "app/store/ducks/home/homeSlice";
 import { useAppDispatch } from "app/store/hooks";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 

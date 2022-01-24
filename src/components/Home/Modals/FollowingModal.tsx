@@ -1,4 +1,3 @@
-import { homeActions } from "app/store/ducks/home/homeSlice";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { useAppDispatch } from "app/store/hooks";
 import StoryCircle from "components/Common/StoryCircle";
@@ -58,8 +57,6 @@ const FollowingModal = ({
     const dispatch = useAppDispatch();
     const unFollowHandler = () => {
         // 언팔로우
-        // onUnfollow(); //dispatch, thunk로 해결
-        // onModalOff();
         dispatch(modalActions.resetModal());
     };
 

@@ -499,107 +499,15 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
     },
 ];
 
-const EXTRA_ARTICLES: HomeType.ArticleProps = {
-    postId: 102,
-    followingMemberUsernameLikedPost: null,
-    memberImageUrl:
-        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-    memberNickname: "spursofficial",
-    memberUsername: "Tottenham Hotspur",
-    postBookmarkFlag: false,
-    postCommentsCount: 0,
-    postContent: `이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
-이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
-이 영역은 토트넘 핫스퍼 공식 계정 글입니다.`,
-    postImageDTOs: [
-        {
-            id: 12,
-            postImageUrl:
-                "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-
-            postTagDTOs: [
-                {
-                    id: 12,
-                    tag: {
-                        username: "dummyUsername",
-                        x: 30,
-                        y: 40,
-                    },
-                },
-                {
-                    id: 13,
-                    tag: {
-                        username: "dummyUsername",
-                        x: 60,
-                        y: 60,
-                    },
-                },
-            ],
-        },
-        {
-            id: 13,
-            postImageUrl:
-                "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-
-            postTagDTOs: [
-                {
-                    id: 12,
-                    tag: {
-                        username: "dummyUsername",
-                        x: 60,
-                        y: 70,
-                    },
-                },
-            ],
-        },
-        {
-            id: 14,
-            postImageUrl:
-                "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            postTagDTOs: [
-                {
-                    id: 12,
-                    tag: {
-                        username: "dummyUsername",
-                        x: 30,
-                        y: 40,
-                    },
-                },
-                {
-                    id: 13,
-                    tag: {
-                        username: "dummyUsername",
-                        x: 60,
-                        y: 60,
-                    },
-                },
-            ],
-        },
-    ],
-    postLikeFlag: true,
-    postLikesCount: 24,
-    postUploadDate: "2022-01-03T13:33:00",
-};
-
-// 좋아요 여부를 따로? 아니면 내가 필터링?
-// 좋아요 수를 따로? 아니면 내가 arr 길이 계산?
-
 const initialState: HomeType.homeStateProps = {
     storiesScrollPosition: "left",
     articles: [],
-    isLoading: true, /// dummy
+    isLoading: true,
     isExtraArticleLoading: false,
     extraArticlesCount: 0,
     isAsyncError: false,
     hoveredUser: null,
     isCopiedNotification: false,
-    // modalDTOs: {
-    //     activatedModal: null,
-    //     memberNickname: undefined,
-    //     memberImageUrl: undefined,
-    //     modalPosition: undefined,
-    //     postId: undefined,
-    // },
 };
 
 const homeSlice = createSlice({
@@ -618,20 +526,6 @@ const homeSlice = createSlice({
         ) => {
             state.storiesScrollPosition = action.payload;
         },
-        // startModal: (state, action: PayloadAction<HomeType.ModalDTOsProps>) => {
-        //     state.modalDTOs = {
-        //         ...state.modalDTOs,
-        //         ...action.payload,
-        //     }; // 전달한 modalDTO 값만 변경
-        // },
-        // resetModal: (state) => {
-        //     state.modalDTOs = {
-        //         activatedModal: null,
-        //         memberNickname: undefined,
-        //         modalPosition: undefined,
-        //         postId: undefined,
-        //     };
-        // },
         increaseExtraArticlesCount: (state) => {
             state.extraArticlesCount++;
         },
