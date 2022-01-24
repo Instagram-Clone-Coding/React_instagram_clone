@@ -1,3 +1,4 @@
+import { HomeType } from "@type";
 import React, { useMemo, useRef } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
@@ -55,7 +56,7 @@ const StyledBackDrop = styled.div`
 
 interface ModalProps {
     modalType?: "positioned" | "withBackDrop";
-    modalPosition?: DOMRect;
+    modalPosition?: HomeType.ModalPositionProps;
     onModalOn: () => void;
     onModalOff: () => void;
     children: React.ReactNode;
