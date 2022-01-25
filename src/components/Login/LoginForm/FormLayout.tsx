@@ -48,12 +48,7 @@ const instagramImage: Login.ImageProps = {
 export default function FormLayout() {
     return (
         <FormContainer>
-            <ImageSprite
-                width={instagramImage.width}
-                height={instagramImage.height}
-                position={instagramImage.position}
-                className="logo"
-            />
+            <ImageSprite {...instagramImage} className="logo" />
             <div className="inputContainer">
                 <form className="inputForm">
                     <div>
