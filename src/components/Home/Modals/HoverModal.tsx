@@ -1,5 +1,4 @@
 import StoryCircle from "components/Common/StoryCircle";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Card from "styles/UI/Card";
@@ -9,9 +8,7 @@ import sprite2 from "../../../assets/Images/sprite2.png";
 import useNumberSummary from "hooks/useNumberSummary";
 import Button from "styles/UI/Button";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
-import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
-import { token } from "Routes";
 
 const StyledHoverModalInner = styled.div`
     width: 100%;
