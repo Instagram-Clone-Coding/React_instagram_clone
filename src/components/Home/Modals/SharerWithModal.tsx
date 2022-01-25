@@ -100,7 +100,7 @@ const ShareWithModal = ({
 }: // username, // appselector를 통해 가져오면 됨
 ShareWithModalProps) => {
     const copyHandler = useCopy(DUMMY_BASE_URL + "/p/" + DUMMY_P_ID);
-    const memberNickname = useAppSelector(({ modal }) => modal.memberNickname);
+    const { memberNickname } = useAppSelector(({ modal }) => modal);
 
     return (
         <ModalCard

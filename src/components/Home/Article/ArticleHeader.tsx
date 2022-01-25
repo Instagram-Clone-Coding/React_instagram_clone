@@ -57,6 +57,7 @@ const HEADER_STORY_CIRCLE = 42 / 64;
 
 interface ArticleHeaderProps {
     memberImageUrl: string;
+    memberUsername: string;
     memberNickname: string;
     postId: number;
     location?: string;
@@ -64,6 +65,7 @@ interface ArticleHeaderProps {
 
 const ArticleHeader = ({
     memberImageUrl,
+    memberUsername,
     memberNickname,
     postId,
     location,
@@ -88,6 +90,7 @@ const ArticleHeader = ({
                     bottom,
                     left,
                 },
+                memberUsername,
                 memberNickname,
             }),
         );
@@ -139,6 +142,7 @@ const ArticleHeader = ({
                         modalActions.startModal({
                             activatedModal: "articleMenu",
                             postId: postId,
+                            memberUsername,
                             memberNickname,
                             memberImageUrl,
                         }),

@@ -32,7 +32,7 @@ const ArticleCard = styled(Card)`
 
 const token = {
     accessToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0Mjc3OTY0NH0.Aim3h6qIvauthIAyQrmAFU0w8NAf4ZGNOIbqIKZpE0o88HCMkxJ3RlPbck7BqcO4e41g1Cpdr0HtFT1jAP2EKg",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzA0OTI2MH0.fEZRuRii2e4FkUNH4ko99MXrpD2ONClZJ0jKJxvCI-KDYxE7HnV61Kx3_Awk0jyv0VWEB6F-dMyS7K2GSCD56Q",
     refreshToken:
         "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjQyNzQxNDY4fQ.8mHe22G6uu6F_HB-5G8A7voUNLb5oRAuX84xlKWFUZeccsi_Y3DHMh1fC7w3uEG3UATvNc5U9PBPvF6hW1vpZw",
 };
@@ -88,6 +88,7 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
         <ArticleCard as="article" ref={articleRef}>
             <ArticleHeader
                 memberImageUrl={article.memberImageUrl}
+                memberUsername={article.memberUsername}
                 memberNickname={article.memberNickname}
                 postId={article.postId}
             />
@@ -102,6 +103,7 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
             <ArticleMain
                 followingUserWhoLikesArticle={followingUserWhoLikesArticle}
                 likesCount={article.postLikesCount}
+                memberUsername={article.memberUsername}
                 memberImageUrl={article.memberImageUrl}
                 memberNickname={article.memberNickname}
                 content={article.postContent}

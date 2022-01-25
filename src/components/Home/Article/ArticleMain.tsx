@@ -40,6 +40,7 @@ const StyledMain = styled.div`
 interface MainProps {
     followingUserWhoLikesArticle: null | string;
     likesCount: number;
+    memberUsername: string;
     memberNickname: string;
     memberImageUrl: string;
     content: string;
@@ -54,6 +55,7 @@ interface MainProps {
 const ArticleMain = ({
     followingUserWhoLikesArticle,
     likesCount,
+    memberUsername,
     memberNickname,
     memberImageUrl,
     content,
@@ -114,7 +116,10 @@ const ArticleMain = ({
                     bottom,
                     left,
                 },
+                // 댓글 nickname에 hover 했을 때는 다르게 해야
                 memberNickname: event.currentTarget.innerText, // 이후 체크
+                memberUsername,
+                memberImageUrl,
             }),
         );
     };
@@ -127,32 +132,6 @@ const ArticleMain = ({
     const getFullText = () => setIsFullText(true);
     return (
         <StyledMain>
-            {/* {isHoverModalActivated && (
-                <HoverModal
-                    isFollowing={ishoveredUserFollowing} // hover username 데이터 가져오면 필요 없음
-                    onFollowChange={(a: boolean) =>
-                        setIsHoveredUserFollowing(a)
-                    }
-                    username={hoveredUsername}
-                    modalPosition={modalPositionObj}
-                    onMouseEnter={() => setIsHoverModalActivated(true)}
-                    onMouseLeave={() => setIsHoverModalActivated(false)}
-                    onFollowingModalOn={() =>
-                        setIsFollowingModalActivated(true)
-                    }
-                />
-            )}
-            {ishoveredUserFollowing && isFollowingModalActivated && (
-                <FollowingModal
-                    onUnfollow={() => {
-                        setIsHoveredUserFollowing(false);
-                    }}
-                    onModalOn={() => setIsFollowingModalActivated(true)}
-                    onModalOff={() => setIsFollowingModalActivated(false)}
-                    username={hoveredUsername}
-                    avatarUrl={memberImageUrl} // 원래 FollowingModal 내부에서 username에 따라 받아와야 함.
-                />
-            )} */}
             <div className="article-likeInfo">
                 {followingUserWhoLikesArticle ? (
                     <div>

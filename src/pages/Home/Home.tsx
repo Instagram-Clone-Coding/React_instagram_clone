@@ -39,6 +39,7 @@ const Home = () => {
             activatedModal,
             modalPosition,
             memberNickname,
+            memberUsername,
             memberImageUrl,
             postId,
         },
@@ -76,6 +77,7 @@ const Home = () => {
                             modalActions.startModal({
                                 activatedModal: "hover",
                                 memberNickname,
+                                memberUsername,
                                 modalPosition,
                             }),
                         )
