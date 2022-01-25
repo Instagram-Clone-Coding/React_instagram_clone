@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 import React, { useState } from "react";
+import axios from "axios";
+import ImageSprite from "components/Common/LoginSprite";
 
 interface InputProps {
     isSmallInnerText: boolean;
@@ -61,20 +63,37 @@ const InputContainer = styled.div<InputProps>`
         }
     }
 
-    .isShowPassword {
+    .inputState {
         height: 100%;
         padding-right: 8px;
+        display: flex;
 
+        .stateStyle {
+            margin-left: 8px;
+        }
         .showPassword {
             user-select: none;
         }
     }
 `;
 
+const ValidFlag: Login.ImageProps = {
+    width: 22,
+    height: 22,
+    position: `-225px -333px`,
+};
+
+const InvalidFlag: Login.ImageProps = {
+    width: 22,
+    height: 22,
+    position: `-249px -333px`,
+};
+
 export default function Input(props: Login.InputProps) {
     const { innerText, onUserDataUpdater, type, inputName, value } = props;
 
-    // props.validator 가 있으면, 관리해야함** -> password랑 비슷함
+    const [isFocus, setFocus] = useState(false);
+    const [isValidValue, setValueValid] = useState(false);
     const [isSmallInnerText, setInnerTextSize] = useState(false);
     const [inputType, setInputType] = useState(type);
     const [isShowPassword, setShowPassword] = useState(false);
@@ -82,7 +101,7 @@ export default function Input(props: Login.InputProps) {
         "비밀번호 표시" | "숨기기"
     >("비밀번호 표시");
 
-    const handleText = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const textChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         const userInput = { [name]: value };
         const hasValue = value.length ? true : false;
@@ -91,12 +110,44 @@ export default function Input(props: Login.InputProps) {
         setShowPassword(inputName === "password" && hasValue);
     };
 
-    const handlePasswordBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const passwordVisibleHandler = (
+        event: React.MouseEvent<HTMLButtonElement>,
+    ) => {
         event.preventDefault();
         setInputType(inputType === "password" ? "text" : "password");
         setPasswordMessage(
             inputType === "password" ? "숨기기" : "비밀번호 표시",
         );
+    };
+
+    const valueVaildHandler = (event: React.FocusEvent<HTMLInputElement>) => {
+        if (props.validator === undefined) return;
+        if (event.target.value.length === 0) return;
+        setFocus(false);
+        const validResult = props.validator(event.target.value);
+
+        if (validResult && inputName === "username") {
+            const checkUniqueName = async () => {
+                axios
+                    .post(
+                        `http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/accounts/check?username=${event.target.value}`,
+                    )
+                    .then((response) => {
+                        // if (!response.data.data) {
+                        //     console.log(`이미 존재하는 사용자 이름입니다.`);
+                        // }
+                        setValueValid(() => response.data.data);
+                    })
+                    .catch((error) => {
+                        throw new Error(
+                            `사용자이름 중복검사 API 요청 중에 발생한 에러입니다. 세부에러정보 : ${error}`,
+                        );
+                    });
+            };
+            checkUniqueName();
+        } else {
+            setValueValid(() => validResult);
+        }
     };
 
     return (
@@ -106,19 +157,25 @@ export default function Input(props: Login.InputProps) {
                     <span className="innerText">{innerText}</span>
                     <input
                         className="writingForm"
-                        // onBlur={}
-                        onChange={handleText}
+                        onBlur={valueVaildHandler}
+                        onChange={textChangeHandler}
+                        onFocus={() => setFocus(true)}
                         type={inputType}
                         value={value}
                         name={inputName}
                     />
                 </label>
-                <div className="isShowPassword">
+                <div className="inputState">
+                    {isFocus ? null : props.validator && isValidValue ? (
+                        <ImageSprite {...ValidFlag} className="stateStyle" />
+                    ) : props.validator && value.length ? (
+                        <ImageSprite {...InvalidFlag} className="stateStyle" />
+                    ) : null}
                     {isShowPassword && (
                         <button
-                            className="showPassword"
+                            className="showPassword stateStyle"
                             type="button"
-                            onClick={handlePasswordBtn}
+                            onClick={passwordVisibleHandler}
                         >
                             {passwordMessage}
                         </button>
