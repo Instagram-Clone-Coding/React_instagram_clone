@@ -10,6 +10,7 @@ import useGapText from "hooks/useGapText";
 import useOnView from "hooks/useOnView";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
 import { getExtraArticle } from "app/store/ducks/home/homThunk";
+import { token } from "Routes";
 
 const ArticleCard = styled(Card)`
     margin-bottom: 24px;
@@ -29,14 +30,6 @@ const ArticleCard = styled(Card)`
         }
     }
 `;
-
-const token = {
-    accessToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzA0OTI2MH0.fEZRuRii2e4FkUNH4ko99MXrpD2ONClZJ0jKJxvCI-KDYxE7HnV61Kx3_Awk0jyv0VWEB6F-dMyS7K2GSCD56Q",
-    refreshToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjQyNzQxNDY4fQ.8mHe22G6uu6F_HB-5G8A7voUNLb5oRAuX84xlKWFUZeccsi_Y3DHMh1fC7w3uEG3UATvNc5U9PBPvF6hW1vpZw",
-};
-
 interface ArticleComponentPros {
     article: HomeType.ArticleProps;
     isObserving: boolean;
@@ -62,7 +55,7 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
             try {
                 await dispatch(
                     getExtraArticle({
-                        token: token.accessToken,
+                        token,
                         page: extraArticlesCount + 1,
                     }),
                 );
