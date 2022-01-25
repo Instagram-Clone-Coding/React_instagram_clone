@@ -1,18 +1,23 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
 
 const initialState: ModalType.ModalStateProps = {
     activatedModal: null,
-    memberNickname: undefined,
+    memberUsername: undefined,
     memberImageUrl: undefined,
     modalPosition: undefined,
     postId: undefined,
+    miniProfile: undefined,
 };
 
 const modalSlice = createSlice({
     name: "modal",
     initialState,
     reducers: {
-        startModal: (state, action) => {
+        startModal: (
+            state,
+            action: PayloadAction<ModalType.ModalStateProps>,
+        ) => {
             return {
                 ...state,
                 ...action.payload,
@@ -21,11 +26,20 @@ const modalSlice = createSlice({
         resetModal: (state) => {
             return {
                 activatedModal: null,
-                memberNickname: undefined,
+                memberUsername: undefined,
                 modalPosition: undefined,
                 postId: undefined,
+                miniProfile: undefined,
             };
         },
+    },
+    extraReducers: (build) => {
+        build
+            .addCase(getMiniProfile.pending, (state, payload) => {})
+            .addCase(getMiniProfile.fulfilled, (state, action) => {
+                state.miniProfile = action.payload;
+            })
+            .addCase(getMiniProfile.rejected, (state, action) => {});
     },
 });
 

@@ -90,11 +90,35 @@ declare module ModalType {
         left: number;
     }
 
+    interface MiniProfileProps {
+        blocked: boolean;
+        blocking: boolean;
+        follower: boolean;
+        following: boolean;
+        followingMemberFollow: string;
+        me: boolean;
+        memberFollowersCount: string;
+        memberFollowingsCount: string;
+        memberImage: {
+            imageUrl: string;
+            imageType: string;
+            imageName: string;
+            imageUUID: string;
+        };
+        memberName: string;
+        memberPosts: { postId: number; postImageUrl: string }[]; // string
+        memberPostsCount: number;
+        memberUsername: string;
+        memberWebsite: null | string;
+    }
+
     interface ModalStateProps {
         activatedModal: ActivatedModalType;
         modalPosition?: ModalPositionProps;
+        memberUsername?: string;
         memberNickname?: string;
         memberImageUrl?: string;
         postId?: number;
+        miniProfile?: MiniProfileProps;
     }
 }

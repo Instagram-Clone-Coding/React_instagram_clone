@@ -52,22 +52,3 @@ export const getExtraArticle = createAsyncThunk<
         throw ThunkOptions.rejectWithValue(error);
     }
 });
-
-export const getMiniProfile = createAsyncThunk<
-    any,
-    { token: string; username: string }
->("home/getMiniProfile", async (payload, ThunkOptions) => {
-    const config = {
-        headers: { Authorization: `Bearer ${payload.token}` },
-    };
-    try {
-        const data = await axios.get(
-            `${BASE_URL}/accounts/${payload.username}/mini`,
-            config,
-        );
-        console.log(data);
-        return data;
-    } catch (error) {
-        throw ThunkOptions.rejectWithValue(error);
-    }
-});
