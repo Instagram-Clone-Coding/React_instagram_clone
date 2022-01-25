@@ -30,6 +30,7 @@ const SliderContainer = styled.div`
     margin-left: -35px;
     margin-right: -15px;
     flex-basis: 454px;
+    align-self: center;
     @media (max-width: 875px) {
         display: none;
     }

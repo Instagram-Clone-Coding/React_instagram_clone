@@ -9,6 +9,7 @@ const ContentContainer = styled.main`
     margin: 32px auto 0;
     width: 100%;
     max-width: 935px;
+    flex-grow: 1;
 `;
 
 export function Contents() {

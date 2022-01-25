@@ -5,6 +5,7 @@ import styled from "styled-components";
 const Container = styled.section`
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
 `;
 
 export default function Login() {
