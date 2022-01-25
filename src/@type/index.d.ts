@@ -78,7 +78,6 @@ declare module HomeType {
 
 declare module ModalType {
     type ActivatedModalType =
-        | "hover"
         | "unfollowing"
         | "report"
         | "articleMenu"
@@ -97,8 +96,9 @@ declare module ModalType {
         following: boolean;
         followingMemberFollow: string;
         me: boolean;
-        memberFollowersCount: string;
-        memberFollowingsCount: string;
+        memberFollowersCount: number;
+        memberFollowingsCount: number;
+        memberPostsCount: number;
         memberImage: {
             imageUrl: string;
             imageType: string;
@@ -107,7 +107,6 @@ declare module ModalType {
         };
         memberName: string;
         memberPosts: { postId: number; postImageUrl: string }[]; // string
-        memberPostsCount: number;
         memberUsername: string;
         memberWebsite: null | string;
     }
@@ -115,10 +114,11 @@ declare module ModalType {
     interface ModalStateProps {
         activatedModal: ActivatedModalType;
         modalPosition?: ModalPositionProps;
-        memberUsername?: string;
-        memberNickname?: string;
-        memberImageUrl?: string;
+        memberUsername: string;
+        memberNickname: string;
+        memberImageUrl: string;
         postId?: number;
         miniProfile?: MiniProfileProps;
+        isOnMiniProfile: boolean;
     }
 }
