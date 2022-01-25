@@ -18,21 +18,6 @@ export const getMiniProfile = createAsyncThunk<
             `${BASE_URL}/accounts/${payload.memberUsername}/mini`,
             config,
         );
-        // blocked: false
-        // blocking: false
-        // follower: false
-        // following: true
-        // followingMemberFollow: "dlwlrma2"
-        // me: false // 나인 경우 아래 버튼 링크가 "프로필 편짐"으로 떠야 함
-        // memberFollowersCount: 2
-        // memberFollowingsCount: 0
-        // memberImage: {imageUrl: 'https://bluetifulc-spring-bucket.s3.ap-northeast-2.amazonaws.com/member/base-UUID_base.PNG', imageType: 'PNG', imageName: 'base', imageUUID: 'base-UUID'}
-        // memberName: "이지금"
-        // memberPosts: (3) [{…}, {…}, {…}]
-        // memberPostsCount: 15
-        // memberUsername: "dlwlrma1"
-        // memberWebsite: null
-        console.log(data);
         return data;
     } catch (error) {
         throw ThunkOptions.rejectWithValue(error);

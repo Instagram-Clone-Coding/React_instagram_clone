@@ -4,8 +4,10 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as ThreeDots } from "../../../assets/Svgs/threeDots.svg";
-import { useAppDispatch } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/hooks";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
+import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
+import { token } from "Routes";
 
 const StyledArticleHeader = styled.header`
     height: 60px;
@@ -70,21 +72,35 @@ const ArticleHeader = ({
     postId,
     location,
 }: ArticleHeaderProps) => {
+    const { miniProfile } = useAppSelector(({ modal }) => modal);
     const dispatch = useAppDispatch();
 
     const [isFollowing, setIsFollowing] = useState(false); // followingModal의 isFollowing과 연결할 것
+    const [prevEventText, setPrevEventText] = useState("");
+
+    const fetchMiniProfile = async () => {
+        await dispatch(getMiniProfile({ token, memberUsername }));
+    };
 
     const mouseEnterHandler = (
-        event:
-            | React.MouseEvent<HTMLSpanElement>
-            | React.MouseEvent<HTMLDivElement>,
+        event: React.MouseEvent<HTMLSpanElement | HTMLDivElement>,
     ) => {
         if (!event) return;
+        const {
+            currentTarget: { innerText },
+        } = event;
         const { top, bottom, left } =
             event.currentTarget.getBoundingClientRect();
+        if (innerText !== prevEventText) {
+            dispatch(
+                modalActions.changeHoverModalPosition({ top, bottom, left }),
+            );
+        }
+        if (miniProfile) return dispatch(modalActions.mouseOnHoverModal());
         dispatch(
             modalActions.startModal({
-                activatedModal: "hover",
+                activatedModal: null,
+                isOnMiniProfile: false,
                 modalPosition: {
                     top,
                     bottom,
@@ -92,12 +108,30 @@ const ArticleHeader = ({
                 },
                 memberUsername,
                 memberNickname,
+                memberImageUrl,
             }),
         );
+        fetchMiniProfile();
     };
 
-    const mouseLeaveHandler = () => {
-        dispatch(modalActions.resetModal());
+    const mouseLeaveHandler = (
+        event: React.MouseEvent<HTMLSpanElement | HTMLDivElement>,
+    ) => {
+        if (!event) return;
+        const {
+            currentTarget: { innerText },
+        } = event;
+        // console.log("떨어진 텍스트는", innerText);
+        // console.log("현재 텍스트는", prevEventText);
+        setPrevEventText(innerText);
+        // if (innerText !== prevEventText) {
+        //     console.log("다릅니다");
+        //     setPrevEventText(innerText);
+        //     dispatch(modalActions.resetModal());
+        // } else {
+        dispatch(modalActions.mouseNotOnHoverModal());
+        setTimeout(() => dispatch(modalActions.checkMouseOnHoverModal()), 100);
+        // }
     };
 
     const followHandler = () => {
@@ -140,6 +174,7 @@ const ArticleHeader = ({
                 onClick={() =>
                     dispatch(
                         modalActions.startModal({
+                            isOnMiniProfile: false,
                             activatedModal: "articleMenu",
                             postId: postId,
                             memberUsername,

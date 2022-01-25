@@ -60,11 +60,7 @@ const ArticleMenuModal = ({
                 <div
                     className="articleMenuModal-report"
                     onClick={() =>
-                        dispatch(
-                            modalActions.startModal({
-                                activatedModal: "report",
-                            }),
-                        )
+                        dispatch(modalActions.changeActivatedModal("report"))
                     }
                 >
                     신고
@@ -83,11 +79,7 @@ const ArticleMenuModal = ({
                 </div>
                 <div
                     onClick={() =>
-                        dispatch(
-                            modalActions.startModal({
-                                activatedModal: "shareWith",
-                            }),
-                        )
+                        dispatch(modalActions.changeActivatedModal("shareWith"))
                     }
                 >
                     공유 대상...

@@ -2,8 +2,10 @@ import PopHeart from "components/Common/PopHeart";
 import React, { useState } from "react";
 import styled from "styled-components";
 import Username from "../../Common/Username";
-import { useAppDispatch } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/hooks";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
+import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
+import { token } from "Routes";
 
 const StyledMain = styled.div`
     padding: 0 16px;
@@ -65,13 +67,8 @@ const ArticleMain = ({
     const [isComment1Liked, setIsComment1Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
     const [isComment2Liked, setIsComment2Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
     const [isFullText, setIsFullText] = useState(false);
+    const { miniProfile } = useAppSelector(({ modal }) => modal);
     const dispatch = useAppDispatch();
-    // const [isHoverModalActivated, setIsHoverModalActivated] = useState(false);
-    // const [isFollowingModalActivated, setIsFollowingModalActivated] =
-    //     useState(false);
-    // const [modalPositionObj, setModalPositionObj] = useState<DOMRect>();
-    // const [hoveredUsername, setHoveredUsername] = useState("");
-    // const [ishoveredUserFollowing, setIsHoveredUserFollowing] = useState(false); // hover한 데이터 가져와서 적용
     const isTextLineBreak = content.includes("\n");
     const textArray = isTextLineBreak ? content.split("\n") : [content];
 
@@ -96,21 +93,48 @@ const ArticleMain = ({
         // 백엔드 수행
     };
 
+    // const mouseEnterHandler = (
+    //     event:
+    //         | React.MouseEvent<HTMLSpanElement>
+    //         | React.MouseEvent<HTMLDivElement>,
+    // ) => {
+    //     if (!event) return;
+    //     const { top, bottom, left } =
+    //         event.currentTarget.getBoundingClientRect();
+    //     dispatch(
+    //         modalActions.startModal({
+    //             activatedModal: null,
+    //             isOnMiniProfile: true,
+    //             modalPosition: {
+    //                 top,
+    //                 bottom,
+    //                 left,
+    //             },
+    //             // 댓글 nickname에 hover 했을 때는 다르게 해야
+    //             memberNickname: event.currentTarget.innerText, // 이후 체크
+    //             memberUsername, // 댓글 username이 제공될 때
+    //             memberImageUrl,
+    //         }),
+    //     );
+    // };
+
+    const fetchMiniProfile = async () => {
+        await dispatch(getMiniProfile({ token, memberUsername }));
+    };
+
     const mouseEnterHandler = (
         event:
             | React.MouseEvent<HTMLSpanElement>
             | React.MouseEvent<HTMLDivElement>,
     ) => {
-        // setHoveredUsername(event.currentTarget.innerText);
-        // setModalPositionObj(event?.currentTarget.getBoundingClientRect());
-        // setIsHoverModalActivated(true);
-
         if (!event) return;
+        if (miniProfile) return dispatch(modalActions.mouseOnHoverModal());
         const { top, bottom, left } =
             event.currentTarget.getBoundingClientRect();
         dispatch(
             modalActions.startModal({
-                activatedModal: "hover",
+                activatedModal: null,
+                isOnMiniProfile: true,
                 modalPosition: {
                     top,
                     bottom,
@@ -118,15 +142,16 @@ const ArticleMain = ({
                 },
                 // 댓글 nickname에 hover 했을 때는 다르게 해야
                 memberNickname: event.currentTarget.innerText, // 이후 체크
-                memberUsername,
+                memberUsername, // 댓글 username이 제공될 때
                 memberImageUrl,
             }),
         );
+        fetchMiniProfile();
     };
 
     const mouseLeaveHandler = () => {
-        // setIsHoverModalActivated(false);
-        dispatch(modalActions.resetModal());
+        dispatch(modalActions.mouseNotOnHoverModal());
+        setTimeout(() => dispatch(modalActions.checkMouseOnHoverModal()), 100);
     };
 
     const getFullText = () => setIsFullText(true);

@@ -35,26 +35,18 @@ const Layout = styled.div`
 const Home = () => {
     const {
         home: { isCopiedNotification },
-        modal: {
-            activatedModal,
-            modalPosition,
-            memberNickname,
-            memberUsername,
-            memberImageUrl,
-            postId,
-        },
+        modal: { activatedModal, memberNickname, postId, miniProfile },
     } = useAppSelector((state) => state);
 
     const dispatch = useAppDispatch();
 
-    // const mouseEnterHandler = (
-    //     event:
-    //         | React.MouseEvent<HTMLSpanElement>
-    //         | React.MouseEvent<HTMLDivElement>,
-    // ) => {
-    //     setModalPositionObj(event?.currentTarget.getBoundingClientRect());
-    //     setIsHoverModalActivated(true);
-    // };
+    const hoverModalMouseEnterHandler = () => {
+        dispatch(modalActions.mouseOnHoverModal());
+    };
+    const hoverModalMouseLeaveHandler = () => {
+        dispatch(modalActions.mouseNotOnHoverModal());
+        setTimeout(() => dispatch(modalActions.checkMouseOnHoverModal()), 500);
+    };
 
     return (
         <Layout>
@@ -66,64 +58,27 @@ const Home = () => {
             {isCopiedNotification && (
                 <Notification text="링크를 클립보드에 복사했습니다." />
             )}
-            {activatedModal === "hover" && (
+            {miniProfile && (
                 <HoverModal
-                    // isFollowing={isFollowing}
-                    // onFollowChange={(a: boolean) => setIsFollowing(a)}
-                    // username={memberNickname}
-                    // modalPosition={modalPositionObj}
-                    onMouseEnter={() =>
-                        dispatch(
-                            modalActions.startModal({
-                                activatedModal: "hover",
-                                memberNickname,
-                                memberUsername,
-                                modalPosition,
-                            }),
-                        )
-                    }
-                    onMouseLeave={() => dispatch(modalActions.resetModal())}
-                    onFollowingModalOn={() =>
-                        dispatch(
-                            modalActions.startModal({
-                                activatedModal: "unfollowing",
-                                memberImageUrl,
-                            }),
-                        )
-                    }
+                    onMouseEnter={hoverModalMouseEnterHandler}
+                    onMouseLeave={hoverModalMouseLeaveHandler}
+                    miniProfile={miniProfile}
                 />
             )}
-            {activatedModal === "unfollowing" &&
-                memberNickname &&
-                memberImageUrl && (
-                    <FollowingModal
-                        // onUnfollow={() => setIsFollowing(false)}
-                        onModalOn={() =>
-                            dispatch(
-                                modalActions.startModal({
-                                    activatedModal: "unfollowing",
-                                    memberNickname,
-                                    memberImageUrl,
-                                }),
-                            )
-                        }
-                        onModalOff={() => dispatch(modalActions.resetModal())}
-                        username={memberNickname}
-                        avatarUrl={memberImageUrl}
-                    />
-                )}
+            {activatedModal === "unfollowing" && (
+                <FollowingModal
+                    onModalOn={() => {
+                        dispatch(modalActions.maintainModalon("unfollowing"));
+                    }}
+                    onModalOff={() => dispatch(modalActions.resetModal())}
+                />
+            )}
             {activatedModal === "articleMenu" && memberNickname && postId && (
                 <ArticleMenuModal
                     // isFollowing={isFollowing} 팔로우한 사람의 게시물만 보니까 당연히 처음엔 true
                     // onUnfollow={unfollowHandler}
                     onModalOn={() =>
-                        dispatch(
-                            modalActions.startModal({
-                                activatedModal: "articleMenu",
-                                memberNickname,
-                                postId,
-                            }),
-                        )
+                        dispatch(modalActions.maintainModalon("articleMenu"))
                     }
                     onModalOff={() => dispatch(modalActions.resetModal())}
                 />
@@ -132,11 +87,7 @@ const Home = () => {
             {activatedModal === "report" && (
                 <ReportModal
                     onModalOn={() =>
-                        dispatch(
-                            modalActions.startModal({
-                                activatedModal: "report",
-                            }),
-                        )
+                        dispatch(modalActions.maintainModalon("report"))
                     }
                     onModalOff={() => dispatch(modalActions.resetModal())}
                 />
@@ -144,11 +95,7 @@ const Home = () => {
             {activatedModal === "shareWith" && (
                 <ShareWithModal
                     onModalOn={() =>
-                        dispatch(
-                            modalActions.startModal({
-                                activatedModal: "shareWith",
-                            }),
-                        )
+                        dispatch(modalActions.maintainModalon("shareWith"))
                     }
                     onModalOff={() => dispatch(modalActions.resetModal())}
                 />
