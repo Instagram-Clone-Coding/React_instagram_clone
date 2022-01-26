@@ -222,14 +222,13 @@ HoverModalProps) => {
                                 </Link>
                                 <div>
                                     <Card
-                                        onClick={() => {
-                                            console.log("clicked");
+                                        onClick={() =>
                                             dispatch(
                                                 modalActions.changeActivatedModal(
                                                     "unfollowing",
                                                 ),
-                                            );
-                                        }}
+                                            )
+                                        }
                                     >
                                         팔로잉
                                     </Card>

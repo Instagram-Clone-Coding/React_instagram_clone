@@ -16,7 +16,6 @@ const HomeSection = () => {
             await dispatch(getHomeArticles({ token }));
         };
         fetchData();
-        console.log("effect is occur");
     }, [dispatch]);
 
     return (

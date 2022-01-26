@@ -40,7 +40,6 @@ export const getExtraArticle = createAsyncThunk<
                 data: { content: data, empty },
             },
         } = await axios.get(`${BASE_URL}/posts?page=${payload.page}`, config); // 단건 조회 api 추가
-        console.log(empty);
         if (empty) {
             throw ThunkOptions.rejectWithValue(
                 "게시물이 더 이상 존재하지 않습니다.",

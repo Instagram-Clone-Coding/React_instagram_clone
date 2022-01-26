@@ -51,7 +51,6 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
 
     useEffect(() => {
         const dispatchExtraArticle = async () => {
-            console.log("start");
             try {
                 await dispatch(
                     getExtraArticle({
