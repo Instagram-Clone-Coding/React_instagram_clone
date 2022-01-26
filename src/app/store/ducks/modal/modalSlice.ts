@@ -56,16 +56,7 @@ const modalSlice = createSlice({
                 !state.isOnMiniProfile &&
                 state.activatedModal !== "unfollowing" // hover에서 팔로잉 클릭해서 언팔로우 모달이 켜질 경우 유지
             ) {
-                return {
-                    activatedModal: null,
-                    memberUsername: "",
-                    memberImageUrl: "",
-                    memberNickname: "",
-                    modalPosition: undefined,
-                    postId: undefined,
-                    miniProfile: undefined,
-                    isOnMiniProfile: false,
-                };
+                return initialState;
             } else {
                 return state;
             }
