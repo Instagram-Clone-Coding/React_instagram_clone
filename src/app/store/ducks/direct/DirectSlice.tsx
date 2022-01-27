@@ -6,7 +6,7 @@ export interface InitialStateType {
     modal: Direct.modalType;
     view: Direct.currentSectionViewType;
     selectedChatItem: number | null;
-    selectedNewChatUser?: string | null;
+    selectedNewChatUser: string | null;
 }
 
 
