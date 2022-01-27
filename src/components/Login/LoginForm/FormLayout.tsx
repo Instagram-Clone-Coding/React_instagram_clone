@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import ImageSprite from "components/Common/LoginSprite";
+import ImageSprite from "components/Common/ImageSprite";
 import { Link } from "react-router-dom";
 import Line from "components/Common/Line";
 import FacebookLogin from "components/Common/FacebookLogin";
 import LoginFormAndButton from "components/Login/LoginForm/FormAndButton";
 import { useAppSelector } from "app/store/Hooks";
+import sprite from "assets/Images/loginPageSprite.png";
 
 const FormContainer = styled.div`
     white-space: pre-wrap; // 개행처리
@@ -49,10 +50,11 @@ const FormContainer = styled.div`
     }
 `;
 
-const instagramImage: Login.ImageProps = {
+const instagramImage: Common.ImageProps = {
     width: 175,
     height: 51,
     position: `0 -130px`,
+    url: sprite,
 };
 
 export default function FormLayout() {

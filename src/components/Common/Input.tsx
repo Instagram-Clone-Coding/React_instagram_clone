@@ -1,7 +1,8 @@
 import styled, { css } from "styled-components";
 import React, { useState } from "react";
 import axios from "axios";
-import ImageSprite from "components/Common/LoginSprite";
+import ImageSprite from "components/Common/ImageSprite";
+import sprite from "assets/Images/loginPageSprite.png";
 
 interface InputProps {
     isSmallInnerText: boolean;
@@ -77,16 +78,18 @@ const InputContainer = styled.div<InputProps>`
     }
 `;
 
-const ValidFlag: Login.ImageProps = {
+const ValidFlag: Common.ImageProps = {
     width: 22,
     height: 22,
     position: `-225px -333px`,
+    url: sprite,
 };
 
-const InvalidFlag: Login.ImageProps = {
+const InvalidFlag: Common.ImageProps = {
     width: 22,
     height: 22,
     position: `-249px -333px`,
+    url: sprite,
 };
 
 export default function Input(props: Login.InputProps) {

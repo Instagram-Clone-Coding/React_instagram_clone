@@ -23,11 +23,7 @@ declare module Login {
         url?: string;
     }
 
-    interface ImageProps {
-        width: number;
-        height: number;
-        position: string;
-    }
+
 
     interface InputProps {
         inputName: "email" | "name" | "username" | "password" | "id";
@@ -116,5 +112,14 @@ declare module HomeType {
         } | null;
         isCopiedNotification: boolean;
         homeModal: homeModalProps;
+    }
+}
+
+declare module Common {
+    interface ImageProps {
+        width: number;
+        height: number;
+        position: string;
+        url:string;
     }
 }

@@ -1,6 +1,7 @@
-import ImageSprite from "components/Common/LoginSprite";
+import ImageSprite from "components/Common/ImageSprite";
 import styled from "styled-components";
 import Button from "styles/UI/Button/Button";
+import sprite from "assets/Images/loginPageSprite.png";
 
 const FacebookButtonContainer = styled.div`
     margin: 8px 40px;
@@ -18,16 +19,18 @@ const FacebookButtonContainer = styled.div`
     }
 `;
 
-const backgroundWhiteFacebook: Login.ImageProps = {
+const backgroundWhiteFacebook: Common.ImageProps = {
     width: 16,
     height: 16,
     position: `-414px -259px`,
+    url:sprite
 };
 
-const backgroundBlueFacebook: Login.ImageProps = {
+const backgroundBlueFacebook: Common.ImageProps = {
     width: 16,
     height: 16,
     position: `-414px -300px`,
+    url:sprite
 };
 
 export default function FacebookLogin({ bgColor, color }: UI.ButtonProps) {
@@ -36,15 +39,11 @@ export default function FacebookLogin({ bgColor, color }: UI.ButtonProps) {
             <Button bgColor={bgColor} color={color}>
                 {bgColor ? (
                     <ImageSprite
-                        width={backgroundWhiteFacebook.width}
-                        height={backgroundWhiteFacebook.height}
-                        position={backgroundWhiteFacebook.position}
+                        {...backgroundWhiteFacebook}
                     />
                 ) : (
                     <ImageSprite
-                        width={backgroundBlueFacebook.width}
-                        height={backgroundBlueFacebook.height}
-                        position={backgroundBlueFacebook.position}
+                        {...backgroundBlueFacebook}
                     />
                 )}
                 Facebook으로 로그인

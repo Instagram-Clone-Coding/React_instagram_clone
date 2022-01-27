@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import FacebookLogin from "components/Common/FacebookLogin";
 import Line from "components/Common/Line";
-import ImageSprite from "components/Common/LoginSprite";
-import InputAndButton from "components/Signup/InputAndButton";
+import InputAndButton from "./InputAndButton";
+import ImageSprite from "components/Common/ImageSprite";
+import sprite from "assets/Images/loginPageSprite.png";
 
 const SignUpFormContainer = styled.div`
     display: flex;
@@ -28,10 +29,11 @@ const SignUpFormContainer = styled.div`
     }
 `;
 
-const instagramImage: Login.ImageProps = {
+const instagramImage: Common.ImageProps = {
     width: 175,
     height: 51,
     position: `0 -130px`,
+    url: sprite,
 };
 
 export default function SignUpForm() {
