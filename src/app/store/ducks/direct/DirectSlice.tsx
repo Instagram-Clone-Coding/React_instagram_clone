@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 
-type modalType = "deleteChat" | "block" | "report" | "newChat" | "convertAccount" | null;
 
 export interface InitialStateType {
-    modal: modalType;
+    modal: Direct.modalType;
     view: Direct.currentSectionViewType;
     selectedChatItem: number | null;
     selectedNewChatUser?: string | null;
@@ -47,5 +46,12 @@ const directSlice = createSlice({
 });
 ;
 
-export const { openModal, closeModal, selectView, selectChatItem, selectNewChatUser ,unSelectNewChatUser} = directSlice.actions;
+export const {
+    openModal,
+    closeModal,
+    selectView,
+    selectChatItem,
+    selectNewChatUser,
+    unSelectNewChatUser,
+} = directSlice.actions;
 export const directReducer = directSlice.reducer;

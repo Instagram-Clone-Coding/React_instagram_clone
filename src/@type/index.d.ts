@@ -13,8 +13,8 @@ declare module Direct {
         isImLast: boolean;
         isRead:boolean;
     }
-
-    type currentSectionViewType = "inbox" | "detail" | "chat"
+    type modalType = "deleteChat" | "block" | "report" | "newChat" | "convertAccount" |  null;
+    type currentSectionViewType = "inbox" | "detail" | "chat" | "requests" | "requestsChat"
 
 }
 

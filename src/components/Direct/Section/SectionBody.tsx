@@ -4,6 +4,8 @@ import ChatBar from "components/Direct/Section/ChatBar";
 import ChatSection from "components/Direct/Section/ChatSection";
 import DetailSection from "./DetailSection";
 import { useAppDispatch, useAppSelector } from "../../../app/store/hooks";
+import RequestsSection from "./requestsSection";
+import RequestsWishContainer from "./RequestsWishContainer";
 
 
 interface SectionBodyProps {
@@ -21,16 +23,28 @@ const SectionBodyContainer = styled.section`
 
 
 const SectionBody = ({ message, setMessage }: SectionBodyProps) => {
-    const dispatch = useAppDispatch();
     const { view } = useAppSelector((state => state.direct));
-    return <SectionBodyContainer>
-        {
-            view === "detail" ? <DetailSection /> :
-                <>
+    const viewRender = () => {
+        switch (view) {
+            case "detail":
+                return <DetailSection />;
+            case "chat":
+                return <>
                     <ChatSection />
                     <ChatBar message={message} setMessage={setMessage} />
-                </>
+                </>;
+            case "requestsChat":
+                return <>
+                    <ChatSection />
+                    <RequestsWishContainer/>
+                </>;
+            default:
+                break;
         }
+    };
+
+    return <SectionBodyContainer>
+        {viewRender()}
     </SectionBodyContainer>;
 };
 

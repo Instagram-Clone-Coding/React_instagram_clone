@@ -14,9 +14,8 @@ const ChatListItemContainer = styled.a<ChatListItemContainerType>`
   padding: 8px 20px;
   align-items: center;
   cursor: pointer;
-  background-color: ${props => props.isSelected ? "rgb(239,239,239)" : "#fff"};
+  background-color: ${props => props.isSelected ? "rgb(239,239,239)" : "transparent"};
 
-  
 
   .user-image {
     width: 56px;
@@ -45,6 +44,9 @@ const ChatListItemContainer = styled.a<ChatListItemContainerType>`
         overflow: hidden;
         text-overflow: ellipsis;
         font-weight: ${props => props.isRead ? 400 : 600};
+        @media (max-width: 936px) {
+          max-width: 120px;
+        }
       }
 
       .last-date-container {
@@ -67,14 +69,19 @@ const ChatListItemContainer = styled.a<ChatListItemContainerType>`
 const ChatListItem = ({ id, lastChatDate, avatarImg, memberName, lastMessage, isRead }: Direct.ChatItem) => {
     const calculatedTime = useGapText(lastChatDate);
     const dispatch = useAppDispatch();
+    const { view } = useAppSelector(state => state.direct);
     const { selectedChatItem } = useAppSelector((state => state.direct));
 
     const chatListClickHandler = () => {
         // 클릭한거 읽은거였으면 읽음 처리해주는 로직 필요
 
         dispatch(selectChatItem(id));
-        dispatch(selectView("chat"))
-    }
+        if (view === "requests" || view === "requestsChat") {
+            dispatch(selectView("requestsChat"));
+        } else {
+            dispatch(selectView("chat"));
+        }
+    };
 
     return (
         <ChatListItemContainer isRead={isRead} isSelected={selectedChatItem === id} onClick={chatListClickHandler}>
