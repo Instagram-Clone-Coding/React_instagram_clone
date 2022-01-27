@@ -1,12 +1,12 @@
 import styled, { css } from "styled-components";
-// import { imageProps, ImgSprite } from "components/Common/Sprite";
 
 import { Link, useHistory } from "react-router-dom";
 import React, { useRef, MouseEvent } from "react";
 import Button from "styles/UI/Button/Button";
 
 import { useAppDispatch } from "app/store/hooks";
-import ImageSprite from "../Common/LoginSprite";
+import ImageSprite from "components/Common/ImageSprite";
+import sprite from "assets/Images/loginPageSprite.png";
 
 const callSignInAPI = (
     e: MouseEvent<HTMLButtonElement>,
@@ -29,9 +29,7 @@ export function Forms() {
     return (
         <FormContainer>
             <ImageSprite
-                width={test.width}
-                height={test.height}
-                position={test.position}
+                {...test}
                 className="logo"
             />
             <InputContainer>
@@ -63,10 +61,11 @@ interface textProps {
 }
 
 // Props
-const test: Login.ImageProps = {
+const test: Common.ImageProps = {
     width: 175,
     height: 51,
     position: `0 -130px`,
+    url:sprite
 };
 
 const placeholder = {
@@ -74,10 +73,11 @@ const placeholder = {
     password: "비밀번호",
 };
 
-const facebook: Login.ImageProps = {
+const facebook: Common.ImageProps = {
     width: 16,
     height: 16,
     position: `-414px -259px`,
+    url:sprite
 };
 
 // component
@@ -132,9 +132,7 @@ function Facebook() {
         <FacebookStyle>
             <button>
                 <ImageSprite
-                    width={facebook.width}
-                    height={facebook.height}
-                    position={facebook.position}
+                    {...facebook}
                 />
                 <span>Facebook으로 로그인</span>
             </button>

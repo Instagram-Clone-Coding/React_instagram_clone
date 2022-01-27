@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import ImageSprite from "components/Common/LoginSprite";
+import ImageSprite from "components/Common/ImageSprite";
 import { Link } from "react-router-dom";
 import Line from "components/Common/Line";
 import FacebookLogin from "../../Common/FacebookLogin";
 import LoginFormAndButton from "./FormAndButton";
+import sprite from "assets/Images/loginPageSprite.png";
 
 const FormContainer = styled.div`
     .logo {
@@ -39,19 +40,19 @@ const FormContainer = styled.div`
     }
 `;
 
-const instagramImage: Login.ImageProps = {
+const instagramImage: Common.ImageProps = {
     width: 175,
     height: 51,
     position: `0 -130px`,
+    url:sprite
+
 };
 
 export default function FormLayout() {
     return (
         <FormContainer>
             <ImageSprite
-                width={instagramImage.width}
-                height={instagramImage.height}
-                position={instagramImage.position}
+                {...instagramImage}
                 className="logo"
             />
             <div className="inputContainer">
