@@ -1,5 +1,5 @@
 import { modalActions } from "app/store/ducks/modal/modalSlice";
-import { useAppDispatch } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/hooks";
 import useCopy from "hooks/useCopy";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -31,8 +31,6 @@ const ArticleMenuModalInner = styled.div`
 `;
 
 interface ArticleMenuModalProps {
-    // isFollowing: boolean;
-    // onUnfollow: () => void;
     onModalOn: () => void;
     onModalOff: () => void;
 }
@@ -41,14 +39,14 @@ const DUMMY_P_ID = "CWWCI-eINvr"; // 게시물 id
 
 const DUMMY_BASE_URL = "https://www.instagram.com"; // 원래 root url: window.location.href
 
-const ArticleMenuModal = ({
-    // isFollowing,
-    // onUnfollow,
-    onModalOn,
-    onModalOff,
-}: ArticleMenuModalProps) => {
+const ArticleMenuModal = ({ onModalOn, onModalOff }: ArticleMenuModalProps) => {
+    const { isFollowing } = useAppSelector(({ modal }) => modal);
     const dispatch = useAppDispatch();
     const copyHandler = useCopy(DUMMY_BASE_URL + "/p/" + DUMMY_P_ID);
+
+    const unFollowClickHandler = () => {
+        dispatch(modalActions.changeActivatedModal("unfollowing"));
+    };
 
     return (
         <ModalCard
@@ -65,14 +63,14 @@ const ArticleMenuModal = ({
                 >
                     신고
                 </div>
-                {/* {isFollowing && (
+                {isFollowing && (
                     <div
                         className="articleMenuModal-unfollow"
-                        onClick={onUnfollow}
+                        onClick={unFollowClickHandler}
                     >
                         팔로우 취소
                     </div>
-                )} */}
+                )}
                 <div>
                     <Link to={`/`}>게시물로 이동</Link>
                     {/* p, tv 등 다양해서 일단 url은 보류 */}

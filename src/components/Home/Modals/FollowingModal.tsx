@@ -40,18 +40,13 @@ const FollowingModalInner = styled.div`
 `;
 
 interface FollowingModalProps {
-    // onUnfollow: () => void;
     onModalOn: () => void;
     onModalOff: () => void;
 }
 
 const MODAL_CIRCLE_SIZE = 90 / 64;
 
-const FollowingModal = ({
-    // onUnfollow,
-    onModalOn,
-    onModalOff,
-}: FollowingModalProps) => {
+const FollowingModal = ({ onModalOn, onModalOff }: FollowingModalProps) => {
     const { memberNickname, memberUsername, memberImageUrl } = useAppSelector(
         ({ modal }) => modal,
     );
@@ -62,6 +57,7 @@ const FollowingModal = ({
             await dispatch(postUnfollow({ token, username: memberUsername }));
         };
         unFollowUser();
+        onModalOff();
     };
 
     return (

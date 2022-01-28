@@ -126,6 +126,7 @@ const ArticleHeader = ({
                 memberUsername,
                 memberNickname,
                 memberImageUrl,
+                isFollowing,
             }),
         );
         fetchMiniProfile({
@@ -201,6 +202,7 @@ const ArticleHeader = ({
                             memberUsername,
                             memberNickname,
                             memberImageUrl,
+                            isFollowing,
                         }),
                     )
                 }

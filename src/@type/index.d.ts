@@ -129,6 +129,7 @@ declare module ModalType {
         memberImageUrl: string;
         postId?: number;
         miniProfile?: MiniProfileStateProps;
+        isFollowing?: boolean;
         isOnMiniProfile: boolean;
     }
 }
