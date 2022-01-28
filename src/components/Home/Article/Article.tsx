@@ -37,7 +37,7 @@ const ArticleCard = styled(Card)`
 
 const token = {
     accessToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0Mjc3MzA0MH0.jqP4Dxxz2km0y1UloLINEH1nUP3iWau0YsU6gwBCHBMlGQ0BrDlGz9rJNPRvbgR51yuWasFfM5nwbr2lDGcnoQ",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzM5MjIyMn0.hmbdXM_VNZNHvzp1Byts6GHQxhvvOHADwYF7KhNGFBVUIDQx1CZpUQYVYUD5VvAgmRMz9sdDO0qJYn_pPlAV5Q",
     refreshToken:
         "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjQyNzQxNDY4fQ.8mHe22G6uu6F_HB-5G8A7voUNLb5oRAuX84xlKWFUZeccsi_Y3DHMh1fC7w3uEG3UATvNc5U9PBPvF6hW1vpZw",
 };
@@ -66,7 +66,6 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
 
     useEffect(() => {
         const dispatchExtraArticle = async () => {
-            console.log("start");
             try {
                 await dispatch(
                     getExtraArticle({
@@ -84,26 +83,37 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
     }, [isObserving, isVisible, dispatch]);
 
     const dispatchPostLike = async () => {
-        await dispatch(
-            postLike({ token: token.accessToken, postId: article.postId }),
-        );
+        try {
+            await dispatch(
+                postLike({ token: token.accessToken, postId: article.postId }),
+            ).unwrap();
+        } catch (error) {
+            setIsliked(false);
+            setLikesCount((prev) => prev - 1);
+        }
     };
 
     const dispatchDeleteLike = async () => {
-        await dispatch(
-            deleteLike({
-                token: token.accessToken,
-                postId: article.postId,
-            }),
-        );
+        try {
+            await dispatch(
+                deleteLike({
+                    token: token.accessToken,
+                    postId: article.postId,
+                }),
+            ).unwrap();
+        } catch (error) {
+            setIsliked(true);
+            setLikesCount((prev) => prev + 1);
+        }
     };
 
     const toggleLikeHandler = (): void => {
-        setIsliked((prev: boolean) => !prev);
         if (!isLiked) {
+            setIsliked(true);
             setLikesCount((prev) => prev + 1);
             dispatchPostLike();
         } else {
+            setIsliked(false);
             setLikesCount((prev) => prev - 1);
             dispatchDeleteLike();
         }
