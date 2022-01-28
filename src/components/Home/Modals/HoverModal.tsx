@@ -128,7 +128,6 @@ const HoverModal = ({
     miniProfile,
 }: // onFollowingModalOn,
 HoverModalProps) => {
-    const { modalPosition } = useAppSelector(({ modal }) => modal);
     const dispatch = useAppDispatch();
 
     const postsNumSummary = useNumberSummary(
@@ -153,7 +152,7 @@ HoverModalProps) => {
     return (
         <ModalCard
             modalType="positioned"
-            modalPosition={modalPosition}
+            modalPosition={miniProfile.modalPosition}
             onModalOn={onMouseEnter}
             onModalOff={onMouseLeave}
         >

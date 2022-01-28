@@ -6,7 +6,11 @@ const BASE_URL =
 
 export const getMiniProfile = createAsyncThunk<
     ModalType.MiniProfileStateProps,
-    { token: string; memberUsername: string }
+    {
+        token: string;
+        memberUsername: string;
+        modalPosition: ModalType.ModalPositionProps;
+    }
 >("modal/getMiniProfile", async (payload, ThunkOptions) => {
     const config = {
         headers: { Authorization: `Bearer ${payload.token}` },
@@ -18,7 +22,11 @@ export const getMiniProfile = createAsyncThunk<
             `${BASE_URL}/accounts/${payload.memberUsername}/mini`,
             config,
         );
-        return { ...data, isLoading: false };
+        return {
+            ...data,
+            isLoading: false,
+            modalPosition: payload.modalPosition,
+        };
     } catch (error) {
         throw ThunkOptions.rejectWithValue(error);
     }

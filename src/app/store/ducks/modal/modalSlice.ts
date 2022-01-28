@@ -7,7 +7,6 @@ const initialState: ModalType.ModalStateProps = {
     memberUsername: "",
     memberImageUrl: "",
     memberNickname: "",
-    modalPosition: undefined,
     postId: undefined,
     miniProfile: undefined,
     isOnMiniProfile: false,
@@ -66,7 +65,9 @@ const modalSlice = createSlice({
             state,
             action: PayloadAction<ModalType.ModalPositionProps>,
         ) => {
-            state.modalPosition = action.payload;
+            if (state.miniProfile) {
+                state.miniProfile.modalPosition = action.payload;
+            }
         },
     },
     extraReducers: (build) => {

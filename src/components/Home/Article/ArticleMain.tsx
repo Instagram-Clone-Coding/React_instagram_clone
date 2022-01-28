@@ -93,33 +93,18 @@ const ArticleMain = ({
         // 백엔드 수행
     };
 
-    // const mouseEnterHandler = (
-    //     event:
-    //         | React.MouseEvent<HTMLSpanElement>
-    //         | React.MouseEvent<HTMLDivElement>,
-    // ) => {
-    //     if (!event) return;
-    //     const { top, bottom, left } =
-    //         event.currentTarget.getBoundingClientRect();
-    //     dispatch(
-    //         modalActions.startModal({
-    //             activatedModal: null,
-    //             isOnMiniProfile: true,
-    //             modalPosition: {
-    //                 top,
-    //                 bottom,
-    //                 left,
-    //             },
-    //             // 댓글 nickname에 hover 했을 때는 다르게 해야
-    //             memberNickname: event.currentTarget.innerText, // 이후 체크
-    //             memberUsername, // 댓글 username이 제공될 때
-    //             memberImageUrl,
-    //         }),
-    //     );
-    // };
-
-    const fetchMiniProfile = async () => {
-        await dispatch(getMiniProfile({ token, memberUsername }));
+    const fetchMiniProfile = async ({
+        top,
+        bottom,
+        left,
+    }: ModalType.ModalPositionProps) => {
+        await dispatch(
+            getMiniProfile({
+                token,
+                memberUsername,
+                modalPosition: { top, bottom, left },
+            }),
+        );
     };
 
     const mouseEnterHandler = (
@@ -135,18 +120,17 @@ const ArticleMain = ({
             modalActions.startModal({
                 activatedModal: null,
                 isOnMiniProfile: true,
-                modalPosition: {
-                    top,
-                    bottom,
-                    left,
-                },
                 // 댓글 nickname에 hover 했을 때는 다르게 해야
                 memberNickname: event.currentTarget.innerText, // 이후 체크
                 memberUsername, // 댓글 username이 제공될 때
                 memberImageUrl,
             }),
         );
-        fetchMiniProfile();
+        fetchMiniProfile({
+            top,
+            bottom,
+            left,
+        });
     };
 
     const mouseLeaveHandler = () => {

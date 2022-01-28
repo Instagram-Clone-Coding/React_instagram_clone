@@ -90,8 +90,18 @@ const ArticleHeader = ({
     // const [isFollowing, setIsFollowing] = useState(false); // followingModal의 isFollowing과 연결할 것
     const [prevEventText, setPrevEventText] = useState("");
 
-    const fetchMiniProfile = async () => {
-        await dispatch(getMiniProfile({ token, memberUsername }));
+    const fetchMiniProfile = async ({
+        top,
+        bottom,
+        left,
+    }: ModalType.ModalPositionProps) => {
+        await dispatch(
+            getMiniProfile({
+                token,
+                memberUsername,
+                modalPosition: { top, bottom, left },
+            }),
+        );
     };
 
     const mouseEnterHandler = (
@@ -113,17 +123,16 @@ const ArticleHeader = ({
             modalActions.startModal({
                 activatedModal: null,
                 isOnMiniProfile: false,
-                modalPosition: {
-                    top,
-                    bottom,
-                    left,
-                },
                 memberUsername,
                 memberNickname,
                 memberImageUrl,
             }),
         );
-        fetchMiniProfile();
+        fetchMiniProfile({
+            top,
+            bottom,
+            left,
+        });
     };
 
     const mouseLeaveHandler = (

@@ -119,11 +119,11 @@ declare module ModalType {
 
     interface MiniProfileStateProps extends MiniProfileProps {
         isLoading: boolean;
+        modalPosition: ModalPositionProps;
     }
 
     interface ModalStateProps {
         activatedModal: ActivatedModalType;
-        modalPosition?: ModalPositionProps;
         memberUsername: string;
         memberNickname: string;
         memberImageUrl: string;
