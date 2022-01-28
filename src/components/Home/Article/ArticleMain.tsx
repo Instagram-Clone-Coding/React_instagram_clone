@@ -122,8 +122,11 @@ const ArticleMain = ({
                 isOnMiniProfile: true,
                 // 댓글 nickname에 hover 했을 때는 다르게 해야
                 memberNickname: event.currentTarget.innerText, // 이후 체크
-                memberUsername, // 댓글 username이 제공될 때
+                memberUsername,
                 memberImageUrl,
+                // 댓글 username이 제공될 때 예시
+                // memberUsername:comments.memberUsername,
+                // memberImageUrl:comments.imageUrl,
             }),
         );
         fetchMiniProfile({
