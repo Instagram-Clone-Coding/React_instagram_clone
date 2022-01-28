@@ -571,17 +571,9 @@ const homeSlice = createSlice({
                 state.isExtraArticleLoading = false;
                 state.isAsyncError = true;
             })
-            .addCase(postUnfollow.pending, (state, action) => {
-                state.articles.forEach((article) => {
-                    if (article.memberUsername === action.meta.arg.username) {
-                        // article.followLoading = true;
-                    }
-                });
-            })
             .addCase(postUnfollow.fulfilled, (state, action) => {
                 state.articles.forEach((article) => {
                     if (article.memberUsername === action.meta.arg.username) {
-                        // article.followLoading = false;
                         article.isFollowing = false;
                     }
                 });
@@ -589,7 +581,6 @@ const homeSlice = createSlice({
             .addCase(postUnfollow.rejected, (state, action) => {
                 state.articles.forEach((article) => {
                     if (article.memberUsername === action.meta.arg.username) {
-                        // article.followLoading = false;
                         article.isFollowing = true;
                     }
                 });
