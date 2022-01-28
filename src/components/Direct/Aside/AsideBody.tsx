@@ -11,7 +11,7 @@ export const dummyChatList: Array<Direct.ChatItem> = [
         id: 0,
         avatarImg:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-        memberUsername: "dlwlrma1",
+        memberUsername: "dlwlrma",
         "memberName": "이지금",
         lastChatDate: "2021.11.22 21:00:00",
         lastMessage: "모행",
@@ -22,7 +22,7 @@ export const dummyChatList: Array<Direct.ChatItem> = [
         id: 1,
         avatarImg:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-        memberUsername: "dlwl2rma",
+        memberUsername: "dlwlrma",
         "memberName": "이지금",
         lastChatDate: "2021.11.10 21:00:00",
         lastMessage: "마지막으로 ",
@@ -33,7 +33,7 @@ export const dummyChatList: Array<Direct.ChatItem> = [
         id: 2,
         avatarImg:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-        memberUsername: "dlwl3rma",
+        memberUsername: "dlwlrma",
         "memberName": "이지금",
         lastChatDate: "2021.11.10 21:00:00",
         lastMessage: "마지막으로 상대가 보낸 메세지",
@@ -44,7 +44,7 @@ export const dummyChatList: Array<Direct.ChatItem> = [
         id: 3,
         avatarImg:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-        memberUsername: "dlwlr4ma",
+        memberUsername: "dlwlrma",
         "memberName": "이지금",
         lastChatDate: "2021.11.10 21:00:00",
         lastMessage: "마지막으로 ",
@@ -55,7 +55,7 @@ export const dummyChatList: Array<Direct.ChatItem> = [
         id: 4,
         avatarImg:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-        memberUsername: "dlwlr5ma",
+        memberUsername: "dlwlrma",
         "memberName": "이지금",
         lastChatDate: "2021.11.10 21:00:00",
         lastMessage: "마지막으로 상대가 보낸 메세지",

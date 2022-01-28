@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { makeRoom } from "./DirectThunk";
 
 
 export interface InitialStateType {
@@ -6,6 +7,7 @@ export interface InitialStateType {
     view: Direct.currentSectionViewType;
     selectedChatItem: number | null;
     selectedNewChatUser: string | null;
+    isLoading: boolean;
 }
 
 
@@ -14,6 +16,7 @@ const initialState: InitialStateType = {
     view: "inbox",
     selectedChatItem: null,
     selectedNewChatUser: null,
+    isLoading: false,
 };
 
 const directSlice = createSlice({
@@ -40,7 +43,15 @@ const directSlice = createSlice({
         },
     },
     extraReducers: (build) => {
-
+        build
+            .addCase(makeRoom.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(makeRoom.fulfilled, (state) => {
+                state.isLoading = false;
+            }).addCase(makeRoom.rejected, (state) => {
+                state.isLoading = false;
+        });
     },
 });
 ;
