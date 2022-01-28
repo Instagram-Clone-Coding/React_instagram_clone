@@ -2,10 +2,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
     getExtraArticle,
     getHomeArticles,
+    postFollow,
+    postUnfollow,
 } from "app/store/ducks/home/homThunk";
 
-const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
+const DUMMY_ARTICLES: HomeType.ArticleStateProps[] = [
     {
+        followLoading: false,
+        isFollowing: true,
         postId: 10,
         followingMemberUsernameLikedPost: null,
         memberImageUrl:
@@ -88,6 +92,8 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
         postUploadDate: "2022-01-03T13:33:00",
     },
     {
+        followLoading: false,
+        isFollowing: true,
         postId: 11,
         followingMemberUsernameLikedPost: "followingUser",
         memberImageUrl:
@@ -170,6 +176,8 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
         postUploadDate: "2022-01-03T13:33:00",
     },
     {
+        followLoading: false,
+        isFollowing: true,
         postId: 12,
         followingMemberUsernameLikedPost: null,
         memberImageUrl:
@@ -252,6 +260,8 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
         postUploadDate: "2022-01-03T13:33:00",
     },
     {
+        followLoading: false,
+        isFollowing: true,
         postId: 13,
         followingMemberUsernameLikedPost: null,
         memberImageUrl:
@@ -334,6 +344,8 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
         postUploadDate: "2022-01-03T13:33:00",
     },
     {
+        followLoading: false,
+        isFollowing: true,
         postId: 14,
         followingMemberUsernameLikedPost: null,
         memberImageUrl:
@@ -416,6 +428,8 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
         postUploadDate: "2022-01-03T13:33:00",
     },
     {
+        followLoading: false,
+        isFollowing: true,
         postId: 15,
         followingMemberUsernameLikedPost: null,
         memberImageUrl:
@@ -556,6 +570,52 @@ const homeSlice = createSlice({
             .addCase(getExtraArticle.rejected, (state, action) => {
                 state.isExtraArticleLoading = false;
                 state.isAsyncError = true;
+            })
+            .addCase(postUnfollow.pending, (state, action) => {
+                state.articles.forEach((article) => {
+                    if (article.memberUsername === action.meta.arg.username) {
+                        // article.followLoading = true;
+                    }
+                });
+            })
+            .addCase(postUnfollow.fulfilled, (state, action) => {
+                state.articles.forEach((article) => {
+                    if (article.memberUsername === action.meta.arg.username) {
+                        // article.followLoading = false;
+                        article.isFollowing = false;
+                    }
+                });
+            })
+            .addCase(postUnfollow.rejected, (state, action) => {
+                state.articles.forEach((article) => {
+                    if (article.memberUsername === action.meta.arg.username) {
+                        // article.followLoading = false;
+                        article.isFollowing = true;
+                    }
+                });
+            })
+            .addCase(postFollow.pending, (state, action) => {
+                state.articles.forEach((article) => {
+                    if (article.memberUsername === action.meta.arg.username) {
+                        article.followLoading = true;
+                    }
+                });
+            })
+            .addCase(postFollow.fulfilled, (state, action) => {
+                state.articles.forEach((article) => {
+                    if (article.memberUsername === action.meta.arg.username) {
+                        article.followLoading = false;
+                        article.isFollowing = true;
+                    }
+                });
+            })
+            .addCase(postFollow.rejected, (state, action) => {
+                state.articles.forEach((article) => {
+                    if (article.memberUsername === action.meta.arg.username) {
+                        article.followLoading = false;
+                        article.isFollowing = false;
+                    }
+                });
             });
     },
 });

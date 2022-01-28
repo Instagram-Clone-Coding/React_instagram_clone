@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { postFollow, postUnfollow } from "app/store/ducks/home/homThunk";
 import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
 
 const initialState: ModalType.ModalStateProps = {
@@ -75,10 +76,48 @@ const modalSlice = createSlice({
             })
             .addCase(getMiniProfile.fulfilled, (state, action) => {
                 state.miniProfile = action.payload;
-            });
-        // .addCase(getMiniProfile.rejected, (state, action) => {
+            })
+            // .addCase(getMiniProfile.rejected, (state, action) => {
 
-        // });
+            // });
+            .addCase(postUnfollow.pending, (state) => {
+                if (state.miniProfile) {
+                    state.miniProfile.isLoading = true;
+                    state.isOnMiniProfile = true; // 로딩동안 미니프로필 유지
+                    state.activatedModal = null;
+                }
+            })
+            .addCase(postUnfollow.fulfilled, (state) => {
+                if (state.miniProfile) {
+                    state.miniProfile.isLoading = false;
+                    state.miniProfile.following = false;
+                }
+            })
+            .addCase(postUnfollow.rejected, (state) => {
+                if (state.miniProfile) {
+                    state.miniProfile.isLoading = false;
+                    state.miniProfile.following = true;
+                }
+            })
+            .addCase(postFollow.pending, (state) => {
+                if (state.miniProfile) {
+                    state.miniProfile.isLoading = true;
+                    state.isOnMiniProfile = true; // 로딩동안 미니프로필 유지
+                    state.activatedModal = null;
+                }
+            })
+            .addCase(postFollow.fulfilled, (state) => {
+                if (state.miniProfile) {
+                    state.miniProfile.isLoading = false;
+                    state.miniProfile.following = true;
+                }
+            })
+            .addCase(postFollow.rejected, (state) => {
+                if (state.miniProfile) {
+                    state.miniProfile.isLoading = false;
+                    state.miniProfile.following = false;
+                }
+            });
     },
 });
 

@@ -31,7 +31,7 @@ const ArticleCard = styled(Card)`
     }
 `;
 interface ArticleComponentPros {
-    article: HomeType.ArticleProps;
+    article: HomeType.ArticleStateProps;
     isObserving: boolean;
     isLast: boolean;
 }
@@ -83,6 +83,8 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
                 memberUsername={article.memberUsername}
                 memberNickname={article.memberNickname}
                 postId={article.postId}
+                isFollowing={article.isFollowing}
+                followLoading={article.followLoading}
             />
             <ArticleImgSlider
                 imageDTOs={article.postImageDTOs}

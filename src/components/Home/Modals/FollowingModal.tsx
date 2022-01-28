@@ -1,6 +1,8 @@
+import { postUnfollow } from "app/store/ducks/home/homThunk";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
 import StoryCircle from "components/Common/StoryCircle";
+import { token } from "Routes";
 import styled from "styled-components";
 import ModalCard from "styles/UI/ModalCard";
 
@@ -50,13 +52,16 @@ const FollowingModal = ({
     onModalOn,
     onModalOff,
 }: FollowingModalProps) => {
-    const { memberNickname, memberImageUrl } = useAppSelector(
+    const { memberNickname, memberUsername, memberImageUrl } = useAppSelector(
         ({ modal }) => modal,
     );
     const dispatch = useAppDispatch();
     const unFollowHandler = () => {
         // 언팔로우
-        dispatch(modalActions.resetModal());
+        const unFollowUser = async () => {
+            await dispatch(postUnfollow({ token, username: memberUsername }));
+        };
+        unFollowUser();
     };
 
     return (

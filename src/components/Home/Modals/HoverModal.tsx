@@ -9,6 +9,9 @@ import useNumberSummary from "hooks/useNumberSummary";
 import Button from "styles/UI/Button";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
+import Loading from "components/Common/Loading";
+import { token } from "Routes";
+import { postFollow } from "app/store/ducks/home/homThunk";
 
 const StyledHoverModalInner = styled.div`
     width: 100%;
@@ -98,6 +101,9 @@ const StyledHoverModalInner = styled.div`
                 text-align: center;
             }
         }
+        & > button > div {
+            padding: 0;
+        }
     }
 `;
 
@@ -108,7 +114,7 @@ interface HoverModalProps {
     // modalPosition?: DOMRect;
     onMouseEnter: () => void;
     onMouseLeave: () => void;
-    miniProfile: ModalType.MiniProfileProps;
+    miniProfile: ModalType.MiniProfileStateProps;
     // onFollowingModalOn: () => void;
 }
 
@@ -134,6 +140,15 @@ HoverModalProps) => {
     const followsNumSummary = useNumberSummary(
         miniProfile ? miniProfile.memberFollowingsCount : 0,
     );
+
+    const followClickHandler = () => {
+        const followUser = async () => {
+            await dispatch(
+                postFollow({ token, username: miniProfile.memberUsername }),
+            );
+        };
+        followUser();
+    };
 
     return (
         <ModalCard
@@ -230,13 +245,22 @@ HoverModalProps) => {
                                             )
                                         }
                                     >
-                                        팔로잉
+                                        {miniProfile.isLoading ? (
+                                            <Loading size={18} />
+                                        ) : (
+                                            "팔로잉"
+                                        )}
                                     </Card>
                                 </div>
                             </>
                         ) : (
-                            // <Button onClick={() => onFollowChange(true)}>
-                            <Button onClick={() => {}}>팔로우</Button>
+                            <Button onClick={followClickHandler}>
+                                {miniProfile.isLoading ? (
+                                    <Loading size={18} isInButtun={true} />
+                                ) : (
+                                    "팔로우"
+                                )}
+                            </Button>
                         )}
                     </div>
                 </StyledHoverModalInner>

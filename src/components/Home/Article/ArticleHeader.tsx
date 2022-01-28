@@ -8,6 +8,8 @@ import { useAppDispatch, useAppSelector } from "app/store/hooks";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
 import { token } from "Routes";
+import { postFollow } from "app/store/ducks/home/homThunk";
+import Loading from "components/Common/Loading";
 
 const StyledArticleHeader = styled.header`
     height: 60px;
@@ -32,10 +34,16 @@ const StyledArticleHeader = styled.header`
             display: flex;
         }
         .header-followBox {
+            display: flex;
+            align-items: center;
             & > span {
                 margin: 0 4px;
             }
             & > button {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 36.34px;
                 margin-left: 2px;
                 color: ${(props) => props.theme.color.blue};
             }
@@ -63,6 +71,8 @@ interface ArticleHeaderProps {
     memberNickname: string;
     postId: number;
     location?: string;
+    isFollowing: boolean;
+    followLoading: boolean;
 }
 
 const ArticleHeader = ({
@@ -71,11 +81,13 @@ const ArticleHeader = ({
     memberNickname,
     postId,
     location,
+    isFollowing,
+    followLoading,
 }: ArticleHeaderProps) => {
     const { miniProfile } = useAppSelector(({ modal }) => modal);
     const dispatch = useAppDispatch();
 
-    const [isFollowing, setIsFollowing] = useState(false); // followingModal의 isFollowing과 연결할 것
+    // const [isFollowing, setIsFollowing] = useState(false); // followingModal의 isFollowing과 연결할 것
     const [prevEventText, setPrevEventText] = useState("");
 
     const fetchMiniProfile = async () => {
@@ -121,22 +133,16 @@ const ArticleHeader = ({
         const {
             currentTarget: { innerText },
         } = event;
-        // console.log("떨어진 텍스트는", innerText);
-        // console.log("현재 텍스트는", prevEventText);
         setPrevEventText(innerText);
-        // if (innerText !== prevEventText) {
-        //     console.log("다릅니다");
-        //     setPrevEventText(innerText);
-        //     dispatch(modalActions.resetModal());
-        // } else {
         dispatch(modalActions.mouseNotOnHoverModal());
-        setTimeout(() => dispatch(modalActions.checkMouseOnHoverModal()), 100);
-        // }
+        setTimeout(() => dispatch(modalActions.checkMouseOnHoverModal()), 500);
     };
 
     const followHandler = () => {
-        // follow
-        setIsFollowing(true);
+        const followUser = async () => {
+            await dispatch(postFollow({ token, username: memberUsername }));
+        };
+        followUser();
     };
 
     return (
@@ -160,8 +166,14 @@ const ArticleHeader = ({
                     {!isFollowing && (
                         <div className="header-followBox">
                             <span>•</span>
-                            <button onClick={followHandler}>팔로우</button>
-                        </div>
+                            <button onClick={followHandler}>
+                                {followLoading ? (
+                                    <Loading size={18} />
+                                ) : (
+                                    "팔로우"
+                                )}
+                            </button>
+                        </div> // 로딩 처리 필요
                     )}
                 </div>
                 <Link to={`/explore/locations/:id/${location}`}>

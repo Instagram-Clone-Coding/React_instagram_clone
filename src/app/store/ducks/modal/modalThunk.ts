@@ -5,7 +5,7 @@ const BASE_URL =
     "http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080";
 
 export const getMiniProfile = createAsyncThunk<
-    ModalType.MiniProfileProps,
+    ModalType.MiniProfileStateProps,
     { token: string; memberUsername: string }
 >("modal/getMiniProfile", async (payload, ThunkOptions) => {
     const config = {
@@ -18,7 +18,7 @@ export const getMiniProfile = createAsyncThunk<
             `${BASE_URL}/accounts/${payload.memberUsername}/mini`,
             config,
         );
-        return data;
+        return { ...data, isLoading: false };
     } catch (error) {
         throw ThunkOptions.rejectWithValue(error);
     }
