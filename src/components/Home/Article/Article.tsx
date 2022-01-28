@@ -51,7 +51,7 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
         article.followingMemberUsernameLikedPost;
     // like state
     const [isLiked, setIsliked] = useState(article.postLikeFlag);
-    const gapText = useGapText(article.postUploadDate);
+    const gapText = `${useGapText(article.postUploadDate)} 전`;
     const articleRef = useRef<HTMLDivElement>(null);
     const isVisible = useOnView(articleRef);
     const extraArticlesCount = useAppSelector(
