@@ -108,26 +108,16 @@ const StyledHoverModalInner = styled.div`
 `;
 
 interface HoverModalProps {
-    // isFollowing?: boolean;
-    // onFollowChange: (a: boolean) => void;
-    // username: string;
-    // modalPosition?: DOMRect;
     onMouseEnter: () => void;
     onMouseLeave: () => void;
     miniProfile: ModalType.MiniProfileStateProps;
-    // onFollowingModalOn: () => void;
 }
 
 const HoverModal = ({
-    // isFollowing,
-    // onFollowChange,
-    // username,
-    // modalPosition,
     onMouseEnter,
     onMouseLeave,
     miniProfile,
-}: // onFollowingModalOn,
-HoverModalProps) => {
+}: HoverModalProps) => {
     const dispatch = useAppDispatch();
 
     const postsNumSummary = useNumberSummary(

@@ -75,8 +75,6 @@ const Home = () => {
             )}
             {activatedModal === "articleMenu" && memberNickname && postId && (
                 <ArticleMenuModal
-                    // isFollowing={isFollowing} 팔로우한 사람의 게시물만 보니까 당연히 처음엔 true
-                    // onUnfollow={unfollowHandler}
                     onModalOn={() =>
                         dispatch(modalActions.maintainModalon("articleMenu"))
                     }
