@@ -44,12 +44,17 @@ const StyledLoading = styled.div`
 
 interface LoadingProps {
     size: number;
+    isInButtun?: boolean;
 }
 
-const Loading = ({ size }: LoadingProps) => {
+const Loading = ({ size, isInButtun = false }: LoadingProps) => {
     return (
         <StyledLoading>
-            <LoadingCircle width={size} height={size} />
+            <LoadingCircle
+                width={size}
+                height={size}
+                fill={isInButtun ? "#fff" : "#555555"}
+            />
         </StyledLoading>
     );
 };
