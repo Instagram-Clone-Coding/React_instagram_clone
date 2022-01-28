@@ -7,12 +7,26 @@ declare module Direct {
         // 아이디
         memberUsername: string;
         //실제이름
-        memberName:string;
+        memberName: string;
         lastChatDate: string;
         lastMessage: string;
         isImLast: boolean;
-        isRead:boolean;
+        isRead: boolean;
     }
+
+
+    interface opponentProps {
+        username:string;
+        name:string;
+        imageUrl:string;
+    }
+
+    interface RoomsProps {
+        status: boolean;
+        chatRoomId: number;
+        opponents: opponentProps[]
+    }
+
 
     type currentSectionViewType = "inbox" | "detail" | "chat"
 
@@ -31,7 +45,6 @@ declare module Login {
         text: string;
         url?: string;
     }
-
 
 
     interface InputProps {
@@ -130,6 +143,6 @@ declare module Common {
         width: number;
         height: number;
         position: string;
-        url:string;
+        url: string;
     }
 }
