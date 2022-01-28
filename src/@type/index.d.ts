@@ -28,7 +28,8 @@ declare module Direct {
     }
 
 
-    type currentSectionViewType = "inbox" | "detail" | "chat"
+    type modalType = "deleteChat" | "block" | "report" | "newChat" | "convertAccount" |  null;
+    type currentSectionViewType = "inbox" | "detail" | "chat" | "requests" | "requestsChat"
 
 }
 

@@ -1,20 +1,19 @@
 import styled from "styled-components";
 import theme from "styles/theme";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AsideBody from "components/Direct/Aside/AsideBody";
 import AsideHeader from "components/Direct/Aside/AsideHeader";
 import SectionBody from "components/Direct/Section/SectionBody";
 import SectionHeader from "components/Direct/Section/SectionHeader";
-import { useAppDispatch, useAppSelector } from "app/store/hooks";
-import InboxSection from "../../components/Direct/Section/InboxSection";
+import { useAppSelector } from "app/store/hooks";
+import InboxSection from "components/Direct/Section/InboxSection";
+import RequestsSection from "../../components/Direct/Section/requestsSection";
 
 
 const Direct = () => {
 
-    const [currentSectionView, setCurrentSectionView] = useState<Direct.currentSectionViewType>("chat");
     const [message, setMessage] = useState<string>("");
-    const dispatch = useAppDispatch();
     const { view } = useAppSelector((state => state.direct));
 
 
@@ -24,6 +23,20 @@ const Direct = () => {
         document.title = "(1) 받은 메세지함 · Direct";
     }, []);
 
+
+    const viewRender = () => {
+        switch (view) {
+            case "inbox":
+                return <InboxSection />;
+            case "requests":
+                return <RequestsSection/>
+            default:
+                return <>
+                    <SectionHeader />
+                    <SectionBody message={message} setMessage={setMessage} />
+                </>
+        }
+    };
 
     const borderStyle = `1px solid ${theme.color.bd_gray}`;
     return (
@@ -36,14 +49,7 @@ const Direct = () => {
                 </aside>
                 {/* body */}
                 <section>
-                    {
-                        view === "inbox" ? <InboxSection /> :
-                            <>
-                                <SectionHeader />
-                                <SectionBody message={message} setMessage={setMessage} />
-                            </>
-                    }
-
+                    {viewRender()}
                 </section>
             </Container>
         </Layout>
@@ -75,6 +81,8 @@ const Container = styled.div`
 
   aside {
     width: 350px;
+    height: 100%;
+    position: relative;
   }
 
   section {

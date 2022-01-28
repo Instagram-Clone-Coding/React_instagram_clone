@@ -1,13 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-
-type modalType = "deleteChat" | "block" | "report" | "newChat" | "convertAccount" | null;
 
 export interface InitialStateType {
-    modal: modalType;
+    modal: Direct.modalType;
     view: Direct.currentSectionViewType;
     selectedChatItem: number | null;
-    selectedNewChatUser?: string | null;
+    selectedNewChatUser: string | null;
 }
 
 
@@ -22,19 +20,19 @@ const directSlice = createSlice({
     name: "modal",
     initialState,
     reducers: {
-        openModal: (state, action) => {
+        openModal: (state, action: PayloadAction<Direct.modalType>) => {
             state.modal = action.payload;
         },
         closeModal: (state) => {
             state.modal = null;
         },
-        selectView: (state, action) => {
+        selectView: (state, action: PayloadAction<Direct.currentSectionViewType>) => {
             state.view = action.payload;
         },
-        selectChatItem: (state, action) => {
+        selectChatItem: (state, action: PayloadAction<number | null>) => {
             state.selectedChatItem = action.payload;
         },
-        selectNewChatUser: (state, action) => {
+        selectNewChatUser: (state, action: PayloadAction<string | null>) => {
             state.selectedNewChatUser = action.payload;
         },
         unSelectNewChatUser: (state) => {
@@ -47,5 +45,12 @@ const directSlice = createSlice({
 });
 ;
 
-export const { openModal, closeModal, selectView, selectChatItem, selectNewChatUser ,unSelectNewChatUser} = directSlice.actions;
+export const {
+    openModal,
+    closeModal,
+    selectView,
+    selectChatItem,
+    selectNewChatUser,
+    unSelectNewChatUser,
+} = directSlice.actions;
 export const directReducer = directSlice.reducer;
