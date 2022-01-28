@@ -49,9 +49,15 @@ declare module HomeType {
         postUploadDate: string;
         // comment 몇 개 가져오기
     }
+
+    interface ArticleStateProps extends ArticleProps {
+        isFollowing: boolean;
+        followLoading: boolean;
+    }
+
     interface homeStateProps {
         storiesScrollPosition: storiesScrollPositionType;
-        articles: ArticleProps[];
+        articles: ArticleStateProps[];
         // location?
         isLoading: boolean; // 더미 로딩
         isExtraArticleLoading: boolean;
@@ -111,6 +117,10 @@ declare module ModalType {
         memberWebsite: null | string;
     }
 
+    interface MiniProfileStateProps extends MiniProfileProps {
+        isLoading: boolean;
+    }
+
     interface ModalStateProps {
         activatedModal: ActivatedModalType;
         modalPosition?: ModalPositionProps;
@@ -118,7 +128,7 @@ declare module ModalType {
         memberNickname: string;
         memberImageUrl: string;
         postId?: number;
-        miniProfile?: MiniProfileProps;
+        miniProfile?: MiniProfileStateProps;
         isOnMiniProfile: boolean;
     }
 }
