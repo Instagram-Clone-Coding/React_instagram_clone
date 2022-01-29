@@ -57,9 +57,20 @@ const ModalButtonContent = ({ actionName }: ModalButtonContentProps) => {
 
     };
 
+    const buttonRender = () => {
+        switch (actionName) {
+            case "삭제":
+                return <button onClick={deleteRoomHandler}>{actionName}</button>;
+            case "차단":
+                return <button >{actionName}</button>;
+            case "모두 삭제":
+                return <button >{actionName}</button>;
+        }
+    };
+
     return (
         <ModalButtonContentContainer>
-            <button onClick={deleteRoomHandler}>{actionName}</button>
+            {buttonRender()}
             <button onClick={() => {
                 dispatch(closeModal());
             }}>취소

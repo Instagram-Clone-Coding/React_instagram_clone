@@ -2,7 +2,7 @@ import ChatList from "components/Direct/Aside/ChatList";
 // 이런 식으로 type을 가져와서 제가 필요한 모듈을 가져와요
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
-import { selectView } from "app/store/ducks/direct/DirectSlice";
+import { openModal, selectView } from "app/store/ducks/direct/DirectSlice";
 
 // 그 다음 그 모듈 안에서 제가 export 한 타입을 가져와서 사용하는 방식입니다.
 
@@ -214,6 +214,7 @@ const AsideBodyContainer = styled.section`
     color: #ed4956;
     font-size: 14px;
     font-weight: 600;
+    cursor: pointer;
   }
   
 
@@ -245,7 +246,9 @@ const AsideBody = () => {
             }
             <ChatList chatList={dummyChatList} />
             {
-                (view === "requests" || view === "requestsChat") && <div className={"delete-all-button"}>
+                (view === "requests" || view === "requestsChat") && <div className={"delete-all-button"}
+                onClick={()=>{dispatch(openModal("deleteAll"))}}
+                >
                     모두 삭제
                 </div>
             }

@@ -6,6 +6,7 @@ import DetailSection from "./DetailSection";
 import { useAppDispatch, useAppSelector } from "../../../app/store/hooks";
 import RequestsSection from "./requestsSection";
 import RequestsWishContainer from "./RequestsWishContainer";
+import CommonDirectModal from "./Modals/CommonDirectModal";
 
 
 interface SectionBodyProps {
@@ -23,7 +24,7 @@ const SectionBodyContainer = styled.section`
 
 
 const SectionBody = ({ message, setMessage }: SectionBodyProps) => {
-    const { view } = useAppSelector((state => state.direct));
+    const { view, modal } = useAppSelector((state => state.direct));
     const viewRender = () => {
         switch (view) {
             case "detail":
@@ -36,7 +37,12 @@ const SectionBody = ({ message, setMessage }: SectionBodyProps) => {
             case "requestsChat":
                 return <>
                     <ChatSection />
-                    <RequestsWishContainer/>
+                    <RequestsWishContainer />
+                    {
+                        modal === "deleteAll" &&   <CommonDirectModal modalType={"deleteAll"} actionName={"모두 삭제"}
+                                                                    title={"모두 삭제하시겠어요?"} description={"메시지 1개가 삭제됩니다."}
+                        />
+                    }
                 </>;
             default:
                 break;

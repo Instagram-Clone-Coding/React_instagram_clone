@@ -16,19 +16,19 @@ declare module Direct {
 
 
     interface opponentProps {
-        username:string;
-        name:string;
-        imageUrl:string;
+        username: string;
+        name: string;
+        imageUrl: string;
     }
 
     interface RoomsProps {
         status: boolean;
         chatRoomId: number;
-        opponents: opponentProps[]
+        opponents: opponentProps[];
     }
 
 
-    type modalType = "deleteChat" | "block" | "report" | "newChat" | "convertAccount" |  null;
+    type modalType = "deleteChat" | "block" | "report" | "newChat" | "convertAccount" | "deleteAll" | null;
     type currentSectionViewType = "inbox" | "detail" | "chat" | "requests" | "requestsChat"
 
 }
