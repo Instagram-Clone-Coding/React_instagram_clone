@@ -1,16 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import { ReactComponent as Close } from "assets/Svgs/close.svg";
 import { closeModal } from "app/store/ducks/direct/DirectSlice";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
 import Loading from "components/Common/Loading";
 import { makeRoom } from "app/store/ducks/direct/DirectThunk";
+import CloseSVG from "assets/Svgs/CloseSVG";
 
 const token = {
     accessToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0Mjc3MzA0MH0.jqP4Dxxz2km0y1UloLINEH1nUP3iWau0YsU6gwBCHBMlGQ0BrDlGz9rJNPRvbgR51yuWasFfM5nwbr2lDGcnoQ",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzQ2MzUwMn0.rh9_oBk6GQpeGWdz8tPg8U6cSXL6VJMCEXW8b-Y3hw7faPZn7qFtSXWjvmQPZ3718O82Fh8TyxlT-4JZ3bj8pg",
     refreshToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjQyNzQxNDY4fQ.8mHe22G6uu6F_HB-5G8A7voUNLb5oRAuX84xlKWFUZeccsi_Y3DHMh1fC7w3uEG3UATvNc5U9PBPvF6hW1vpZw",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzQ2MzUwMn0.rh9_oBk6GQpeGWdz8tPg8U6cSXL6VJMCEXW8b-Y3hw7faPZn7qFtSXWjvmQPZ3718O82Fh8TyxlT-4JZ3bj8pg",
 };
 
 interface NewChatModalTitleContainerType {
@@ -55,7 +55,7 @@ const NewChatModalTitle = () => {
 
     return (
         <NewChatModalTitleContainer isSelected={selectedNewChatUser !== null}>
-            <Close onClick={() => {
+            <CloseSVG color={"#262626"} size={"18"} onClick={() => {
                 dispatch(closeModal());
             }} />
             <h1>새로운 메시지</h1>
