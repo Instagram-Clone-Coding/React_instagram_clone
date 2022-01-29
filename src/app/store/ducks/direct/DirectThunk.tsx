@@ -22,10 +22,28 @@ export const makeRoom = createAsyncThunk<Direct.RoomsProps,
             null,
             config,
         );
-        console.log(data);
         return data;
     } catch (error) {
         throw ThunkOptions.rejectWithValue(error);
     }
 
+});
+
+
+// 백엔드 API 작동하면 response type 정해줘야함 현재는 any 로 임시로 선언
+
+export const deleteRoom = createAsyncThunk<any, { token: string, roomId: number }>("chat/deleteRoom", async (payload, ThunkOpions) => {
+    const config = {
+        headers: { Authorization: `Bearer ${payload.token}` },
+        params: {
+            roomId: payload.roomId,
+        },
+    };
+
+    try {
+        const {data} = await axios.delete(`${BASE_URL}/chat/rooms/hide`,config)
+        return data;
+    }catch (error) {
+        throw ThunkOpions.rejectWithValue(error);
+    }
 });

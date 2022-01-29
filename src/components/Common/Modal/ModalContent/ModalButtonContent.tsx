@@ -1,7 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import { closeModal } from "app/store/ducks/direct/DirectSlice";
-import { useAppDispatch } from "app/store/hooks";
+import { closeModal, selectView } from "app/store/ducks/direct/DirectSlice";
+import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import axios from "axios";
+import { deleteRoom } from "../../../../app/store/ducks/direct/DirectThunk";
+
+const token = {
+    accessToken:
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzQ3MDM3Mn0.N39vELPR_kSikcKYPmfAEOE2KHteW4f-fvu9ezYRtLIgN5NH7DdmjqmunnD-jwECRCnVID7rt2x4xcgwxMW2xw",
+    refreshToken:
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzQ3MDM3Mn0.N39vELPR_kSikcKYPmfAEOE2KHteW4f-fvu9ezYRtLIgN5NH7DdmjqmunnD-jwECRCnVID7rt2x4xcgwxMW2xw",
+};
 
 
 interface ModalButtonContentProps {
@@ -12,28 +21,49 @@ const ModalButtonContentContainer = styled.div`
   margin-top: 1rem;
   display: flex;
   flex-direction: column;
-  button:first-child{
+
+  button:first-child {
     color: #ed4956;
     font-weight: 700;
   }
-  button{
+
+  button {
     min-height: 48px;
-    border-top: 1px solid rgba(var(--b6a,219,219,219),1);
+    border-top: 1px solid rgba(var(--b6a, 219, 219, 219), 1);
     font-weight: 400;
   }
 `;
 
 
-const ModalButtonContent = ({ actionName} : ModalButtonContentProps) => {
+const ModalButtonContent = ({ actionName }: ModalButtonContentProps) => {
 
     const dispatch = useAppDispatch();
+    const { selectedRoom } = useAppSelector(state => state.direct);
+
+    const deleteRoomHandler = async () => {
+
+        if (selectedRoom) {
+            try {
+                await dispatch(
+                    deleteRoom({
+                        token: token.accessToken,
+                        roomId: selectedRoom,
+                    }),
+                );
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+    };
 
     return (
         <ModalButtonContentContainer>
-            <button>{actionName}</button>
-            <button onClick={()=>{
-                dispatch(closeModal())
-            }}>취소</button>
+            <button onClick={deleteRoomHandler}>{actionName}</button>
+            <button onClick={() => {
+                dispatch(closeModal());
+            }}>취소
+            </button>
         </ModalButtonContentContainer>
     );
 };

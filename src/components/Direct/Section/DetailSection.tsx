@@ -89,6 +89,7 @@ const DetailSectionContainer = styled.div`
 const DetailSection = () => {
     const dispatch = useAppDispatch();
     const { modal } = useAppSelector((state => state.direct));
+
     return (
         <DetailSectionContainer>
             <div className="direct-notification-check">

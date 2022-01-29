@@ -5,12 +5,11 @@ import { useAppDispatch, useAppSelector } from "app/store/hooks";
 import Loading from "components/Common/Loading";
 import { makeRoom } from "app/store/ducks/direct/DirectThunk";
 import CloseSVG from "assets/Svgs/CloseSVG";
-
 const token = {
     accessToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzQ2MzUwMn0.rh9_oBk6GQpeGWdz8tPg8U6cSXL6VJMCEXW8b-Y3hw7faPZn7qFtSXWjvmQPZ3718O82Fh8TyxlT-4JZ3bj8pg",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzQ3MDM3Mn0.N39vELPR_kSikcKYPmfAEOE2KHteW4f-fvu9ezYRtLIgN5NH7DdmjqmunnD-jwECRCnVID7rt2x4xcgwxMW2xw",
     refreshToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzQ2MzUwMn0.rh9_oBk6GQpeGWdz8tPg8U6cSXL6VJMCEXW8b-Y3hw7faPZn7qFtSXWjvmQPZ3718O82Fh8TyxlT-4JZ3bj8pg",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzQ3MDM3Mn0.N39vELPR_kSikcKYPmfAEOE2KHteW4f-fvu9ezYRtLIgN5NH7DdmjqmunnD-jwECRCnVID7rt2x4xcgwxMW2xw",
 };
 
 interface NewChatModalTitleContainerType {

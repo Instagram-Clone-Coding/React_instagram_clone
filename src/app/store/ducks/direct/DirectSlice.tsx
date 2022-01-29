@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { makeRoom } from "./DirectThunk";
+import { deleteRoom, makeRoom } from "./DirectThunk";
+import { stat } from "fs";
 
 
 export interface InitialStateType {
@@ -7,6 +8,7 @@ export interface InitialStateType {
     view: Direct.currentSectionViewType;
     selectedChatItem: number | null;
     selectedNewChatUser: string | null;
+    selectedRoom: number | null;
     isLoading: boolean;
 }
 
@@ -16,6 +18,8 @@ const initialState: InitialStateType = {
     view: "inbox",
     selectedChatItem: null,
     selectedNewChatUser: null,
+    // RoomNumber 하드코딩해뒀음 처음엔 null 로 둬야함
+    selectedRoom: 23,
     isLoading: false,
 };
 
@@ -49,9 +53,22 @@ const directSlice = createSlice({
             })
             .addCase(makeRoom.fulfilled, (state) => {
                 state.isLoading = false;
-            }).addCase(makeRoom.rejected, (state) => {
+            })
+            .addCase(makeRoom.rejected, (state) => {
                 state.isLoading = false;
-        });
+            })
+            .addCase(deleteRoom.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(deleteRoom.fulfilled, (state)=> {
+                state.selectedRoom = null;
+                state.modal = null;
+                state.view = "inbox";
+                state.isLoading = true;
+            })
+            .addCase(deleteRoom.rejected,(state)=>{
+                state.isLoading = false;
+            })
     },
 });
 ;
