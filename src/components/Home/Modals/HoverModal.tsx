@@ -245,7 +245,7 @@ const HoverModal = ({
                         ) : (
                             <Button onClick={followClickHandler}>
                                 {miniProfile.isLoading ? (
-                                    <Loading size={18} isInButtun={true} />
+                                    <Loading size={18} isInButton={true} />
                                 ) : (
                                     "팔로우"
                                 )}
