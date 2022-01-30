@@ -609,6 +609,7 @@ const homeSlice = createSlice({
                         article.isFollowing = false;
                     }
                 });
+            })
             .addCase(postLike.pending, (state) => {
                 state.isAsyncError = false;
             })

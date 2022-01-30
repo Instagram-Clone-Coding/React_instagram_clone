@@ -76,7 +76,7 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
     const dispatchPostLike = async () => {
         try {
             await dispatch(
-                postLike({ token: token.accessToken, postId: article.postId }),
+                postLike({ token, postId: article.postId }),
             ).unwrap();
         } catch (error) {
             setIsliked(false);
@@ -88,7 +88,7 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
         try {
             await dispatch(
                 deleteLike({
-                    token: token.accessToken,
+                    token,
                     postId: article.postId,
                 }),
             ).unwrap();
@@ -137,7 +137,7 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
             />
             <ArticleMain
                 followingUserWhoLikesArticle={followingUserWhoLikesArticle}
-                likesCount={article.postLikesCount}
+                likesCount={likesCount}
                 memberUsername={article.memberUsername}
                 memberImageUrl={article.memberImageUrl}
                 memberNickname={article.memberNickname}
