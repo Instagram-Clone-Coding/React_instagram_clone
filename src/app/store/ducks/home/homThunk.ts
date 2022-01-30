@@ -87,9 +87,8 @@ export const postUnfollow = createAsyncThunk<
     try {
         const {
             data: { data },
-        } = await axios.post(
-            `${BASE_URL}/${payload.username}/unfollow`,
-            null,
+        } = await axios.delete(
+            `${BASE_URL}/${payload.username}/follow`,
             config,
         );
         return data;
