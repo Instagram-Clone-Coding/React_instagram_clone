@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Direct } from "@type";
 import moment from "moment";
 import "moment/locale/ko";
 

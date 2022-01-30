@@ -3,12 +3,13 @@ import Username from "components/Common/Username";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import ArticleMenuModal from "../Modals/ArticleMenuModal";
-import FollowingModal from "../Modals/FollowingModal";
-import HoverModal from "../Modals/HoverModal";
-import ReportModal from "../Modals/ReportModal";
-import ShareWithModal from "../Modals/SharerWithModal";
 import { ReactComponent as ThreeDots } from "../../../assets/Svgs/threeDots.svg";
+import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { modalActions } from "app/store/ducks/modal/modalSlice";
+import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
+import { token } from "Routes";
+import { postFollow } from "app/store/ducks/home/homThunk";
+import Loading from "components/Common/Loading";
 
 const StyledArticleHeader = styled.header`
     height: 60px;
@@ -33,10 +34,16 @@ const StyledArticleHeader = styled.header`
             display: flex;
         }
         .header-followBox {
+            display: flex;
+            align-items: center;
             & > span {
                 margin: 0 4px;
             }
             & > button {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 36.34px;
                 margin-left: 2px;
                 color: ${(props) => props.theme.color.blue};
             }
@@ -60,108 +67,96 @@ const HEADER_STORY_CIRCLE = 42 / 64;
 
 interface ArticleHeaderProps {
     memberImageUrl: string;
+    memberUsername: string;
     memberNickname: string;
+    postId: number;
     location?: string;
+    isFollowing: boolean;
+    followLoading: boolean;
 }
 
 const ArticleHeader = ({
     memberImageUrl,
+    memberUsername,
     memberNickname,
+    postId,
     location,
+    isFollowing,
+    followLoading,
 }: ArticleHeaderProps) => {
-    const [isHoverModalActivated, setIsHoverModalActivated] = useState(false);
-    const [isDotModalActivated, setIsDotModalActivated] = useState(false);
-    const [isReportModalActivated, setIsReportModalActivated] = useState(false);
-    const [isFollowingModalActivated, setIsFollowingModalActivated] =
-        useState(false);
-    const [isShareWithModalActivated, setIsShareWithModalActivated] =
-        useState(false);
+    const { miniProfile } = useAppSelector(({ modal }) => modal);
+    const dispatch = useAppDispatch();
 
-    const [modalPositionObj, setModalPositionObj] = useState<DOMRect>();
-    const [isFollowing, setIsFollowing] = useState(false); // followingModal의 isFollowing과 연결할 것
+    // const [isFollowing, setIsFollowing] = useState(false); // followingModal의 isFollowing과 연결할 것
+    const [prevEventText, setPrevEventText] = useState("");
 
-    const mouseEnterHandler = (
-        event:
-            | React.MouseEvent<HTMLSpanElement>
-            | React.MouseEvent<HTMLDivElement>,
-    ) => {
-        setModalPositionObj(event?.currentTarget.getBoundingClientRect());
-        setIsHoverModalActivated(true);
+    const fetchMiniProfile = async ({
+        top,
+        bottom,
+        left,
+    }: ModalType.ModalPositionProps) => {
+        await dispatch(
+            getMiniProfile({
+                token,
+                memberUsername,
+                modalPosition: { top, bottom, left },
+            }),
+        );
     };
 
-    const mouseLeaveHandler = () => {
-        setIsHoverModalActivated(false);
+    const mouseEnterHandler = (
+        event: React.MouseEvent<HTMLSpanElement | HTMLDivElement>,
+    ) => {
+        if (!event) return;
+        const {
+            currentTarget: { innerText },
+        } = event;
+        const { top, bottom, left } =
+            event.currentTarget.getBoundingClientRect();
+        if (innerText !== prevEventText) {
+            dispatch(
+                modalActions.changeHoverModalPosition({ top, bottom, left }),
+            );
+        }
+        if (miniProfile) return dispatch(modalActions.mouseOnHoverModal());
+        dispatch(
+            modalActions.startModal({
+                activatedModal: null,
+                isOnMiniProfile: false,
+                memberUsername,
+                memberNickname,
+                memberImageUrl,
+                isFollowing,
+            }),
+        );
+        fetchMiniProfile({
+            top,
+            bottom,
+            left,
+        });
+    };
+
+    const mouseLeaveHandler = (
+        event: React.MouseEvent<HTMLSpanElement | HTMLDivElement>,
+    ) => {
+        if (!event) return;
+        const {
+            currentTarget: { innerText },
+        } = event;
+        setPrevEventText(innerText);
+        dispatch(modalActions.mouseNotOnHoverModal());
+        setTimeout(() => dispatch(modalActions.checkMouseOnHoverModal()), 500);
     };
 
     const followHandler = () => {
-        // follow
-        setIsFollowing(true);
-    };
-
-    const unfollowHandler = () => {
-        // unfollow하기 전에 modal에서 재차 확인
-        setIsFollowingModalActivated(true);
-    };
-
-    const cloaseArticleMenuModalAndOpenReportModal = () => {
-        setIsDotModalActivated(false);
-        setIsReportModalActivated(true);
-    };
-
-    const cloaseArticleMenuModalAndOpenShareWithModal = () => {
-        setIsDotModalActivated(false);
-        setIsShareWithModalActivated(true);
+        const followUser = async () => {
+            await dispatch(postFollow({ token, username: memberUsername }));
+        };
+        followUser();
     };
 
     return (
         <StyledArticleHeader>
-            {isHoverModalActivated && (
-                <HoverModal
-                    isFollowing={isFollowing}
-                    onFollowChange={(a: boolean) => setIsFollowing(a)}
-                    username={memberNickname}
-                    modalPosition={modalPositionObj}
-                    onMouseEnter={() => setIsHoverModalActivated(true)}
-                    onMouseLeave={() => setIsHoverModalActivated(false)}
-                    onFollowingModalOn={() =>
-                        setIsFollowingModalActivated(true)
-                    }
-                />
-            )}
-            {isFollowing && isFollowingModalActivated && (
-                <FollowingModal
-                    onUnfollow={() => setIsFollowing(false)}
-                    onModalOn={() => setIsFollowingModalActivated(true)}
-                    onModalOff={() => setIsFollowingModalActivated(false)}
-                    username={memberNickname}
-                    avatarUrl={memberImageUrl}
-                />
-            )}
-            {isDotModalActivated && (
-                <ArticleMenuModal
-                    isFollowing={isFollowing}
-                    onUnfollow={unfollowHandler}
-                    onModalOn={() => setIsDotModalActivated(true)}
-                    onModalOff={() => setIsDotModalActivated(false)}
-                    onReportModalOn={cloaseArticleMenuModalAndOpenReportModal}
-                    onShareWithModalOn={
-                        cloaseArticleMenuModalAndOpenShareWithModal
-                    }
-                />
-            )}
-            {isReportModalActivated && (
-                <ReportModal
-                    onModalOn={() => setIsReportModalActivated(true)}
-                    onModalOff={() => setIsReportModalActivated(false)}
-                />
-            )}
-            {isShareWithModalActivated && (
-                <ShareWithModal
-                    onModalOn={() => setIsShareWithModalActivated(true)}
-                    onModalOff={() => setIsShareWithModalActivated(false)}
-                    username={memberNickname}
-                />
-            )}
             <StoryCircle
                 type="unread" // 백엔드 소통하여 읽었는지 여부 확인
                 avatarUrl={memberImageUrl}
@@ -181,8 +176,14 @@ const ArticleHeader = ({
                     {!isFollowing && (
                         <div className="header-followBox">
                             <span>•</span>
-                            <button onClick={followHandler}>팔로우</button>
-                        </div>
+                            <button onClick={followHandler}>
+                                {followLoading ? (
+                                    <Loading size={18} />
+                                ) : (
+                                    "팔로우"
+                                )}
+                            </button>
+                        </div> // 로딩 처리 필요
                     )}
                 </div>
                 <Link to={`/explore/locations/:id/${location}`}>
@@ -192,7 +193,19 @@ const ArticleHeader = ({
             </div>
             <div
                 className="header-dots"
-                onClick={() => setIsDotModalActivated(true)}
+                onClick={() =>
+                    dispatch(
+                        modalActions.startModal({
+                            isOnMiniProfile: false,
+                            activatedModal: "articleMenu",
+                            postId: postId,
+                            memberUsername,
+                            memberNickname,
+                            memberImageUrl,
+                            isFollowing,
+                        }),
+                    )
+                }
             >
                 <ThreeDots />
             </div>

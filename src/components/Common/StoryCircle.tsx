@@ -62,11 +62,11 @@ interface StoryCircleProps {
     username: string;
     scale: number;
     onMouseEnter?: (
-        event:
-            | React.MouseEvent<HTMLSpanElement>
-            | React.MouseEvent<HTMLDivElement>,
+        event: React.MouseEvent<HTMLSpanElement | HTMLDivElement>,
     ) => void;
-    onMouseLeave?: () => void;
+    onMouseLeave?: (
+        event: React.MouseEvent<HTMLSpanElement | HTMLDivElement>,
+    ) => void;
 }
 
 const StoryCircle = ({

@@ -5,7 +5,7 @@
     height="current"
 >
     <rect
-        fill="#555555"
+        fill="current"
         height="6"
         opacity="0"
         rx="3"
@@ -16,7 +16,7 @@
         y="47"
     ></rect>
     <rect
-        fill="#555555"
+        fill="current"
         height="6"
         opacity="0.08333333333333333"
         rx="3"
@@ -27,7 +27,7 @@
         y="47"
     ></rect>
     <rect
-        fill="#555555"
+        fill="current"
         height="6"
         opacity="0.16666666666666666"
         rx="3"
@@ -38,7 +38,7 @@
         y="47"
     ></rect>
     <rect
-        fill="#555555"
+        fill="current"
         height="6"
         opacity="0.25"
         rx="3"
@@ -49,7 +49,7 @@
         y="47"
     ></rect>
     <rect
-        fill="#555555"
+        fill="current"
         height="6"
         opacity="0.3333333333333333"
         rx="3"
@@ -60,7 +60,7 @@
         y="47"
     ></rect>
     <rect
-        fill="#555555"
+        fill="current"
         height="6"
         opacity="0.4166666666666667"
         rx="3"
@@ -71,7 +71,7 @@
         y="47"
     ></rect>
     <rect
-        fill="#555555"
+        fill="current"
         height="6"
         opacity="0.5"
         rx="3"
@@ -82,7 +82,7 @@
         y="47"
     ></rect>
     <rect
-        fill="#555555"
+        fill="current"
         height="6"
         opacity="0.5833333333333334"
         rx="3"
@@ -93,7 +93,7 @@
         y="47"
     ></rect>
     <rect
-        fill="#555555"
+        fill="current"
         height="6"
         opacity="0.6666666666666666"
         rx="3"
@@ -104,7 +104,7 @@
         y="47"
     ></rect>
     <rect
-        fill="#555555"
+        fill="current"
         height="6"
         opacity="0.75"
         rx="3"
@@ -115,7 +115,7 @@
         y="47"
     ></rect>
     <rect
-        fill="#555555"
+        fill="current"
         height="6"
         opacity="0.8333333333333334"
         rx="3"
@@ -126,7 +126,7 @@
         y="47"
     ></rect>
     <rect
-        fill="#555555"
+        fill="current"
         height="6"
         opacity="0.9166666666666666"
         rx="3"

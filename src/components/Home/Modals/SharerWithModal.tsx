@@ -4,6 +4,7 @@ import ModalHeader from "./ModalHeader";
 import direct from "../../../assets/Images/direct.png";
 import sprite3 from "../../../assets/Images/sprite3.png";
 import useCopy from "hooks/useCopy";
+import { useAppSelector } from "app/store/hooks";
 
 const ShareWithModalInner = styled.div`
     .shareWithModal-options {
@@ -83,22 +84,17 @@ const ShareWithModalInner = styled.div`
 interface ShareWithModalProps {
     onModalOn: () => void;
     onModalOff: () => void;
-    username: string;
+    // username: string;
 }
-
-const DUMMY_P_ID = "CWWCI-eINvr"; // 게시물 id
 
 const DUMMY_BASE_URL = "https://www.instagram.com"; // 원래 root url: window.location.href
 
 // 위 두 DUMMY 데이터로 공유 기능을 임시 구현하였습니다.
 // 참고 url: https://developers.facebook.com/docs/plugins/share-button?locale=ko_KR
 
-const ShareWithModal = ({
-    onModalOn,
-    onModalOff,
-    username,
-}: ShareWithModalProps) => {
-    const copyHandler = useCopy(DUMMY_BASE_URL + "/p/" + DUMMY_P_ID);
+const ShareWithModal = ({ onModalOn, onModalOff }: ShareWithModalProps) => {
+    const { memberNickname, postId } = useAppSelector(({ modal }) => modal);
+    const copyHandler = useCopy(DUMMY_BASE_URL + "/p/" + postId);
 
     return (
         <ModalCard
@@ -119,7 +115,7 @@ const ShareWithModal = ({
                     <a
                         className="shareWithModal-facebook"
                         href={`https://www.facebook.com/sharer/sharer.php?kid_directed_site=0&sdk=joey&u=${
-                            DUMMY_BASE_URL + "/p/" + DUMMY_P_ID
+                            DUMMY_BASE_URL + "/p/" + postId
                         }&display=popup&ref=plugin&src=share_button`}
                         target="_blank"
                         rel="noreferrer"
@@ -132,7 +128,7 @@ const ShareWithModal = ({
                     <a
                         className="shareWithModal-messenger"
                         href={`https://www.facebook.com/sharer/sharer.php?kid_directed_site=0&sdk=joey&u=${
-                            DUMMY_BASE_URL + "/p/" + DUMMY_P_ID
+                            DUMMY_BASE_URL + "/p/" + postId
                         }&display=popup&ref=plugin&src=share_button`}
                         target="_blank"
                         rel="noreferrer"
@@ -146,7 +142,7 @@ const ShareWithModal = ({
                     <a
                         className="shareWithModal-twitter"
                         href={`https://twitter.com/share?text=@님의 이 instagram 게시물 보기&url=${
-                            DUMMY_BASE_URL + "/p/" + DUMMY_P_ID
+                            DUMMY_BASE_URL + "/p/" + postId
                         }%3Futm_source%3Dig_web_button_share_sheet
                     `}
                         target="_blank"
@@ -159,8 +155,8 @@ const ShareWithModal = ({
                     </a>
                     <a
                         className="shareWithModal-email"
-                        href={`mailto:?subject=@${username}님의 이 인스타그램 게시물 보기&body=@${username}님의 이 인스타그램 게시물 보기 %20${
-                            DUMMY_BASE_URL + "/p/" + DUMMY_P_ID
+                        href={`mailto:?subject=@${memberNickname}님의 이 인스타그램 게시물 보기&body=@${memberNickname}님의 이 인스타그램 게시물 보기 %20${
+                            DUMMY_BASE_URL + "/p/" + postId
                         }%3Futm_source%3Dig_web_button_share_sheet`}
                         target="_top"
                     >

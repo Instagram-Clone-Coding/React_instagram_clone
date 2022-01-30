@@ -6,10 +6,10 @@ import ArticleImgSlider from "components/Home/Article/ArticleImgSlider";
 import ArticleMainIcons from "components/Home/Article/ArticleMainIcons";
 import ArticleMain from "components/Home/Article/ArticleMain";
 import CommentForm from "components/Home/Article/CommentForm";
-import { HomeType } from "@type";
 import useGapText from "hooks/useGapText";
 import useOnView from "hooks/useOnView";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { token } from "Routes";
 import {
     deleteLike,
     getExtraArticle,
@@ -35,15 +35,8 @@ const ArticleCard = styled(Card)`
     }
 `;
 
-const token = {
-    accessToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzM5MjIyMn0.hmbdXM_VNZNHvzp1Byts6GHQxhvvOHADwYF7KhNGFBVUIDQx1CZpUQYVYUD5VvAgmRMz9sdDO0qJYn_pPlAV5Q",
-    refreshToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjQyNzQxNDY4fQ.8mHe22G6uu6F_HB-5G8A7voUNLb5oRAuX84xlKWFUZeccsi_Y3DHMh1fC7w3uEG3UATvNc5U9PBPvF6hW1vpZw",
-};
-
 interface ArticleComponentPros {
-    article: HomeType.ArticleProps;
+    article: HomeType.ArticleStateProps;
     isObserving: boolean;
     isLast: boolean;
 }
@@ -59,9 +52,7 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
     const gapText = `${useGapText(article.postUploadDate)} 전`;
     const articleRef = useRef<HTMLDivElement>(null);
     const isVisible = useOnView(articleRef);
-    const extraArticlesCount = useAppSelector(
-        ({ home }) => home.extraArticlesCount,
-    );
+    const { extraArticlesCount } = useAppSelector(({ home }) => home);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -69,7 +60,7 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
             try {
                 await dispatch(
                     getExtraArticle({
-                        token: token.accessToken,
+                        token,
                         page: extraArticlesCount + 1,
                     }),
                 );
@@ -130,7 +121,11 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
         <ArticleCard as="article" ref={articleRef}>
             <ArticleHeader
                 memberImageUrl={article.memberImageUrl}
+                memberUsername={article.memberUsername}
                 memberNickname={article.memberNickname}
+                postId={article.postId}
+                isFollowing={article.isFollowing}
+                followLoading={article.followLoading}
             />
             <ArticleImgSlider
                 imageDTOs={article.postImageDTOs}
@@ -142,7 +137,8 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
             />
             <ArticleMain
                 followingUserWhoLikesArticle={followingUserWhoLikesArticle}
-                likesCount={likesCount}
+                likesCount={article.postLikesCount}
+                memberUsername={article.memberUsername}
                 memberImageUrl={article.memberImageUrl}
                 memberNickname={article.memberNickname}
                 content={article.postContent}
