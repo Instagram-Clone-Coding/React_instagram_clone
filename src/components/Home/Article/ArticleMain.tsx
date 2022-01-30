@@ -1,5 +1,5 @@
 import PopHeart from "components/Common/PopHeart";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 import Username from "../../Common/Username";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
@@ -64,25 +64,34 @@ const ArticleMain = ({
     commentsCount,
     comments,
 }: MainProps) => {
+    // like state
     const [isComment1Liked, setIsComment1Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
     const [isComment2Liked, setIsComment2Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
+    // content state
     const [isFullText, setIsFullText] = useState(false);
     const { miniProfile } = useAppSelector(({ modal }) => modal);
     const dispatch = useAppDispatch();
-    const isTextLineBreak = content.includes("\n");
-    const textArray = isTextLineBreak ? content.split("\n") : [content];
+    const isTextLineBreak = useMemo(() => content.includes("\n"), [content]);
+    const textArray = useMemo(
+        () => (isTextLineBreak ? content.split("\n") : [content]),
+        [content, isTextLineBreak],
+    );
 
-    const textSpan = !isFullText ? (
-        <span>{textArray[0]}</span>
-    ) : (
-        textArray.map((line: string, index: number) => {
-            return (
-                <span key={index}>
-                    {line}
-                    <br />
-                </span>
-            );
-        })
+    const textSpan = useMemo(
+        () =>
+            !isFullText ? (
+                <span>{textArray[0]}</span>
+            ) : (
+                textArray.map((line: string, index: number) => {
+                    return (
+                        <span key={index}>
+                            {line}
+                            <br />
+                        </span>
+                    );
+                })
+            ),
+        [isFullText, textArray],
     );
     const comment1LikeHandler = () => {
         setIsComment1Liked((prev) => !prev);

@@ -9,8 +9,12 @@ import CommentForm from "components/Home/Article/CommentForm";
 import useGapText from "hooks/useGapText";
 import useOnView from "hooks/useOnView";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
-import { getExtraArticle } from "app/store/ducks/home/homThunk";
 import { token } from "Routes";
+import {
+    deleteLike,
+    getExtraArticle,
+    postLike,
+} from "app/store/ducks/home/homThunk";
 
 const ArticleCard = styled(Card)`
     margin-bottom: 24px;
@@ -30,6 +34,7 @@ const ArticleCard = styled(Card)`
         }
     }
 `;
+
 interface ArticleComponentPros {
     article: HomeType.ArticleStateProps;
     isObserving: boolean;
@@ -43,7 +48,8 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
         article.followingMemberUsernameLikedPost;
     // like state
     const [isLiked, setIsliked] = useState(article.postLikeFlag);
-    const gapText = useGapText(article.postUploadDate);
+    const [likesCount, setLikesCount] = useState(article.postLikesCount);
+    const gapText = `${useGapText(article.postUploadDate)} 전`;
     const articleRef = useRef<HTMLDivElement>(null);
     const isVisible = useOnView(articleRef);
     const { extraArticlesCount } = useAppSelector(({ home }) => home);
@@ -67,13 +73,48 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
         // isLast && isVisible && dispatchExtraArticle();
     }, [isObserving, isVisible, dispatch]);
 
+    const dispatchPostLike = async () => {
+        try {
+            await dispatch(
+                postLike({ token: token.accessToken, postId: article.postId }),
+            ).unwrap();
+        } catch (error) {
+            setIsliked(false);
+            setLikesCount((prev) => prev - 1);
+        }
+    };
+
+    const dispatchDeleteLike = async () => {
+        try {
+            await dispatch(
+                deleteLike({
+                    token: token.accessToken,
+                    postId: article.postId,
+                }),
+            ).unwrap();
+        } catch (error) {
+            setIsliked(true);
+            setLikesCount((prev) => prev + 1);
+        }
+    };
+
     const toggleLikeHandler = (): void => {
-        setIsliked((prev: boolean) => !prev);
+        if (!isLiked) {
+            setIsliked(true);
+            setLikesCount((prev) => prev + 1);
+            dispatchPostLike();
+        } else {
+            setIsliked(false);
+            setLikesCount((prev) => prev - 1);
+            dispatchDeleteLike();
+        }
     };
 
     const changeToLikeHandler = (): undefined => {
         if (isLiked) return;
         setIsliked(true);
+        setLikesCount((prev) => prev + 1);
+        dispatchPostLike();
     };
 
     return (

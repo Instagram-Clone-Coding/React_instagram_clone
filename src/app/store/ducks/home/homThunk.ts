@@ -57,6 +57,7 @@ export const getExtraArticle = createAsyncThunk<
             `${BASE_URL}/posts?page=${payload.page}`,
             config,
         ); // 단건 조회 api 추가
+
         if (empty) {
             throw ThunkOptions.rejectWithValue(
                 "게시물이 더 이상 존재하지 않습니다.",
@@ -115,6 +116,64 @@ export const postFollow = createAsyncThunk<
             null,
             config,
         );
+        return data;
+    } catch (error) {
+        throw ThunkOptions.rejectWithValue(error);
+    }
+});
+
+export const postLike = createAsyncThunk<
+    {
+        status: number;
+        code: string;
+        message: string;
+        errors?: [];
+        data?: {
+            status: boolean;
+        };
+    },
+    // any,
+    { token: string; postId: number }
+>("home/postLike", async (payload, ThunkOptions) => {
+    const config = {
+        headers: { Authorization: `Bearer ${payload.token}` },
+        params: {
+            postId: payload.postId,
+        },
+    };
+    try {
+        const { data } = await axios.post(
+            `${BASE_URL}/posts/like`,
+            null,
+            config,
+        );
+        return data;
+    } catch (error) {
+        throw ThunkOptions.rejectWithValue(error);
+    }
+});
+
+export const deleteLike = createAsyncThunk<
+    {
+        status: number;
+        code: string;
+        message: string;
+        errors?: [];
+        data?: {
+            status: boolean;
+        };
+    },
+    // any,
+    { token: string; postId: number }
+>("home/deleteLike", async (payload, ThunkOptions) => {
+    const config = {
+        headers: { Authorization: `Bearer ${payload.token}` },
+        params: {
+            postId: payload.postId,
+        },
+    };
+    try {
+        const { data } = await axios.delete(`${BASE_URL}/posts/like`, config);
         return data;
     } catch (error) {
         throw ThunkOptions.rejectWithValue(error);

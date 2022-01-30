@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
+    deleteLike,
     getExtraArticle,
     getHomeArticles,
     postFollow,
     postUnfollow,
+    postLike,
 } from "app/store/ducks/home/homThunk";
 
 const DUMMY_ARTICLES: HomeType.ArticleStateProps[] = [
@@ -607,6 +609,17 @@ const homeSlice = createSlice({
                         article.isFollowing = false;
                     }
                 });
+            .addCase(postLike.pending, (state) => {
+                state.isAsyncError = false;
+            })
+            .addCase(postLike.rejected, (state, action) => {
+                state.isAsyncError = true;
+            })
+            .addCase(deleteLike.pending, (state) => {
+                state.isAsyncError = false;
+            })
+            .addCase(deleteLike.rejected, (state, action) => {
+                state.isAsyncError = true;
             });
     },
 });
