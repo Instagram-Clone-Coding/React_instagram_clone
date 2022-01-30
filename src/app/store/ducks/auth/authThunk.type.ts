@@ -10,7 +10,5 @@ export interface Token {
     data: {
         type: string;
         accessToken: string;
-        refreshToken: string;
-        accessTokenExpires: string;
     };
 }

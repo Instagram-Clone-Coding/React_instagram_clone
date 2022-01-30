@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { authReducer } from "app/store/ducks/auth/signinSlice";
+import { authReducer } from "app/store/ducks/auth/authSlice";
 import { homeReducer } from "app/store/ducks/home/homeSlice";
 
 export const store = configureStore({
