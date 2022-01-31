@@ -70,7 +70,9 @@ const Home = () => {
                     onModalOn={() => {
                         dispatch(modalActions.maintainModalon("unfollowing"));
                     }}
-                    onModalOff={() => dispatch(modalActions.resetModal())}
+                    onModalOff={() =>
+                        dispatch(modalActions.changeActivatedModal(null))
+                    }
                 />
             )}
             {activatedModal === "articleMenu" && memberNickname && postId && (
