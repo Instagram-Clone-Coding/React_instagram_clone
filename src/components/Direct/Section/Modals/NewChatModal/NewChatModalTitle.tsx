@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { closeModal, selectView } from "app/store/ducks/direct/DirectSlice";
+import { closeModal, selectNewChatUser, selectView } from "app/store/ducks/direct/DirectSlice";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
 import Loading from "components/Common/Loading";
 import { makeRoom } from "app/store/ducks/direct/DirectThunk";

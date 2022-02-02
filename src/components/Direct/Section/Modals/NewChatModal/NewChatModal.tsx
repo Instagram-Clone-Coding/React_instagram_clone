@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import NewChatModalTitle from "./NewChatModalTitle";
 import NewChatSearchBar from "./NewChatSearchBar";
 import NewChatFriendList from "./NewChatFriendList";
 import ModalCard from "styles/UI/ModalCard";
 import { useAppDispatch } from "app/store/hooks";
-import { closeModal, openModal } from "app/store/ducks/direct/DirectSlice";
+import { closeModal, openModal, selectNewChatUser } from "app/store/ducks/direct/DirectSlice";
 
 
 const NewChatModalContainer = styled.div`
@@ -16,6 +16,13 @@ const NewChatModalContainer = styled.div`
 
 const NewChatModal = () => {
     const dispatch = useAppDispatch();
+
+    useEffect(()=>{
+        return () => {
+            dispatch(selectNewChatUser(null))
+        }
+    },[])
+
 
     return (
         <ModalCard modalType={"withBackDrop"} onModalOn={() => {

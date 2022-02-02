@@ -25,7 +25,7 @@ const DetailSectionContainer = styled.div`
       height: 16px;
       margin-right: 10px;
       border: 1px solid rgba(var(--ca6, 219, 219, 219), 1);
-
+      
       &:focus {
         border-color: rgba(var(--d69, 0, 149, 246), 1);
       }
