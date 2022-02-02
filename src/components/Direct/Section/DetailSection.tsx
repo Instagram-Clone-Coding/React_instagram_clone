@@ -50,7 +50,11 @@ const DetailSectionContainer = styled.div`
       display: flex;
       align-items: center;
       padding: 8px 16px;
-
+      cursor: pointer;
+      &:hover{
+        background-color: #fafafa;
+      }
+      
       img {
         width: 56px;
         height: 56px;
