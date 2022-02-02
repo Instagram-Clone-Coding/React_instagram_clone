@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { openModal } from "app/store/ducks/direct/DirectSlice";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
-import BlockModal from "components/Direct/Section/Modals/BlockModal";
+import CommonDirectModal from "./Modals/CommonDirectModal";
 
 const RequestsWishContainerContainer = styled.div`
   position: absolute;
@@ -105,7 +105,10 @@ const RequestsWishContainer = () => {
             </div>
 
             {
-                modal === "block" && <BlockModal />
+                modal === "block" && <CommonDirectModal modalType={"block"} actionName={"차단"}
+                                                        title={"개복치님을 차단하시겠어요?"}
+                                                        description={"상대방은 Instagram에서 회원님의 프로필, 게시물 또는 스토리를 찾을 수 없습니다. Instagram은 회원님이 차단한 사실을 상대방에게 알리지 않습니다."}
+                />
             }
         </RequestsWishContainerContainer>
     );

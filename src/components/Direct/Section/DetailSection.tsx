@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import BlockModal from "components/Direct/Section/Modals/BlockModal";
 import ReportModal from "components/Home/Modals/ReportModal";
 import { closeModal, openModal } from "app/store/ducks/direct/DirectSlice";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
