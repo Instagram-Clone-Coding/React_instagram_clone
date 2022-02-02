@@ -47,7 +47,7 @@ const ModalButtonContent = ({ actionName }: ModalButtonContentProps) => {
                 await dispatch(
                     deleteRoom({
                         token: token.accessToken,
-                        roomId: selectedRoom,
+                        roomId: selectedRoom.chatRoomId,
                     }),
                 );
             } catch (error) {

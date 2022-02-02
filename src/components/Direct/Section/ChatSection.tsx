@@ -20,16 +20,16 @@ const ChatSection = () => {
             <ChatBubble me={true} message={"saddasdasd"} />
             <ChatBubble me={false} message={"saddasdasd"} />
             <ChatBubble me={true}
-                        message={"saddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasd"} />
+                        message={"나중에 대체될겁니다"} />
             <ChatBubble me={true} message={"saddasdasd"} />
             <ChatBubble me={false} message={"saddasdasd"} />
             <ChatBubble me={true} message={"saddasdasd"} />
             <ChatBubble me={false} message={"saddasdasd"} />
+            <ChatBubble me={true} message={"나중에 대체될겁니다"} />
             <ChatBubble me={true} message={"saddasdasd"} />
             <ChatBubble me={true} message={"saddasdasd"} />
             <ChatBubble me={true} message={"saddasdasd"} />
-            <ChatBubble me={true} message={"saddasdasd"} />
-            <ChatBubble me={false} message={"saddasdasd"} />
+            <ChatBubble me={false} message={"나중에 대체될겁니다"} />
             <ChatBubble me={true} message={"saddasdasd"} />
         </ChatSectionContainer>
     );

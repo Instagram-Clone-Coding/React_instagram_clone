@@ -55,7 +55,7 @@ export const dummyChatList: Array<Direct.ChatItem> = [
         id: 4,
         avatarImg:
             "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-        memberUsername: "dlwlrma5",
+        memberUsername: "dlwlrma2",
         "memberName": "이지금",
         lastChatDate: "2021.11.10 21:00:00",
         lastMessage: "마지막으로 상대가 보낸 메세지",

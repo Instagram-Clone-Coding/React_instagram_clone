@@ -51,8 +51,7 @@ const SectionHeaderContainer = styled.section<SectionHeaderContainerType>`
 
 const SectionHeader = () => {
     const dispatch = useAppDispatch();
-    const { view } = useAppSelector((state => state.direct));
-
+    const { view,selectedRoom } = useAppSelector((state => state.direct));
     const viewConvertHandler = () => {
         switch (view) {
             case "detail":
@@ -61,6 +60,9 @@ const SectionHeader = () => {
             case "chat":
                 dispatch(selectView("detail"));
                 break;
+            // case "requestsChat":
+            //     dispatch(selectView("detail"))
+            //     break
             default:
                 break;
         }
@@ -74,8 +76,8 @@ const SectionHeader = () => {
             <div className="user-profile-container">
                 {view === "detail" ? <h3>상세 정보</h3> :
                     <>
-                        <img src="https://placeimg.com/50/50/any" alt="selected-user-image" />
-                        <h3>개복치님</h3>
+                        <img src={selectedRoom?.invitees[0].imageUrl} alt="selected-user-image" />
+                        <h3>{selectedRoom?.invitees[0].username}</h3>
                     </>
                 }
             </div>

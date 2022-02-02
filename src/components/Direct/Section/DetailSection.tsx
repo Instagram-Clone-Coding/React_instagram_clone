@@ -88,8 +88,7 @@ const DetailSectionContainer = styled.div`
 
 const DetailSection = () => {
     const dispatch = useAppDispatch();
-    const { modal } = useAppSelector((state => state.direct));
-
+    const { modal, selectedRoom } = useAppSelector((state => state.direct));
     return (
         <DetailSectionContainer>
             <div className="direct-notification-check">
@@ -98,10 +97,10 @@ const DetailSection = () => {
             <div className="member-container">
                 <h3>멤버</h3>
                 <div className="member-profile-container">
-                    <img src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150" alt="맴버 사진" />
+                    <img src={selectedRoom?.invitees[0].imageUrl} alt="맴버 사진" />
                     <div className="member-id-name">
-                        <span className="username">dlwlrma</span>
-                        <span className="name">이지금</span>
+                        <span className="username">{selectedRoom?.invitees[0].username}</span>
+                        <span className="name">{selectedRoom?.invitees[0].name}</span>
                     </div>
                 </div>
             </div>
@@ -130,7 +129,8 @@ const DetailSection = () => {
             }
             {
                 modal === "block" && <CommonDirectModal modalType={"block"} actionName={"차단"}
-                title={"개복치님을 차단하시겠어요?"} description={"상대방은 Instagram에서 회원님의 프로필, 게시물 또는 스토리를 찾을 수 없습니다. Instagram은 회원님이 차단한 사실을 상대방에게 알리지 않습니다."}
+                                                        title={"개복치님을 차단하시겠어요?"}
+                                                        description={"상대방은 Instagram에서 회원님의 프로필, 게시물 또는 스토리를 찾을 수 없습니다. Instagram은 회원님이 차단한 사실을 상대방에게 알리지 않습니다."}
                 />
             }
             {

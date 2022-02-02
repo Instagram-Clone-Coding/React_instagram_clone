@@ -1,15 +1,15 @@
 import React from "react";
 import styled from "styled-components";
-import { closeModal } from "app/store/ducks/direct/DirectSlice";
+import { closeModal, selectView } from "app/store/ducks/direct/DirectSlice";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
 import Loading from "components/Common/Loading";
 import { makeRoom } from "app/store/ducks/direct/DirectThunk";
 import CloseSVG from "assets/Svgs/CloseSVG";
 const token = {
     accessToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzQ3MDM3Mn0.N39vELPR_kSikcKYPmfAEOE2KHteW4f-fvu9ezYRtLIgN5NH7DdmjqmunnD-jwECRCnVID7rt2x4xcgwxMW2xw",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0Mzc5NzA5Nn0.UCcHozBqGQoMzBvjWqeCuB9A71Kd0JvANWyh-SOV41joWynQAZwpGOh9aZ7CnMAwRlAPcNtMpndSMtNkBQfrug",
     refreshToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzQ3MDM3Mn0.N39vELPR_kSikcKYPmfAEOE2KHteW4f-fvu9ezYRtLIgN5NH7DdmjqmunnD-jwECRCnVID7rt2x4xcgwxMW2xw",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0Mzc5NzA5Nn0.UCcHozBqGQoMzBvjWqeCuB9A71Kd0JvANWyh-SOV41joWynQAZwpGOh9aZ7CnMAwRlAPcNtMpndSMtNkBQfrug",
 };
 
 interface NewChatModalTitleContainerType {
@@ -46,9 +46,11 @@ const NewChatModalTitle = () => {
     const { selectedNewChatUser, isLoading } = useAppSelector(state => state.direct);
 
 
-    const makeRoomHandler = () => {
+    const makeRoomHandler = async () => {
         if (selectedNewChatUser) {
-            dispatch(makeRoom({ token: token.accessToken, username: selectedNewChatUser }));
+            await dispatch(makeRoom({ token: token.accessToken, username: selectedNewChatUser }));
+            dispatch(closeModal())
+            dispatch(selectView("chat"))
         }
     };
 

@@ -22,7 +22,7 @@ export const makeRoom = createAsyncThunk<Direct.RoomsProps,
             null,
             config,
         );
-        return data;
+        return data.data;
     } catch (error) {
         throw ThunkOptions.rejectWithValue(error);
     }

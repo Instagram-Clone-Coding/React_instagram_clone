@@ -14,8 +14,13 @@ declare module Direct {
         isRead: boolean;
     }
 
+    interface inviterProps {
+        username: string;
+        name: string;
+        imageUrl: string;
+    }
 
-    interface opponentProps {
+    interface inviteeProps {
         username: string;
         name: string;
         imageUrl: string;
@@ -24,7 +29,8 @@ declare module Direct {
     interface RoomsProps {
         status: boolean;
         chatRoomId: number;
-        opponents: opponentProps[];
+        inviter: inviterProps;
+        invitees: inviteeProps[];
     }
 
 

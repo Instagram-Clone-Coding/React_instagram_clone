@@ -7,7 +7,7 @@ export interface InitialStateType {
     view: Direct.currentSectionViewType;
     selectedChatItem: number | null;
     selectedNewChatUser: string | null;
-    selectedRoom: number | null;
+    selectedRoom: Direct.RoomsProps | null;
     isLoading: boolean;
 }
 
@@ -17,8 +17,7 @@ const initialState: InitialStateType = {
     view: "inbox",
     selectedChatItem: null,
     selectedNewChatUser: null,
-    // RoomNumber 하드코딩해뒀음 처음엔 null 로 둬야함
-    selectedRoom: 23,
+    selectedRoom: null,
     isLoading: false,
 };
 
@@ -50,8 +49,9 @@ const directSlice = createSlice({
             .addCase(makeRoom.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(makeRoom.fulfilled, (state) => {
+            .addCase(makeRoom.fulfilled, (state,action) => {
                 state.isLoading = false;
+                state.selectedRoom = action.payload;
             })
             .addCase(makeRoom.rejected, (state) => {
                 state.isLoading = false;
