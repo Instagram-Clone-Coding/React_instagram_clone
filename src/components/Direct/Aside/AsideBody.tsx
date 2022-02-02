@@ -11,7 +11,7 @@ const BASE_URL =
     "http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080";
 const token = {
     accessToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzgwNDM4OH0.qihCvQZsiTA0HTMJplelHrzj4pb_yAEhl_gJkHHeANtmBmrSA_DoJs0Jf4vgglJKBqkpxKR11SdR54_kBaMO7g",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzgxMTU3MH0._bLGXXtPlrAWXf8FVwGTGGeJSWb5S45tzqzatQQkYuUkZ0DzDiZJgi7GTgMerDhxmyms-PFTlL8HwueKqmdejg",
     refreshToken:
         "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjQyNzQxNDY4fQ.8mHe22G6uu6F_HB-5G8A7voUNLb5oRAuX84xlKWFUZeccsi_Y3DHMh1fC7w3uEG3UATvNc5U9PBPvF6hW1vpZw",
 };
@@ -150,11 +150,9 @@ const AsideBody = () => {
     useEffect(() => {
 
         const getChatList = async () => {
-
             const config = {
                 headers: { Authorization: `Bearer ${token.accessToken}` },
             };
-
             try {
                 const {
                     data:{data}
@@ -162,7 +160,6 @@ const AsideBody = () => {
 
                 setChatList(data.content)
             } catch (err) {
-
             }
         };
         getChatList()

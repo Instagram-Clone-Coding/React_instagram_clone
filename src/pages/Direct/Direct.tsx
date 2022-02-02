@@ -24,6 +24,7 @@ const Direct = () => {
     }, []);
 
 
+
     const viewRender = () => {
         switch (view) {
             case "inbox":

@@ -1,9 +1,18 @@
-import React, { ChangeEvent, Dispatch, KeyboardEventHandler, MouseEventHandler, SetStateAction, useState } from "react";
+import React, {
+    ChangeEvent,
+    Dispatch,
+    KeyboardEventHandler,
+    SetStateAction,
+    useEffect,
+    useState,
+} from "react";
 import styled from "styled-components";
 import { ReactComponent as Emoji } from "assets/Svgs/direct-emoji-icon.svg";
 import { ReactComponent as ImageUpload } from "assets/Svgs/direct-image-upload.svg";
 import { ReactComponent as Heart } from "assets/Svgs/heart.svg";
 import Picker, { IEmojiData } from "emoji-picker-react";
+import SockJS from "sockjs-client";
+import Stomp from "stompjs";
 
 interface ChatBarType {
     message: string;
@@ -76,7 +85,13 @@ const ChatBar = ({ message, setMessage }: ChatBarType) => {
     const [showPicker, setShowPicker] = useState(false);
     const sendMessage = () => {
         // Todo : axios
-        console.log(message);
+        stompClient.send("/pub/messages",{},JSON.stringify({
+            'message': message,
+            'senderId': 7,
+            'receiverId': 14,
+            'roomId': 5
+        }));
+
         setMessage("");
     };
 
@@ -110,6 +125,20 @@ const ChatBar = ({ message, setMessage }: ChatBarType) => {
 
     const imageUploadHandler = (e: ChangeEvent<HTMLInputElement>) => {
     };
+
+
+    let sockJS = new SockJS("http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/ws-connection");
+    let stompClient : Stomp.Client = Stomp.over(sockJS);
+    stompClient.debug= (err) => {
+        console.log(err);};
+
+    useEffect(()=>{
+        stompClient.connect({},()=>{
+            stompClient.subscribe('/sub/rooms/5',(data)=>{
+                const newMessage : any = JSON.parse(data.body) as any;
+            });
+        });
+    },[])
 
 
     return (

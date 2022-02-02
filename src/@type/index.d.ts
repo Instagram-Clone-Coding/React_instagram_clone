@@ -30,8 +30,8 @@ declare module Direct {
     interface RoomsProps {
         status: boolean;
         chatRoomId: number;
-        inviter: inviterProps;
-        invitees: inviteeProps[];
+        inviter: inviterProps; // 초대한사람
+        invitees: inviteeProps[]; // 초대받은사람
     }
 
 
