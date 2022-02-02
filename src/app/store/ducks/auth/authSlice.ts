@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { saveToken, signIn, reissueToken } from "./authThunk";
+import { saveToken, signIn, reissueToken, checkUsername } from "./authThunk";
 
 export interface AuthStateProps {
     username: string;
@@ -7,6 +7,7 @@ export interface AuthStateProps {
     isLoading: boolean;
     isAsyncReject: boolean;
     errorMessage: string | undefined;
+    hasUsername: boolean | null;
 }
 
 interface UserInfo {
@@ -19,6 +20,7 @@ const initialState: AuthStateProps = {
     isLogin: false,
     isAsyncReject: false,
     errorMessage: "",
+    hasUsername: null,
 };
 
 const authSlice = createSlice({
@@ -27,7 +29,7 @@ const authSlice = createSlice({
     reducers: {
         setUserName: (state, action: PayloadAction<UserInfo>) => {
             state.username = action.payload.username;
-        }, // thunkQption.dispatch
+        },
     },
     extraReducers: (bulid) => {
         bulid
@@ -39,23 +41,26 @@ const authSlice = createSlice({
                 state.isLoading = false;
                 state.isLogin = true;
                 state.username = action.meta.arg.username;
-                saveToken(state.username, action.payload);
+                saveToken(action.payload);
             })
-            .addCase(signIn.rejected, (state, action) => {
+            .addCase(signIn.rejected, (state) => {
                 state.isAsyncReject = true;
-                if (String(action.payload).includes("Network")) {
-                    state.errorMessage = `네트워크 연결을 확인해주세요`;
+                // null 일때 처리
+                if (state.hasUsername) {
+                    state.errorMessage = `잘못된 비밀번호입니다. \n다시 확인하세요.`;
                 } else {
-                    state.errorMessage = `사용자 이름과 비밀번호를 확인하고 다시 시도해주세요`;
-                } // 아이디 유무로 에러 나누기
+                    state.errorMessage = `입력한 사용자 이름을 사용하는 계정을 찾을 수 없습니다. 사용자 이름을 확인하고 다시 시도하세요.`;
+                }
             })
             .addCase(reissueToken.fulfilled, (state, action) => {
-                saveToken(state.username, action.payload);
+                saveToken(action.payload);
             })
-            .addCase(reissueToken.rejected, (state, action) => {});
+            .addCase(checkUsername.fulfilled, (state, action) => {
+                state.hasUsername = !action.payload;
+            });
     },
 });
 
-export const { setUserName } = authSlice.actions;
+export const authAction = authSlice.actions;
 
 export const authReducer = authSlice.reducer;

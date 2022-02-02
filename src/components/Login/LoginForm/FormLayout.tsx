@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 import Line from "components/Common/Line";
 import FacebookLogin from "components/Common/FacebookLogin";
 import LoginFormAndButton from "components/Login/LoginForm/FormAndButton";
+import { useAppSelector } from "app/store/Hooks";
 
 const FormContainer = styled.div`
+    white-space: pre-wrap; // 개행처리
     .logo {
         margin: 22px auto 12px;
     }
@@ -30,10 +32,18 @@ const FormContainer = styled.div`
         .inputForm {
             display: flex;
             flex-direction: column;
-            & > div {
+
+            .loginForm {
                 margin-top: 24px;
                 display: flex;
                 flex-direction: column;
+            }
+            .errorMessage {
+                color: #ed4956;
+                font-size: 14px;
+                line-height: 18px;
+                text-align: center;
+                margin: 10px 40px;
             }
         }
     }
@@ -46,16 +56,23 @@ const instagramImage: Login.ImageProps = {
 };
 
 export default function FormLayout() {
+    const { errorMessage } = useAppSelector((state) => state.auth);
+
     return (
         <FormContainer>
             <ImageSprite {...instagramImage} className="logo" />
             <div className="inputContainer">
                 <form className="inputForm">
-                    <div>
+                    <div className="loginForm">
                         <LoginFormAndButton />
                         <Line />
                         <FacebookLogin bgColor="#fff" color="#385185" />
                     </div>
+                    {errorMessage && (
+                        <div className="errorMessage">
+                            <p>{errorMessage}</p>
+                        </div>
+                    )}
                 </form>
                 <Link to="/accounts/password/reset/">
                     비밀번호를 잊으셨나요?
