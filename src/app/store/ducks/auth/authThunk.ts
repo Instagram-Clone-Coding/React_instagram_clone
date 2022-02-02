@@ -11,7 +11,7 @@ export const checkUsername = createAsyncThunk<boolean, { username: string }>(
             const {
                 data: { data },
             } = await axios.post(
-                `http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/accounts/check?username=${payload.username}`,
+                `${process.env.REACT_APP_BASE_URL}/accounts/check?username=${payload.username}`,
             );
             return data;
         } catch (error) {
@@ -49,7 +49,7 @@ export const reissueToken = createAsyncThunk<Token, void>(
     async () => {
         try {
             const response = await axios.post(
-                `http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/reissue`,
+                `${process.env.REACT_APP_BASE_URL}/reissue`,
             );
             console.log(response);
             return response.data;
