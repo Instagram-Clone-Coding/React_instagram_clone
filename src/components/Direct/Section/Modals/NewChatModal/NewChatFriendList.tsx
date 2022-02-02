@@ -34,7 +34,7 @@ const NewChatFriendList = () => {
             <div className="new-chat-recommend-container">
                 {
                     dummyChatList.map(item => (
-                        <NewChatRecommendUser key={item.id} {...item}/>
+                        <NewChatRecommendUser key={item.chatRoomId} {...item}/>
                     ))
                 }
             </div>

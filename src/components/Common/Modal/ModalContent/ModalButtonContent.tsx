@@ -7,9 +7,9 @@ import { deleteRoom } from "../../../../app/store/ducks/direct/DirectThunk";
 
 const token = {
     accessToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzQ3MDM3Mn0.N39vELPR_kSikcKYPmfAEOE2KHteW4f-fvu9ezYRtLIgN5NH7DdmjqmunnD-jwECRCnVID7rt2x4xcgwxMW2xw",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzgwMzIwNH0.pftOV8QO0D9gEhIyJMtdQ13u-eUHzDKR4qmLOITb44Y-YERm_OyInkovsCrw4YgnSVfNAlP52uC8Y1bfIpXgOA",
     refreshToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzQ3MDM3Mn0.N39vELPR_kSikcKYPmfAEOE2KHteW4f-fvu9ezYRtLIgN5NH7DdmjqmunnD-jwECRCnVID7rt2x4xcgwxMW2xw",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzgwMzIwNH0.pftOV8QO0D9gEhIyJMtdQ13u-eUHzDKR4qmLOITb44Y-YERm_OyInkovsCrw4YgnSVfNAlP52uC8Y1bfIpXgOA",
 };
 
 

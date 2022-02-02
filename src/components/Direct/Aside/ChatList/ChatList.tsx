@@ -5,7 +5,7 @@ const ChatList = ({ chatList }: ChatListProps) => {
     return (
         <div>
             {chatList.map((chatListItem) => (
-                <ChatListItem key={chatListItem.id} {...chatListItem} />
+                <ChatListItem key={chatListItem.chatRoomId} {...chatListItem} />
             ))}
         </div>
     );

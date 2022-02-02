@@ -40,36 +40,36 @@ const NewChatRecommendUserContainer = styled.div`
 `;
 
 
-const NewChatRecommendUser = ({ id, avatarImg, memberUsername, memberName }: Direct.ChatItem) => {
+const NewChatRecommendUser = ({ chatRoomId, invitees }: Direct.ChatItem) => {
     const { selectedNewChatUser } = useAppSelector(state => state.direct);
     const dispatch = useAppDispatch();
 
     const selectNewChatUserHandler = () => {
 
         if (!selectedNewChatUser) {
-            dispatch(selectNewChatUser(memberUsername));
-        }else if(selectedNewChatUser === memberUsername){
+            dispatch(selectNewChatUser(invitees[0].username));
+        }else if(selectedNewChatUser === invitees[0].username){
             dispatch(unSelectNewChatUser())
         }else {
-            dispatch(selectNewChatUser(memberUsername))
+            dispatch(selectNewChatUser(invitees[0].username))
         }
     };
     return (
         <NewChatRecommendUserContainer onClick={selectNewChatUserHandler}>
             <div className="user-info">
-                <img src={avatarImg} alt="avatarImg" className="user-image" />
+                <img src={invitees[0].imageUrl} alt="avatarImg" className="user-image" />
                 <div className="user-name-container">
                 <span className="user-memberUsername">
-                    {memberUsername}
+                    {invitees[0].username}
                 </span>
                     <span className="user-memberName">
-                    {memberName}
+                    {invitees[0].name}
                 </span>
                 </div>
             </div>
             <div className="circle-svg">
                 {
-                    selectedNewChatUser === memberUsername ? <CheckedCircle /> : <Circle />
+                    selectedNewChatUser === invitees[0].username ? <CheckedCircle /> : <Circle />
                 }
             </div>
         </NewChatRecommendUserContainer>

@@ -1,17 +1,18 @@
 declare module Direct {
 
+    interface MessageDTO {
+        messageId:number;
+        content:string;
+        userId:number;
+        messageType:string
+    }
 
     interface ChatItem {
-        id: number;
-        avatarImg: string;
-        // 아이디
-        memberUsername: string;
-        //실제이름
-        memberName: string;
-        lastChatDate: string;
-        lastMessage: string;
-        isImLast: boolean;
-        isRead: boolean;
+        chatRoomId:number;
+        lastMessage:MessageDTO;
+        unreadFlag:boolean;
+        inviter:inviterProps;
+        invitees:inviteeProps[];
     }
 
     interface inviterProps {

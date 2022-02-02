@@ -8,171 +8,33 @@ import { openModal, selectView } from "app/store/ducks/direct/DirectSlice";
 
 export const dummyChatList: Array<Direct.ChatItem> = [
     {
-        id: 0,
-        avatarImg:
-            "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-        memberUsername: "dlwlrma",
-        "memberName": "이지금",
-        lastChatDate: "2021.11.22 21:00:00",
-        lastMessage: "모행",
-        isImLast: true,
-        isRead: true,
-    },
-    {
-        id: 1,
-        avatarImg:
-            "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-        memberUsername: "dlwlrma1",
-        "memberName": "이지금",
-        lastChatDate: "2021.11.10 21:00:00",
-        lastMessage: "마지막으로 ",
-        isImLast: false,
-        isRead: false,
+        chatRoomId: 1,
+        lastMessage: {
+            messageId: 1,
+            content: "야 모해",
+            userId: 3,
+            messageType: "text",
+        },
+        unreadFlag: false,
+        inviter: {
+            username: "dlwlrma",
+            name: "이지금",
+            imageUrl: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+        },
 
-    }, {
-        id: 2,
-        avatarImg:
-            "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-        memberUsername: "dlwlrma3",
-        "memberName": "이지금",
-        lastChatDate: "2021.11.10 21:00:00",
-        lastMessage: "마지막으로 상대가 보낸 메세지",
-        isImLast: false,
-        isRead: false,
-
-    }, {
-        id: 3,
-        avatarImg:
-            "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-        memberUsername: "dlwlrma4",
-        "memberName": "이지금",
-        lastChatDate: "2021.11.10 21:00:00",
-        lastMessage: "마지막으로 ",
-        isImLast: false,
-        isRead: true,
-
-    }, {
-        id: 4,
-        avatarImg:
-            "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-        memberUsername: "dlwlrma2",
-        "memberName": "이지금",
-        lastChatDate: "2021.11.10 21:00:00",
-        lastMessage: "마지막으로 상대가 보낸 메세지",
-        isImLast: false,
-        isRead: false,
+        invitees: [{
+            username: "dlwlrma2",
+            name: "이지금2",
+            imageUrl: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+        }],
     }
-
-
-    // ,
-    // {
-    //     id: 5,
-    //     avatarImg:
-    //         "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-    //     memberUsername: "dlwlrm6a",
-    //     "memberName": "이지금",
-    //     lastChatDate: "2021.11.10 21:00:00",
-    //     lastMessage: "마",
-    //     isImLast: false,
-    //     isRead: true,
-    //
-    // }, {
-    //     id: 6,
-    //     avatarImg:
-    //         "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-    //     memberUsername: "dlw7lrma",
-    //     "memberName": "이지금",
-    //     lastChatDate: "2021.11.10 21:00:00",
-    //     lastMessage: "마지막으로 상대가 보낸 막으로 상대가 보낸 메세지",
-    //     isImLast: false,
-    //     isRead: true,
-    //
-    // }, {
-    //     id: 7,
-    //     avatarImg:
-    //         "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-    //     memberUsername: "dlwlr8ma",
-    //     "memberName": "이지금",
-    //     lastChatDate: "2021.11.10 21:00:00",
-    //     lastMessage: "마지막으로 상대가 보낸 막으로 상대가 보낸 메세지",
-    //     isImLast: false,
-    //     isRead: false,
-    //
-    // }, {
-    //     id: 8,
-    //     avatarImg:
-    //         "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-    //     memberUsername: "dlwl9rma",
-    //     "memberName": "이지금",
-    //     lastChatDate: "2021.11.10 21:00:00",
-    //     lastMessage: "마지막으로 상대가 보낸 막으로 상대가 보낸 메세지",
-    //     isImLast: false,
-    //     isRead: true,
-    //
-    // }, {
-    //     id: 9,
-    //     avatarImg:
-    //         "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-    //     memberUsername: "dlw33lrma",
-    //     "memberName": "이지금",
-    //     lastChatDate: "2021.11.10 21:00:00",
-    //     lastMessage: "대가지",
-    //     isImLast: false,
-    //     isRead: true,
-    //
-    // }, {
-    //
-    //     id: 10,
-    //     avatarImg:
-    //         "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-    //     memberUsername: "dlwl6rma",
-    //     "memberName": "이지금",
-    //     lastChatDate: "2021.11.10 21:00:00",
-    //     lastMessage: "마세지",
-    //     isImLast: false,
-    //     isRead: true,
-    //
-    // }, {
-    //     id: 11,
-    //     avatarImg:
-    //         "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-    //     memberUsername: "dlwlr7ma",
-    //     "memberName": "이지금",
-    //     lastChatDate: "2021.11.10 21:00:00",
-    //     lastMessage: "마낸 메세지",
-    //     isImLast: false,
-    //     isRead: true,
-    //
-    // }, {
-    //     id: 12,
-    //     avatarImg:
-    //         "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-    //     memberUsername: "dlwlr6ma",
-    //     "memberName": "이지금",
-    //     lastChatDate: "2021.11.10 21:00:00",
-    //     lastMessage: " 메세지",
-    //     isImLast: false,
-    //     isRead: true,
-    //
-    // }, {
-    //     id: 13,
-    //     avatarImg:
-    //         "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-    //     memberUsername: "dlwlr2ma",
-    //     "memberName": "이지금",
-    //     lastChatDate: "2021.11.10 21:00:00",
-    //     lastMessage: "마지로지",
-    //     isImLast: false,
-    //     isRead: true,
-    //
-    // },
-];
-
+   ]
 
 const AsideBodyContainer = styled.section`
   height: calc(100% - 60px);
   overflow-y: auto;
   min-width: 350px;
+
   .no-follower-message {
     display: flex;
     margin: 8px 20px;
@@ -199,10 +61,11 @@ const AsideBodyContainer = styled.section`
     font-weight: 400;
     font-size: 12px;
     line-height: 16px;
-    color : #8e8e8e;
+    color: #8e8e8e;
     background-color: #fafafa;
   }
-  .delete-all-button{
+
+  .delete-all-button {
     position: absolute;
     width: 100%;
     background-color: white;
@@ -216,7 +79,7 @@ const AsideBodyContainer = styled.section`
     font-weight: 600;
     cursor: pointer;
   }
-  
+
 
   @media (max-width: 936px) {
     min-width: 300px;
@@ -247,7 +110,9 @@ const AsideBody = () => {
             <ChatList chatList={dummyChatList} />
             {
                 (view === "requests" || view === "requestsChat") && <div className={"delete-all-button"}
-                onClick={()=>{dispatch(openModal("deleteAll"))}}
+                                                                         onClick={() => {
+                                                                             dispatch(openModal("deleteAll"));
+                                                                         }}
                 >
                     모두 삭제
                 </div>

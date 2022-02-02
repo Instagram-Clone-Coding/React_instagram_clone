@@ -7,9 +7,9 @@ import { makeRoom } from "app/store/ducks/direct/DirectThunk";
 import CloseSVG from "assets/Svgs/CloseSVG";
 const token = {
     accessToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0Mzc5NzA5Nn0.UCcHozBqGQoMzBvjWqeCuB9A71Kd0JvANWyh-SOV41joWynQAZwpGOh9aZ7CnMAwRlAPcNtMpndSMtNkBQfrug",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzgwMzIwNH0.pftOV8QO0D9gEhIyJMtdQ13u-eUHzDKR4qmLOITb44Y-YERm_OyInkovsCrw4YgnSVfNAlP52uC8Y1bfIpXgOA",
     refreshToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0Mzc5NzA5Nn0.UCcHozBqGQoMzBvjWqeCuB9A71Kd0JvANWyh-SOV41joWynQAZwpGOh9aZ7CnMAwRlAPcNtMpndSMtNkBQfrug",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzgwMzIwNH0.pftOV8QO0D9gEhIyJMtdQ13u-eUHzDKR4qmLOITb44Y-YERm_OyInkovsCrw4YgnSVfNAlP52uC8Y1bfIpXgOA",
 };
 
 interface NewChatModalTitleContainerType {
