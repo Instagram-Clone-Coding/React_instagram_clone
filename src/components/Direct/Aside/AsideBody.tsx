@@ -3,9 +3,18 @@ import ChatList from "components/Direct/Aside/ChatList";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "app/store/hooks";
 import { openModal, selectView } from "app/store/ducks/direct/DirectSlice";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 // 그 다음 그 모듈 안에서 제가 export 한 타입을 가져와서 사용하는 방식입니다.
-
+const BASE_URL =
+    "http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080";
+const token = {
+    accessToken:
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzgwNDM4OH0.qihCvQZsiTA0HTMJplelHrzj4pb_yAEhl_gJkHHeANtmBmrSA_DoJs0Jf4vgglJKBqkpxKR11SdR54_kBaMO7g",
+    refreshToken:
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjQyNzQxNDY4fQ.8mHe22G6uu6F_HB-5G8A7voUNLb5oRAuX84xlKWFUZeccsi_Y3DHMh1fC7w3uEG3UATvNc5U9PBPvF6hW1vpZw",
+};
 export const dummyChatList: Array<Direct.ChatItem> = [
     {
         chatRoomId: 1,
@@ -71,8 +80,8 @@ export const dummyChatList: Array<Direct.ChatItem> = [
             name: "이지금2",
             imageUrl: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
         }],
-    }
-   ]
+    },
+];
 
 const AsideBodyContainer = styled.section`
   height: calc(100% - 60px);
@@ -135,7 +144,29 @@ const AsideBody = () => {
 
     const dispatch = useAppDispatch();
     const { view } = useAppSelector((state => state.direct));
+    const [chatList, setChatList] = useState<Direct.ChatItem[]>([]);
 
+    // 채팅방 목록 페이징 조회 아직은 더미데이터를 사용하고 있음
+    useEffect(() => {
+
+        const getChatList = async () => {
+
+            const config = {
+                headers: { Authorization: `Bearer ${token.accessToken}` },
+            };
+
+            try {
+                const {
+                    data:{data}
+                } = await axios.get(`${BASE_URL}/chat/rooms?page=${1}`,config)
+
+                setChatList(data.content)
+            } catch (err) {
+
+            }
+        };
+        getChatList()
+    }, []);
 
     return (
         <AsideBodyContainer>
