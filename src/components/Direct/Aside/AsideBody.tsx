@@ -27,6 +27,50 @@ export const dummyChatList: Array<Direct.ChatItem> = [
             name: "이지금2",
             imageUrl: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
         }],
+    },
+
+    {
+        chatRoomId: 2,
+        lastMessage: {
+            messageId: 1,
+            content: "야 모해",
+            userId: 3,
+            messageType: "text",
+        },
+        unreadFlag: false,
+        inviter: {
+            username: "dlwlrma",
+            name: "이지금",
+            imageUrl: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+        },
+
+        invitees: [{
+            username: "dlwlrma2",
+            name: "이지금2",
+            imageUrl: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+        }],
+    },
+
+    {
+        chatRoomId: 3,
+        lastMessage: {
+            messageId: 1,
+            content: "야 모해",
+            userId: 3,
+            messageType: "text",
+        },
+        unreadFlag: false,
+        inviter: {
+            username: "dlwlrma",
+            name: "이지금",
+            imageUrl: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+        },
+
+        invitees: [{
+            username: "dlwlrma1",
+            name: "이지금2",
+            imageUrl: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+        }],
     }
    ]
 
