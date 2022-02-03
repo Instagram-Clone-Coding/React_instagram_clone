@@ -13,7 +13,7 @@ import { ReactComponent as Heart } from "assets/Svgs/heart.svg";
 import Picker, { IEmojiData } from "emoji-picker-react";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-import * as StompJs from "@stomp/stompjs";
+
 interface ChatBarType {
     message: string;
     setMessage: Dispatch<SetStateAction<string>>;
@@ -34,7 +34,7 @@ const ChatBarContainer = styled.div<ChatBarContainerType>`
   .emoji-picker-react {
     width: 50% !important;
     @media (max-width: 970px) {
-      width: 100% !important;      
+      width: 100% !important;
     }
   }
 
@@ -75,19 +75,19 @@ const ChatBarContainer = styled.div<ChatBarContainerType>`
   }
 `;
 
+const sockJS = new SockJS("http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/ws-connection");
+let stompClient: Stomp.Client = Stomp.over(sockJS);
+stompClient.debug = (log) => {
+    console.log(log);
+};
 
-const ChatBar = ({ message, setMessage }: ChatBarType) => {
+const ChatBar = ({}: ChatBarType) => {
     // message to be trimed
-
+    const [message, setMessage] = useState<string>("");
     const [sendButtonClicked, setSendButtonClicked] = useState<boolean>(false);
     const [image, setImage] = useState<File>();
     const [showPicker, setShowPicker] = useState(false);
-    const sendMessage = () => {
-        // Todo : axios
 
-
-        setMessage("");
-    };
 
     const onEmojiClick = (event: React.MouseEvent, emojiObject: IEmojiData) => {
         setMessage(prevInput => prevInput + emojiObject.emoji);
@@ -121,39 +121,85 @@ const ChatBar = ({ message, setMessage }: ChatBarType) => {
     };
 
 
-    const client = new StompJs.Client({
-        brokerURL: 'ws://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/ws-connection/',
+    // 여기부터 웹소켓 관련 코드입니다.
 
-        debug: function (str) {
-            console.log(str);
-        },
-        reconnectDelay: 5000, //자동 재 연결
-        heartbeatIncoming: 4000,
-        heartbeatOutgoing: 4000,
-    });
-
-    client.onConnect = function (frame) {
-        // Do something, all subscribes must be done is this callback
-        // This is needed because this will be executed after a (re)connect
+    const sendMessage = () => {
+        waitForConnection(stompClient, function() {
+            stompClient.send("/pub/messages", {}, JSON.stringify({
+                "content": message,
+                "senderId": 1,
+                "messageType": "TEXT",
+                "roomId": 29,
+            }));
+        });
+        setMessage("");
     };
 
-    client.onStompError = function (frame) {
-        // Will be invoked in case of error encountered at Broker
-        // Bad login/passcode typically will cause an error
-        // Complaint brokers will set `message` header with a brief message. Body may contain details.
-        // Compliant brokers will terminate the connection after any error
-        console.log('Broker reported error: ' + frame.headers['message']);
-        console.log('Additional details: ' + frame.body);
-    };
 
-    client.activate();
+    useEffect(() => {
+        wsConnectSubscribe();
+        return () => {
+            wsDisConnectUnsubscribe();
+        };
+    }, []);
 
 
+    // 웹소켓이 연결될 때 까지 실행하는 함수
+    function waitForConnection(stompClient: Stomp.Client, callback: any) {
+        setTimeout(
+            function() {
+                // 연결되었을 때 콜백함수 실행
+                if (stompClient.ws.readyState === 1) {
+                    callback();
+                    // 연결이 안 되었으면 재호출
+                } else {
+                    waitForConnection(stompClient, callback);
+                }
+            },
+            1, // 밀리초 간격으로 실행
+        );
+    }
 
 
+    // 웹소켓 연결, 구독
+    function wsConnectSubscribe() {
+        try {
+            stompClient.connect(
+                {},
+                () => {
+                    stompClient.subscribe(
+                        `/sub/rooms/29`,
+                        (data) => {
+                            const newMessage = JSON.parse(data.body);
+                            console.log(newMessage);
+                            console.log(
+                                "구독성공!",
+                            );
+                        },
+                    );
+                },
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // 연결해제, 구독해제
+    function wsDisConnectUnsubscribe() {
+        try {
+            stompClient.disconnect(
+                () => {
+                    stompClient.unsubscribe("sub-0");
+                },
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <ChatBarContainer sendButtonClicked={sendButtonClicked}>
+
             {showPicker && <Picker
                 pickerStyle={{ width: "100%" }}
                 onEmojiClick={onEmojiClick} />}
