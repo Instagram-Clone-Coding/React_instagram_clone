@@ -133,6 +133,8 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
             />
             <ArticleMainIcons
                 isLiked={isLiked}
+                isBookmarked={article.postBookmarkFlag}
+                postId={article.postId}
                 onToggleLike={toggleLikeHandler}
             />
             <ArticleMain
