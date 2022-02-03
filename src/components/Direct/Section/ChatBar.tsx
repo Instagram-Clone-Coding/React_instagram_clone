@@ -3,7 +3,7 @@ import React, {
     Dispatch,
     KeyboardEventHandler,
     SetStateAction,
-    useEffect,
+    useEffect, useRef,
     useState,
 } from "react";
 import styled from "styled-components";
@@ -13,7 +13,7 @@ import { ReactComponent as Heart } from "assets/Svgs/heart.svg";
 import Picker, { IEmojiData } from "emoji-picker-react";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-
+import * as StompJs from "@stomp/stompjs";
 interface ChatBarType {
     message: string;
     setMessage: Dispatch<SetStateAction<string>>;
@@ -79,18 +79,12 @@ const ChatBarContainer = styled.div<ChatBarContainerType>`
 const ChatBar = ({ message, setMessage }: ChatBarType) => {
     // message to be trimed
 
-
     const [sendButtonClicked, setSendButtonClicked] = useState<boolean>(false);
     const [image, setImage] = useState<File>();
     const [showPicker, setShowPicker] = useState(false);
     const sendMessage = () => {
         // Todo : axios
-        stompClient.send("/pub/messages",{},JSON.stringify({
-            'message': message,
-            'senderId': 7,
-            'receiverId': 14,
-            'roomId': 5
-        }));
+
 
         setMessage("");
     };
@@ -127,18 +121,35 @@ const ChatBar = ({ message, setMessage }: ChatBarType) => {
     };
 
 
-    let sockJS = new SockJS("http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/ws-connection");
-    let stompClient : Stomp.Client = Stomp.over(sockJS);
-    stompClient.debug= (err) => {
-        console.log(err);};
+    const client = new StompJs.Client({
+        brokerURL: 'ws://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/ws-connection/',
 
-    useEffect(()=>{
-        stompClient.connect({},()=>{
-            stompClient.subscribe('/sub/rooms/5',(data)=>{
-                const newMessage : any = JSON.parse(data.body) as any;
-            });
-        });
-    },[])
+        debug: function (str) {
+            console.log(str);
+        },
+        reconnectDelay: 5000, //자동 재 연결
+        heartbeatIncoming: 4000,
+        heartbeatOutgoing: 4000,
+    });
+
+    client.onConnect = function (frame) {
+        // Do something, all subscribes must be done is this callback
+        // This is needed because this will be executed after a (re)connect
+    };
+
+    client.onStompError = function (frame) {
+        // Will be invoked in case of error encountered at Broker
+        // Bad login/passcode typically will cause an error
+        // Complaint brokers will set `message` header with a brief message. Body may contain details.
+        // Compliant brokers will terminate the connection after any error
+        console.log('Broker reported error: ' + frame.headers['message']);
+        console.log('Additional details: ' + frame.body);
+    };
+
+    client.activate();
+
+
+
 
 
     return (
