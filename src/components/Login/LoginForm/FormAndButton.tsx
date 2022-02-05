@@ -1,11 +1,9 @@
 import Input from "components/Common/Input";
-import { useState, MouseEvent } from "react";
+import { useState, MouseEvent, useRef } from "react";
 import SubmitButton from "components/Common/SubmitButton";
 
-import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import { signIn } from "app/store/ducks/auth/signinThunk";
-import { setUserName } from "app/store/ducks/auth/signinSlice";
-import { Redirect } from "react-router-dom";
+import { useAppDispatch } from "app/store/Hooks";
+import { signIn } from "app/store/ducks/auth/authThunk";
 
 const placeholder = {
     username: "사용자 이름",
@@ -13,18 +11,17 @@ const placeholder = {
 };
 
 const callSignInAPI = (
-    e: MouseEvent<HTMLButtonElement>,
     dispatch: Function,
     userData: { username: string; password: string },
 ) => {
-    e.preventDefault();
-    const requestSignIn = async () =>
+    const requestSignIn = async () => {
         await dispatch(
             signIn({
                 username: userData.username,
                 password: userData.password,
             }),
-        ).unwrap(); // try catch하기 -> 에러처리
+        );
+    };
     requestSignIn();
 };
 
@@ -32,46 +29,46 @@ export default function LoginFormAndButton() {
     const [userData, setUserData] = useState({
         username: "",
         password: "",
-    }); // useReducer
-
-    const changeUserData = (changed: {
-        username?: string;
-        password?: string;
-    }) => {
-        setUserData((prev) => ({ ...prev, ...changed }));
-    };
-
+    });
     const dispatch = useAppDispatch();
-    const isLogin = useAppSelector((state) => state.auth.isLogin);
-    if (isLogin) {
-        dispatch(setUserName({ username: userData.username })); // thunk에서 처리하기
-        return <Redirect to="/" />; // 해당 라우트 최상단에서 처리 **
-    }
+    const usernameRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
+
+    const submitButtonClickHandler = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        if (usernameRef.current && passwordRef.current) {
+            const newUserData = {
+                username: usernameRef.current.value,
+                password: passwordRef.current.value,
+            };
+            callSignInAPI(dispatch, newUserData);
+            setUserData((prev) => ({ ...prev, ...newUserData }));
+        }
+    };
 
     return (
         <>
             <Input
-                value={userData.username}
                 type="text"
                 inputName="username"
                 innerText={placeholder.username}
-                onUserDataUpdater={changeUserData}
+                ref={usernameRef}
             />
             <Input
-                value={userData.password}
                 type="password"
                 inputName="password"
                 innerText={placeholder.password}
-                onUserDataUpdater={changeUserData}
+                ref={passwordRef}
             />
             <SubmitButton
                 type="submit"
-                disabled={
-                    userData.username.length > 0 && userData.password.length > 5
-                        ? false
-                        : true
-                }
-                onClick={(e) => callSignInAPI(e, dispatch, userData)}
+                onClick={submitButtonClickHandler}
+                // disabled={
+                //     userData.username.length > 0 && userData.password.length > 5
+                //         ? false
+                //         : true
+                // }
+                // click해야 user정보 가져오기때문에, 그 전에 계속 보고있으려면 어떻게 해야할까?
             >
                 로그인
             </SubmitButton>
