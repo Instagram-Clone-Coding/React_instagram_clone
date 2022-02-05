@@ -9,6 +9,7 @@ export interface AuthStateProps {
     isAsyncReject: boolean;
     errorMessage: string | undefined;
     hasUsername: boolean | null;
+    isRefreshTokenChecking: boolean;
 }
 
 interface UserInfo {
@@ -22,6 +23,7 @@ const initialState: AuthStateProps = {
     isAsyncReject: false,
     errorMessage: "",
     hasUsername: null,
+    isRefreshTokenChecking: true,
 };
 
 const authSlice = createSlice({
@@ -30,6 +32,15 @@ const authSlice = createSlice({
     reducers: {
         setUserName: (state, action: PayloadAction<UserInfo>) => {
             state.username = action.payload.username;
+        },
+        login: (state) => {
+            state.isLogin = true;
+        },
+        logout: (state) => {
+            state.isLogin = false;
+        },
+        finishRefreshTokenChecking: (state) => {
+            state.isRefreshTokenChecking = false;
         },
     },
     extraReducers: (bulid) => {
