@@ -61,7 +61,7 @@ export const dummyChatList: Array<Direct.ChatItem> = [
     },
 
     {
-        chatRoomId: 3,
+        chatRoomId: 4,
         lastMessage: {
             messageId: 1,
             content: "야 모해",
@@ -77,6 +77,48 @@ export const dummyChatList: Array<Direct.ChatItem> = [
 
         invitees: [{
             username: "dlwlrma1",
+            name: "이지금2",
+            imageUrl: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+        }],
+    },
+    {
+        chatRoomId: 5,
+        lastMessage: {
+            messageId: 1,
+            content: "지금",
+            userId: 3,
+            messageType: "text",
+        },
+        unreadFlag: false,
+        inviter: {
+            username: "dlwlrma8",
+            name: "이지금",
+            imageUrl: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+        },
+
+        invitees: [{
+            username: "dlwlrma4",
+            name: "이지금1",
+            imageUrl: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+        }],
+    },
+    {
+        chatRoomId: 36,
+        lastMessage: {
+            messageId: 1,
+            content: "너",
+            userId: 3,
+            messageType: "text",
+        },
+        unreadFlag: false,
+        inviter: {
+            username: "dlwlrma7",
+            name: "이지금",
+            imageUrl: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+        },
+
+        invitees: [{
+            username: "dlwlrma3",
             name: "이지금2",
             imageUrl: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
         }],
@@ -145,7 +187,6 @@ const AsideBody = () => {
     const dispatch = useAppDispatch();
     const { view } = useAppSelector((state => state.direct));
     const [chatList, setChatList] = useState<Direct.ChatItem[]>([]);
-
     // 채팅방 목록 페이징 조회 아직은 더미데이터를 사용하고 있음
     useEffect(() => {
 

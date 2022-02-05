@@ -8,14 +8,13 @@ import SectionBody from "components/Direct/Section/SectionBody";
 import SectionHeader from "components/Direct/Section/SectionHeader";
 import { useAppSelector } from "app/store/hooks";
 import InboxSection from "components/Direct/Section/InboxSection";
-import RequestsSection from "../../components/Direct/Section/requestsSection";
+import RequestsSection from "components/Direct/Section/requestsSection";
 
 
 const Direct = () => {
 
     const [message, setMessage] = useState<string>("");
-    const { view } = useAppSelector((state => state.direct));
-
+    const view = useAppSelector(({direct}) => direct.view);
 
     // title 변경해주는 역할
     // Todo: (1) 이 부분 데이터 받아서 안 읽은 메세지 개수로 처리해줘야 합니다.
@@ -23,7 +22,7 @@ const Direct = () => {
         document.title = "(1) 받은 메세지함 · Direct";
     }, []);
 
-
+    console.log("최상위 컴포넌트 랜더링");
 
     const viewRender = () => {
         switch (view) {
@@ -38,7 +37,6 @@ const Direct = () => {
                 </>
         }
     };
-
     const borderStyle = `1px solid ${theme.color.bd_gray}`;
     return (
         <Layout style={{ backgroundColor: theme.color.bg_gray }}>
