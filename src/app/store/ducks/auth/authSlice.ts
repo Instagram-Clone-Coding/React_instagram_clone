@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { saveToken } from "customAxios";
-import { signIn, reissueToken, checkUsername } from "./authThunk";
+import { signIn, checkUsername } from "./authThunk";
 
 export interface AuthStateProps {
     username: string;
@@ -52,9 +52,6 @@ const authSlice = createSlice({
                 } else {
                     state.errorMessage = `입력한 사용자 이름을 사용하는 계정을 찾을 수 없습니다. 사용자 이름을 확인하고 다시 시도하세요.`;
                 }
-            })
-            .addCase(reissueToken.fulfilled, (state, action) => {
-                saveToken(action.payload);
             })
             .addCase(checkUsername.fulfilled, (state, action) => {
                 state.hasUsername = !action.payload;

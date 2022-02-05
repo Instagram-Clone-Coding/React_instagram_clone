@@ -11,8 +11,8 @@ export const checkUsername = createAsyncThunk<boolean, { username: string }>(
         try {
             const {
                 data: { data },
-            } = await axios.post(
-                `${process.env.REACT_APP_BASE_URL}/accounts/check?username=${payload.username}`,
+            } = await customAxios.post(
+                `/accounts/check?username=${payload.username}`,
             );
             return data;
         } catch (error) {
@@ -41,22 +41,6 @@ export const signIn = createAsyncThunk<Token, SignInRequestType>(
                 );
                 throw ThunkOptions.rejectWithValue(error);
             }
-        }
-    },
-);
-
-// 토큰재발급
-export const reissueToken = createAsyncThunk<Token, void>(
-    "auth/reissueToken",
-    async () => {
-        try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_BASE_URL}/reissue`,
-            );
-            console.log(response);
-            return response.data;
-        } catch (error) {
-            console.log(error);
         }
     },
 );
