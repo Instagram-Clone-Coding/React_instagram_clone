@@ -44,12 +44,10 @@ export default function InputAndButton() {
                 return (
                     <Input
                         key={index}
-                        value={userData[inputName]}
                         inputName={inputName}
                         type={inputType}
                         innerText={value}
                         validator={validator}
-                        onUserDataUpdater={changeUserData}
                     />
                 );
             })}
