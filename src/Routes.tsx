@@ -22,16 +22,17 @@ const Routes = () => {
                     <>
                         <Route exact path="/" component={Home} />
                         <Redirect to="/" />
+                        {/* 인스타그램에서는 404처리 하지만 일단 rediect 처리 */}
                     </>
                 ) : (
                     <>
-                        <Route exact path="/" component={Home} />
+                        {/* <Route exact path="/" component={Home} /> */}
                         <Route path="/accounts/signin" component={Login} />
                         {/* <Route
                             path="/accounts/emailsignup"
                             component={SignUp}
                         /> */}
-                        {/* <Redirect to="/accounts/signin" /> */}
+                        <Redirect to="/accounts/signin" />
                     </>
                 )}
             </Switch>
