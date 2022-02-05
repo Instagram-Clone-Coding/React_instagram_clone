@@ -22,7 +22,7 @@ declare module AuthType {
         status: number;
         code: number;
         message: string;
-        data: {
+        data?: {
             type: string;
             accessToken: string;
         };
