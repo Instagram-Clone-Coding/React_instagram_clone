@@ -17,20 +17,28 @@ declare module UI {
     }
 }
 
+declare module AuthType {
+    interface Token {
+        status: number;
+        code: number;
+        message: string;
+        data: {
+            type: string;
+            accessToken: string;
+        };
+    }
+}
+
 declare module Login {
     interface FooterTextProps {
         text: string;
         url?: string;
     }
 
-
-
     interface InputProps {
         inputName: "email" | "name" | "username" | "password" | "id";
         innerText: string;
-        value: string;
         type: "text" | "password";
-        onUserDataUpdater: Function;
         validator?: Function;
     }
 
@@ -120,6 +128,6 @@ declare module Common {
         width: number;
         height: number;
         position: string;
-        url:string;
+        url: string;
     }
 }

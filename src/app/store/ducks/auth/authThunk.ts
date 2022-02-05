@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { SignInRequestType, Token } from "./authThunk.type";
+import { customAxios } from "customAxios";
 
 axios.defaults.withCredentials = true; // 백엔드와 쿠키공유 허용 -> 글로벌?
 
@@ -25,13 +26,14 @@ export const signIn = createAsyncThunk<Token, SignInRequestType>(
     "auth/signIn",
     async (payload, ThunkOptions) => {
         try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_BASE_URL}/login`,
-                { password: payload.password, username: payload.username },
-            );
+            const response = await customAxios.post(`/login`, {
+                password: payload.password,
+                username: payload.username,
+            });
             return response.data;
         } catch (error) {
             if (String(error).includes("Network")) {
+                // eventHandler -> network 에러처리하는 거 알려줌 navigator.online
                 throw ThunkOptions.rejectWithValue(`네트워크 연결 확인하세요`); // 로그인 실패 | 네트워크 문제 | 서버 내부에러(status=500)
             } else {
                 await ThunkOptions.dispatch(
@@ -58,13 +60,3 @@ export const reissueToken = createAsyncThunk<Token, void>(
         }
     },
 );
-
-//  다른사람들은 어디 두는지 알아보기 **
-export const saveToken = (token: Token) => {
-    const { type, accessToken } = token.data;
-    axios.defaults.headers.common[`Authorization`] = `${type} ${accessToken}`;
-
-    // 로그아웃 ? access / refresh 삭제 ?
-    // 현재 access -> error (refresh 만료시간 -> 재발급 // 로그인 페이지 refresh)
-    // 홈
-};
