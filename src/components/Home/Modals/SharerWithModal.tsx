@@ -4,7 +4,7 @@ import ModalHeader from "./ModalHeader";
 import direct from "../../../assets/Images/direct.png";
 import sprite3 from "../../../assets/Images/sprite3.png";
 import useCopy from "hooks/useCopy";
-import { useAppSelector } from "app/store/hooks";
+import { useAppSelector } from "app/store/Hooks";
 
 const ShareWithModalInner = styled.div`
     .shareWithModal-options {

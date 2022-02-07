@@ -2,7 +2,7 @@ import PopHeart from "components/Common/PopHeart";
 import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 import Username from "../../Common/Username";
-import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
 import { token } from "Routes";

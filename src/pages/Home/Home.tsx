@@ -3,7 +3,7 @@ import HomeAside from "components/Home/HomeAside";
 import HomeStories from "components/Home/HomeStories";
 import HomeSection from "components/Home/HomeSection";
 import Notification from "styles/UI/Notification";
-import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import HoverModal from "components/Home/Modals/HoverModal";
 import FollowingModal from "components/Home/Modals/FollowingModal";
 import ArticleMenuModal from "components/Home/Modals/ArticleMenuModal";

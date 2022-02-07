@@ -5,7 +5,7 @@ import { ReactComponent as PaperAirplane } from "assets/Svgs/paperAirplane.svg";
 import { ReactComponent as EmptyBookmark } from "assets/Svgs/emptyBookmark.svg";
 import { ReactComponent as FilledBookmark } from "assets/Svgs/filledBookmark.svg";
 import styled from "styled-components";
-import { useAppDispatch } from "app/store/hooks";
+import { useAppDispatch } from "app/store/Hooks";
 import {
     deleteSaveArticle,
     postSaveArticle,

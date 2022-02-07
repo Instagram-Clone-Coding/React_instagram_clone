@@ -5,7 +5,7 @@ import { Link, useHistory } from "react-router-dom";
 import React, { useRef, MouseEvent } from "react";
 import Button from "styles/UI/Button/Button";
 
-import { useAppDispatch } from "app/store/hooks";
+import { useAppDispatch } from "app/store/Hooks";
 import { setUserInfo } from "features/Auth/authSlice";
 
 const callSignInAPI = (

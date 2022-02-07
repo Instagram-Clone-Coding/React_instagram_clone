@@ -1,5 +1,5 @@
 import { modalActions } from "app/store/ducks/modal/modalSlice";
-import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import useCopy from "hooks/useCopy";
 import { Link } from "react-router-dom";
 import styled from "styled-components";

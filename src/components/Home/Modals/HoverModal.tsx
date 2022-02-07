@@ -7,7 +7,7 @@ import Username from "../../Common/Username";
 import sprite2 from "../../../assets/Images/sprite2.png";
 import useNumberSummary from "hooks/useNumberSummary";
 import Button from "styles/UI/Button";
-import { useAppDispatch } from "app/store/hooks";
+import { useAppDispatch } from "app/store/Hooks";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 import Loading from "components/Common/Loading";
 import { token } from "Routes";

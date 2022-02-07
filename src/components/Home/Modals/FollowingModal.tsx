@@ -1,5 +1,5 @@
 import { postUnfollow } from "app/store/ducks/home/homThunk";
-import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import StoryCircle from "components/Common/StoryCircle";
 import { token } from "Routes";
 import styled from "styled-components";
