@@ -3,8 +3,7 @@ import styled from "styled-components";
 import ChatBar from "components/Direct/Section/ChatBar";
 import ChatSection from "components/Direct/Section/ChatSection";
 import DetailSection from "./DetailSection";
-import { useAppDispatch, useAppSelector } from "../../../app/store/hooks";
-import RequestsSection from "./requestsSection";
+import { useAppSelector } from "app/store/Hooks";
 import RequestsWishContainer from "./RequestsWishContainer";
 import CommonDirectModal from "./Modals/CommonDirectModal";
 

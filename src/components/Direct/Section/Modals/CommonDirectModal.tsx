@@ -4,7 +4,7 @@ import ModalTitleContent from "components/Common/Modal/ModalContent/ModalTitleCo
 import ModalButtonContent from "components/Common/Modal/ModalContent/ModalButtonContent";
 import ModalCard from "styles/UI/ModalCard";
 import { closeModal, openModal, selectView } from "app/store/ducks/direct/DirectSlice";
-import { useAppDispatch } from "app/store/hooks";
+import { useAppDispatch } from "app/store/Hooks";
 
 
 const CommonDirectModalContainer = styled.div`

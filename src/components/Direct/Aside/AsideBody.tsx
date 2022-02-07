@@ -1,20 +1,13 @@
 import ChatList from "components/Direct/Aside/ChatList";
 // 이런 식으로 type을 가져와서 제가 필요한 모듈을 가져와요
 import styled from "styled-components";
-import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { openModal, selectView } from "app/store/ducks/direct/DirectSlice";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { authorizedCustomAxios } from "../../../customAxios";
 
-// 그 다음 그 모듈 안에서 제가 export 한 타입을 가져와서 사용하는 방식입니다.
-const BASE_URL =
-    "http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080";
-const token = {
-    accessToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzgxMTU3MH0._bLGXXtPlrAWXf8FVwGTGGeJSWb5S45tzqzatQQkYuUkZ0DzDiZJgi7GTgMerDhxmyms-PFTlL8HwueKqmdejg",
-    refreshToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjQyNzQxNDY4fQ.8mHe22G6uu6F_HB-5G8A7voUNLb5oRAuX84xlKWFUZeccsi_Y3DHMh1fC7w3uEG3UATvNc5U9PBPvF6hW1vpZw",
-};
+
 export const dummyChatList: Array<Direct.ChatItem> = [
     {
         chatRoomId: 1,
@@ -191,13 +184,10 @@ const AsideBody = () => {
     useEffect(() => {
 
         const getChatList = async () => {
-            const config = {
-                headers: { Authorization: `Bearer ${token.accessToken}` },
-            };
             try {
                 const {
                     data:{data}
-                } = await axios.get(`${BASE_URL}/chat/rooms?page=${1}`,config)
+                } = await authorizedCustomAxios.get(`/chat/rooms?page=${1}`)
 
                 setChatList(data.content)
             } catch (err) {

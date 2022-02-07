@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useAppSelector } from "../../../../../app/store/hooks";
+import { useAppSelector } from "app/store/Hooks";
 import NewChatInviteButton from "./NewChatInviteButton";
 
 const NewChatSearchBarContainer = styled.div`

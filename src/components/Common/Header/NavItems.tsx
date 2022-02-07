@@ -15,8 +15,8 @@ import { ReactComponent as Heart } from "assets/Svgs/heart.svg";
 import { ReactComponent as HeartActive } from "assets/Svgs/heart-active.svg";
 
 import { NavLink } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../../app/store/hooks";
-import { selectView } from "../../../app/store/ducks/direct/DirectSlice";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { selectView } from "app/store/ducks/direct/DirectSlice";
 
 const Container = styled.div`
     flex: 1 0 0%;

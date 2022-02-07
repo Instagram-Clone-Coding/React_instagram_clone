@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as Circle } from "assets/Svgs/circle.svg";
 import { ReactComponent as CheckedCircle } from "assets/Svgs/checkedCircle.svg";
-import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { selectNewChatUser, unSelectNewChatUser } from "app/store/ducks/direct/DirectSlice";
 
 const NewChatRecommendUserContainer = styled.div`

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import ChatBubble from "components/Direct/Section/ChatBubble/ChatBubble";
-import { useAppSelector } from "../../../app/store/hooks";
+import { useAppSelector } from "app/store/Hooks";
 
 
 const ChatSectionContainer = styled.div<{ isRequestsChat: boolean }>`

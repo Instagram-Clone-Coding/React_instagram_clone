@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import ImageSprite from "components/Common/ImageSprite";
 import Button from "styles/UI/Button";
-import { useAppDispatch } from "app/store/hooks";
+import { useAppDispatch } from "app/store/Hooks";
 import { openModal } from "app/store/ducks/direct/DirectSlice";
 import sprite from "assets/Images/sprite.png";
 

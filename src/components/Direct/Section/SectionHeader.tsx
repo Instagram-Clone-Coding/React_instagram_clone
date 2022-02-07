@@ -3,7 +3,7 @@ import styled from "styled-components";
 import theme from "styles/theme";
 import { ReactComponent as DetailInfo } from "assets/Svgs/direct-detail-info.svg";
 import { ReactComponent as DetailInfoActive } from "assets/Svgs/direct-detail-info-active.svg";
-import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { selectView } from "app/store/ducks/direct/DirectSlice";
 
 

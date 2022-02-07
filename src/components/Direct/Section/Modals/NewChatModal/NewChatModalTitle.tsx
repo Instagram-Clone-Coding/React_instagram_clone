@@ -1,16 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { closeModal, selectNewChatUser, selectView } from "app/store/ducks/direct/DirectSlice";
+import { closeModal, selectView } from "app/store/ducks/direct/DirectSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import Loading from "components/Common/Loading";
 import { makeRoom } from "app/store/ducks/direct/DirectThunk";
 import CloseSVG from "assets/Svgs/CloseSVG";
-const token = {
-    accessToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzgxMTU3MH0._bLGXXtPlrAWXf8FVwGTGGeJSWb5S45tzqzatQQkYuUkZ0DzDiZJgi7GTgMerDhxmyms-PFTlL8HwueKqmdejg",
-    refreshToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzgwMzIwNH0.pftOV8QO0D9gEhIyJMtdQ13u-eUHzDKR4qmLOITb44Y-YERm_OyInkovsCrw4YgnSVfNAlP52uC8Y1bfIpXgOA",
-};
 
 interface NewChatModalTitleContainerType {
     isSelected: boolean;
@@ -48,7 +42,7 @@ const NewChatModalTitle = () => {
 
     const makeRoomHandler = async () => {
         if (selectedNewChatUser) {
-            await dispatch(makeRoom({ token: token.accessToken, username: selectedNewChatUser }));
+            await dispatch(makeRoom({ username: selectedNewChatUser }));
             dispatch(closeModal())
             dispatch(selectView("chat"))
         }

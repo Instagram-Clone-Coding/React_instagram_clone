@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { openModal } from "app/store/ducks/direct/DirectSlice";
-import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import CommonDirectModal from "./Modals/CommonDirectModal";
 
 const RequestsWishContainerContainer = styled.div`
