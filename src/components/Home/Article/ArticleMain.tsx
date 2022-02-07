@@ -5,7 +5,6 @@ import Username from "../../Common/Username";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
-import { token } from "Routes";
 
 const StyledMain = styled.div`
     padding: 0 16px;
@@ -109,7 +108,6 @@ const ArticleMain = ({
     }: ModalType.ModalPositionProps) => {
         await dispatch(
             getMiniProfile({
-                token,
                 memberUsername,
                 modalPosition: { top, bottom, left },
             }),

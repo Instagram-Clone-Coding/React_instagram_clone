@@ -10,7 +10,6 @@ import Button from "styles/UI/Button";
 import { useAppDispatch } from "app/store/Hooks";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 import Loading from "components/Common/Loading";
-import { token } from "Routes";
 import { postFollow } from "app/store/ducks/home/homThunk";
 
 const StyledHoverModalInner = styled.div`
@@ -133,7 +132,7 @@ const HoverModal = ({
     const followClickHandler = () => {
         const followUser = async () => {
             await dispatch(
-                postFollow({ token, username: miniProfile.memberUsername }),
+                postFollow({ username: miniProfile.memberUsername }),
             );
         };
         followUser();

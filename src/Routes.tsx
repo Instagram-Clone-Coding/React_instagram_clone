@@ -7,8 +7,6 @@ import Header from "components/Common/Header";
 
 import { useAppSelector } from "app/store/Hooks";
 
-export const token =
-    "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzEyNDE4N30.1cDekafQGl7dLdfaPs8YciAOM_f9rhAesVJvvoOpdLfWBc3FHAgE_mZEMeRQyxOUXB6mHhybXrB0kZjYx9VDmA";
 const Routes = () => {
     const { isLogin } = useAppSelector((state) => state.auth);
 

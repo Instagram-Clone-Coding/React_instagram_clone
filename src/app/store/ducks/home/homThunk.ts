@@ -5,56 +5,49 @@ import {
     RecentArticlesProps,
 } from "app/store/ducks/home/homeThunk.type";
 import axios from "axios";
+import { authorizedCustomAxios } from "customAxios";
 
-const BASE_URL =
-    "http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080";
-
-export const getHomeArticles = createAsyncThunk<
-    HomeType.ArticleStateProps[],
-    {
-        token: string;
-    }
->("home/getHomeArticles", async (payload, ThunkOptions) => {
-    const config = {
-        headers: { Authorization: `Bearer ${payload.token}` },
-    };
-    try {
-        const {
-            data: { data },
-        }: RecentArticlesProps = await axios.get(
-            `${BASE_URL}/posts/recent`,
-            config,
-        );
-        const articlesState: HomeType.ArticleStateProps[] = data.map(
-            (article) => ({
-                ...article,
-                isFollowing: true,
-                followLoading: false,
-            }),
-        );
-        return articlesState;
-    } catch (error) {
-        throw ThunkOptions.rejectWithValue(error);
-    }
-});
+export const getHomeArticles = createAsyncThunk<HomeType.ArticleStateProps[]>(
+    "home/getHomeArticles",
+    async (payload, ThunkOptions) => {
+        try {
+            const {
+                data: { data },
+            }: RecentArticlesProps = await authorizedCustomAxios.get(
+                `/posts/recent`,
+            );
+            const articlesState: HomeType.ArticleStateProps[] = data.map(
+                (article) => ({
+                    ...article,
+                    isFollowing: true,
+                    followLoading: false,
+                }),
+            );
+            return articlesState;
+        } catch (error) {
+            throw ThunkOptions.rejectWithValue(error);
+        }
+    },
+);
 
 export const getExtraArticle = createAsyncThunk<
     HomeType.ArticleStateProps,
     {
-        token: string;
         page: number;
     }
 >("home/getExtraArticle", async (payload, ThunkOptions) => {
     const config = {
-        headers: { Authorization: `Bearer ${payload.token}` },
+        params: {
+            page: payload.page,
+        },
     };
     try {
         const {
             data: {
                 data: { content: data, empty },
             },
-        }: ExtraArticleProps = await axios.get(
-            `${BASE_URL}/posts?page=${payload.page}`,
+        }: ExtraArticleProps = await authorizedCustomAxios.get(
+            `/posts`,
             config,
         ); // 단건 조회 api 추가
 
@@ -78,20 +71,13 @@ export const getExtraArticle = createAsyncThunk<
 export const postUnfollow = createAsyncThunk<
     string, // 이후 데이터 보고 수정
     {
-        token: string;
         username: string;
     }
 >("home/postUnfollow", async (payload, ThunkOptions) => {
-    const config = {
-        headers: { Authorization: `Bearer ${payload.token}` },
-    };
     try {
         const {
             data: { data },
-        } = await axios.delete(
-            `${BASE_URL}/${payload.username}/follow`,
-            config,
-        );
+        } = await authorizedCustomAxios.delete(`/${payload.username}/follow`);
         return data;
     } catch (error) {
         throw ThunkOptions.rejectWithValue(error);
@@ -101,20 +87,15 @@ export const postUnfollow = createAsyncThunk<
 export const postFollow = createAsyncThunk<
     string, // 이후 데이터 보고 수정
     {
-        token: string;
         username: string;
     }
 >("home/postFollow", async (payload, ThunkOptions) => {
-    const config = {
-        headers: { Authorization: `Bearer ${payload.token}` },
-    };
     try {
         const {
             data: { data },
-        } = await axios.post(
-            `${BASE_URL}/${payload.username}/follow`,
+        } = await authorizedCustomAxios.post(
+            `/${payload.username}/follow`,
             null,
-            config,
         );
         return data;
     } catch (error) {
@@ -133,17 +114,16 @@ export const postLike = createAsyncThunk<
         };
     },
     // any,
-    { token: string; postId: number }
+    { postId: number }
 >("home/postLike", async (payload, ThunkOptions) => {
     const config = {
-        headers: { Authorization: `Bearer ${payload.token}` },
         params: {
             postId: payload.postId,
         },
     };
     try {
-        const { data } = await axios.post(
-            `${BASE_URL}/posts/like`,
+        const { data } = await authorizedCustomAxios.post(
+            `/posts/like`,
             null,
             config,
         );
@@ -163,17 +143,15 @@ export const deleteLike = createAsyncThunk<
             status: boolean;
         };
     },
-    // any,
-    { token: string; postId: number }
+    { postId: number }
 >("home/deleteLike", async (payload, ThunkOptions) => {
     const config = {
-        headers: { Authorization: `Bearer ${payload.token}` },
         params: {
             postId: payload.postId,
         },
     };
     try {
-        const { data } = await axios.delete(`${BASE_URL}/posts/like`, config);
+        const { data } = await axios.delete(`/posts/like`, config);
         return data;
     } catch (error) {
         throw ThunkOptions.rejectWithValue(error);

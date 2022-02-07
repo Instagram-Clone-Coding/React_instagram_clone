@@ -7,7 +7,6 @@ import { ReactComponent as ThreeDots } from "../../../assets/Svgs/threeDots.svg"
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
-import { token } from "Routes";
 import { postFollow } from "app/store/ducks/home/homThunk";
 import Loading from "components/Common/Loading";
 
@@ -97,7 +96,6 @@ const ArticleHeader = ({
     }: ModalType.ModalPositionProps) => {
         await dispatch(
             getMiniProfile({
-                token,
                 memberUsername,
                 modalPosition: { top, bottom, left },
             }),
@@ -150,7 +148,7 @@ const ArticleHeader = ({
 
     const followHandler = () => {
         const followUser = async () => {
-            await dispatch(postFollow({ token, username: memberUsername }));
+            await dispatch(postFollow({ username: memberUsername }));
         };
         followUser();
     };

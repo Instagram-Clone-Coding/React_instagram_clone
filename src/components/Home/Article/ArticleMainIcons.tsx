@@ -10,7 +10,6 @@ import {
     deleteSaveArticle,
     postSaveArticle,
 } from "app/store/ducks/Article/articleThunk";
-import { token } from "Routes";
 
 const StyledMainIcons = styled.div`
     display: flex;
@@ -67,7 +66,7 @@ const ArticleMainIcons = ({
     const saveArticle = async () => {
         try {
             setIsSaved(true);
-            await dispatch(postSaveArticle({ token, postId })).unwrap();
+            await dispatch(postSaveArticle({ postId })).unwrap();
         } catch (error) {
             setIsSaved(false);
         }
@@ -76,7 +75,7 @@ const ArticleMainIcons = ({
     const cancelSavedArticle = async () => {
         try {
             setIsSaved(false);
-            await dispatch(deleteSaveArticle({ token, postId })).unwrap();
+            await dispatch(deleteSaveArticle({ postId })).unwrap();
         } catch (error) {
             setIsSaved(true);
         }

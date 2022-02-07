@@ -59,7 +59,6 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
             try {
                 await dispatch(
                     getExtraArticle({
-                        token,
                         page: extraArticlesCount + 1,
                     }),
                 );
@@ -74,9 +73,7 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
 
     const dispatchPostLike = async () => {
         try {
-            await dispatch(
-                postLike({ token, postId: article.postId }),
-            ).unwrap();
+            await dispatch(postLike({ postId: article.postId })).unwrap();
         } catch (error) {
             setIsliked(false);
             setLikesCount((prev) => prev - 1);
@@ -87,7 +84,6 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
         try {
             await dispatch(
                 deleteLike({
-                    token,
                     postId: article.postId,
                 }),
             ).unwrap();

@@ -2,7 +2,6 @@ import { getHomeArticles } from "app/store/ducks/home/homThunk";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import ExtraLoadingCircle from "components/Home/ExtraLoadingCircle";
 import { useEffect } from "react";
-import { token } from "Routes";
 import Article from "./Article";
 
 const HomeSection = () => {
@@ -13,7 +12,7 @@ const HomeSection = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            await dispatch(getHomeArticles({ token }));
+            await dispatch(getHomeArticles());
         };
         fetchData();
     }, [dispatch]);
