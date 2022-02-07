@@ -2,6 +2,7 @@ import { authAction } from "app/store/ducks/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import Loading from "components/Common/Loading";
 import { authorizedCustomAxios, customAxios } from "customAxios";
+import InstagramLoading from "InstagramLoading";
 import { useEffect } from "react";
 import Routes from "Routes";
 import { EXPIRED_TOKEN_MESSAGE, INVALID_TOKEN_MESSAGE } from "utils/constant";
@@ -40,7 +41,7 @@ function App() {
 
     return (
         <div className="App">
-            {isRefreshTokenChecking ? <Loading size={24} /> : <Routes />}
+            {isRefreshTokenChecking ? <InstagramLoading /> : <Routes />}
         </div>
     );
 }
