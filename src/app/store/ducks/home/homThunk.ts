@@ -2,6 +2,9 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { homeActions } from "app/store/ducks/home/homeSlice";
 import axios from "axios";
 
+const BASE_URL =
+    "http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080";
+
 export const getHomeArticles = createAsyncThunk<
     HomeType.ArticleProps[],
     {
@@ -14,10 +17,7 @@ export const getHomeArticles = createAsyncThunk<
     try {
         const {
             data: { data },
-        } = await axios.get(
-            "http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/posts/recent",
-            config,
-        );
+        } = await axios.get(`${BASE_URL}/posts/recent`, config);
         return data;
     } catch (error) {
         throw ThunkOptions.rejectWithValue(error);
@@ -39,10 +39,7 @@ export const getExtraArticle = createAsyncThunk<
             data: {
                 data: { content: data, empty },
             },
-        } = await axios.get(
-            `http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/posts?page=${payload.page}`,
-            config,
-        ); // 단건 조회 api 추가
+        } = await axios.get(`${BASE_URL}/posts?page=${payload.page}`, config); // 단건 조회 api 추가
         console.log(empty);
         if (empty) {
             throw ThunkOptions.rejectWithValue(
@@ -51,6 +48,64 @@ export const getExtraArticle = createAsyncThunk<
         }
         ThunkOptions.dispatch(homeActions.increaseExtraArticlesCount());
         return data[0];
+    } catch (error) {
+        throw ThunkOptions.rejectWithValue(error);
+    }
+});
+
+export const postLike = createAsyncThunk<
+    {
+        status: number;
+        code: string;
+        message: string;
+        errors?: [];
+        data?: {
+            status: boolean;
+        };
+    },
+    // any,
+    { token: string; postId: number }
+>("home/postLike", async (payload, ThunkOptions) => {
+    const config = {
+        headers: { Authorization: `Bearer ${payload.token}` },
+        params: {
+            postId: payload.postId,
+        },
+    };
+    try {
+        const { data } = await axios.post(
+            `${BASE_URL}/posts/like`,
+            null,
+            config,
+        );
+        return data;
+    } catch (error) {
+        throw ThunkOptions.rejectWithValue(error);
+    }
+});
+
+export const deleteLike = createAsyncThunk<
+    {
+        status: number;
+        code: string;
+        message: string;
+        errors?: [];
+        data?: {
+            status: boolean;
+        };
+    },
+    // any,
+    { token: string; postId: number }
+>("home/deleteLike", async (payload, ThunkOptions) => {
+    const config = {
+        headers: { Authorization: `Bearer ${payload.token}` },
+        params: {
+            postId: payload.postId,
+        },
+    };
+    try {
+        const { data } = await axios.delete(`${BASE_URL}/posts/like`, config);
+        return data;
     } catch (error) {
         throw ThunkOptions.rejectWithValue(error);
     }

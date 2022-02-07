@@ -24,5 +24,4 @@ yarn-error.log*
 
 #image 
 .png
-
-.env
+.idea/

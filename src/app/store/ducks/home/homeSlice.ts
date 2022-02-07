@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
+    deleteLike,
     getExtraArticle,
     getHomeArticles,
+    postLike,
 } from "app/store/ducks/home/homThunk";
 
 const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
@@ -635,13 +637,10 @@ const homeSlice = createSlice({
                 state.isLoading = true;
                 state.isAsyncError = false;
             })
-            .addCase(
-                getHomeArticles.fulfilled,
-                (state, action: PayloadAction<HomeType.ArticleProps[]>) => {
-                    state.articles = action.payload;
-                    state.isLoading = false;
-                },
-            )
+            .addCase(getHomeArticles.fulfilled, (state, action) => {
+                state.articles = action.payload;
+                state.isLoading = false;
+            })
             .addCase(getHomeArticles.rejected, (state) => {
                 state.isLoading = false;
                 state.isAsyncError = true;
@@ -657,6 +656,18 @@ const homeSlice = createSlice({
             })
             .addCase(getExtraArticle.rejected, (state, action) => {
                 state.isExtraArticleLoading = false;
+                state.isAsyncError = true;
+            })
+            .addCase(postLike.pending, (state) => {
+                state.isAsyncError = false;
+            })
+            .addCase(postLike.rejected, (state, action) => {
+                state.isAsyncError = true;
+            })
+            .addCase(deleteLike.pending, (state) => {
+                state.isAsyncError = false;
+            })
+            .addCase(deleteLike.rejected, (state, action) => {
                 state.isAsyncError = true;
             });
     },

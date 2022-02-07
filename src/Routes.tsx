@@ -11,7 +11,7 @@ const Routes = () => {
     const { isLogin } = useAppSelector((state) => state.auth);
 
     return (
-        <BrowserRouter>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Switch>
                 {/* {!isLogin ? (
                     <Redirect to="/accounts/signin" />

@@ -9,7 +9,11 @@ import CommentForm from "components/Home/Article/CommentForm";
 import useGapText from "hooks/useGapText";
 import useOnView from "hooks/useOnView";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import { getExtraArticle } from "app/store/ducks/home/homThunk";
+import {
+    deleteLike,
+    getExtraArticle,
+    postLike,
+} from "app/store/ducks/home/homThunk";
 
 const ArticleCard = styled(Card)`
     margin-bottom: 24px;
@@ -32,7 +36,7 @@ const ArticleCard = styled(Card)`
 
 const token = {
     accessToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MjQxODcxMH0.a54MJzWdP3Mjs1yXG33v7ti0SpHcN7IzqfwQ9nFdVSjmhriTcFA_tc5yHFWyLA_PRCH3A_TUk0WPRQ_0dEacjw",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0Mjc3MzA0MH0.jqP4Dxxz2km0y1UloLINEH1nUP3iWau0YsU6gwBCHBMlGQ0BrDlGz9rJNPRvbgR51yuWasFfM5nwbr2lDGcnoQ",
     refreshToken:
         "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjQyNzQxNDY4fQ.8mHe22G6uu6F_HB-5G8A7voUNLb5oRAuX84xlKWFUZeccsi_Y3DHMh1fC7w3uEG3UATvNc5U9PBPvF6hW1vpZw",
 };
@@ -50,6 +54,7 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
         article.followingMemberUsernameLikedPost;
     // like state
     const [isLiked, setIsliked] = useState(article.postLikeFlag);
+    const [likesCount, setLikesCount] = useState(article.postLikesCount);
     const gapText = useGapText(article.postUploadDate);
     const articleRef = useRef<HTMLDivElement>(null);
     const isVisible = useOnView(articleRef);
@@ -77,13 +82,37 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
         // isLast && isVisible && dispatchExtraArticle();
     }, [isObserving, isVisible, dispatch]);
 
+    const dispatchPostLike = async () => {
+        await dispatch(
+            postLike({ token: token.accessToken, postId: article.postId }),
+        );
+    };
+
+    const dispatchDeleteLike = async () => {
+        await dispatch(
+            deleteLike({
+                token: token.accessToken,
+                postId: article.postId,
+            }),
+        );
+    };
+
     const toggleLikeHandler = (): void => {
         setIsliked((prev: boolean) => !prev);
+        if (!isLiked) {
+            setLikesCount((prev) => prev + 1);
+            dispatchPostLike();
+        } else {
+            setLikesCount((prev) => prev - 1);
+            dispatchDeleteLike();
+        }
     };
 
     const changeToLikeHandler = (): undefined => {
         if (isLiked) return;
         setIsliked(true);
+        setLikesCount((prev) => prev + 1);
+        dispatchPostLike();
     };
 
     return (
@@ -102,7 +131,7 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
             />
             <ArticleMain
                 followingUserWhoLikesArticle={followingUserWhoLikesArticle}
-                likesCount={article.postLikesCount}
+                likesCount={likesCount}
                 memberImageUrl={article.memberImageUrl}
                 memberNickname={article.memberNickname}
                 content={article.postContent}
