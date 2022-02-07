@@ -9,7 +9,6 @@ import CommentForm from "components/Home/Article/CommentForm";
 import useGapText from "hooks/useGapText";
 import useOnView from "hooks/useOnView";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import { token } from "Routes";
 import {
     deleteLike,
     getExtraArticle,

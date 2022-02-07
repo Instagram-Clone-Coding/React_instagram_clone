@@ -17,7 +17,7 @@ const StyledPositionedModal = styled(Card)<PositionedModal>`
     top: ${(props) => props.top + "px"};
     left: ${(props) => props.left + "px"};
     transform: ${(props) =>
-        !props.isUpperThanHalfPosition && `translateY(-100%)`};
+    !props.isUpperThanHalfPosition && `translateY(-100%)`};
     box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 16px 0px,
         rgb(219, 219, 219) 0px 0px 0px 1px;
     border: none;

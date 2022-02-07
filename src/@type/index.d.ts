@@ -1,9 +1,3 @@
-// 여기에 쓰는건 어때요?
-declare module globalType {
-    //
-    interface asd {}
-}
-
 declare module Direct {
     interface ChatItem {
         id: number;
@@ -12,6 +6,54 @@ declare module Direct {
         lastLoggedIn: string;
         lastMessage: string;
         isImLast: boolean;
+    }
+}
+
+declare module UI {
+    interface ButtonProps {
+        bgColor?: string;
+        radius?: number;
+        color?: string;
+    }
+}
+
+declare module AuthType {
+    interface Token {
+        status: number;
+        code: number;
+        message: string;
+        data?: {
+            type: string;
+            accessToken: string;
+        };
+    }
+}
+
+declare module Login {
+    interface FooterTextProps {
+        text: string;
+        url?: string;
+    }
+
+    interface InputProps {
+        inputName: "email" | "name" | "username" | "password" | "id";
+        innerText: string;
+        type: "text" | "password";
+        inputProps: useInputProps;
+        isValid?: boolean | null;
+        isFocus?: boolean;
+    }
+
+    interface useInputProps {
+        value: string;
+        onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+        onBlur?: () => void;
+        onFocus?: () => void;
+    }
+
+    interface NewCardProps {
+        padding: string;
+        margin: string;
     }
 }
 
@@ -131,5 +173,14 @@ declare module ModalType {
         miniProfile?: MiniProfileStateProps;
         isFollowing?: boolean;
         isOnMiniProfile: boolean;
+    }
+}
+
+declare module Common {
+    interface ImageProps {
+        width: number;
+        height: number;
+        position: string;
+        url: string;
     }
 }
