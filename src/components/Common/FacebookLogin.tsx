@@ -36,7 +36,7 @@ const backgroundBlueFacebook: Common.ImageProps = {
 export default function FacebookLogin({ bgColor, color }: UI.ButtonProps) {
     return (
         <FacebookButtonContainer>
-            <Button bgColor={bgColor} color={color}>
+            <Button bgColor={bgColor} color={color} type="button">
                 {bgColor ? (
                     <ImageSprite
                         {...backgroundWhiteFacebook}
