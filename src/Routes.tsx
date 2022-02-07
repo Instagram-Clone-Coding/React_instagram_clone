@@ -28,10 +28,10 @@ const Routes = () => {
                     <>
                         {/* <Route exact path="/" component={Home} /> */}
                         <Route path="/accounts/signin" component={Login} />
-                        {/* <Route
+                        <Route
                             path="/accounts/emailsignup"
                             component={SignUp}
-                        /> */}
+                        />
                         <Redirect to="/accounts/signin" />
                     </>
                 )}
