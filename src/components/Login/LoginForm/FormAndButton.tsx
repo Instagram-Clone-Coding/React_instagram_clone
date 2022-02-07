@@ -1,7 +1,6 @@
 import Input from "components/Common/Input";
 import { MouseEvent } from "react";
 import SubmitButton from "components/Common/SubmitButton";
-
 import { useAppDispatch } from "app/store/Hooks";
 import { signIn } from "app/store/ducks/auth/authThunk";
 import useInput from "hooks/useInput";
@@ -9,21 +8,6 @@ import useInput from "hooks/useInput";
 const placeholder = {
     username: "사용자 이름",
     password: "비밀번호",
-};
-
-const callSignInAPI = (
-    dispatch: Function,
-    userData: { username: string; password: string },
-) => {
-    const requestSignIn = async () => {
-        await dispatch(
-            signIn({
-                username: userData.username,
-                password: userData.password,
-            }),
-        );
-    };
-    requestSignIn();
 };
 
 export default function LoginFormAndButton() {
@@ -42,10 +26,15 @@ export default function LoginFormAndButton() {
 
     const submitButtonClickHandler = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        callSignInAPI(dispatch, {
-            username: usernameInputProps.value,
-            password: passwordInputProps.value,
-        });
+        const requestSignIn = async () => {
+            await dispatch(
+                signIn({
+                    username: usernameInputProps.value,
+                    password: passwordInputProps.value,
+                }),
+            );
+        };
+        requestSignIn();
     };
 
     return (
