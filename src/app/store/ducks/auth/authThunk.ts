@@ -9,11 +9,14 @@ export const checkUsername = createAsyncThunk<boolean, { username: string }>(
     "auth/checkUsername",
     async (payload, ThunkOptions) => {
         try {
+            const config = {
+                params: {
+                    username: payload.username,
+                },
+            };
             const {
                 data: { data },
-            } = await customAxios.post(
-                `/accounts/check?username=${payload.username}`,
-            );
+            } = await customAxios.post(`/accounts/check`, config);
             return data;
         } catch (error) {
             throw ThunkOptions.rejectWithValue(error);
