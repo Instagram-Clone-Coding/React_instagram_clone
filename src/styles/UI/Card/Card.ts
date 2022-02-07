@@ -6,7 +6,6 @@ export interface CardProps {
 }
 
 const Card = styled.div<CardProps>`
-
     border: 1px solid
         ${(props) => (props.isNav ? "none" : props.theme.color.bd_gray)};
     border-bottom: 1px solid

@@ -36,7 +36,7 @@ const ArticleCard = styled(Card)`
 
 const token = {
     accessToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0Mjc3MzA0MH0.jqP4Dxxz2km0y1UloLINEH1nUP3iWau0YsU6gwBCHBMlGQ0BrDlGz9rJNPRvbgR51yuWasFfM5nwbr2lDGcnoQ",
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzgxMTU3MH0._bLGXXtPlrAWXf8FVwGTGGeJSWb5S45tzqzatQQkYuUkZ0DzDiZJgi7GTgMerDhxmyms-PFTlL8HwueKqmdejg",
     refreshToken:
         "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjQyNzQxNDY4fQ.8mHe22G6uu6F_HB-5G8A7voUNLb5oRAuX84xlKWFUZeccsi_Y3DHMh1fC7w3uEG3UATvNc5U9PBPvF6hW1vpZw",
 };
@@ -138,7 +138,7 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
                 commentsCount={article.postCommentsCount}
                 // comments={article.comments}
             />
-            <div className="article-createdAt">{gapText}</div>
+            <div className="article-createdAt">{gapText}전</div>
             <div className="article-form-layout">
                 <CommentForm />
             </div>
