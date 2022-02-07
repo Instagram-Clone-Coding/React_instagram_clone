@@ -4,7 +4,7 @@ import NewChatModalTitle from "./NewChatModalTitle";
 import NewChatSearchBar from "./NewChatSearchBar";
 import NewChatFriendList from "./NewChatFriendList";
 import ModalCard from "styles/UI/ModalCard";
-import { useAppDispatch } from "app/store/hooks";
+import { useAppDispatch } from "app/store/Hooks";
 import { closeModal, openModal, selectNewChatUser } from "app/store/ducks/direct/DirectSlice";
 
 
@@ -25,11 +25,15 @@ const NewChatModal = () => {
 
 
     return (
-        <ModalCard modalType={"withBackDrop"} onModalOn={() => {
-            dispatch(openModal("newChat"));
-        }} onModalOff={() => {
-            dispatch(closeModal());
-        }}>
+        <ModalCard
+            modalType={"withBackDrop"}
+            onModalOn={() => {
+                dispatch(openModal("newChat"));
+            }}
+            onModalOff={() => {
+                dispatch(closeModal());
+            }}
+        >
             <NewChatModalContainer>
                 <NewChatModalTitle />
                 <NewChatSearchBar />

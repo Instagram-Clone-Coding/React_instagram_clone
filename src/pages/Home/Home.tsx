@@ -3,7 +3,7 @@ import HomeAside from "components/Home/HomeAside";
 import HomeStories from "components/Home/HomeStories";
 import HomeSection from "components/Home/HomeSection";
 import Notification from "styles/UI/Notification";
-import { useAppSelector } from "app/store/hooks";
+import { useAppSelector } from "app/store/Hooks";
 
 const Layout = styled.div`
     padding-top: 30px;

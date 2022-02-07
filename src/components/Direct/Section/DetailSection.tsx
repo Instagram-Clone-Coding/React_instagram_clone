@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import ReportModal from "components/Home/Modals/ReportModal";
 import { closeModal, openModal } from "app/store/ducks/direct/DirectSlice";
-import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import CommonDirectModal from "components/Direct/Section/Modals/CommonDirectModal";
 
 const DetailSectionContainer = styled.div`
@@ -20,12 +20,12 @@ const DetailSectionContainer = styled.div`
     padding: 20px 16px 16px;
     display: flex;
 
-    input { 
+    input {
       width: 16px;
       height: 16px;
       margin-right: 10px;
       border: 1px solid rgba(var(--ca6, 219, 219, 219), 1);
-      
+
       &:focus {
         border-color: rgba(var(--d69, 0, 149, 246), 1);
       }
@@ -53,7 +53,7 @@ const DetailSectionContainer = styled.div`
       &:hover{
         background-color: #fafafa;
       }
-      
+
       img {
         width: 56px;
         height: 56px;

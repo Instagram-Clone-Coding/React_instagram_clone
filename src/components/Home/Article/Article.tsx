@@ -8,7 +8,7 @@ import ArticleMain from "components/Home/Article/ArticleMain";
 import CommentForm from "components/Home/Article/CommentForm";
 import useGapText from "hooks/useGapText";
 import useOnView from "hooks/useOnView";
-import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import {
     deleteLike,
     getExtraArticle,

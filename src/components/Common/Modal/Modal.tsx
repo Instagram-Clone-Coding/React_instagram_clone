@@ -3,8 +3,7 @@ import PropTypes from "prop-types";
 import styled, { keyframes } from "styled-components";
 import Portal from "components/Common/Modal/Portal";
 import { closeModal } from "../../../app/store/ducks/direct/DirectSlice";
-import { useAppDispatch } from "../../../app/store/hooks";
-
+import { useAppDispatch } from "../../../app/store/Hooks";
 
 interface ModalProps {
     maskClosable: boolean;
@@ -13,25 +12,14 @@ interface ModalProps {
     children: React.ReactNode;
 }
 
-
-const Modal = ({
-                   maskClosable,
-                   visible,
-                   children,
-               }: ModalProps) => {
-
-
-    const dispatch = useAppDispatch()
+const Modal = ({ maskClosable, visible, children }: ModalProps) => {
+    const dispatch = useAppDispatch();
 
     const onMaskClick = (e: MouseEvent) => {
         if (e.target === e.currentTarget) {
-            dispatch(closeModal())
+            dispatch(closeModal());
         }
     };
-
-
-
-
 
     return (
         <Portal elementId="modal-root">
@@ -60,29 +48,29 @@ Modal.propTypes = {
     visible: PropTypes.bool,
 };
 
-const ModalWrapper = styled.div<{ visible: boolean, onClick: any }>`
-  box-sizing: border-box;
-  display: ${(props) => (props.visible ? "block" : "none")};
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1000;
-  overflow: auto;
-  outline: 0;
+const ModalWrapper = styled.div<{ visible: boolean; onClick: any }>`
+    box-sizing: border-box;
+    display: ${(props) => (props.visible ? "block" : "none")};
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    overflow: auto;
+    outline: 0;
 `;
 
 const ModalOverlay = styled.div<{ visible: boolean }>`
-  box-sizing: border-box;
-  display: ${(props) => (props.visible ? "block" : "none")};
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 999;
+    box-sizing: border-box;
+    display: ${(props) => (props.visible ? "block" : "none")};
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 999;
 `;
 
 const modalShow = keyframes`
@@ -102,21 +90,19 @@ const modalShow = keyframes`
   }
 `;
 
-
 const ModalInner = styled.div`
-  box-sizing: border-box;
-  position: relative;
-  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
-  background-color: #fff;
-  border-radius: 10px;
-  width: 400px;
-  max-width: 480px;
-  top: 50%;
-  transform: translateY(-50%);
-  margin: 0 auto;
-  padding-top: 30px;
-  animation: ${modalShow} 0.1s;
+    box-sizing: border-box;
+    position: relative;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
+    background-color: #fff;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 480px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0 auto;
+    padding-top: 30px;
+    animation: ${modalShow} 0.1s;
 `;
-
 
 export default Modal;

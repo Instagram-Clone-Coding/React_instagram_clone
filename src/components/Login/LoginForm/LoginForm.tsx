@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import Suggest from "../../Common/Suggest";
 import ContentBox from "components/Common/ContentBox";
 import Appdownload from "components/Common/AppDownload";
-import FormLayout from "./FormLayout";
+import Suggest from "components/Common/Suggest";
+import FormLayout from "components/Login/LoginForm/FormLayout";
 
 const FormContainer = styled.div`
     display: flex;
@@ -18,7 +18,7 @@ const Props: Login.NewCardProps = {
     margin: `0 0 10px`,
 };
 
-export function LoginForm() {
+export default function LoginForm() {
     return (
         <FormContainer>
             <ContentBox padding={Props.padding} margin={Props.margin}>

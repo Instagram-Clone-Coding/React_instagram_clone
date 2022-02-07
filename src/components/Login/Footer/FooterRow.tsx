@@ -1,7 +1,7 @@
 import React from "react";
-import FooterTextPiece from "./FooterTextPiece";
 import styled from "styled-components";
-import FooterContentProps from "./FooterText.type";
+import FooterTextPiece from "components/Login/Footer/FooterTextPiece";
+import FooterContentProps from "components/Login/Footer/FooterText.type";
 
 const FlexRow = styled.div`
     display: flex;

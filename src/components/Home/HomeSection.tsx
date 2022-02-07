@@ -1,5 +1,5 @@
 import { getHomeArticles } from "app/store/ducks/home/homThunk";
-import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import ExtraLoadingCircle from "components/Home/ExtraLoadingCircle";
 import { useEffect } from "react";
 import Article from "./Article";

@@ -33,7 +33,7 @@ const instagramImage: Common.ImageProps = {
     width: 175,
     height: 51,
     position: `0 -130px`,
-    url:sprite
+    url: sprite,
 };
 
 export default function SignUpForm() {

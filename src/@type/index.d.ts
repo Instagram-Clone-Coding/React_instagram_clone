@@ -48,20 +48,38 @@ declare module UI {
     }
 }
 
+declare module AuthType {
+    interface Token {
+        status: number;
+        code: number;
+        message: string;
+        data?: {
+            type: string;
+            accessToken: string;
+        };
+    }
+}
+
 declare module Login {
     interface FooterTextProps {
         text: string;
         url?: string;
     }
 
-
     interface InputProps {
         inputName: "email" | "name" | "username" | "password" | "id";
         innerText: string;
-        value: string;
         type: "text" | "password";
-        onUserDataUpdater: Function;
-        validator?: Function;
+        inputProps: useInputProps;
+        isValid?: boolean | null;
+        isFocus?: boolean;
+    }
+
+    interface useInputProps {
+        value: string;
+        onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+        onBlur?: () => void;
+        onFocus?: () => void;
     }
 
     interface NewCardProps {
@@ -71,9 +89,9 @@ declare module Login {
 }
 
 declare module HomeType {
-    export type StoriesScrollPositionType = "left" | "right" | "center";
+    type StoriesScrollPositionType = "left" | "right" | "center";
 
-    export type ActivatedModalType =
+    type ActivatedModalType =
         | "hover"
         | "unfollowing"
         | "report"
@@ -81,7 +99,7 @@ declare module HomeType {
         | "shareWith"
         | null;
 
-    export interface PostImgTagDTOProps {
+    interface PostImgTagDTOProps {
         id: number;
         tag: {
             username: string;
@@ -90,7 +108,7 @@ declare module HomeType {
         };
     }
 
-    export interface PostImageDTOProps {
+    interface PostImageDTOProps {
         id: number;
         postImageUrl: string;
         postTagDTOs: PostImgTagDTOProps[];
@@ -113,12 +131,11 @@ declare module HomeType {
         // comment 몇 개 가져오기
     }
 
-    export interface homeModalProps {
+    interface homeModalProps {
         activatedModal: activatedModalType;
         handledObj: null;
     }
-
-    export interface homeStateProps {
+    interface homeStateProps {
         storiesScrollPosition: storiesScrollPositionType;
         articles: ArticleProps[];
         // location?

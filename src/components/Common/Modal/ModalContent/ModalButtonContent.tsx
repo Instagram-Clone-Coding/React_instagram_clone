@@ -1,16 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { closeModal, selectView } from "app/store/ducks/direct/DirectSlice";
-import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import axios from "axios";
 import { deleteRoom } from "../../../../app/store/ducks/direct/DirectThunk";
 
-const token = {
-    accessToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzgxMTU3MH0._bLGXXtPlrAWXf8FVwGTGGeJSWb5S45tzqzatQQkYuUkZ0DzDiZJgi7GTgMerDhxmyms-PFTlL8HwueKqmdejg",
-    refreshToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzgwMzIwNH0.pftOV8QO0D9gEhIyJMtdQ13u-eUHzDKR4qmLOITb44Y-YERm_OyInkovsCrw4YgnSVfNAlP52uC8Y1bfIpXgOA",
-};
 
 
 interface ModalButtonContentProps {
@@ -36,6 +30,7 @@ const ModalButtonContentContainer = styled.div`
 
 
 const ModalButtonContent = ({ actionName }: ModalButtonContentProps) => {
+
 
     const dispatch = useAppDispatch();
     const { selectedRoom } = useAppSelector(state => state.direct);

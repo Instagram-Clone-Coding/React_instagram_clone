@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { LoginForm } from "./LoginForm/LoginForm";
-import { ShowingInstagram } from "./InstagramSlider/ShowingInsta";
+import ShowingInstagram from "components/Login/InstagramSlider/ShowingInsta";
+import LoginForm from "components/Login/LoginForm/LoginForm";
 
 const ContentContainer = styled.main`
     display: flex;
@@ -9,6 +9,7 @@ const ContentContainer = styled.main`
     margin: 32px auto 0;
     width: 100%;
     max-width: 935px;
+    flex-grow: 1;
 `;
 
 export function Contents() {

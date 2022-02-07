@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { closeModal, selectNewChatUser, selectView } from "app/store/ducks/direct/DirectSlice";
-import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import Loading from "components/Common/Loading";
 import { makeRoom } from "app/store/ducks/direct/DirectThunk";
 import CloseSVG from "assets/Svgs/CloseSVG";
