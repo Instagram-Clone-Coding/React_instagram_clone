@@ -8,7 +8,6 @@ import { useAppSelector } from "app/store/Hooks";
 import sprite from "assets/Images/loginPageSprite.png";
 
 const FormContainer = styled.div`
-    white-space: pre-wrap; // 개행처리
     .logo {
         margin: 22px auto 12px;
     }
@@ -58,7 +57,7 @@ const instagramImage: Common.ImageProps = {
 };
 
 export default function FormLayout() {
-    const { errorMessage } = useAppSelector((state) => state.auth);
+    const errorMessage = useAppSelector((state) => state.auth.errorMessage);
 
     return (
         <FormContainer>

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { saveToken } from "customAxios";
-import { signIn, checkUsername } from "./authThunk";
+import { signIn } from "./authThunk";
 
 export interface AuthStateProps {
     username: string;
@@ -55,17 +55,13 @@ const authSlice = createSlice({
                 state.username = action.meta.arg.username;
                 saveToken(action.payload);
             })
-            .addCase(signIn.rejected, (state) => {
+            .addCase(signIn.rejected, (state, action) => {
                 state.isAsyncReject = true;
-                // null 일때 처리
-                if (state.hasUsername) {
-                    state.errorMessage = `잘못된 비밀번호입니다. \n다시 확인하세요.`;
+                if (action.payload) {
+                    state.errorMessage = `잘못된 비밀번호입니다. 다시 확인하세요.`;
                 } else {
                     state.errorMessage = `입력한 사용자 이름을 사용하는 계정을 찾을 수 없습니다. 사용자 이름을 확인하고 다시 시도하세요.`;
                 }
-            })
-            .addCase(checkUsername.fulfilled, (state, action) => {
-                state.hasUsername = !action.payload;
             });
     },
 });
