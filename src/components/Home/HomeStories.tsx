@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Card from "styles/UI/Card";
 import Story from "./Story";
 import sprite from "assets/Images/sprite.png";
-import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { homeActions } from "app/store/ducks/home/homeSlice";
 
 const DUMMY_STORIES = [

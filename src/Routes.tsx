@@ -5,16 +5,36 @@ import Direct from "pages/Direct";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import Header from "components/Common/Header";
 
-import { useAppSelector } from "app/store/hooks";
+import { useAppSelector } from "app/store/Hooks";
 
 const Routes = () => {
+    const { isLogin } = useAppSelector((state) => state.auth);
+
     return (
         <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Switch>
-                <Route path="/accounts/signin" component={Login} />
-                <Route path="/accounts/emailsignup" component={SignUp} />
-
-                <Route component={AuthedContainer} />
+                {/* {!isLogin ? (
+                    <Redirect to="/accounts/signin" />
+                ) : (
+                    <Route component={AuthedContainer} />
+                )} */}
+                {isLogin ? (
+                    <>
+                        <Route exact path="/" component={Home} />
+                        <Redirect to="/" />
+                        {/* 인스타그램에서는 404처리 하지만 일단 rediect 처리 */}
+                    </>
+                ) : (
+                    <>
+                        {/* <Route exact path="/" component={Home} /> */}
+                        <Route path="/accounts/signin" component={Login} />
+                        <Route
+                            path="/accounts/emailsignup"
+                            component={SignUp}
+                        />
+                        <Redirect to="/accounts/signin" />
+                    </>
+                )}
             </Switch>
         </BrowserRouter>
     );
@@ -33,21 +53,6 @@ const AuthedContainer = () => {
             {/*  */}
         </>
     );
-    // const userInfo = useAppSelector((state) => state.auth.userInfo);
-    // return !userInfo ? (
-    //     <Redirect to="/accounts/signin" />
-    // ) : (
-    //     <>
-    //         <Header />
-    //         <Route path="*">
-    //             <Redirect to="/" />
-    //         </Route>
-    //         <Route exact path="/" component={Home} />
-    //         {/* Direct */}
-    //         <Route path="/direct" component={Direct} />
-    //         {/*  */}
-    //     </>
-    // );
 };
 
 export default Routes;

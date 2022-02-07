@@ -36,8 +36,9 @@ const ArticleImgSliderUnit = ({
 }) => {
     const [isAvatarOn, setIsAvatarOn] = useState(false);
     const [isImgHashTagsOn, setIsImgHashTagOn] = useState<boolean | null>(null);
-    const [timeoutId, setTimeoutId] =
-        useState<null | ReturnType<typeof setTimeout>>(null);
+    const [timeoutId, setTimeoutId] = useState<null | ReturnType<
+        typeof setTimeout
+    >>(null);
 
     const onClickHandler = () => {
         if (!isAvatarOn) {

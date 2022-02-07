@@ -1,5 +1,5 @@
 import { homeActions } from "app/store/ducks/home/homeSlice";
-import { useAppDispatch } from "app/store/hooks";
+import { useAppDispatch } from "app/store/Hooks";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import ModalCard from "styles/UI/ModalCard";

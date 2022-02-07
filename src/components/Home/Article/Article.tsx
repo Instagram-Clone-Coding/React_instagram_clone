@@ -6,9 +6,9 @@ import ArticleImgSlider from "components/Home/Article/ArticleImgSlider";
 import ArticleMainIcons from "components/Home/Article/ArticleMainIcons";
 import ArticleMain from "components/Home/Article/ArticleMain";
 import CommentForm from "components/Home/Article/CommentForm";
-import useGapText from "Hooks/useGapText";
-import useOnView from "Hooks/useOnView";
-import { useAppDispatch, useAppSelector } from "app/store/hooks";
+import useGapText from "hooks/useGapText";
+import useOnView from "hooks/useOnView";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import {
     deleteLike,
     getExtraArticle,

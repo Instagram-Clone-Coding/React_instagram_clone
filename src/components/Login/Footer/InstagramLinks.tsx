@@ -1,6 +1,6 @@
-import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-import FooterRow from "./FooterRow";
+import { useLocation } from "react-router-dom";
+import FooterRow from "components/Login/Footer/FooterRow";
 
 const Links = styled.div`
     display: flex;

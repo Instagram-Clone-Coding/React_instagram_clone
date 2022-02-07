@@ -30,6 +30,7 @@ const SliderContainer = styled.div`
     margin-left: -35px;
     margin-right: -15px;
     flex-basis: 454px;
+    align-self: center;
     @media (max-width: 875px) {
         display: none;
     }
@@ -49,14 +50,14 @@ const Image = styled.img<imageStateProps>`
 `;
 
 interface imageStateProps {
-    show: Boolean;
-    background: Boolean;
+    show: boolean;
+    background: boolean;
 }
 
 const SlideImage = [home, Edit, talk, takephoto, InstagramImg];
 const IMAGE_LENGTH = SlideImage.length;
 
-export function ShowingInstagram() {
+export default function ShowingInstagram() {
     const [index, setIndex] = useState(-1);
 
     useEffect(() => {

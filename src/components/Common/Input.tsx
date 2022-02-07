@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
-import React, { useState } from "react";
+import { ChangeEvent, MouseEvent, useState } from "react";
+import ImageSprite from "components/Common/ImageSprite";
+import sprite from "assets/Images/loginPageSprite.png";
 
 interface InputProps {
     isSmallInnerText: boolean;
@@ -9,6 +11,7 @@ const InputContainer = styled.div<InputProps>`
     margin: 0 40px 6px;
 
     .inputContent {
+        // focus -> border 조절**
         display: flex;
         font-size: 14px;
         position: relative;
@@ -61,20 +64,36 @@ const InputContainer = styled.div<InputProps>`
         }
     }
 
-    .isShowPassword {
+    .inputState {
         height: 100%;
         padding-right: 8px;
+        display: flex;
 
+        .stateStyle {
+            margin-left: 8px;
+        }
         .showPassword {
             user-select: none;
         }
     }
 `;
 
-export default function Input(props: Login.InputProps) {
-    const { innerText, onUserDataUpdater, type, inputName, value } = props;
+const ValidFlag: Common.ImageProps = {
+    width: 22,
+    height: 22,
+    position: `-225px -333px`,
+    url: sprite,
+};
 
-    // props.validator 가 있으면, 관리해야함** -> password랑 비슷함
+const InvalidFlag: Common.ImageProps = {
+    width: 22,
+    height: 22,
+    position: `-249px -333px`,
+    url: sprite,
+};
+
+const Input = (props: Login.InputProps) => {
+    const { innerText, type, inputName } = props;
     const [isSmallInnerText, setInnerTextSize] = useState(false);
     const [inputType, setInputType] = useState(type);
     const [isShowPassword, setShowPassword] = useState(false);
@@ -82,16 +101,13 @@ export default function Input(props: Login.InputProps) {
         "비밀번호 표시" | "숨기기"
     >("비밀번호 표시");
 
-    const handleText = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        const userInput = { [name]: value };
-        const hasValue = value.length ? true : false;
-        onUserDataUpdater(userInput);
+    const textChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        const hasValue = event.target.value.length ? true : false;
         setInnerTextSize(hasValue);
         setShowPassword(inputName === "password" && hasValue);
     };
 
-    const handlePasswordBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const passwordVisibleHandler = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         setInputType(inputType === "password" ? "text" : "password");
         setPasswordMessage(
@@ -105,20 +121,28 @@ export default function Input(props: Login.InputProps) {
                 <label className="placeholder">
                     <span className="innerText">{innerText}</span>
                     <input
-                        className="writingForm"
-                        // onBlur={}
-                        onChange={handleText}
                         type={inputType}
-                        value={value}
                         name={inputName}
+                        className="writingForm"
+                        {...props.inputProps}
+                        onChange={(e) => {
+                            textChangeHandler(e);
+                            props.inputProps.onChange(e);
+                        }}
                     />
                 </label>
-                <div className="isShowPassword">
+                <div className="inputState">
+                    {!props.inputProps.onBlur ? null : props.isValid ===
+                      null ? null : !props.isValid && !props.isFocus ? (
+                        <ImageSprite {...InvalidFlag} className="stateStyle" />
+                    ) : !props.isValid && props.isFocus ? null : (
+                        <ImageSprite {...ValidFlag} className="stateStyle" />
+                    )}
                     {isShowPassword && (
                         <button
-                            className="showPassword"
+                            className="showPassword stateStyle"
                             type="button"
-                            onClick={handlePasswordBtn}
+                            onClick={passwordVisibleHandler}
                         >
                             {passwordMessage}
                         </button>
@@ -127,4 +151,6 @@ export default function Input(props: Login.InputProps) {
             </div>
         </InputContainer>
     );
-}
+};
+
+export default Input;
