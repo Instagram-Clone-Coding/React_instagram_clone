@@ -151,7 +151,10 @@ export const deleteLike = createAsyncThunk<
         },
     };
     try {
-        const { data } = await axios.delete(`/posts/like`, config);
+        const { data } = await authorizedCustomAxios.delete(
+            `/posts/like`,
+            config,
+        );
         return data;
     } catch (error) {
         throw ThunkOptions.rejectWithValue(error);

@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { authorizedCustomAxios } from "customAxios";
 
 export const getMiniProfile = createAsyncThunk<
     ModalType.MiniProfileStateProps,
@@ -11,7 +12,9 @@ export const getMiniProfile = createAsyncThunk<
     try {
         const {
             data: { data },
-        } = await axios.get(`/accounts/${payload.memberUsername}/mini`);
+        } = await authorizedCustomAxios.get(
+            `/accounts/${payload.memberUsername}/mini`,
+        );
         return {
             ...data,
             isLoading: false,
