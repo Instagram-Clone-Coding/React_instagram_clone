@@ -1,14 +1,7 @@
 import styled, { css } from "styled-components";
-import {
-    ChangeEvent,
-    ForwardedRef,
-    forwardRef,
-    MouseEvent,
-    useState,
-} from "react";
+import { ChangeEvent, MouseEvent, useState } from "react";
 import ImageSprite from "components/Common/ImageSprite";
 import sprite from "assets/Images/loginPageSprite.png";
-import useInput from "hooks/useInput";
 
 interface InputProps {
     isSmallInnerText: boolean;
@@ -99,107 +92,65 @@ const InvalidFlag: Common.ImageProps = {
     url: sprite,
 };
 
-const Input = forwardRef(
-    (props: Login.InputProps, ref: ForwardedRef<HTMLInputElement>) => {
-        // Style
-        const { innerText, type, inputName } = props;
-        const [isSmallInnerText, setInnerTextSize] = useState(false);
-        const [inputType, setInputType] = useState(type);
-        const [isShowPassword, setShowPassword] = useState(false);
-        const [passwordMessage, setPasswordMessage] = useState<
-            "비밀번호 표시" | "숨기기"
-        >("비밀번호 표시");
+const Input = (props: Login.InputProps) => {
+    const { innerText, type, inputName } = props;
+    const [isSmallInnerText, setInnerTextSize] = useState(false);
+    const [inputType, setInputType] = useState(type);
+    const [isShowPassword, setShowPassword] = useState(false);
+    const [passwordMessage, setPasswordMessage] = useState<
+        "비밀번호 표시" | "숨기기"
+    >("비밀번호 표시");
 
-        const textChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-            const hasValue = event.target.value.length ? true : false;
-            setInnerTextSize(hasValue);
-            setShowPassword(inputName === "password" && hasValue);
-        };
+    const textChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        const hasValue = event.target.value.length ? true : false;
+        setInnerTextSize(hasValue);
+        setShowPassword(inputName === "password" && hasValue);
+    };
 
-        const passwordVisibleHandler = (
-            event: MouseEvent<HTMLButtonElement>,
-        ) => {
-            event.preventDefault();
-            setInputType(inputType === "password" ? "text" : "password");
-            setPasswordMessage(
-                inputType === "password" ? "숨기기" : "비밀번호 표시",
-            );
-        };
-
-        // Value
-        const [, inputProps, isValid, isFocus] = useInput("", props.validator);
-
-        return (
-            <InputContainer isSmallInnerText={isSmallInnerText}>
-                <div className="inputContent">
-                    <label className="placeholder">
-                        <span className="innerText">{innerText}</span>
-                        <input
-                            ref={ref}
-                            type={inputType}
-                            name={inputName}
-                            className="writingForm"
-                            {...inputProps}
-                            onChange={(e) => {
-                                textChangeHandler(e);
-                                inputProps.onChange(e);
-                            }}
-                        />
-                    </label>
-                    <div className="inputState">
-                        {!props.validator ? null : isValid ===
-                          null ? null : !isValid && !isFocus ? (
-                            <ImageSprite
-                                {...InvalidFlag}
-                                className="stateStyle"
-                            />
-                        ) : !isValid && isFocus ? null : (
-                            <ImageSprite
-                                {...ValidFlag}
-                                className="stateStyle"
-                            />
-                        )}
-                        {isShowPassword && (
-                            <button
-                                className="showPassword stateStyle"
-                                type="button"
-                                onClick={passwordVisibleHandler}
-                            >
-                                {passwordMessage}
-                            </button>
-                        )}
-                    </div>
-                </div>
-            </InputContainer>
+    const passwordVisibleHandler = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        setInputType(inputType === "password" ? "text" : "password");
+        setPasswordMessage(
+            inputType === "password" ? "숨기기" : "비밀번호 표시",
         );
-    },
-);
+    };
+
+    return (
+        <InputContainer isSmallInnerText={isSmallInnerText}>
+            <div className="inputContent">
+                <label className="placeholder">
+                    <span className="innerText">{innerText}</span>
+                    <input
+                        type={inputType}
+                        name={inputName}
+                        className="writingForm"
+                        {...props.inputProps}
+                        onChange={(e) => {
+                            textChangeHandler(e);
+                            props.inputProps.onChange(e);
+                        }}
+                    />
+                </label>
+                <div className="inputState">
+                    {!props.inputProps.onBlur ? null : props.isValid ===
+                      null ? null : !props.isValid && !props.isFocus ? (
+                        <ImageSprite {...InvalidFlag} className="stateStyle" />
+                    ) : !props.isValid && props.isFocus ? null : (
+                        <ImageSprite {...ValidFlag} className="stateStyle" />
+                    )}
+                    {isShowPassword && (
+                        <button
+                            className="showPassword stateStyle"
+                            type="button"
+                            onClick={passwordVisibleHandler}
+                        >
+                            {passwordMessage}
+                        </button>
+                    )}
+                </div>
+            </div>
+        </InputContainer>
+    );
+};
 
 export default Input;
-
-// const valueVaildHandler = (
-//     event: React.FocusEvent<HTMLInputElement>,
-// ) => {
-// if (validResult && inputName === "username") {
-// const checkUniqueName = async () => {
-//     axios
-//         .post(
-//             `http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/accounts/check?username=${event.target.value}`,
-//         )
-//         .then((response) => {
-//             // if (!response.data.data) {
-//             //     console.log(`이미 존재하는 사용자 이름입니다.`);
-//             // }
-//             setValueValid(() => response.data.data);
-//         })
-//         .catch((error) => {
-//             throw new Error(
-//                 `사용자이름 중복검사 API 요청 중에 발생한 에러입니다. 세부에러정보 : ${error}`,
-//             );
-//         });
-// };
-// checkUniqueName();
-// } else {
-//     setValueValid(() => validResult);
-// }
-// };

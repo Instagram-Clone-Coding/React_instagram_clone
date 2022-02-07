@@ -1,9 +1,10 @@
 import Input from "components/Common/Input";
-import { useState, MouseEvent, useRef } from "react";
+import { MouseEvent } from "react";
 import SubmitButton from "components/Common/SubmitButton";
 
 import { useAppDispatch } from "app/store/Hooks";
 import { signIn } from "app/store/ducks/auth/authThunk";
+import useInput from "hooks/useInput";
 
 const placeholder = {
     username: "사용자 이름",
@@ -26,24 +27,25 @@ const callSignInAPI = (
 };
 
 export default function LoginFormAndButton() {
-    const [userData, setUserData] = useState({
-        username: "",
-        password: "",
-    });
+    const [usernameInputProps, usernameIsValid, usernameIsFocus] = useInput(
+        "",
+        undefined,
+        (value) => value.length > 0,
+    );
+    const [passwordInputProps, passwordIsValid, passwordIsFocus] = useInput(
+        "",
+        undefined,
+        (value) => value.length > 5,
+    );
+
     const dispatch = useAppDispatch();
-    const usernameRef = useRef<HTMLInputElement>(null);
-    const passwordRef = useRef<HTMLInputElement>(null);
 
     const submitButtonClickHandler = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        if (usernameRef.current && passwordRef.current) {
-            const newUserData = {
-                username: usernameRef.current.value,
-                password: passwordRef.current.value,
-            };
-            callSignInAPI(dispatch, newUserData);
-            setUserData((prev) => ({ ...prev, ...newUserData }));
-        }
+        callSignInAPI(dispatch, {
+            username: usernameInputProps.value,
+            password: passwordInputProps.value,
+        });
     };
 
     return (
@@ -52,23 +54,20 @@ export default function LoginFormAndButton() {
                 type="text"
                 inputName="username"
                 innerText={placeholder.username}
-                ref={usernameRef}
+                inputProps={usernameInputProps}
+                isFocus={usernameIsFocus}
             />
             <Input
                 type="password"
                 inputName="password"
                 innerText={placeholder.password}
-                ref={passwordRef}
+                inputProps={passwordInputProps}
+                isFocus={passwordIsFocus}
             />
             <SubmitButton
                 type="submit"
                 onClick={submitButtonClickHandler}
-                // disabled={
-                //     userData.username.length > 0 && userData.password.length > 5
-                //         ? false
-                //         : true
-                // }
-                // click해야 user정보 가져오기때문에, 그 전에 계속 보고있으려면 어떻게 해야할까?
+                disabled={!(usernameIsValid && passwordIsValid)}
             >
                 로그인
             </SubmitButton>
