@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import useGapText from "Hooks/useGapText";
+import useGapText from "hooks/useGapText";
 import React from "react";
 import Direct from "../../../../../pages/Direct";
 
