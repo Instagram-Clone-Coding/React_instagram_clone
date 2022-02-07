@@ -142,7 +142,7 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
                 commentsCount={article.postCommentsCount}
                 // comments={article.comments}
             />
-            <div className="article-createdAt">{gapText}</div>
+            <div className="article-createdAt">{gapText}전</div>
             <div className="article-form-layout">
                 <CommentForm />
             </div>

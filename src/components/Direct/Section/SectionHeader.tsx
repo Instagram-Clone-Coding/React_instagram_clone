@@ -3,14 +3,12 @@ import styled from "styled-components";
 import theme from "styles/theme";
 import { ReactComponent as DetailInfo } from "assets/Svgs/direct-detail-info.svg";
 import { ReactComponent as DetailInfoActive } from "assets/Svgs/direct-detail-info-active.svg";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { selectView } from "app/store/ducks/direct/DirectSlice";
 
-interface SectionHeaderProps {
-    isDetailedView: boolean;
-    setIsDetailedView: Dispatch<SetStateAction<boolean>>;
-}
 
 interface SectionHeaderContainerType {
-    isDetailedView:boolean
+    view: string;
 }
 
 
@@ -21,9 +19,9 @@ const SectionHeaderContainer = styled.section<SectionHeaderContainerType>`
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid ${theme.color.bd_gray};
-  
-  .dummy-container{
-    display: ${(props) => !props.isDetailedView && 'none'  };
+
+  .dummy-container {
+    display: ${(props) => !(props.view === "detail") && "none"};
   }
 
   .user-profile-container {
@@ -51,27 +49,41 @@ const SectionHeaderContainer = styled.section<SectionHeaderContainerType>`
 `;
 
 
-const SectionHeader = ({ isDetailedView, setIsDetailedView }: SectionHeaderProps) => {
+const SectionHeader = () => {
+    const dispatch = useAppDispatch();
+    const { view,selectedRoom } = useAppSelector((state => state.direct));
     const viewConvertHandler = () => {
-        setIsDetailedView(!isDetailedView);
+        switch (view) {
+            case "detail":
+                dispatch(selectView("chat"));
+                break;
+            case "chat":
+                dispatch(selectView("detail"));
+                break;
+            // case "requestsChat":
+            //     dispatch(selectView("detail"))
+            //     break
+            default:
+                break;
+        }
     };
 
     return (
-        <SectionHeaderContainer isDetailedView={isDetailedView}>
+        <SectionHeaderContainer view={view}>
             <div className="dummy-container">
 
             </div>
             <div className="user-profile-container">
-                {isDetailedView ? <h3>상세 정보</h3> :
+                {view === "detail" ? <h3>상세 정보</h3> :
                     <>
-                    <img src="https://placeimg.com/50/50/any" alt="selected-user-image" />
-                    <h3>개복치님</h3>
+                        <img src={selectedRoom?.invitees[0].imageUrl} alt="selected-user-image" />
+                        <h3>{selectedRoom?.invitees[0].username}</h3>
                     </>
-                    }
+                }
             </div>
             <div className="detail-info-container" onClick={viewConvertHandler}>
                 {
-                    isDetailedView ? <DetailInfoActive /> : <DetailInfo />
+                    view === "detail" ? <DetailInfoActive /> : <DetailInfo />
                 }
             </div>
         </SectionHeaderContainer>

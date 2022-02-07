@@ -11,7 +11,10 @@ export const store = configureStore({
         home: homeReducer,
         modal: modalReducer,
     },
-});
+    middleware: getDefaultMiddleware =>
+        getDefaultMiddleware({
+            serializableCheck: false,
+        }),});
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;

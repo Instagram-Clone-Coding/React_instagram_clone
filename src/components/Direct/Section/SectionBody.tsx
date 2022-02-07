@@ -3,10 +3,12 @@ import styled from "styled-components";
 import ChatBar from "components/Direct/Section/ChatBar";
 import ChatSection from "components/Direct/Section/ChatSection";
 import DetailSection from "./DetailSection";
+import { useAppSelector } from "app/store/Hooks";
+import RequestsWishContainer from "./RequestsWishContainer";
+import CommonDirectModal from "./Modals/CommonDirectModal";
 
 
-interface SectionBodyType {
-    isDetailedView: boolean;
+interface SectionBodyProps {
     message: string;
     setMessage: Dispatch<SetStateAction<string>>;
 }
@@ -19,17 +21,35 @@ const SectionBodyContainer = styled.section`
 
 `;
 
-const SectionBody = ({ isDetailedView, message, setMessage }: SectionBodyType) => {
-    return <SectionBodyContainer>
-        {
-            isDetailedView ? <DetailSection /> :
 
-                // chatbar 어디에포함시킬지
-                <>
+const SectionBody = ({ message, setMessage }: SectionBodyProps) => {
+    const { view, modal } = useAppSelector((state => state.direct));
+    const viewRender = () => {
+        switch (view) {
+            case "detail":
+                return <DetailSection />;
+            case "chat":
+                return <>
                     <ChatSection />
                     <ChatBar message={message} setMessage={setMessage} />
-                </>
+                </>;
+            case "requestsChat":
+                return <>
+                    <ChatSection />
+                    <RequestsWishContainer />
+                    {
+                        modal === "deleteAll" &&   <CommonDirectModal modalType={"deleteAll"} actionName={"모두 삭제"}
+                                                                    title={"모두 삭제하시겠어요?"} description={"메시지 1개가 삭제됩니다."}
+                        />
+                    }
+                </>;
+            default:
+                break;
         }
+    };
+
+    return <SectionBodyContainer>
+        {viewRender()}
     </SectionBodyContainer>;
 };
 

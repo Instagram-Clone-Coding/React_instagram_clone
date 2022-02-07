@@ -1,12 +1,43 @@
 declare module Direct {
-    interface ChatItem {
-        id: number;
-        avatarImg: string;
-        userName: string;
-        lastLoggedIn: string;
-        lastMessage: string;
-        isImLast: boolean;
+
+    interface MessageDTO {
+        messageId:number;
+        content:string;
+        userId:number;
+        messageType:string
     }
+
+    interface ChatItem {
+        chatRoomId:number;
+        lastMessage:MessageDTO;
+        unreadFlag:boolean;
+        inviter:inviterProps;
+        invitees:inviteeProps[];
+    }
+
+    interface inviterProps {
+        username: string;
+        name: string;
+        imageUrl: string;
+    }
+
+    interface inviteeProps {
+        username: string;
+        name: string;
+        imageUrl: string;
+    }
+
+    interface RoomsProps {
+        status: boolean;
+        chatRoomId: number;
+        inviter: inviterProps; // 초대한사람
+        invitees: inviteeProps[]; // 초대받은사람
+    }
+
+
+    type modalType = "deleteChat" | "block" | "report" | "newChat" | "convertAccount" | "deleteAll" | null;
+    type currentSectionViewType = "inbox" | "detail" | "chat" | "requests" | "requestsChat"
+
 }
 
 declare module UI {

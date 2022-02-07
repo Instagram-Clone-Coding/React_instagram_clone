@@ -11,7 +11,8 @@ const Routes = () => {
     const { isLogin } = useAppSelector((state) => state.auth);
 
     return (
-        <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <>
+            <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Switch>
                 {/* {!isLogin ? (
                     <Redirect to="/accounts/signin" />
@@ -20,8 +21,10 @@ const Routes = () => {
                 )} */}
                 {isLogin ? (
                     <>
-                        <Route exact path="/" component={Home} />
-                        <Redirect to="/" />
+                        {AuthedContainer()}
+                        {/*<Header />*/}
+                        {/*<Route exact path="/" component={Home} />*/}
+                        {/*<Redirect to="/" />*/}
                         {/* 인스타그램에서는 404처리 하지만 일단 rediect 처리 */}
                     </>
                 ) : (
@@ -37,6 +40,7 @@ const Routes = () => {
                 )}
             </Switch>
         </BrowserRouter>
+        </>
     );
 };
 
@@ -44,13 +48,13 @@ const AuthedContainer = () => {
     return (
         <>
             <Header />
-            <Route path="*">
-                <Redirect to="/" />
-            </Route>
             <Route exact path="/" component={Home} />
             {/* Direct */}
             <Route path="/direct" component={Direct} />
             {/*  */}
+            <Route path="*">
+                <Redirect to="/" />
+            </Route>
         </>
     );
 };

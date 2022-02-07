@@ -1,10 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import ChatBubble from "components/Direct/Section/ChatBubble/ChatBubble";
+import { useAppSelector } from "app/store/Hooks";
 
 
-const ChatSectionContainer = styled.div`
-  height: calc(100vh - 240px);
+const ChatSectionContainer = styled.div<{ isRequestsChat: boolean }>`
+  height: ${props => props.isRequestsChat ? "calc(100vh - 280px)" : "calc(100vh - 250px)"};
+          
   overflow-y: auto;
 
   @media (max-width: 935px) {
@@ -12,21 +14,22 @@ const ChatSectionContainer = styled.div`
   }
 `;
 const ChatSection = () => {
+    const { view } = useAppSelector(state => state.direct);
     return (
-        <ChatSectionContainer>
+        <ChatSectionContainer isRequestsChat={view === "requestsChat"}>
             <ChatBubble me={true} message={"saddasdasd"} />
             <ChatBubble me={false} message={"saddasdasd"} />
             <ChatBubble me={true}
-                        message={"saddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasdsaddasdasd"} />
+                        message={"나중에 대체될겁니다"} />
             <ChatBubble me={true} message={"saddasdasd"} />
             <ChatBubble me={false} message={"saddasdasd"} />
             <ChatBubble me={true} message={"saddasdasd"} />
             <ChatBubble me={false} message={"saddasdasd"} />
+            <ChatBubble me={true} message={"나중에 대체될겁니다"} />
             <ChatBubble me={true} message={"saddasdasd"} />
             <ChatBubble me={true} message={"saddasdasd"} />
             <ChatBubble me={true} message={"saddasdasd"} />
-            <ChatBubble me={true} message={"saddasdasd"} />
-            <ChatBubble me={false} message={"saddasdasd"} />
+            <ChatBubble me={false} message={"나중에 대체될겁니다"} />
             <ChatBubble me={true} message={"saddasdasd"} />
         </ChatSectionContainer>
     );
