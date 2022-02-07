@@ -50,8 +50,8 @@ const Image = styled.img<imageStateProps>`
 `;
 
 interface imageStateProps {
-    show: Boolean;
-    background: Boolean;
+    show: boolean;
+    background: boolean;
 }
 
 const SlideImage = [home, Edit, talk, takephoto, InstagramImg];
