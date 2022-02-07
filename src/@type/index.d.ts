@@ -39,7 +39,16 @@ declare module Login {
         inputName: "email" | "name" | "username" | "password" | "id";
         innerText: string;
         type: "text" | "password";
-        validator?: Function;
+        inputProps: useInputProps;
+        isValid?: boolean | null;
+        isFocus?: boolean;
+    }
+
+    interface useInputProps {
+        value: string;
+        onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+        onBlur?: () => void;
+        onFocus?: () => void;
     }
 
     interface NewCardProps {
