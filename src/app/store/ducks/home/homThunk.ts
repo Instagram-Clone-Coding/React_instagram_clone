@@ -1,11 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { authorizedCustomAxios } from "customAxios";
 import { homeActions } from "app/store/ducks/home/homeSlice";
 import {
     ExtraArticleProps,
     RecentArticlesProps,
 } from "app/store/ducks/home/homeThunk.type";
-import axios from "axios";
-import { authorizedCustomAxios } from "customAxios";
+import { FAIL_TO_REISSUE_MESSAGE } from "utils/constant";
+import { authAction } from "app/store/ducks/auth/authSlice";
 
 export const getHomeArticles = createAsyncThunk<HomeType.ArticleStateProps[]>(
     "home/getHomeArticles",
@@ -25,6 +26,8 @@ export const getHomeArticles = createAsyncThunk<HomeType.ArticleStateProps[]>(
             );
             return articlesState;
         } catch (error) {
+            error === FAIL_TO_REISSUE_MESSAGE &&
+                ThunkOptions.dispatch(authAction.logout());
             throw ThunkOptions.rejectWithValue(error);
         }
     },
@@ -64,6 +67,8 @@ export const getExtraArticle = createAsyncThunk<
         };
         return articleState;
     } catch (error) {
+        error === FAIL_TO_REISSUE_MESSAGE &&
+            ThunkOptions.dispatch(authAction.logout());
         throw ThunkOptions.rejectWithValue(error);
     }
 });
@@ -80,6 +85,8 @@ export const postUnfollow = createAsyncThunk<
         } = await authorizedCustomAxios.delete(`/${payload.username}/follow`);
         return data;
     } catch (error) {
+        error === FAIL_TO_REISSUE_MESSAGE &&
+            ThunkOptions.dispatch(authAction.logout());
         throw ThunkOptions.rejectWithValue(error);
     }
 });
@@ -99,6 +106,8 @@ export const postFollow = createAsyncThunk<
         );
         return data;
     } catch (error) {
+        error === FAIL_TO_REISSUE_MESSAGE &&
+            ThunkOptions.dispatch(authAction.logout());
         throw ThunkOptions.rejectWithValue(error);
     }
 });
@@ -129,6 +138,8 @@ export const postLike = createAsyncThunk<
         );
         return data;
     } catch (error) {
+        error === FAIL_TO_REISSUE_MESSAGE &&
+            ThunkOptions.dispatch(authAction.logout());
         throw ThunkOptions.rejectWithValue(error);
     }
 });
@@ -157,6 +168,8 @@ export const deleteLike = createAsyncThunk<
         );
         return data;
     } catch (error) {
+        error === FAIL_TO_REISSUE_MESSAGE &&
+            ThunkOptions.dispatch(authAction.logout());
         throw ThunkOptions.rejectWithValue(error);
     }
 });
