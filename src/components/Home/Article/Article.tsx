@@ -34,15 +34,8 @@ const ArticleCard = styled(Card)`
     }
 `;
 
-const token = {
-    accessToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY0MzgxMTU3MH0._bLGXXtPlrAWXf8FVwGTGGeJSWb5S45tzqzatQQkYuUkZ0DzDiZJgi7GTgMerDhxmyms-PFTlL8HwueKqmdejg",
-    refreshToken:
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjQyNzQxNDY4fQ.8mHe22G6uu6F_HB-5G8A7voUNLb5oRAuX84xlKWFUZeccsi_Y3DHMh1fC7w3uEG3UATvNc5U9PBPvF6hW1vpZw",
-};
-
 interface ArticleComponentPros {
-    article: HomeType.ArticleProps;
+    article: HomeType.ArticleStateProps;
     isObserving: boolean;
     isLast: boolean;
 }
@@ -55,21 +48,17 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
     // like state
     const [isLiked, setIsliked] = useState(article.postLikeFlag);
     const [likesCount, setLikesCount] = useState(article.postLikesCount);
-    const gapText = useGapText(article.postUploadDate);
+    const gapText = `${useGapText(article.postUploadDate)} 전`;
     const articleRef = useRef<HTMLDivElement>(null);
     const isVisible = useOnView(articleRef);
-    const extraArticlesCount = useAppSelector(
-        ({ home }) => home.extraArticlesCount,
-    );
+    const { extraArticlesCount } = useAppSelector(({ home }) => home);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
         const dispatchExtraArticle = async () => {
-            console.log("start");
             try {
                 await dispatch(
                     getExtraArticle({
-                        token: token.accessToken,
                         page: extraArticlesCount + 1,
                     }),
                 );
@@ -83,26 +72,34 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
     }, [isObserving, isVisible, dispatch]);
 
     const dispatchPostLike = async () => {
-        await dispatch(
-            postLike({ token: token.accessToken, postId: article.postId }),
-        );
+        try {
+            await dispatch(postLike({ postId: article.postId })).unwrap();
+        } catch (error) {
+            setIsliked(false);
+            setLikesCount((prev) => prev - 1);
+        }
     };
 
     const dispatchDeleteLike = async () => {
-        await dispatch(
-            deleteLike({
-                token: token.accessToken,
-                postId: article.postId,
-            }),
-        );
+        try {
+            await dispatch(
+                deleteLike({
+                    postId: article.postId,
+                }),
+            ).unwrap();
+        } catch (error) {
+            setIsliked(true);
+            setLikesCount((prev) => prev + 1);
+        }
     };
 
     const toggleLikeHandler = (): void => {
-        setIsliked((prev: boolean) => !prev);
         if (!isLiked) {
+            setIsliked(true);
             setLikesCount((prev) => prev + 1);
             dispatchPostLike();
         } else {
+            setIsliked(false);
             setLikesCount((prev) => prev - 1);
             dispatchDeleteLike();
         }
@@ -119,7 +116,11 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
         <ArticleCard as="article" ref={articleRef}>
             <ArticleHeader
                 memberImageUrl={article.memberImageUrl}
+                memberUsername={article.memberUsername}
                 memberNickname={article.memberNickname}
+                postId={article.postId}
+                isFollowing={article.isFollowing}
+                followLoading={article.followLoading}
             />
             <ArticleImgSlider
                 imageDTOs={article.postImageDTOs}
@@ -127,11 +128,14 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
             />
             <ArticleMainIcons
                 isLiked={isLiked}
+                isBookmarked={article.postBookmarkFlag}
+                postId={article.postId}
                 onToggleLike={toggleLikeHandler}
             />
             <ArticleMain
                 followingUserWhoLikesArticle={followingUserWhoLikesArticle}
                 likesCount={likesCount}
+                memberUsername={article.memberUsername}
                 memberImageUrl={article.memberImageUrl}
                 memberNickname={article.memberNickname}
                 content={article.postContent}

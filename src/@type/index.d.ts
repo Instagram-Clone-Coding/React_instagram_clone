@@ -91,14 +91,6 @@ declare module Login {
 declare module HomeType {
     type StoriesScrollPositionType = "left" | "right" | "center";
 
-    type ActivatedModalType =
-        | "hover"
-        | "unfollowing"
-        | "report"
-        | "articleMenu"
-        | "shareWith"
-        | null;
-
     interface PostImgTagDTOProps {
         id: number;
         tag: {
@@ -131,13 +123,14 @@ declare module HomeType {
         // comment 몇 개 가져오기
     }
 
-    interface homeModalProps {
-        activatedModal: activatedModalType;
-        handledObj: null;
+    interface ArticleStateProps extends ArticleProps {
+        isFollowing: boolean;
+        followLoading: boolean;
     }
+
     interface homeStateProps {
         storiesScrollPosition: storiesScrollPositionType;
-        articles: ArticleProps[];
+        articles: ArticleStateProps[];
         // location?
         isLoading: boolean; // 더미 로딩
         isExtraArticleLoading: boolean;
@@ -159,7 +152,58 @@ declare module HomeType {
             }[]; // 최신 3개
         } | null;
         isCopiedNotification: boolean;
-        homeModal: homeModalProps;
+    }
+}
+
+declare module ModalType {
+    type ActivatedModalType =
+        | "unfollowing"
+        | "report"
+        | "articleMenu"
+        | "shareWith"
+        | null;
+    interface ModalPositionProps {
+        top: number;
+        bottom: number;
+        left: number;
+    }
+
+    interface MiniProfileProps {
+        blocked: boolean;
+        blocking: boolean;
+        follower: boolean;
+        following: boolean;
+        followingMemberFollow: string;
+        me: boolean;
+        memberFollowersCount: number;
+        memberFollowingsCount: number;
+        memberPostsCount: number;
+        memberImage: {
+            imageUrl: string;
+            imageType: string;
+            imageName: string;
+            imageUUID: string;
+        };
+        memberName: string;
+        memberPosts: { postId: number; postImageUrl: string }[]; // string
+        memberUsername: string;
+        memberWebsite: null | string;
+    }
+
+    interface MiniProfileStateProps extends MiniProfileProps {
+        isLoading: boolean;
+        modalPosition: ModalPositionProps;
+    }
+
+    interface ModalStateProps {
+        activatedModal: ActivatedModalType;
+        memberUsername: string;
+        memberNickname: string;
+        memberImageUrl: string;
+        postId?: number;
+        miniProfile?: MiniProfileStateProps;
+        isFollowing?: boolean;
+        isOnMiniProfile: boolean;
     }
 }
 

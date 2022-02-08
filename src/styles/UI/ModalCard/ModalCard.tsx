@@ -12,7 +12,7 @@ interface PositionedModal extends CardProps {
 
 const StyledPositionedModal = styled(Card)<PositionedModal>`
     position: absolute;
-    z-index: 101;
+    z-index: 100;
     width: 390px;
     top: ${(props) => props.top + "px"};
     left: ${(props) => props.left + "px"};
@@ -55,7 +55,7 @@ const StyledBackDrop = styled.div`
 
 interface ModalProps {
     modalType?: "positioned" | "withBackDrop";
-    modalPosition?: DOMRect;
+    modalPosition?: ModalType.ModalPositionProps;
     onModalOn: () => void;
     onModalOff: () => void;
     children: React.ReactNode;

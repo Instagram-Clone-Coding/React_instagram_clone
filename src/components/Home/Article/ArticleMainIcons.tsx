@@ -1,10 +1,15 @@
 import PopHeart from "components/Common/PopHeart";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { ReactComponent as CommentBubble } from "assets/Svgs/commentBubble.svg";
 import { ReactComponent as PaperAirplane } from "assets/Svgs/paperAirplane.svg";
 import { ReactComponent as EmptyBookmark } from "assets/Svgs/emptyBookmark.svg";
 import { ReactComponent as FilledBookmark } from "assets/Svgs/filledBookmark.svg";
 import styled from "styled-components";
+import { useAppDispatch } from "app/store/Hooks";
+import {
+    deleteSaveArticle,
+    postSaveArticle,
+} from "app/store/ducks/Article/articleThunk";
 
 const StyledMainIcons = styled.div`
     display: flex;
@@ -44,14 +49,39 @@ const StyledMainIcons = styled.div`
 
 interface likePropsType {
     isLiked: boolean;
+    isBookmarked: boolean;
+    postId: number;
     onToggleLike: () => void;
 }
 
-const ArticleMainIcons = ({ isLiked, onToggleLike }: likePropsType) => {
-    const [isSaved, setIsSaved] = useState(false);
+const ArticleMainIcons = ({
+    isLiked,
+    isBookmarked,
+    postId,
+    onToggleLike,
+}: likePropsType) => {
+    const [isSaved, setIsSaved] = useState(isBookmarked);
+    const dispatch = useAppDispatch();
     // 로그인 된 유저의 saved articles에 이 document id가 있는 지 확인하여 결정
-    const toggleSave = () => {
-        setIsSaved((prev) => !prev);
+    const saveArticle = async () => {
+        try {
+            setIsSaved(true);
+            await dispatch(postSaveArticle({ postId })).unwrap();
+        } catch (error) {
+            setIsSaved(false);
+        }
+    };
+
+    const cancelSavedArticle = async () => {
+        try {
+            setIsSaved(false);
+            await dispatch(deleteSaveArticle({ postId })).unwrap();
+        } catch (error) {
+            setIsSaved(true);
+        }
+    };
+    const saveClickHandler = () => {
+        isSaved ? cancelSavedArticle() : saveArticle();
     };
 
     return (
@@ -70,7 +100,7 @@ const ArticleMainIcons = ({ isLiked, onToggleLike }: likePropsType) => {
                 <PaperAirplane />
             </div>
             <div
-                onClick={toggleSave}
+                onClick={saveClickHandler}
                 className={`save ${isSaved ? "saved" : ""}`}
             >
                 {isSaved ? <FilledBookmark /> : <EmptyBookmark />}
@@ -79,4 +109,4 @@ const ArticleMainIcons = ({ isLiked, onToggleLike }: likePropsType) => {
     );
 };
 
-export default ArticleMainIcons;
+export default memo(ArticleMainIcons);

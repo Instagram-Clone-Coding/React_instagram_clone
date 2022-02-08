@@ -1,4 +1,9 @@
+import { homeActions } from "app/store/ducks/home/homeSlice";
+import { modalActions } from "app/store/ducks/modal/modalSlice";
+import { useAppDispatch } from "app/store/Hooks";
+
 const useCopy = (copyValue: string) => {
+    const dispatch = useAppDispatch();
     return () => {
         if (!document.queryCommandSupported("copy")) {
             return alert("복사하기가 지원되지 않는 브라우저입니다.");
@@ -15,8 +20,12 @@ const useCopy = (copyValue: string) => {
         textarea.select();
         document.execCommand("copy");
         document.body.removeChild(textarea);
-        // notification root 작성 후 복사 여부 알려주기
-        // dispatch(notificationActions.appear())
+        dispatch(modalActions.resetModal());
+        dispatch(homeActions.notificateIsCopied());
+        setTimeout(
+            () => dispatch(homeActions.closeIsCopiedNotification()),
+            8500,
+        );
     };
 };
 
