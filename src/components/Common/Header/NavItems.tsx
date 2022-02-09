@@ -44,11 +44,9 @@ const AvatarWrapper = styled(NavItemWrapper)`
     }
 `;
 
-
 const NavItems = () => {
-
     const dispatch = useAppDispatch();
-    const { view } = useAppSelector((state => state.direct));
+    const view = useAppSelector((state) => state.direct.view);
 
     const navItems = [
         {
@@ -60,8 +58,20 @@ const NavItems = () => {
         {
             id: "메세지",
             path: "/direct",
-            component: <Direct onClick={()=>{dispatch(selectView("inbox"))}} />,
-            activeComponent: <DirectActive onClick={()=>{dispatch(selectView("inbox"))}} />,
+            component: (
+                <Direct
+                    onClick={() => {
+                        dispatch(selectView("inbox"));
+                    }}
+                />
+            ),
+            activeComponent: (
+                <DirectActive
+                    onClick={() => {
+                        dispatch(selectView("inbox"));
+                    }}
+                />
+            ),
         },
         {
             id: "새 글 작성",
