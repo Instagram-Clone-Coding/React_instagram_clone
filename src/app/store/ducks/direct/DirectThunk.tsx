@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { authorizedCustomAxios } from "customAxios";
-
+import { FAIL_TO_REISSUE_MESSAGE } from "utils/constant";
+import { authAction } from "app/store/ducks/auth/authSlice";
 export const makeRoom = createAsyncThunk<
     Direct.RoomsProps,
     {
@@ -20,6 +21,8 @@ export const makeRoom = createAsyncThunk<
         );
         return data.data;
     } catch (error) {
+        error === FAIL_TO_REISSUE_MESSAGE &&
+        ThunkOptions.dispatch(authAction.logout());
         throw ThunkOptions.rejectWithValue(error);
     }
 });
@@ -28,7 +31,7 @@ export const makeRoom = createAsyncThunk<
 
 export const deleteRoom = createAsyncThunk<any, { roomId: number }>(
     "chat/deleteRoom",
-    async (payload, ThunkOpions) => {
+    async (payload, ThunkOptions) => {
         const config = {
             params: {
                 roomId: payload.roomId,
@@ -42,7 +45,8 @@ export const deleteRoom = createAsyncThunk<any, { roomId: number }>(
             );
             return data;
         } catch (error) {
-            throw ThunkOpions.rejectWithValue(error);
-        }
+            error === FAIL_TO_REISSUE_MESSAGE &&
+            ThunkOptions.dispatch(authAction.logout());
+            throw ThunkOptions.rejectWithValue(error);        }
     },
 );
