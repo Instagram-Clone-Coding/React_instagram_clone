@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { openModal, selectView } from "app/store/ducks/direct/DirectSlice";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { authorizedCustomAxios } from "../../../customAxios";
 
 export const dummyChatList: Array<Direct.ChatItem> = [
