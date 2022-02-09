@@ -3,8 +3,10 @@ declare module Direct {
     interface MessageDTO {
         messageId:number;
         content:string;
-        userId:number;
-        messageType:string
+        messageType:string;
+        messageDate:string;
+        senderId:number;
+        roomId:number;
     }
 
     interface ChatItem {

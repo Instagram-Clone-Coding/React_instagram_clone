@@ -6,135 +6,135 @@ import { openModal, selectView } from "app/store/ducks/direct/DirectSlice";
 import { useEffect, useState } from "react";
 import { authorizedCustomAxios } from "../../../customAxios";
 
-export const dummyChatList: Array<Direct.ChatItem> = [
-    {
-        chatRoomId: 1,
-        lastMessage: {
-            messageId: 1,
-            content: "야 모해",
-            userId: 3,
-            messageType: "text",
-        },
-        unreadFlag: false,
-        inviter: {
-            username: "dlwlrma",
-            name: "이지금",
-            imageUrl:
-                "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-        },
-
-        invitees: [
-            {
-                username: "dlwlrma2",
-                name: "이지금2",
-                imageUrl:
-                    "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-            },
-        ],
-    },
-
-    {
-        chatRoomId: 2,
-        lastMessage: {
-            messageId: 1,
-            content: "야 모해",
-            userId: 3,
-            messageType: "text",
-        },
-        unreadFlag: false,
-        inviter: {
-            username: "dlwlrma",
-            name: "이지금",
-            imageUrl:
-                "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-        },
-
-        invitees: [
-            {
-                username: "dlwlrma2",
-                name: "이지금2",
-                imageUrl:
-                    "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-            },
-        ],
-    },
-
-    {
-        chatRoomId: 4,
-        lastMessage: {
-            messageId: 1,
-            content: "야 모해",
-            userId: 3,
-            messageType: "text",
-        },
-        unreadFlag: false,
-        inviter: {
-            username: "dlwlrma",
-            name: "이지금",
-            imageUrl:
-                "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-        },
-
-        invitees: [
-            {
-                username: "dlwlrma1",
-                name: "이지금2",
-                imageUrl:
-                    "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-            },
-        ],
-    },
-    {
-        chatRoomId: 5,
-        lastMessage: {
-            messageId: 1,
-            content: "지금",
-            userId: 3,
-            messageType: "text",
-        },
-        unreadFlag: false,
-        inviter: {
-            username: "dlwlrma8",
-            name: "이지금",
-            imageUrl:
-                "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-        },
-
-        invitees: [
-            {
-                username: "dlwlrma4",
-                name: "이지금1",
-                imageUrl:
-                    "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-            },
-        ],
-    },
-    {
-        chatRoomId: 36,
-        lastMessage: {
-            messageId: 1,
-            content: "너",
-            userId: 3,
-            messageType: "text",
-        },
-        unreadFlag: false,
-        inviter: {
-            username: "dlwlrma7",
-            name: "이지금",
-            imageUrl:
-                "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-        },
-
-        invitees: [
-            {
-                username: "dlwlrma3",
-                name: "이지금2",
-                imageUrl:
-                    "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
-            },
-        ],
-    },
-];
+// export const dummyChatList: Array<Direct.ChatItem> = [
+//     {
+//         chatRoomId: 1,
+//         lastMessage: {
+//             messageId: 1,
+//             content: "야 모해",
+//             userId: 3,
+//             messageType: "text",
+//         },
+//         unreadFlag: false,
+//         inviter: {
+//             username: "dlwlrma",
+//             name: "이지금",
+//             imageUrl:
+//                 "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+//         },
+//
+//         invitees: [
+//             {
+//                 username: "dlwlrma2",
+//                 name: "이지금2",
+//                 imageUrl:
+//                     "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+//             },
+//         ],
+//     },
+//
+//     {
+//         chatRoomId: 2,
+//         lastMessage: {
+//             messageId: 1,
+//             content: "야 모해",
+//             userId: 3,
+//             messageType: "text",
+//         },
+//         unreadFlag: false,
+//         inviter: {
+//             username: "dlwlrma",
+//             name: "이지금",
+//             imageUrl:
+//                 "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+//         },
+//
+//         invitees: [
+//             {
+//                 username: "dlwlrma2",
+//                 name: "이지금2",
+//                 imageUrl:
+//                     "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+//             },
+//         ],
+//     },
+//
+//     {
+//         chatRoomId: 4,
+//         lastMessage: {
+//             messageId: 1,
+//             content: "야 모해",
+//             userId: 3,
+//             messageType: "text",
+//         },
+//         unreadFlag: false,
+//         inviter: {
+//             username: "dlwlrma",
+//             name: "이지금",
+//             imageUrl:
+//                 "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+//         },
+//
+//         invitees: [
+//             {
+//                 username: "dlwlrma1",
+//                 name: "이지금2",
+//                 imageUrl:
+//                     "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+//             },
+//         ],
+//     },
+//     {
+//         chatRoomId: 5,
+//         lastMessage: {
+//             messageId: 1,
+//             content: "지금",
+//             userId: 3,
+//             messageType: "text",
+//         },
+//         unreadFlag: false,
+//         inviter: {
+//             username: "dlwlrma8",
+//             name: "이지금",
+//             imageUrl:
+//                 "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+//         },
+//
+//         invitees: [
+//             {
+//                 username: "dlwlrma4",
+//                 name: "이지금1",
+//                 imageUrl:
+//                     "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+//             },
+//         ],
+//     },
+//     {
+//         chatRoomId: 36,
+//         lastMessage: {
+//             messageId: 1,
+//             content: "너",
+//             userId: 3,
+//             messageType: "text",
+//         },
+//         unreadFlag: false,
+//         inviter: {
+//             username: "dlwlrma7",
+//             name: "이지금",
+//             imageUrl:
+//                 "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+//         },
+//
+//         invitees: [
+//             {
+//                 username: "dlwlrma3",
+//                 name: "이지금2",
+//                 imageUrl:
+//                     "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150",
+//             },
+//         ],
+//     },
+// ];
 
 const AsideBodyContainer = styled.section`
     height: calc(100% - 60px);
@@ -204,7 +204,7 @@ const AsideBody = () => {
                 } = await authorizedCustomAxios.get(`/chat/rooms?page=${1}`);
 
                 setChatList(data.content);
-                console.log(data);
+                console.log(data.content);
             } catch (err) {}
         };
         getChatList();
@@ -229,7 +229,7 @@ const AsideBody = () => {
                     </h5>
                 </div>
             )}
-            <ChatList chatList={dummyChatList} />
+            <ChatList chatList={chatList} />
             {(view === "requests" || view === "requestsChat") && (
                 <div
                     className={"delete-all-button"}

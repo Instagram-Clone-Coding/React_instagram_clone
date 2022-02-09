@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { dummyChatList } from "components/Direct/Aside/AsideBody";
+// import { dummyChatList } from "components/Direct/Aside/AsideBody";
 import NewChatRecommendUser from "./NewChatRecommendUser";
 
 
@@ -32,11 +32,11 @@ const NewChatFriendList = () => {
             <span>추천</span>
 
             <div className="new-chat-recommend-container">
-                {
-                    dummyChatList.map(item => (
-                        <NewChatRecommendUser key={item.chatRoomId} {...item}/>
-                    ))
-                }
+                {/*{*/}
+                {/*    dummyChatList.map(item => (*/}
+                {/*        <NewChatRecommendUser key={item.chatRoomId} {...item}/>*/}
+                {/*    ))*/}
+                {/*}*/}
             </div>
 
 

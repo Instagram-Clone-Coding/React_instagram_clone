@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import useGapText from "hooks/useGapText";
 import React from "react";
-import Direct from "../../../../../pages/Direct";
+import Direct from "pages/Direct";
 
 
 
@@ -72,7 +72,7 @@ interface ChatListItemProps extends Direct.ChatItem {
 }
 
 const ChatListItem = ({ chatRoomId, invitees, lastMessage, unreadFlag, isSelected ,chatListClickHandler}: ChatListItemProps) => {
-    const calculatedTime = useGapText("2021.11.22 21:00:00");
+    const calculatedTime = useGapText(lastMessage.messageDate);
 
     return (
         <ChatListItemContainer unreadFlag={unreadFlag} isSelected={isSelected}
