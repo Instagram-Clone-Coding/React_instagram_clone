@@ -1,9 +1,6 @@
-import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { SignInRequestType, Token } from "./authThunk.type";
 import { customAxios } from "customAxios";
-
-axios.defaults.withCredentials = true; // 백엔드와 쿠키공유 허용 -> 글로벌?
 
 export const checkUsername = createAsyncThunk<boolean, { username: string }>(
     "auth/checkUsername",
