@@ -24,7 +24,7 @@ const ChatList = ({ chatList }: ChatListProps) => {
             await dispatch(makeRoom({ username: username }));
 
             // 채팅방 클릭시 채팅방조회(채팅방을 클릭하면 unseen count를 감소시키는 API) 호출
-
+            console.log("chatRoomId",chatRoomId);
             try {
                 await authorizedCustomAxios.delete(`/chat/rooms/${chatRoomId}`);
             } catch (error) {

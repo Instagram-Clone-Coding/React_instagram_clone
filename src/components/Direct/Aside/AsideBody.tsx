@@ -204,6 +204,7 @@ const AsideBody = () => {
                 } = await authorizedCustomAxios.get(`/chat/rooms?page=${1}`);
 
                 setChatList(data.content);
+                console.log(data);
             } catch (err) {}
         };
         getChatList();

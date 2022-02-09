@@ -13,6 +13,7 @@ import { ReactComponent as Heart } from "assets/Svgs/heart.svg";
 import Picker, { IEmojiData } from "emoji-picker-react";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import { useAppSelector } from "app/store/Hooks";
 
 interface ChatBarType {
     message: string;
@@ -87,6 +88,8 @@ const ChatBar = ({}: ChatBarType) => {
     const [sendButtonClicked, setSendButtonClicked] = useState<boolean>(false);
     const [image, setImage] = useState<File>();
     const [showPicker, setShowPicker] = useState(false);
+    const selectedRoom = useAppSelector(state => state.direct.selectedRoom);
+    const selectedNewChatUser = useAppSelector(state => state.direct.selectedNewChatUser)
 
 
     const onEmojiClick = (event: React.MouseEvent, emojiObject: IEmojiData) => {
@@ -129,7 +132,7 @@ const ChatBar = ({}: ChatBarType) => {
                 "content": message,
                 "senderId": 1,
                 "messageType": "TEXT",
-                "roomId": 29,
+                "roomId": selectedRoom?.chatRoomId,
             }));
         });
         setMessage("");
@@ -163,12 +166,13 @@ const ChatBar = ({}: ChatBarType) => {
 
     // 웹소켓 연결, 구독
     function wsConnectSubscribe() {
+        console.log(`${selectedNewChatUser} 님 구독`);
         try {
             stompClient.connect(
                 {},
                 () => {
                     stompClient.subscribe(
-                        `/sub/rooms/29`,
+                        `/sub/${selectedNewChatUser}`,
                         (data) => {
                             const newMessage = JSON.parse(data.body);
                             console.log(newMessage);

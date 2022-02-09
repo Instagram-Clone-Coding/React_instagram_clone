@@ -14,11 +14,13 @@ export const makeRoom = createAsyncThunk<
         },
     };
     try {
+        console.log("나 챗 룸 만들어");
         const { data } = await authorizedCustomAxios.post(
             `/chat/rooms`,
             null,
             config,
         );
+        console.log(data.data);
         return data.data;
     } catch (error) {
         error === FAIL_TO_REISSUE_MESSAGE &&

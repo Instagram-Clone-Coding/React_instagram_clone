@@ -18,9 +18,7 @@ const NewChatModal = () => {
     const dispatch = useAppDispatch();
 
     useEffect(()=>{
-        return () => {
             dispatch(selectNewChatUser(null))
-        }
     },[])
 
 

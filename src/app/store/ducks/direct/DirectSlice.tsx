@@ -65,9 +65,7 @@ const directSlice = createSlice({
                 state.view = "inbox";
                 state.isLoading = true;
             })
-            .addCase(deleteRoom.rejected,(state)=>{
-                state.isLoading = false;
-            })
+
     },
 });
 ;
