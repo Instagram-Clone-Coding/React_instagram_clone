@@ -17,7 +17,7 @@ const HeaderContainer = styled.nav`
     top: 0;
 
     width: 100%;
-    z-index: 3;
+    z-index: 101;
 `;
 
 const HeaderContentsWrapper = styled.div`

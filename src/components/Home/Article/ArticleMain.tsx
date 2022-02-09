@@ -1,9 +1,10 @@
 import PopHeart from "components/Common/PopHeart";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import styled from "styled-components";
-import FollowingModal from "../Modals/FollowingModal";
-import HoverModal from "../Modals/HoverModal";
 import Username from "../../Common/Username";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { modalActions } from "app/store/ducks/modal/modalSlice";
+import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
 
 const StyledMain = styled.div`
     padding: 0 16px;
@@ -38,64 +39,79 @@ const StyledMain = styled.div`
 `;
 
 interface MainProps {
-    isMyFollowerLiked: boolean;
-    myFollowersLiked: string[];
-    likes: string[];
-    owner: {
-        username: string;
-        avatarUrl: string;
-    };
-    text: string;
-    comments: {
+    followingUserWhoLikesArticle: null | string;
+    likesCount: number;
+    memberUsername: string;
+    memberNickname: string;
+    memberImageUrl: string;
+    content: string;
+    commentsCount: number;
+    comments?: {
+        // 없거나 있으면 보내주거나 해야 할 듯
         username: string;
         comment: string;
     }[];
 }
 
 const ArticleMain = ({
-    isMyFollowerLiked,
-    myFollowersLiked,
-    likes,
-    owner,
-    text,
+    followingUserWhoLikesArticle,
+    likesCount,
+    memberUsername,
+    memberNickname,
+    memberImageUrl,
+    content,
+    commentsCount,
     comments,
 }: MainProps) => {
-    const [isComment1Liked, setIsComment1Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람이 있는지 확인
-    const [isComment2Liked, setIsComment2Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람이 있는지 확인
+    // like state
+    const [isComment1Liked, setIsComment1Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
+    const [isComment2Liked, setIsComment2Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
+    // content state
     const [isFullText, setIsFullText] = useState(false);
-    const [isHeart1Animation, setIsHeart1Animation] = useState(false);
-    const [isHeart2Animation, setIsHeart2Animation] = useState(false);
-    const [isHoverModalActivated, setIsHoverModalActivated] = useState(false);
-    const [isFollowingModalActivated, setIsFollowingModalActivated] =
-        useState(false);
-    // const [isFollowing, setIsFollowing] = useState(false);
-    const [modalPositionObj, setModalPositionObj] = useState<DOMRect>();
-    const [hoveredUsername, setHoveredUsername] = useState("");
-    const [ishoveredUserFollowing, setIsHoveredUserFollowing] = useState(false); // hover한 데이터 가져와서 적용
-    const isTextLineBreak = text.includes("\n");
-    const textArray = isTextLineBreak ? text.split("\n") : [text];
+    const { miniProfile } = useAppSelector(({ modal }) => modal);
+    const dispatch = useAppDispatch();
+    const isTextLineBreak = useMemo(() => content.includes("\n"), [content]);
+    const textArray = useMemo(
+        () => (isTextLineBreak ? content.split("\n") : [content]),
+        [content, isTextLineBreak],
+    );
 
-    const textSpan = !isFullText ? (
-        <span>{textArray[0]}</span>
-    ) : (
-        textArray.map((line: string, index: number) => {
-            return (
-                <span key={index}>
-                    {line}
-                    <br />
-                </span>
-            );
-        })
+    const textSpan = useMemo(
+        () =>
+            !isFullText ? (
+                <span>{textArray[0]}</span>
+            ) : (
+                textArray.map((line: string, index: number) => {
+                    return (
+                        <span key={index}>
+                            {line}
+                            <br />
+                        </span>
+                    );
+                })
+            ),
+        [isFullText, textArray],
     );
     const comment1LikeHandler = () => {
-        setIsHeart1Animation(true);
         setIsComment1Liked((prev) => !prev);
         // 백엔드 수행
     };
     const comment2LikeHandler = () => {
-        setIsHeart2Animation(true);
         setIsComment2Liked((prev) => !prev);
         // 백엔드 수행
+    };
+
+    const fetchMiniProfile = async ({
+        top,
+        bottom,
+        left,
+    }: ModalType.ModalPositionProps) => {
+        await dispatch(
+            getMiniProfile({
+                memberUsername,
+                modalPosition: { top, bottom, left },
+            }),
+        );
     };
 
     const mouseEnterHandler = (
@@ -103,58 +119,52 @@ const ArticleMain = ({
             | React.MouseEvent<HTMLSpanElement>
             | React.MouseEvent<HTMLDivElement>,
     ) => {
-        setHoveredUsername(event.currentTarget.innerText);
-        setModalPositionObj(event?.currentTarget.getBoundingClientRect());
-        setIsHoverModalActivated(true);
+        if (!event) return;
+        if (miniProfile) return dispatch(modalActions.mouseOnHoverModal());
+        const { top, bottom, left } =
+            event.currentTarget.getBoundingClientRect();
+        dispatch(
+            modalActions.startModal({
+                activatedModal: null,
+                isOnMiniProfile: true,
+                // 댓글 nickname에 hover 했을 때는 다르게 해야
+                memberNickname: event.currentTarget.innerText, // 이후 체크
+                memberUsername,
+                memberImageUrl,
+                // 댓글 username이 제공될 때 예시
+                // memberUsername:comments.memberUsername,
+                // memberImageUrl:comments.imageUrl,
+            }),
+        );
+        fetchMiniProfile({
+            top,
+            bottom,
+            left,
+        });
     };
 
     const mouseLeaveHandler = () => {
-        setIsHoverModalActivated(false);
+        dispatch(modalActions.mouseNotOnHoverModal());
+        setTimeout(() => dispatch(modalActions.checkMouseOnHoverModal()), 100);
     };
 
     const getFullText = () => setIsFullText(true);
     return (
         <StyledMain>
-            {isHoverModalActivated && (
-                <HoverModal
-                    isFollowing={ishoveredUserFollowing} // hover username 데이터 가져오면 필요 없음
-                    onFollowChange={(a: boolean) =>
-                        setIsHoveredUserFollowing(a)
-                    }
-                    username={hoveredUsername}
-                    modalPosition={modalPositionObj}
-                    onMouseEnter={() => setIsHoverModalActivated(true)}
-                    onMouseLeave={() => setIsHoverModalActivated(false)}
-                    onFollowingModalOn={() =>
-                        setIsFollowingModalActivated(true)
-                    }
-                />
-            )}
-            {ishoveredUserFollowing && isFollowingModalActivated && (
-                <FollowingModal
-                    onUnfollow={() => {
-                        setIsHoveredUserFollowing(false);
-                    }}
-                    onModalOn={() => setIsFollowingModalActivated(true)}
-                    onModalOff={() => setIsFollowingModalActivated(false)}
-                    username={hoveredUsername}
-                    avatarUrl={owner.avatarUrl} // 원래 FollowingModal 내부에서 username에 따라 받아와야 함.
-                />
-            )}
             <div className="article-likeInfo">
-                {isMyFollowerLiked ? (
+                {followingUserWhoLikesArticle ? (
                     <div>
                         {/* 임의로 첫 번째 인덱스 선택 */}
                         <Username
                             onMouseEnter={mouseEnterHandler}
                             onMouseLeave={mouseLeaveHandler}
                         >
-                            {myFollowersLiked[0]}
+                            {followingUserWhoLikesArticle}
                         </Username>
-                        님 외<span>{likes.length - 1}명</span>이 좋아합니다
+                        님 외<span>{likesCount - 1}명</span>이 좋아합니다
                     </div>
                 ) : (
-                    <span>좋아요 {likes.length}개</span>
+                    <span>좋아요 {likesCount}개</span>
                 )}
             </div>
             <div className="article-textBox">
@@ -163,7 +173,7 @@ const ArticleMain = ({
                     onMouseLeave={mouseLeaveHandler}
                     className="article-text-username"
                 >
-                    {owner.username}&nbsp;
+                    {memberNickname}&nbsp;
                 </Username>
                 <span className="article-text">
                     <>
@@ -177,52 +187,50 @@ const ArticleMain = ({
                     </>
                 </span>
             </div>
-            <div className="article-commentsBox">
-                <div className="article-commentsNum">
-                    댓글 {comments.length}개 모두 보기
-                </div>
-                <div className="article-recent-comment">
-                    <span>
-                        <Username
-                            onMouseEnter={mouseEnterHandler}
-                            onMouseLeave={mouseLeaveHandler}
-                            className="comment-username"
-                        >
-                            {comments[0].username}
-                        </Username>
-                        &nbsp;
-                        {comments[0].comment}
-                    </span>
-                    <PopHeart
-                        size={17}
-                        isLiked={isComment1Liked}
-                        onToggleLike={comment1LikeHandler}
-                        isAnimation={isHeart1Animation}
-                        resetAnimation={() => setIsHeart1Animation(false)}
-                    />
-                </div>
-                <div className="article-recent-comment">
-                    <span>
-                        <Username
-                            onMouseEnter={mouseEnterHandler}
-                            onMouseLeave={mouseLeaveHandler}
-                            className="comment-username"
-                        >
-                            {comments[1].username}
-                        </Username>
-                        &nbsp;
-                        {comments[1].comment}
-                    </span>
+            {comments && (
+                <div className="article-commentsBox">
+                    <div className="article-commentsNum">
+                        댓글 {commentsCount}개 모두 보기
+                    </div>
+                    <div className="article-recent-comment">
+                        <span>
+                            <Username
+                                onMouseEnter={mouseEnterHandler}
+                                onMouseLeave={mouseLeaveHandler}
+                                className="comment-username"
+                            >
+                                {comments[0].username}
+                            </Username>
+                            &nbsp;
+                            {comments[0].comment}
+                        </span>
+                        <PopHeart
+                            size={17}
+                            isLiked={isComment1Liked}
+                            onToggleLike={comment1LikeHandler}
+                        />
+                    </div>
+                    <div className="article-recent-comment">
+                        <span>
+                            <Username
+                                onMouseEnter={mouseEnterHandler}
+                                onMouseLeave={mouseLeaveHandler}
+                                className="comment-username"
+                            >
+                                {comments[1].username}
+                            </Username>
+                            &nbsp;
+                            {comments[1].comment}
+                        </span>
 
-                    <PopHeart
-                        size={17}
-                        isLiked={isComment2Liked}
-                        onToggleLike={comment2LikeHandler}
-                        isAnimation={isHeart2Animation}
-                        resetAnimation={() => setIsHeart2Animation(false)}
-                    />
+                        <PopHeart
+                            size={17}
+                            isLiked={isComment2Liked}
+                            onToggleLike={comment2LikeHandler}
+                        />
+                    </div>
                 </div>
-            </div>
+            )}
         </StyledMain>
     );
 };

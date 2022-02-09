@@ -1,4 +1,4 @@
-import sprite2 from "../../assets/Images/sprite2.png";
+import sprite2 from "assets/Images/sprite2.png";
 import styled, { DefaultTheme } from "styled-components";
 
 interface StyledStoryCircleProps {
@@ -8,7 +8,7 @@ interface StyledStoryCircleProps {
 
 const handleBackground = (
     type: "unread" | "read" | "default",
-    theme: DefaultTheme
+    theme: DefaultTheme,
 ) => {
     switch (type) {
         case "unread":
@@ -22,7 +22,7 @@ const handleBackground = (
 
 const handleBackgroundWidth = (
     type: "unread" | "read" | "default",
-    scale: number
+    scale: number,
 ) => {
     switch (type) {
         case "unread":
@@ -52,7 +52,7 @@ const StyledStoryCircle = styled.div<StyledStoryCircleProps>`
         border: ${(props) => props.type === "read" && `2px solid white`};
         box-sizing: ${(props) => props.type === "read" && "content-box"};
         border-radius: 50%;
-        z-index: 0;
+        /* z-index: 0; */
     }
 `;
 
@@ -62,11 +62,11 @@ interface StoryCircleProps {
     username: string;
     scale: number;
     onMouseEnter?: (
-        event:
-            | React.MouseEvent<HTMLSpanElement>
-            | React.MouseEvent<HTMLDivElement>
+        event: React.MouseEvent<HTMLSpanElement | HTMLDivElement>,
     ) => void;
-    onMouseLeave?: () => void;
+    onMouseLeave?: (
+        event: React.MouseEvent<HTMLSpanElement | HTMLDivElement>,
+    ) => void;
 }
 
 const StoryCircle = ({

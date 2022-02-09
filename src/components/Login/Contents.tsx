@@ -1,6 +1,16 @@
 import styled from "styled-components";
-import { LoginForm } from "./LoginForm";
-import { ShowingInstagram } from "./ShowingInsta";
+import ShowingInstagram from "components/Login/InstagramSlider/ShowingInsta";
+import LoginForm from "components/Login/LoginForm/LoginForm";
+
+const ContentContainer = styled.main`
+    display: flex;
+    justify-content: center;
+    padding-bottom: 32px;
+    margin: 32px auto 0;
+    width: 100%;
+    max-width: 935px;
+    flex-grow: 1;
+`;
 
 export function Contents() {
     return (
@@ -10,11 +20,3 @@ export function Contents() {
         </ContentContainer>
     );
 }
-
-const ContentContainer = styled.main`
-    display: flex;
-    justify-content: center;
-    padding-bottom: 32px;
-    margin: 32px auto 0;
-    width: 100%;
-`;

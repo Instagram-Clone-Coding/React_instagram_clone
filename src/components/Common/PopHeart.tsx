@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { ReactComponent as RedHeart } from "../../assets/Svgs/redHeart.svg";
 import { ReactComponent as EmptyHeart } from "../../assets/Svgs/emptyHeart.svg";
+import { useState } from "react";
 
 const HeartBox = styled.div`
     display: flex;
@@ -8,6 +9,17 @@ const HeartBox = styled.div`
     cursor: pointer;
     svg.pop {
         animation: pop 0.3s forwards;
+        @-webkit-keyframes pop {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: none;
+            }
+        }
         @keyframes pop {
             0% {
                 transform: scale(1);
@@ -30,9 +42,6 @@ interface PopHeartProps {
     size: number;
     isLiked: boolean;
     onToggleLike: () => void;
-    isAnimation: boolean;
-    resetAnimation: () => void;
-    // setliked를 포함한 처리를 수행하는 함수
 }
 
 const PopHeart = ({
@@ -40,22 +49,25 @@ const PopHeart = ({
     size,
     isLiked,
     onToggleLike,
-    isAnimation,
-    resetAnimation,
 }: PopHeartProps) => {
+    const [isFirst, setIsFirst] = useState(true);
+
+    const checkFirstRenderingHandler = () => {
+        isFirst && setIsFirst(false);
+        onToggleLike();
+    };
+
     return (
-        <HeartBox onClick={onToggleLike} className={className}>
+        <HeartBox onClick={checkFirstRenderingHandler} className={className}>
             {isLiked ? (
                 <RedHeart
-                    className={isLiked && isAnimation ? "pop" : ""}
-                    onAnimationEnd={resetAnimation}
+                    className={isLiked && !isFirst ? "pop" : ""}
                     height={size}
                     width={size}
                 />
             ) : (
                 <EmptyHeart
-                    className={!isLiked && isAnimation ? "pop not" : "not"}
-                    onAnimationEnd={resetAnimation}
+                    className={!isLiked && !isFirst ? "pop not" : "not"}
                     height={size}
                     width={size}
                 />

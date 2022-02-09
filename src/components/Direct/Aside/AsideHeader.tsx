@@ -2,9 +2,16 @@ import styled from "styled-components";
 import { ReactComponent as ArrowUp } from "assets/Svgs/arrow-up.svg";
 import { ReactComponent as DmWrite } from "assets/Svgs/dm-write.svg";
 import theme from "styles/theme";
-import { NavLink } from "react-router-dom";
+import { openModal } from "app/store/ducks/direct/DirectSlice";
+import NewChatModal from "components/Direct/Section/Modals/NewChatModal/NewChatModal";
+import ConvertAccountModal from "components/Direct/Section/Modals/ConvertAccountModal";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 
-const Container = styled.header``;
+const Container = styled.header`
+    svg {
+        cursor: pointer;
+    }
+`;
 
 const HeaderTop = styled.div`
     display: flex;
@@ -18,8 +25,8 @@ const NickWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-
     flex: 1;
+    cursor: pointer;
 
     & > p {
         display: block;
@@ -39,65 +46,31 @@ const Rotate = styled.span`
     padding: 8px;
 `;
 
-const HeaderTab = styled.div`
-    display: flex;
-    & > nav {
-        display: flex;
-        width: 60%;
-    }
-`;
-
-const TabLink = styled(NavLink)`
-    flex: 1;
-
-    display: inline-block;
-    padding: 12px 0;
-
-    font-weight: 600;
-    text-align: center;
-    text-decoration: none;
-    opacity: 1;
-    z-index: 1;
-    color: ${theme.color.bd_gray};
-
-    border-bottom: 1px solid ${theme.color.bd_gray};
-
-    &.active {
-        color: rgba(var(--i1d, 38, 38, 38), 1);
-        border-color: rgba(var(--i1d, 38, 38, 38), 1);
-    }
-`;
-
-const BlankLink = styled.div`
-    flex: 1;
-    border-bottom: 1px solid ${theme.color.bd_gray};
-`;
-
 const AsideHeader = () => {
+    const dispatch = useAppDispatch();
+    const { modal } = useAppSelector((state) => state.direct);
+    // styled-components => sass
     return (
         <Container>
             <HeaderTop>
-                <NickWrapper>
+                <NickWrapper
+                    onClick={() => {
+                        dispatch(openModal("convertAccount"));
+                    }}
+                >
                     <p>minsoo_web</p>
                     <Rotate>
                         <ArrowUp />
                     </Rotate>
                 </NickWrapper>
-                <DmWrite />
+                <DmWrite
+                    onClick={() => {
+                        dispatch(openModal("newChat"));
+                    }}
+                />
             </HeaderTop>
-
-            {/*  */}
-            <HeaderTab>
-                <nav>
-                    <TabLink exact to="/direct">
-                        주요
-                    </TabLink>
-                    <TabLink exact to="/direct/general">
-                        일반
-                    </TabLink>
-                </nav>
-                <BlankLink />
-            </HeaderTab>
+            {modal === "newChat" && <NewChatModal />}
+            {modal === "convertAccount" && <ConvertAccountModal />}
         </Container>
     );
 };

@@ -1,3 +1,5 @@
+import { postUnfollow } from "app/store/ducks/home/homThunk";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import StoryCircle from "components/Common/StoryCircle";
 import styled from "styled-components";
 import ModalCard from "styles/UI/ModalCard";
@@ -36,25 +38,23 @@ const FollowingModalInner = styled.div`
 `;
 
 interface FollowingModalProps {
-    onUnfollow: () => void;
     onModalOn: () => void;
     onModalOff: () => void;
-    username: string;
-    avatarUrl: string;
 }
 
 const MODAL_CIRCLE_SIZE = 90 / 64;
 
-const FollowingModal = ({
-    onUnfollow,
-    onModalOn,
-    onModalOff,
-    username,
-    avatarUrl,
-}: FollowingModalProps) => {
+const FollowingModal = ({ onModalOn, onModalOff }: FollowingModalProps) => {
+    const { memberNickname, memberUsername, memberImageUrl } = useAppSelector(
+        ({ modal }) => modal,
+    );
+    const dispatch = useAppDispatch();
     const unFollowHandler = () => {
         // 언팔로우
-        onUnfollow();
+        const unFollowUser = async () => {
+            await dispatch(postUnfollow({ username: memberUsername }));
+        };
+        unFollowUser();
         onModalOff();
     };
 
@@ -67,12 +67,12 @@ const FollowingModal = ({
             <FollowingModalInner>
                 <StoryCircle
                     type="default"
-                    avatarUrl={avatarUrl}
-                    username={username}
+                    avatarUrl={memberImageUrl}
+                    username={memberNickname}
                     scale={MODAL_CIRCLE_SIZE}
                 />
                 <div className="followingModal-warning">
-                    @{username}님의 팔로우를 취소하시겠어요?
+                    @{memberNickname}님의 팔로우를 취소하시겠어요?
                 </div>
                 <div
                     className="followingModal-delete"

@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import Card from "styles/UI/Card";
 import Story from "./Story";
 import sprite from "assets/Images/sprite.png";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { homeActions } from "app/store/ducks/home/homeSlice";
 
 const DUMMY_STORIES = [
     {
@@ -103,7 +105,7 @@ const StoriesCard = styled(Card)`
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            z-index: 101;
+            /* z-index: 101; */
             width: 45px;
             height: 45px;
             cursor: pointer;
@@ -121,8 +123,11 @@ const StoriesCard = styled(Card)`
 `;
 
 const HomeStories = () => {
-    const [leftArrow, setLeftArrow] = useState(false);
-    const [rightArrow, setRightArrow] = useState(true);
+    const dispatch = useAppDispatch();
+    const storiesScrollPosition = useAppSelector(
+        (state) => state.home.storiesScrollPosition,
+    );
+
     const toggleArrowHandler = (
         event: React.UIEvent<HTMLUListElement>,
     ): void => {
@@ -130,14 +135,11 @@ const HomeStories = () => {
             currentTarget: { scrollLeft, clientWidth, scrollWidth },
         } = event;
         if (scrollLeft === 0) {
-            setLeftArrow(false);
-            setRightArrow(true);
+            dispatch(homeActions.changeStoriesScrollPosition("left"));
         } else if (scrollWidth > scrollLeft + clientWidth) {
-            setLeftArrow(true);
-            setRightArrow(true);
+            dispatch(homeActions.changeStoriesScrollPosition("center"));
         } else if (scrollWidth === scrollLeft + clientWidth) {
-            setLeftArrow(true);
-            setRightArrow(false);
+            dispatch(homeActions.changeStoriesScrollPosition("right"));
         }
     };
 
@@ -170,13 +172,13 @@ const HomeStories = () => {
     return (
         <StoriesCard>
             <ul className="layout" onScroll={toggleArrowHandler}>
-                {leftArrow && (
+                {storiesScrollPosition !== "left" && (
                     <div
                         className="leftArrow"
                         onClick={arrowClickHandler}
                     ></div>
                 )}
-                {rightArrow && (
+                {storiesScrollPosition !== "right" && (
                     <div
                         className="rightArrow"
                         onClick={arrowClickHandler}
