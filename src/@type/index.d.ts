@@ -10,7 +10,7 @@ declare module Direct {
     }
 
     interface ChatItem {
-        chatRoomId:number;
+        roomId:number;
         lastMessage:MessageDTO;
         unreadFlag:boolean;
         inviter:inviterProps;

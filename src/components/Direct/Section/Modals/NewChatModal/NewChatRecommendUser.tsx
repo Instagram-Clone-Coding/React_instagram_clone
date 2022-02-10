@@ -40,7 +40,7 @@ const NewChatRecommendUserContainer = styled.div`
 `;
 
 
-const NewChatRecommendUser = ({ chatRoomId, invitees }: Direct.ChatItem) => {
+const NewChatRecommendUser = ({ roomId, invitees }: Direct.ChatItem) => {
     const { selectedNewChatUser } = useAppSelector(state => state.direct);
     const dispatch = useAppDispatch();
 

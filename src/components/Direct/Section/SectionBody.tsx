@@ -11,18 +11,17 @@ import CommonDirectModal from "./Modals/CommonDirectModal";
 interface SectionBodyProps {
     message: string;
     setMessage: Dispatch<SetStateAction<string>>;
+    sendMessage: () => void
 }
 
 const SectionBodyContainer = styled.section`
   position: relative;
   height: calc(100% - 60px); // 60px : 이름 써져있는 header 의 높이만큼빼줍니다. 
   overflow-y: auto;
-
-
 `;
 
 
-const SectionBody = ({ message, setMessage }: SectionBodyProps) => {
+const SectionBody = ({ message, setMessage,sendMessage }: SectionBodyProps) => {
     const { view, modal } = useAppSelector((state => state.direct));
     const viewRender = () => {
         switch (view) {
@@ -31,7 +30,7 @@ const SectionBody = ({ message, setMessage }: SectionBodyProps) => {
             case "chat":
                 return <>
                     <ChatSection />
-                    <ChatBar message={message} setMessage={setMessage} />
+                    <ChatBar sendMessage={sendMessage} message={message} setMessage={setMessage} />
                 </>;
             case "requestsChat":
                 return <>

@@ -3,7 +3,6 @@ import React, {
     Dispatch,
     KeyboardEventHandler,
     SetStateAction,
-    useEffect, useRef,
     useState,
 } from "react";
 import styled from "styled-components";
@@ -13,11 +12,11 @@ import { ReactComponent as Heart } from "assets/Svgs/heart.svg";
 import Picker, { IEmojiData } from "emoji-picker-react";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-import { useAppSelector } from "app/store/Hooks";
 
 interface ChatBarType {
     message: string;
     setMessage: Dispatch<SetStateAction<string>>;
+    sendMessage: () => void;
 }
 
 interface ChatBarContainerType {
@@ -82,14 +81,11 @@ stompClient.debug = (log) => {
     console.log(log);
 };
 
-const ChatBar = ({}: ChatBarType) => {
+const ChatBar = ({ sendMessage, message, setMessage }: ChatBarType) => {
     // message to be trimed
-    const [message, setMessage] = useState<string>("");
     const [sendButtonClicked, setSendButtonClicked] = useState<boolean>(false);
     const [image, setImage] = useState<File>();
     const [showPicker, setShowPicker] = useState(false);
-    const selectedRoom = useAppSelector(state => state.direct.selectedRoom);
-    const selectedNewChatUser = useAppSelector(state => state.direct.selectedNewChatUser)
 
 
     const onEmojiClick = (event: React.MouseEvent, emojiObject: IEmojiData) => {
@@ -123,83 +119,6 @@ const ChatBar = ({}: ChatBarType) => {
     const imageUploadHandler = (e: ChangeEvent<HTMLInputElement>) => {
     };
 
-
-    // 여기부터 웹소켓 관련 코드입니다.
-
-    const sendMessage = () => {
-        waitForConnection(stompClient, function() {
-            stompClient.send("/pub/messages", {}, JSON.stringify({
-                "content": message,
-                "senderId": 1,
-                "messageType": "TEXT",
-                "roomId": selectedRoom?.chatRoomId,
-            }));
-        });
-        setMessage("");
-    };
-
-
-    useEffect(() => {
-        wsConnectSubscribe();
-        return () => {
-            wsDisConnectUnsubscribe();
-        };
-    }, []);
-
-
-    // 웹소켓이 연결될 때 까지 실행하는 함수
-    function waitForConnection(stompClient: Stomp.Client, callback: any) {
-        setTimeout(
-            function() {
-                // 연결되었을 때 콜백함수 실행
-                if (stompClient.ws.readyState === 1) {
-                    callback();
-                    // 연결이 안 되었으면 재호출
-                } else {
-                    waitForConnection(stompClient, callback);
-                }
-            },
-            1, // 밀리초 간격으로 실행
-        );
-    }
-
-
-    // 웹소켓 연결, 구독
-    function wsConnectSubscribe() {
-        console.log(`${selectedNewChatUser} 님 구독`);
-        try {
-            stompClient.connect(
-                {},
-                () => {
-                    stompClient.subscribe(
-                        `/sub/${selectedNewChatUser}`,
-                        (data) => {
-                            const newMessage = JSON.parse(data.body);
-                            console.log(newMessage);
-                            console.log(
-                                "구독성공!",
-                            );
-                        },
-                    );
-                },
-            );
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    // 연결해제, 구독해제
-    function wsDisConnectUnsubscribe() {
-        try {
-            stompClient.disconnect(
-                () => {
-                    stompClient.unsubscribe("sub-0");
-                },
-            );
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     return (
         <ChatBarContainer sendButtonClicked={sendButtonClicked}>

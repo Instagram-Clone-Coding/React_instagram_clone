@@ -2,44 +2,54 @@ import ChatListItem from "./ChatListItem";
 import ChatListProps from "./ChatList.type";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { selectChatItem, selectView } from "app/store/ducks/direct/DirectSlice";
-import { makeRoom } from "app/store/ducks/direct/DirectThunk";
-import { useCallback } from "react";
-import { authorizedCustomAxios } from "customAxios";
+import { lookUpChatList, lookUpChatRoom, makeRoom } from "app/store/ducks/direct/DirectThunk";
+import { useCallback, useEffect } from "react";
 
 
-const ChatList = ({ chatList }: ChatListProps) => {
+const ChatList = ({}: ChatListProps) => {
     const dispatch = useAppDispatch();
     const selectedChatItem = useAppSelector((state => state.direct.selectedChatItem));
     const view = useAppSelector(state => state.direct.view);
+    const username = useAppSelector(state => state.auth.username);
+    const chatList = useAppSelector(state => state.direct.chatList);
+    const chatListPage = useAppSelector(state => state.direct.chatListPage);
 
-    const chatListClickHandler = useCallback(async (chatRoomId: number, username: string) => {
-        // 클릭한거 읽은거였으면 읽음 처리해주는 로직 필요
-        dispatch(selectChatItem(chatRoomId));
+    const chatListClickHandler = useCallback(async (roomId: number, username: string) => {
+        dispatch(selectChatItem(roomId));
         if (view === "requests" || view === "requestsChat") {
             dispatch(selectView("requestsChat"));
         } else {
             dispatch(selectView("chat"));
-
             // 채팅방 클릭시 채팅방 생성 이 경우에는 기존에 목록에 있는 채팅방을 클릭하므로 실제 생성되진 않고, 기존의 Room 이 return 된다.
             await dispatch(makeRoom({ username: username }));
 
             // 채팅방 클릭시 채팅방조회(채팅방을 클릭하면 unseen count를 감소시키는 API) 호출
-            console.log("chatRoomId",chatRoomId);
-            try {
-                await authorizedCustomAxios.delete(`/chat/rooms/${chatRoomId}`);
-            } catch (error) {
-                console.log(error);
-            }
-
+            await dispatch(lookUpChatRoom({ roomId }));
         }
     }, []);
 
+
+    // 채팅방 목록 페이징 조회 API
+    // 1. `DM 페이지 입장(새로고침)`
+    // 2. `DB의 JoinRoom 테이블에 본인이 추가되는 상황`
+    // - `채팅방 생성`
+    // - `상대방과 참여한 채팅방이 없는 상황에서, 상대방이 본인에게 메시지 송신`
+    useEffect(() => {
+        dispatch(lookUpChatList({ page: chatListPage }));
+    }, []);
+
+
     return (
         <div>
-            {chatList.map((chatListItem) => (
+            {chatList.map((chatListItem, index) => (
                 <ChatListItem chatListClickHandler={chatListClickHandler}
-                              isSelected={selectedChatItem === chatListItem.chatRoomId}
-                              key={chatListItem.chatRoomId} {...chatListItem} />
+                              opponent={chatListItem.invitees.filter(invitee => {
+                                  return invitee.username !== username;
+                              })[0]}
+                              isSelected={selectedChatItem === chatListItem.roomId}
+                              key={index} {...chatListItem}
+                              isObserving={chatList.length-1 === index}
+                />
             ))}
         </div>
     );

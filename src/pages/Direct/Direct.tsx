@@ -9,32 +9,113 @@ import SectionHeader from "components/Direct/Section/SectionHeader";
 import { useAppSelector } from "app/store/Hooks";
 import InboxSection from "components/Direct/Section/InboxSection";
 import RequestsSection from "components/Direct/Section/requestsSection";
+import SockJS from "sockjs-client";
+import Stomp from "stompjs";
 
+
+const sockJS = new SockJS("http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/ws-connection");
+let stompClient: Stomp.Client = Stomp.over(sockJS);
+stompClient.debug = (log) => {
+    console.log(log);
+};
 
 const Direct = () => {
 
     const [message, setMessage] = useState<string>("");
-    const view = useAppSelector(({direct}) => direct.view);
+    const view = useAppSelector(({ direct }) => direct.view);
+    const selectedRoom = useAppSelector(state => state.direct.selectedRoom);
 
     // title 변경해주는 역할
     // Todo: (1) 이 부분 데이터 받아서 안 읽은 메세지 개수로 처리해줘야 합니다.
     useEffect(() => {
-        document.title = "(1) 받은 메세지함 · Direct";
+        document.title = "(1 ) 받은 메세지함 · Direct";
     }, []);
 
-    console.log("최상위 컴포넌트 랜더링");
+    const username = useAppSelector(state => state.auth.username);
+
+    const sendMessage = () => {
+        waitForConnection(stompClient, function() {
+            stompClient.send("/pub/messages", {}, JSON.stringify({
+                "content": message,
+                "senderId": 1,
+                "messageType": "TEXT",
+                "roomId": selectedRoom?.chatRoomId,
+            }));
+        });
+        setMessage("");
+    };
+
+
+    useEffect(() => {
+        wsConnectSubscribe();
+        return () => {
+            // wsDisConnectUnsubscribe();
+        };
+    }, []);
+
+
+    // 웹소켓이 연결될 때 까지 실행하는 함수
+    function waitForConnection(stompClient: Stomp.Client, callback: any) {
+        setTimeout(
+            function() {
+                // 연결되었을 때 콜백함수 실행
+                if (stompClient.ws.readyState === 1) {
+                    callback();
+                    // 연결이 안 되었으면 재호출
+                } else {
+                    waitForConnection(stompClient, callback);
+                }
+            },
+            1, // 밀리초 간격으로 실행
+        );
+    }
+
+
+    // 웹소켓 연결, 구독
+    function wsConnectSubscribe() {
+        try {
+            stompClient.connect(
+                {},
+                () => {
+                    stompClient.subscribe(
+                        `/sub/${username}`,
+                        (data) => {
+                            const newMessage = JSON.parse(data.body);
+                            console.log(newMessage);
+                            console.log("구독성공");
+                        },
+                    );
+                },
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // 연결해제, 구독해제
+    function wsDisConnectUnsubscribe() {
+        try {
+            stompClient.disconnect(
+                () => {
+                    stompClient.unsubscribe("sub-0");
+                },
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const viewRender = () => {
         switch (view) {
             case "inbox":
                 return <InboxSection />;
             case "requests":
-                return <RequestsSection/>
+                return <RequestsSection />;
             default:
                 return <>
                     <SectionHeader />
-                    <SectionBody message={message} setMessage={setMessage} />
-                </>
+                    <SectionBody message={message} setMessage={setMessage} sendMessage={sendMessage} />
+                </>;
         }
     };
     const borderStyle = `1px solid ${theme.color.bd_gray}`;

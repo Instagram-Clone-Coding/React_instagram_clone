@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import useGapText from "hooks/useGapText";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Direct from "pages/Direct";
-
+import useOnView from "../../../../../hooks/useOnView";
+import { getExtraArticle } from "../../../../../app/store/ducks/home/homThunk";
+import { useAppDispatch, useAppSelector } from "../../../../../app/store/Hooks";
+import { lookUpChatList } from "../../../../../app/store/ducks/direct/DirectThunk";
 
 
 interface ChatListItemContainerType {
@@ -10,7 +13,7 @@ interface ChatListItemContainerType {
     isSelected: boolean;
 }
 
-const ChatListItemContainer = styled.a<ChatListItemContainerType>`
+const ChatListItemContainer = styled.div<ChatListItemContainerType>`
   display: flex;
   padding: 8px 20px;
   align-items: center;
@@ -68,22 +71,52 @@ const ChatListItemContainer = styled.a<ChatListItemContainerType>`
 
 interface ChatListItemProps extends Direct.ChatItem {
     isSelected: boolean;
-    chatListClickHandler: (chatRoomId:number,username:string) => void
+    opponent: Direct.inviteeProps;
+    chatListClickHandler: (chatRoomId: number, username: string) => void;
+    isObserving: boolean;
 }
 
-const ChatListItem = ({ chatRoomId, invitees, lastMessage, unreadFlag, isSelected ,chatListClickHandler}: ChatListItemProps) => {
+const ChatListItem = ({
+                          roomId,
+                          lastMessage,
+                          unreadFlag,
+                          isSelected,
+                          chatListClickHandler,
+                          opponent,
+                          isObserving,
+                      }: ChatListItemProps) => {
     const calculatedTime = useGapText(lastMessage.messageDate);
+    const chatListItemRef = useRef<HTMLDivElement>(null);
+    const isVisible = useOnView(chatListItemRef);
+    const dispatch = useAppDispatch();
+    const chatListPage = useAppSelector(state => state.direct.chatListPage);
+
+    useEffect(() => {
+        const dispatchExtraChatList = async () => {
+            try {
+                await dispatch(
+                    lookUpChatList({
+                        page: chatListPage,
+                    }),
+                );
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        console.log(isObserving,isVisible);
+        isObserving && isVisible && dispatchExtraChatList(); // 이 때 비동기 작업 및 무한 스크롤
+    }, [isObserving, isVisible, dispatch]);
 
     return (
-        <ChatListItemContainer unreadFlag={unreadFlag} isSelected={isSelected}
-                               onClick={()=>{
-                                   chatListClickHandler(chatRoomId,invitees[0].username)
+        <ChatListItemContainer ref={chatListItemRef} unreadFlag={unreadFlag} isSelected={isSelected}
+                               onClick={() => {
+                                   chatListClickHandler(roomId, opponent.username);
                                }}>
-            <img src={invitees[0].imageUrl} alt="avatarImg" className="user-image" />
+            <img src={opponent.imageUrl} alt="avatarImg" className="user-image" />
             <div className="right-section-container">
 
                 <div className="user-nickName">
-                    {invitees[0].username}님
+                    {opponent.username}님
                 </div>
 
                 <div className="last-info">

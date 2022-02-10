@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { deleteRoom, makeRoom } from "./DirectThunk";
+import { deleteRoom, lookUpChatList, lookUpChatRoom, makeRoom } from "./DirectThunk";
 
 
 export interface InitialStateType {
@@ -9,6 +9,8 @@ export interface InitialStateType {
     selectedNewChatUser: string | null;
     selectedRoom: Direct.RoomsProps | null;
     isLoading: boolean;
+    chatList: Direct.ChatItem[];
+    chatListPage: number;
 }
 
 
@@ -19,6 +21,8 @@ const initialState: InitialStateType = {
     selectedNewChatUser: null,
     selectedRoom: null,
     isLoading: false,
+    chatList: [],
+    chatListPage:1
 };
 
 const directSlice = createSlice({
@@ -49,7 +53,7 @@ const directSlice = createSlice({
             .addCase(makeRoom.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(makeRoom.fulfilled, (state,action) => {
+            .addCase(makeRoom.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.selectedRoom = action.payload;
             })
@@ -59,16 +63,40 @@ const directSlice = createSlice({
             .addCase(deleteRoom.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(deleteRoom.fulfilled, (state)=> {
+            .addCase(deleteRoom.fulfilled, (state) => {
                 state.selectedRoom = null;
                 state.modal = null;
                 state.view = "inbox";
                 state.isLoading = true;
             })
+            .addCase(deleteRoom.rejected, (state) => {
+                state.isLoading = false;
+            })
+            .addCase(lookUpChatRoom.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(lookUpChatRoom.fulfilled, (state, action) => {
+                state.selectedChatItem = action.payload;
+            })
+            .addCase(lookUpChatRoom.rejected, (state) => {
+                state.isLoading = false;
+            })
+            .addCase(lookUpChatList.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(lookUpChatList.fulfilled, (state, action) => {
+                action.payload.content.forEach((chatListItem:any) => {
+                    state.chatList.push(chatListItem)
+                })
+                state.chatListPage = state.chatListPage + 1;
+            })
+            .addCase(lookUpChatList.rejected, (state) => {
+                state.isLoading = false;
+            });
 
     },
 });
-;
+
 
 export const {
     openModal,
