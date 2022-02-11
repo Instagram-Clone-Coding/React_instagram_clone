@@ -109,7 +109,6 @@ export const lookUpChatMessageList = createAsyncThunk<any,{page:number,roomId:nu
             const {
                 data: { data },
             } = await authorizedCustomAxios.get(`/chat/rooms/${payload.roomId}/messages`,config);
-            console.log(data);
             return data
         } catch (error) {
             error === FAIL_TO_REISSUE_MESSAGE &&

@@ -53,7 +53,12 @@ const directSlice = createSlice({
         },
         resetChatMessageList : (state) => {
             state.chatMessageList = []
-        }
+            state.chatListPage = 1
+        },
+        addChatMessageItem : (state,action : PayloadAction<any>) => {
+            state.chatMessageList.push(action.payload.data)
+            console.log(action.payload.data);
+        },
     },
     extraReducers: (build) => {
         build
@@ -125,6 +130,7 @@ export const {
     selectChatItem,
     selectNewChatUser,
     unSelectNewChatUser,
-    resetChatMessageList
+    resetChatMessageList,
+    addChatMessageItem
 } = directSlice.actions;
 export const directReducer = directSlice.reducer;

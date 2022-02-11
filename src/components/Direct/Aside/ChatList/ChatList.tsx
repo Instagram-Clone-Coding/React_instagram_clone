@@ -38,7 +38,7 @@ const ChatList = ({}: ChatListProps) => {
                     name:"이지금",
                     imageUrl:"http"
                 },{
-                    username:"dlwlrma5",
+                    username:"dlwlrma1",
                     name:"이지금1",
                     imageUrl:"http"
                 }

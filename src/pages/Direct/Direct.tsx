@@ -6,11 +6,12 @@ import AsideBody from "components/Direct/Aside/AsideBody";
 import AsideHeader from "components/Direct/Aside/AsideHeader";
 import SectionBody from "components/Direct/Section/SectionBody";
 import SectionHeader from "components/Direct/Section/SectionHeader";
-import { useAppSelector } from "app/store/Hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import InboxSection from "components/Direct/Section/InboxSection";
 import RequestsSection from "components/Direct/Section/requestsSection";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import { addChatMessageItem } from "app/store/ducks/direct/DirectSlice";
 
 
 const sockJS = new SockJS("http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/ws-connection");
@@ -24,7 +25,7 @@ const Direct = () => {
     const [message, setMessage] = useState<string>("");
     const view = useAppSelector(({ direct }) => direct.view);
     const selectedRoom = useAppSelector(state => state.direct.selectedRoom);
-
+    const dispatch = useAppDispatch();
 
     // 내가 채팅 메시지를 타이핑하고 있을 때, 상대방에게 "입력 중" 표시를 표현하기 위함
     useEffect(()=>{
@@ -88,16 +89,17 @@ const Direct = () => {
 
     // 웹소켓 연결, 구독
     function wsConnectSubscribe() {
+        console.log(`${username} 구독`);
         try {
             stompClient.connect(
                 {},
                 () => {
                     stompClient.subscribe(
-                        `/sub/${username}`,
+                        `/sub/dlwlrma`,
                         (data) => {
-                            const newMessage = JSON.parse(data.body);
-                            console.log(newMessage);
                             console.log("구독성공");
+                            const newMessage = JSON.parse(data.body);
+                            dispatch(addChatMessageItem(newMessage))
                         },
                     );
                 },
