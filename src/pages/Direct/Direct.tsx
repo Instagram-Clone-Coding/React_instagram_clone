@@ -25,6 +25,21 @@ const Direct = () => {
     const view = useAppSelector(({ direct }) => direct.view);
     const selectedRoom = useAppSelector(state => state.direct.selectedRoom);
 
+
+    // 내가 채팅 메시지를 타이핑하고 있을 때, 상대방에게 "입력 중" 표시를 표현하기 위함
+    useEffect(()=>{
+        if(message !== ""){
+            waitForConnection(stompClient, function() {
+                stompClient.send("/pub/messages/indicate", {}, JSON.stringify({
+                    "senderId": 1,
+                    "roomId": selectedRoom?.chatRoomId,
+                }));
+            });
+        }
+    },[message])
+
+
+
     // title 변경해주는 역할
     // Todo: (1) 이 부분 데이터 받아서 안 읽은 메세지 개수로 처리해줘야 합니다.
     useEffect(() => {
