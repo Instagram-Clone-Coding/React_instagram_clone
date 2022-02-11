@@ -64,9 +64,6 @@ const AsideBody = () => {
     const dispatch = useAppDispatch();
     const view = useAppSelector((state) => state.direct.view);
 
-
-
-
     return (
         <AsideBodyContainer>
             {/*팔로우 아닌 사람에게 온 메세지가 있다면 보여주기*/}

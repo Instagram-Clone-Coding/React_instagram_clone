@@ -2,10 +2,9 @@ import styled from "styled-components";
 import useGapText from "hooks/useGapText";
 import React, { useEffect, useRef } from "react";
 import Direct from "pages/Direct";
-import useOnView from "../../../../../hooks/useOnView";
-import { getExtraArticle } from "../../../../../app/store/ducks/home/homThunk";
-import { useAppDispatch, useAppSelector } from "../../../../../app/store/Hooks";
-import { lookUpChatList } from "../../../../../app/store/ducks/direct/DirectThunk";
+import useOnView from "hooks/useOnView";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { lookUpChatList } from "app/store/ducks/direct/DirectThunk";
 
 
 interface ChatListItemContainerType {
@@ -103,7 +102,6 @@ const ChatListItem = ({
                 console.log(error);
             }
         };
-        console.log(isObserving,isVisible);
         isObserving && isVisible && dispatchExtraChatList(); // 이 때 비동기 작업 및 무한 스크롤
     }, [isObserving, isVisible, dispatch]);
 

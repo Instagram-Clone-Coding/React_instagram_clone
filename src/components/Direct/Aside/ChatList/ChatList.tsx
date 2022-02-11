@@ -9,10 +9,42 @@ import { useCallback, useEffect } from "react";
 const ChatList = ({}: ChatListProps) => {
     const dispatch = useAppDispatch();
     const selectedChatItem = useAppSelector((state => state.direct.selectedChatItem));
+    const selectedRoom = useAppSelector((state => state.direct.selectedRoom));
+
     const view = useAppSelector(state => state.direct.view);
     const username = useAppSelector(state => state.auth.username);
     const chatList = useAppSelector(state => state.direct.chatList);
     const chatListPage = useAppSelector(state => state.direct.chatListPage);
+    const dummyChatList = [
+        {
+            roomId:2,
+            lastMessage: {
+                messageId: 1,
+                content: "asdasdasd",
+                messageType: "TEXT",
+                messageDate: "2022-02-11",
+                senderId: 1,
+                roomId: 2
+            },
+            unreadFlag:false,
+            inviter:{
+                username:"dlwlrma",
+                name:"이지금",
+                imageUrl:"http"
+            },
+            invitees:[
+                {
+                    username:"dlwlrma",
+                    name:"이지금",
+                    imageUrl:"http"
+                },{
+                    username:"dlwlrma5",
+                    name:"이지금1",
+                    imageUrl:"http"
+                }
+            ]
+        }
+    ]
 
     const chatListClickHandler = useCallback(async (roomId: number, username: string) => {
         dispatch(selectChatItem(roomId));
@@ -46,7 +78,7 @@ const ChatList = ({}: ChatListProps) => {
                               opponent={chatListItem.invitees.filter(invitee => {
                                   return invitee.username !== username;
                               })[0]}
-                              isSelected={selectedChatItem === chatListItem.roomId}
+                              isSelected={selectedRoom?.chatRoomId === chatListItem.roomId}
                               key={index} {...chatListItem}
                               isObserving={chatList.length-1 === index}
                 />

@@ -83,6 +83,33 @@ export const lookUpChatList = createAsyncThunk<any,{page:number}>(
             const {
                 data: { data },
             } = await authorizedCustomAxios.get(`/chat/rooms?page=${payload.page}`);
+            console.log(data);
+            return data
+        } catch (error) {
+            error === FAIL_TO_REISSUE_MESSAGE &&
+            ThunkOptions.dispatch(authAction.logout());
+            throw ThunkOptions.rejectWithValue(error);
+        }
+
+    }
+)
+
+// /chat/rooms/{roomId}/messages
+// 채팅방 메시지 목록 페이징 조회
+// 페이지당 10개씩 조회할 수 있습니다.
+export const lookUpChatMessageList = createAsyncThunk<any,{page:number,roomId:number}>(
+    "chat/rooms/lookUpChatList",
+    async (payload,ThunkOptions) => {
+        try {
+            const config = {
+                params: {
+                    page: payload.page,
+                },
+            };
+            const {
+                data: { data },
+            } = await authorizedCustomAxios.get(`/chat/rooms/${payload.roomId}/messages`,config);
+            console.log(data);
             return data
         } catch (error) {
             error === FAIL_TO_REISSUE_MESSAGE &&

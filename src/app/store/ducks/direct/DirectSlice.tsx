@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { deleteRoom, lookUpChatList, lookUpChatRoom, makeRoom } from "./DirectThunk";
+import { deleteRoom, lookUpChatList, lookUpChatMessageList, lookUpChatRoom, makeRoom } from "./DirectThunk";
 
 
 export interface InitialStateType {
@@ -11,6 +11,8 @@ export interface InitialStateType {
     isLoading: boolean;
     chatList: Direct.ChatItem[];
     chatListPage: number;
+    chatMessageList: Direct.MessageDTO[];
+    chatMessageListPage: number;
 }
 
 
@@ -22,7 +24,9 @@ const initialState: InitialStateType = {
     selectedRoom: null,
     isLoading: false,
     chatList: [],
-    chatListPage:1
+    chatMessageList: [],
+    chatListPage: 1,
+    chatMessageListPage: 1,
 };
 
 const directSlice = createSlice({
@@ -47,6 +51,9 @@ const directSlice = createSlice({
         unSelectNewChatUser: (state) => {
             state.selectedNewChatUser = null;
         },
+        resetChatMessageList : (state) => {
+            state.chatMessageList = []
+        }
     },
     extraReducers: (build) => {
         build
@@ -55,6 +62,7 @@ const directSlice = createSlice({
             })
             .addCase(makeRoom.fulfilled, (state, action) => {
                 state.isLoading = false;
+                console.log(action.payload);
                 state.selectedRoom = action.payload;
             })
             .addCase(makeRoom.rejected, (state) => {
@@ -85,12 +93,24 @@ const directSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(lookUpChatList.fulfilled, (state, action) => {
-                action.payload.content.forEach((chatListItem:any) => {
-                    state.chatList.push(chatListItem)
-                })
+                action.payload.content.forEach((chatListItem: any) => {
+                    state.chatList.push(chatListItem);
+                });
                 state.chatListPage = state.chatListPage + 1;
             })
             .addCase(lookUpChatList.rejected, (state) => {
+                state.isLoading = false;
+            })
+            .addCase(lookUpChatMessageList.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(lookUpChatMessageList.fulfilled, (state, action) => {
+                action.payload.content.forEach((chatMessageListItem: Direct.MessageDTO) => {
+                    state.chatMessageList.push(chatMessageListItem);
+                });
+                state.chatListPage = state.chatListPage + 1;
+            })
+            .addCase(lookUpChatMessageList.rejected, (state) => {
                 state.isLoading = false;
             });
 
@@ -105,5 +125,6 @@ export const {
     selectChatItem,
     selectNewChatUser,
     unSelectNewChatUser,
+    resetChatMessageList
 } = directSlice.actions;
 export const directReducer = directSlice.reducer;
