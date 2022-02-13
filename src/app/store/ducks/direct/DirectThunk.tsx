@@ -83,7 +83,6 @@ export const lookUpChatList = createAsyncThunk<any,{page:number}>(
             const {
                 data: { data },
             } = await authorizedCustomAxios.get(`/chat/rooms?page=${payload.page}`);
-            console.log(data);
             return data
         } catch (error) {
             error === FAIL_TO_REISSUE_MESSAGE &&

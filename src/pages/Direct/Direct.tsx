@@ -14,11 +14,7 @@ import Stomp from "stompjs";
 import { addChatMessageItem } from "app/store/ducks/direct/DirectSlice";
 
 
-const sockJS = new SockJS("http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/ws-connection");
-let stompClient: Stomp.Client = Stomp.over(sockJS);
-stompClient.debug = (log) => {
-    console.log(log);
-};
+
 
 const Direct = () => {
 
@@ -27,9 +23,15 @@ const Direct = () => {
     const selectedRoom = useAppSelector(state => state.direct.selectedRoom);
     const dispatch = useAppDispatch();
 
+    const sockJS = new SockJS("http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/ws-connection");
+    let stompClient: Stomp.Client = Stomp.over(sockJS);
+    stompClient.debug = (log) => {
+        console.log(log);
+    };
+
     // 내가 채팅 메시지를 타이핑하고 있을 때, 상대방에게 "입력 중" 표시를 표현하기 위함
-    useEffect(()=>{
-        if(message !== ""){
+    useEffect(() => {
+        if (message !== "") {
             waitForConnection(stompClient, function() {
                 stompClient.send("/pub/messages/indicate", {}, JSON.stringify({
                     "senderId": 1,
@@ -37,8 +39,7 @@ const Direct = () => {
                 }));
             });
         }
-    },[message])
-
+    }, [message]);
 
 
     // title 변경해주는 역할
@@ -63,11 +64,49 @@ const Direct = () => {
 
 
     useEffect(() => {
+
+
+        // 웹소켓 연결, 구독
+        const wsConnectSubscribe = () => {
+            try {
+                stompClient.connect(
+                    {},
+                    () => {
+                        stompClient.subscribe(
+                            `/sub/${username}`,
+                            (data) => {
+
+                                console.log("구독성공");
+                                const newMessage = JSON.parse(data.body);
+                                dispatch(addChatMessageItem(newMessage));
+                            },
+                        );
+                    },
+                );
+            } catch (error) {
+                console.log("웹소켓 통신에러떳어요", error);
+            }
+        };
+
+
+        // 연결해제, 구독해제
+        function wsDisConnectUnsubscribe() {
+            try {
+                stompClient.disconnect(
+                    () => {
+                        stompClient.unsubscribe("sub-0");
+                    },
+                );
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
         wsConnectSubscribe();
         return () => {
             // wsDisConnectUnsubscribe();
         };
-    }, []);
+    }, [dispatch, username]);
 
 
     // 웹소켓이 연결될 때 까지 실행하는 함수
@@ -86,41 +125,6 @@ const Direct = () => {
         );
     }
 
-
-    // 웹소켓 연결, 구독
-    function wsConnectSubscribe() {
-        console.log(`${username} 구독`);
-        try {
-            stompClient.connect(
-                {},
-                () => {
-                    stompClient.subscribe(
-                        `/sub/dlwlrma`,
-                        (data) => {
-                            console.log("구독성공");
-                            const newMessage = JSON.parse(data.body);
-                            dispatch(addChatMessageItem(newMessage))
-                        },
-                    );
-                },
-            );
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    // 연결해제, 구독해제
-    function wsDisConnectUnsubscribe() {
-        try {
-            stompClient.disconnect(
-                () => {
-                    stompClient.unsubscribe("sub-0");
-                },
-            );
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     const viewRender = () => {
         switch (view) {
