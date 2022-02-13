@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import styled from "styled-components";
 import Card from "styles/UI/Card";
 import { CardProps } from "styles/UI/Card/Card";
+import { ReactComponent as Cancel } from "assets/Svgs/cancel.svg";
 
 interface PositionedModal extends CardProps {
     top: number;
@@ -17,7 +18,7 @@ const StyledPositionedModal = styled(Card)<PositionedModal>`
     top: ${(props) => props.top + "px"};
     left: ${(props) => props.left + "px"};
     transform: ${(props) =>
-    !props.isUpperThanHalfPosition && `translateY(-100%)`};
+        !props.isUpperThanHalfPosition && `translateY(-100%)`};
     box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 16px 0px,
         rgb(219, 219, 219) 0px 0px 0px 1px;
     border: none;
@@ -34,6 +35,11 @@ const StyledBackDrop = styled.div`
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.65); // 부모만 opacity 적용하는 법
+    & > svg {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+    }
     & > div {
         width: 400px;
         margin: 20px;
@@ -59,6 +65,7 @@ interface ModalProps {
     onModalOn: () => void;
     onModalOff: () => void;
     children: React.ReactNode;
+    isWithCancelBtn?: boolean;
 }
 
 const ModalCard = ({
@@ -67,6 +74,7 @@ const ModalCard = ({
     onModalOn,
     onModalOff,
     children,
+    isWithCancelBtn = false,
 }: ModalProps) => {
     const modalRef = useRef() as React.MutableRefObject<HTMLDivElement>;
     const isUpperThanHalfPosition = useMemo(
@@ -102,6 +110,7 @@ const ModalCard = ({
             </StyledPositionedModal>
         ) : (
             <StyledBackDrop onMouseEnter={onModalOn} onClick={onModalOff}>
+                {isWithCancelBtn && <Cancel onClick={onModalOff} />}
                 <Card onClick={(event) => event.stopPropagation()} radius={12}>
                     {children}
                 </Card>
