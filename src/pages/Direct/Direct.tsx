@@ -21,6 +21,8 @@ const Direct = () => {
     const [message, setMessage] = useState<string>("");
     const view = useAppSelector(({ direct }) => direct.view);
     const selectedRoom = useAppSelector(state => state.direct.selectedRoom);
+    const userInfo = useAppSelector(state => state.auth.userInfo)
+    console.log(userInfo);
     const dispatch = useAppDispatch();
 
     const sockJS = new SockJS("http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/ws-connection");

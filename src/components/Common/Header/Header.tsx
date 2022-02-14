@@ -3,6 +3,9 @@ import navLogo from "assets/Images/nav-logo.png";
 import SearchBar from "./SearchBar";
 import NavItems from "./NavItems";
 import { NavLink } from "react-router-dom";
+import { useEffect } from "react";
+import { useAppDispatch } from "../../../app/store/Hooks";
+import { getUserInfo } from "../../../app/store/ducks/auth/authThunk";
 
 const HeaderContainer = styled.nav`
     display: flex;
@@ -42,6 +45,11 @@ const FakeHeader = styled.div`
 `;
 
 const Header = () => {
+    const dispatch = useAppDispatch();
+    useEffect(()=>{
+        console.log("실행");
+        dispatch(getUserInfo())
+    },[])
     return (
         <>
             <HeaderContainer>

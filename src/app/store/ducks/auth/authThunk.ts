@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { SignInRequestType, Token } from "./authThunk.type";
-import { customAxios } from "customAxios";
+import { authorizedCustomAxios, customAxios } from "customAxios";
 
 export const checkUsername = createAsyncThunk<boolean, { username: string }>(
     "auth/checkUsername",
@@ -44,3 +44,13 @@ export const signIn = createAsyncThunk<Token, SignInRequestType>(
         }
     },
 );
+
+
+export const getUserInfo = createAsyncThunk<AuthType.UserInfo>("auth/userInfo",async (payload,ThunkOptions) => {
+    try{
+        const response = await authorizedCustomAxios.get("/menu/profile")
+        return response.data.data
+    }catch (error){
+        console.log(error);
+    }
+})

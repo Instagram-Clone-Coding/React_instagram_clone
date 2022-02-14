@@ -60,6 +60,13 @@ declare module AuthType {
             accessToken: string;
         };
     }
+
+    interface UserInfo {
+        memberId:number;
+        memberImageUrl:string;
+        memberName:string;
+        memberUsername:string
+    }
 }
 
 declare module Login {
