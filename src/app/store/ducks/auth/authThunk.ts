@@ -1,6 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { SignInRequestType, Token } from "./authThunk.type";
 import { authorizedCustomAxios, customAxios } from "customAxios";
+import { FAIL_TO_REISSUE_MESSAGE } from "../../../../utils/constant";
+import { authAction } from "./authSlice";
 
 export const checkUsername = createAsyncThunk<boolean, { username: string }>(
     "auth/checkUsername",
@@ -51,6 +53,8 @@ export const getUserInfo = createAsyncThunk<AuthType.UserInfo>("auth/userInfo",a
         const response = await authorizedCustomAxios.get("/menu/profile")
         return response.data.data
     }catch (error){
-        console.log(error);
+        error === FAIL_TO_REISSUE_MESSAGE &&
+        ThunkOptions.dispatch(authAction.logout());
+        throw ThunkOptions.rejectWithValue(error);
     }
 })

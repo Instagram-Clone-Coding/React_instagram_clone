@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { saveToken } from "customAxios";
 import { getUserInfo, signIn } from "./authThunk";
-import { userInfo } from "os";
 
 export interface AuthStateProps {
     username: string;
