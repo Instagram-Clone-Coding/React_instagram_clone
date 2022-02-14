@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import ChatBubble from "components/Direct/Section/ChatBubble/ChatBubble";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import { lookUpChatMessageList } from "../../../app/store/ducks/direct/DirectThunk";
-import { resetChatMessageList } from "../../../app/store/ducks/direct/DirectSlice";
+import { lookUpChatMessageList } from "app/store/ducks/direct/DirectThunk";
+import { resetChatMessageList } from "app/store/ducks/direct/DirectSlice";
 
 
 const ChatSectionContainer = styled.div<{ isRequestsChat: boolean }>`
@@ -17,10 +17,10 @@ const ChatSectionContainer = styled.div<{ isRequestsChat: boolean }>`
 `;
 const ChatSection = () => {
 
-    const myId = 1;
     const dispatch = useAppDispatch();
     const selectedRoom = useAppSelector(state => state.direct.selectedRoom);
     const chatMessageList = useAppSelector(state => state.direct.chatMessageList);
+    const userInfo = useAppSelector(state => state.auth.userInfo)
 
     useEffect(() => {
         if (selectedRoom) {
@@ -35,8 +35,8 @@ const ChatSection = () => {
     const { view } = useAppSelector(state => state.direct);
     return (
         <ChatSectionContainer isRequestsChat={view === "requestsChat"}>
-            {[...chatMessageList].reverse().map(chatMessageList => (
-                <ChatBubble message={chatMessageList.content} me={myId === chatMessageList.senderId} />
+            {[...chatMessageList].map(chatMessageList => (
+                <ChatBubble message={chatMessageList.content} me={userInfo?.memberId === chatMessageList.senderId} />
             ))
             }
         </ChatSectionContainer>

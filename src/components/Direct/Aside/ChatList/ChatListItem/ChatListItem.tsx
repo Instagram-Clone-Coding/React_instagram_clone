@@ -73,6 +73,7 @@ interface ChatListItemProps extends Direct.ChatItem {
     opponent: Direct.inviteeProps;
     chatListClickHandler: (chatRoomId: number, username: string) => void;
     isObserving: boolean;
+    isTyping : boolean
 }
 
 const ChatListItem = ({
@@ -83,6 +84,7 @@ const ChatListItem = ({
                           chatListClickHandler,
                           opponent,
                           isObserving,
+                          isTyping
                       }: ChatListItemProps) => {
     const calculatedTime = useGapText(lastMessage.messageDate);
     const chatListItemRef = useRef<HTMLDivElement>(null);
@@ -119,7 +121,7 @@ const ChatListItem = ({
 
                 <div className="last-info">
                     <div className="last-chat-container">
-                        {lastMessage.content}
+                         {isTyping ? "입력 중..." : lastMessage.content }
                     </div>
                     <span className={"dot"}>
                     ·

@@ -15,36 +15,9 @@ const ChatList = ({}: ChatListProps) => {
     const username = useAppSelector(state => state.auth.username);
     const chatList = useAppSelector(state => state.direct.chatList);
     const chatListPage = useAppSelector(state => state.direct.chatListPage);
-    const dummyChatList = [
-        {
-            roomId:2,
-            lastMessage: {
-                messageId: 1,
-                content: "asdasdasd",
-                messageType: "TEXT",
-                messageDate: "2022-02-11",
-                senderId: 1,
-                roomId: 2
-            },
-            unreadFlag:false,
-            inviter:{
-                username:"dlwlrma",
-                name:"이지금",
-                imageUrl:"http"
-            },
-            invitees:[
-                {
-                    username:"dlwlrma",
-                    name:"이지금",
-                    imageUrl:"http"
-                },{
-                    username:"dlwlrma1",
-                    name:"이지금1",
-                    imageUrl:"http"
-                }
-            ]
-        }
-    ]
+    const typingRoomList = useAppSelector(state => state.direct.typingRoomList);
+
+
 
     const chatListClickHandler = useCallback(async (roomId: number, username: string) => {
         dispatch(selectChatItem(roomId));
@@ -81,6 +54,9 @@ const ChatList = ({}: ChatListProps) => {
                               isSelected={selectedRoom?.chatRoomId === chatListItem.roomId}
                               key={index} {...chatListItem}
                               isObserving={chatList.length-1 === index}
+                              isTyping={typingRoomList.filter(typingRoom => (
+                                  typingRoom.roomId === chatListItem.roomId
+                              )).length > 0}
                 />
             ))}
         </div>

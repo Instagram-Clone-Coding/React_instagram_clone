@@ -11,9 +11,7 @@ import InboxSection from "components/Direct/Section/InboxSection";
 import RequestsSection from "components/Direct/Section/requestsSection";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-import { addChatMessageItem } from "app/store/ducks/direct/DirectSlice";
-
-
+import { addChatMessageItem, addTyping, reissueTyping, removeTyping } from "app/store/ducks/direct/DirectSlice";
 
 
 const Direct = () => {
@@ -21,13 +19,15 @@ const Direct = () => {
     const [message, setMessage] = useState<string>("");
     const view = useAppSelector(({ direct }) => direct.view);
     const selectedRoom = useAppSelector(state => state.direct.selectedRoom);
-    const userInfo = useAppSelector(state => state.auth.userInfo)
+    const userInfo = useAppSelector(state => state.auth.userInfo);
+    const typingRoomList = useAppSelector(state => state.direct.typingRoomList)
+    
     const dispatch = useAppDispatch();
 
     const sockJS = new SockJS("http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/ws-connection");
     let stompClient: Stomp.Client = Stomp.over(sockJS);
     stompClient.debug = (log) => {
-        console.log(log);
+        // console.log(log);
     };
 
     // 내가 채팅 메시지를 타이핑하고 있을 때, 상대방에게 "입력 중" 표시를 표현하기 위함
@@ -35,7 +35,7 @@ const Direct = () => {
         if (message !== "") {
             waitForConnection(stompClient, function() {
                 stompClient.send("/pub/messages/indicate", {}, JSON.stringify({
-                    "senderId": 1,
+                    "senderId": userInfo?.memberId,
                     "roomId": selectedRoom?.chatRoomId,
                 }));
             });
@@ -55,7 +55,7 @@ const Direct = () => {
         waitForConnection(stompClient, function() {
             stompClient.send("/pub/messages", {}, JSON.stringify({
                 "content": message,
-                "senderId": 1,
+                "senderId": userInfo?.memberId,
                 "messageType": "TEXT",
                 "roomId": selectedRoom?.chatRoomId,
             }));
@@ -76,10 +76,31 @@ const Direct = () => {
                         stompClient.subscribe(
                             `/sub/${username}`,
                             (data) => {
-
-                                console.log("구독성공");
                                 const newMessage = JSON.parse(data.body);
-                                dispatch(addChatMessageItem(newMessage));
+                                if (newMessage.action === "MESSAGE_ACK") {
+
+
+
+                                    typingRoomList.forEach(typingRoom => {
+                                        // 이미 있다면 timer 를 reissue 해준다
+                                        if(typingRoom.roomId === newMessage.data.roomId){
+                                            clearTimeout(typingRoom.timer)
+                                            const timer:NodeJS.Timeout = setTimeout(()=>{
+                                                dispatch(removeTyping(newMessage.data.roomId))
+                                            },1500)
+                                            dispatch(reissueTyping({ roomId:typingRoom.roomId,timer }))
+                                        }
+                                    })
+
+
+                                    const timer: NodeJS.Timeout = setTimeout(() => {
+                                        dispatch(removeTyping(newMessage.data.roomId));
+                                    }, 1500);
+                                    dispatch(addTyping({ roomId: newMessage.data.roomId, timer }));
+                                } else {
+                                    // 새롭게 온 메세지 보여주는 로직
+                                    dispatch(addChatMessageItem(newMessage));
+                                }
                             },
                         );
                     },

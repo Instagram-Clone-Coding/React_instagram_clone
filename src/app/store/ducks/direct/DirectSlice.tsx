@@ -13,6 +13,7 @@ export interface InitialStateType {
     chatListPage: number;
     chatMessageList: Direct.MessageDTO[];
     chatMessageListPage: number;
+    typingRoomList: {timer:NodeJS.Timeout,roomId:number}[];
 }
 
 
@@ -27,6 +28,7 @@ const initialState: InitialStateType = {
     chatMessageList: [],
     chatListPage: 1,
     chatMessageListPage: 1,
+    typingRoomList: [],
 };
 
 const directSlice = createSlice({
@@ -51,14 +53,29 @@ const directSlice = createSlice({
         unSelectNewChatUser: (state) => {
             state.selectedNewChatUser = null;
         },
-        resetChatMessageList : (state) => {
-            state.chatMessageList = []
-            state.chatListPage = 1
+        resetChatMessageList: (state) => {
+            state.chatMessageList = [];
+            state.chatListPage = 1;
         },
-        addChatMessageItem : (state,action : PayloadAction<any>) => {
-            state.chatMessageList.push(action.payload.data)
-            console.log(action.payload.data);
+        addChatMessageItem: (state, action: PayloadAction<any>) => {
+            state.chatMessageList.push(action.payload.data);
         },
+        addTyping: (state, action: PayloadAction<{timer:NodeJS.Timeout,roomId:number}>) => {
+            if (!state.typingRoomList.includes(action.payload)) {
+                state.typingRoomList.push(action.payload);
+            }
+        },
+        removeTyping: (state, action: PayloadAction<number>) => {
+            state.typingRoomList = state.typingRoomList.filter(typingRoom => {
+                return typingRoom.roomId !== action.payload
+            })
+        },
+        reissueTyping : (state,action:PayloadAction<{timer:NodeJS.Timeout,roomId:number}>) => {
+            console.log("리이슈해주자");
+            state.typingRoomList = state.typingRoomList.map(typingRoom => {
+                return typingRoom.roomId === action.payload.roomId ? {roomId:action.payload.roomId , timer:action.payload.timer} : typingRoom
+            })
+        }
     },
     extraReducers: (build) => {
         build
@@ -131,6 +148,9 @@ export const {
     selectNewChatUser,
     unSelectNewChatUser,
     resetChatMessageList,
-    addChatMessageItem
+    addChatMessageItem,
+    addTyping,
+    removeTyping,reissueTyping
+
 } = directSlice.actions;
 export const directReducer = directSlice.reducer;
