@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import theme from "styles/theme";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import AsideBody from "components/Direct/Aside/AsideBody";
 import AsideHeader from "components/Direct/Aside/AsideHeader";
 import SectionBody from "components/Direct/Section/SectionBody";
@@ -20,8 +20,7 @@ const Direct = () => {
     const view = useAppSelector(({ direct }) => direct.view);
     const selectedRoom = useAppSelector(state => state.direct.selectedRoom);
     const userInfo = useAppSelector(state => state.auth.userInfo);
-    const typingRoomList = useAppSelector(state => state.direct.typingRoomList)
-    
+    const typingRoomList = useAppSelector(state => state.direct.typingRoomList);
     const dispatch = useAppDispatch();
 
     const sockJS = new SockJS("http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/ws-connection");
@@ -65,8 +64,6 @@ const Direct = () => {
 
 
     useEffect(() => {
-
-
         // 웹소켓 연결, 구독
         const wsConnectSubscribe = () => {
             try {
@@ -78,25 +75,23 @@ const Direct = () => {
                             (data) => {
                                 const newMessage = JSON.parse(data.body);
                                 if (newMessage.action === "MESSAGE_ACK") {
-
-
-
-                                    typingRoomList.forEach(typingRoom => {
-                                        // 이미 있다면 timer 를 reissue 해준다
-                                        if(typingRoom.roomId === newMessage.data.roomId){
-                                            clearTimeout(typingRoom.timer)
-                                            const timer:NodeJS.Timeout = setTimeout(()=>{
-                                                dispatch(removeTyping(newMessage.data.roomId))
-                                            },1500)
-                                            dispatch(reissueTyping({ roomId:typingRoom.roomId,timer }))
-                                        }
-                                    })
-
-
-                                    const timer: NodeJS.Timeout = setTimeout(() => {
-                                        dispatch(removeTyping(newMessage.data.roomId));
-                                    }, 1500);
-                                    dispatch(addTyping({ roomId: newMessage.data.roomId, timer }));
+                                    // typingRoomList.forEach(typingRoom => {
+                                    //     // 이미 있다면 timer 를 reissue 해준다
+                                    //     console.log(typingRoom.roomId,newMessage.data.roomId);
+                                    //     if(typingRoom.roomId === newMessage.data.roomId){
+                                    //         clearTimeout(typingRoom.timer)
+                                    //         console.log("새로운거만듬");
+                                    //         const timer = window.setTimeout(()=>{
+                                    //             dispatch(removeTyping(newMessage.data.roomId))
+                                    //         },1500)
+                                    //         console.log("리이슈직전");
+                                    //         dispatch(reissueTyping({ roomId:typingRoom.roomId,timer  }))
+                                    //     }
+                                    // })
+                                    // const timer = window.setTimeout(() => {
+                                    //     dispatch(removeTyping(newMessage.data.roomId));
+                                    // }, 1500);
+                                    dispatch(addTyping({ roomId: newMessage.data.roomId }));
                                 } else {
                                     // 새롭게 온 메세지 보여주는 로직
                                     dispatch(addChatMessageItem(newMessage));
@@ -109,26 +104,28 @@ const Direct = () => {
                 console.log("웹소켓 통신에러떳어요", error);
             }
         };
-
-
-        // 연결해제, 구독해제
-        function wsDisConnectUnsubscribe() {
-            try {
-                stompClient.disconnect(
-                    () => {
-                        stompClient.unsubscribe("sub-0");
-                    },
-                );
-            } catch (error) {
-                console.log(error);
-            }
-        }
-
         wsConnectSubscribe();
         return () => {
             // wsDisConnectUnsubscribe();
         };
     }, [dispatch, username]);
+
+
+
+
+
+    // 연결해제, 구독해제
+    function wsDisConnectUnsubscribe() {
+        try {
+            stompClient.disconnect(
+                () => {
+                    stompClient.unsubscribe("sub-0");
+                },
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 
     // 웹소켓이 연결될 때 까지 실행하는 함수

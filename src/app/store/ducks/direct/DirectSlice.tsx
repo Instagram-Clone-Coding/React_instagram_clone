@@ -13,7 +13,7 @@ export interface InitialStateType {
     chatListPage: number;
     chatMessageList: Direct.MessageDTO[];
     chatMessageListPage: number;
-    typingRoomList: {timer:NodeJS.Timeout,roomId:number}[];
+    typingRoomList: { timer: number, roomId: number }[];
 }
 
 
@@ -60,22 +60,49 @@ const directSlice = createSlice({
         addChatMessageItem: (state, action: PayloadAction<any>) => {
             state.chatMessageList.push(action.payload.data);
         },
-        addTyping: (state, action: PayloadAction<{timer:NodeJS.Timeout,roomId:number}>) => {
-            if (!state.typingRoomList.includes(action.payload)) {
-                state.typingRoomList.push(action.payload);
+        addTyping: (state, action: PayloadAction<{ roomId: number }>) => {
+
+
+
+            let flag = false;
+            state.typingRoomList.forEach(typingRoom => {
+                if (typingRoom.roomId === action.payload.roomId) {
+                    flag = true;
+                    clearTimeout(typingRoom.timer);
+                    const timer = window.setTimeout(async () => {
+                        state.typingRoomList = await state.typingRoomList.filter(typingRoom => {
+                            return typingRoom.roomId !== action.payload.roomId
+                        })
+                    }, 1500);
+
+                    state.typingRoomList = state.typingRoomList.map(typingRoom => {
+                        return typingRoom.roomId === action.payload.roomId ? {roomId:action.payload.roomId , timer} : typingRoom
+                    })
+                }
+            });
+            if (!flag) {
+                const timer = window.setTimeout(async () => {
+                    console.log("타임끝");
+                    state.typingRoomList = await state.typingRoomList.filter(typingRoom => {
+                        return typingRoom.roomId !== action.payload.roomId
+                    })
+                }, 1500);
+
+                state.typingRoomList.push({ roomId: action.payload.roomId, timer });
             }
+
         },
         removeTyping: (state, action: PayloadAction<number>) => {
             state.typingRoomList = state.typingRoomList.filter(typingRoom => {
                 return typingRoom.roomId !== action.payload
             })
         },
-        reissueTyping : (state,action:PayloadAction<{timer:NodeJS.Timeout,roomId:number}>) => {
+        reissueTyping: (state, action: PayloadAction<{ timer: number, roomId: number }>) => {
             console.log("리이슈해주자");
             state.typingRoomList = state.typingRoomList.map(typingRoom => {
                 return typingRoom.roomId === action.payload.roomId ? {roomId:action.payload.roomId , timer:action.payload.timer} : typingRoom
             })
-        }
+        },
     },
     extraReducers: (build) => {
         build
@@ -150,7 +177,7 @@ export const {
     resetChatMessageList,
     addChatMessageItem,
     addTyping,
-    removeTyping,reissueTyping
+    removeTyping, reissueTyping,
 
 } = directSlice.actions;
 export const directReducer = directSlice.reducer;
