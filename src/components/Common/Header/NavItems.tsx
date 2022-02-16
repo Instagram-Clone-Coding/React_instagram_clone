@@ -17,6 +17,8 @@ import { ReactComponent as HeartActive } from "assets/Svgs/heart-active.svg";
 import { NavLink } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { selectView } from "app/store/ducks/direct/DirectSlice";
+import { uploadActions } from "app/store/ducks/upload/uploadSlice";
+import Upload from "components/Common/Header/Upload";
 
 const Container = styled.div`
     flex: 1 0 0%;
@@ -46,7 +48,7 @@ const AvatarWrapper = styled(NavItemWrapper)`
 
 const NavItems = () => {
     const dispatch = useAppDispatch();
-    const view = useAppSelector((state) => state.direct.view);
+    const isUploading = useAppSelector(({ upload }) => upload.isUploading);
 
     const navItems = [
         {
@@ -76,15 +78,23 @@ const NavItems = () => {
         {
             id: "새 글 작성",
             path: "/",
-            component: <NewArticle />,
-            activeComponent: <NewArticleActive />,
+            component: (
+                <NewArticle
+                    onClick={() => dispatch(uploadActions.startUpload())}
+                />
+            ),
+            activeComponent: (
+                <NewArticleActive
+                    onClick={() => dispatch(uploadActions.startUpload())}
+                />
+            ),
         },
-        {
-            id: "사람 찾기",
-            path: "/",
-            component: <Map />,
-            activeComponent: <MapActive />,
-        },
+        // {
+        //     id: "사람 찾기",
+        //     path: "/",
+        //     component: <Map />,
+        //     activeComponent: <MapActive />,
+        // },
         {
             id: "피드 활동",
             path: "/",
@@ -96,6 +106,7 @@ const NavItems = () => {
     return (
         <Container>
             <NavLitemContainer>
+                {isUploading && <Upload />}
                 {navItems.map((navItem) => (
                     <NavItemWrapper key={navItem.id}>
                         <NavLink to={navItem.path}>{navItem.component}</NavLink>
