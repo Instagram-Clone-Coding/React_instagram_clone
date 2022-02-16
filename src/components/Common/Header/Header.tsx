@@ -47,7 +47,6 @@ const FakeHeader = styled.div`
 const Header = () => {
     const dispatch = useAppDispatch();
     useEffect(()=>{
-        console.log("실행");
         dispatch(getUserInfo())
     },[])
     return (

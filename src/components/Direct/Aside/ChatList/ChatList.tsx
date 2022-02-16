@@ -43,22 +43,22 @@ const ChatList = ({}: ChatListProps) => {
         dispatch(lookUpChatList({ page: chatListPage }));
     }, []);
 
-
+    console.log(chatList);
     return (
         <div>
-            {chatList.map((chatListItem, index) => (
-                <ChatListItem chatListClickHandler={chatListClickHandler}
-                              opponent={chatListItem.invitees.filter(invitee => {
-                                  return invitee.username !== username;
-                              })[0]}
-                              isSelected={selectedRoom?.chatRoomId === chatListItem.roomId}
-                              key={index} {...chatListItem}
-                              isObserving={chatList.length-1 === index}
-                              isTyping={typingRoomList.filter(typingRoom => (
-                                  typingRoom.roomId === chatListItem.roomId
-                              )).length > 0}
-                />
-            ))}
+            {/*{chatList.length > 0 && chatList.map((chatListItem, index) => (*/}
+            {/*    <ChatListItem chatListClickHandler={chatListClickHandler}*/}
+            {/*                  opponent={chatListItem.invitees.filter(invitee => {*/}
+            {/*                      return invitee.username !== username;*/}
+            {/*                  })[0]}*/}
+            {/*                  isSelected={selectedRoom?.chatRoomId === chatListItem.roomId}*/}
+            {/*                  key={index} {...chatListItem}*/}
+            {/*                  isObserving={chatList.length-1 === index}*/}
+            {/*                  isTyping={typingRoomList.filter(typingRoom => (*/}
+            {/*                      typingRoom.roomId === chatListItem.roomId*/}
+            {/*                  )).length > 0}*/}
+            {/*    />*/}
+            {/*))}*/}
         </div>
     );
 };

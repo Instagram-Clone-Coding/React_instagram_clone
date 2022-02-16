@@ -15,6 +15,7 @@ declare module Direct {
         unreadFlag:boolean;
         inviter:inviterProps;
         invitees:inviteeProps[];
+        typing:boolean
     }
 
     interface inviterProps {

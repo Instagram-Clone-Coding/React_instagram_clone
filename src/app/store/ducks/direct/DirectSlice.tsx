@@ -1,5 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { deleteRoom, lookUpChatList, lookUpChatMessageList, lookUpChatRoom, makeRoom } from "./DirectThunk";
+import {
+    addTyping,
+    deleteRoom,
+    lookUpChatList,
+    lookUpChatMessageList,
+    lookUpChatRoom,
+    makeRoom, reissueTyping,
+    removeTyping,
+} from "./DirectThunk";
 
 
 export interface InitialStateType {
@@ -13,7 +21,7 @@ export interface InitialStateType {
     chatListPage: number;
     chatMessageList: Direct.MessageDTO[];
     chatMessageListPage: number;
-    typingRoomList: { timer: number, roomId: number }[];
+    typingRoomList: { roomId: number, timer: number }[];
 }
 
 
@@ -60,49 +68,8 @@ const directSlice = createSlice({
         addChatMessageItem: (state, action: PayloadAction<any>) => {
             state.chatMessageList.push(action.payload.data);
         },
-        addTyping: (state, action: PayloadAction<{ roomId: number }>) => {
 
 
-
-            let flag = false;
-            state.typingRoomList.forEach(typingRoom => {
-                if (typingRoom.roomId === action.payload.roomId) {
-                    flag = true;
-                    clearTimeout(typingRoom.timer);
-                    const timer = window.setTimeout(async () => {
-                        state.typingRoomList = await state.typingRoomList.filter(typingRoom => {
-                            return typingRoom.roomId !== action.payload.roomId
-                        })
-                    }, 1500);
-
-                    state.typingRoomList = state.typingRoomList.map(typingRoom => {
-                        return typingRoom.roomId === action.payload.roomId ? {roomId:action.payload.roomId , timer} : typingRoom
-                    })
-                }
-            });
-            if (!flag) {
-                const timer = window.setTimeout(async () => {
-                    console.log("타임끝");
-                    state.typingRoomList = await state.typingRoomList.filter(typingRoom => {
-                        return typingRoom.roomId !== action.payload.roomId
-                    })
-                }, 1500);
-
-                state.typingRoomList.push({ roomId: action.payload.roomId, timer });
-            }
-
-        },
-        removeTyping: (state, action: PayloadAction<number>) => {
-            state.typingRoomList = state.typingRoomList.filter(typingRoom => {
-                return typingRoom.roomId !== action.payload
-            })
-        },
-        reissueTyping: (state, action: PayloadAction<{ timer: number, roomId: number }>) => {
-            console.log("리이슈해주자");
-            state.typingRoomList = state.typingRoomList.map(typingRoom => {
-                return typingRoom.roomId === action.payload.roomId ? {roomId:action.payload.roomId , timer:action.payload.timer} : typingRoom
-            })
-        },
     },
     extraReducers: (build) => {
         build
@@ -161,7 +128,46 @@ const directSlice = createSlice({
             })
             .addCase(lookUpChatMessageList.rejected, (state) => {
                 state.isLoading = false;
-            });
+            })
+            .addCase(addTyping.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(addTyping.fulfilled, (state, action) => {
+                state.typingRoomList.push({roomId:action.payload.roomId,timer:action.payload.timer})
+            })
+            .addCase(addTyping.rejected, (state) => {
+                state.isLoading = false;
+            })
+            .addCase(removeTyping.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(removeTyping.fulfilled, (state, action) => {
+                state.typingRoomList = state.typingRoomList.filter(typingRoom => {
+                    if(typingRoom.roomId === action.payload){
+                        clearTimeout(typingRoom.timer)
+                    }
+                    return typingRoom.roomId !== action.payload
+                })
+            })
+            .addCase(removeTyping.rejected, (state) => {
+                state.isLoading = false;
+            })
+            .addCase(reissueTyping.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(reissueTyping.fulfilled, (state, action) => {
+
+                // 타이머 제거해주기
+                state.typingRoomList.forEach(typingRoom => {
+                    clearTimeout(typingRoom.timer)
+                })
+
+                state.typingRoomList.push(action.payload)
+            })
+            .addCase(reissueTyping.rejected, (state) => {
+                state.isLoading = false;
+            })
+
 
     },
 });
@@ -176,8 +182,6 @@ export const {
     unSelectNewChatUser,
     resetChatMessageList,
     addChatMessageItem,
-    addTyping,
-    removeTyping, reissueTyping,
 
 } = directSlice.actions;
 export const directReducer = directSlice.reducer;
