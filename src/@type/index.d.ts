@@ -1,18 +1,17 @@
 declare module Direct {
-
     interface MessageDTO {
-        messageId:number;
-        content:string;
-        userId:number;
-        messageType:string
+        messageId: number;
+        content: string;
+        userId: number;
+        messageType: string;
     }
 
     interface ChatItem {
-        chatRoomId:number;
-        lastMessage:MessageDTO;
-        unreadFlag:boolean;
-        inviter:inviterProps;
-        invitees:inviteeProps[];
+        chatRoomId: number;
+        lastMessage: MessageDTO;
+        unreadFlag: boolean;
+        inviter: inviterProps;
+        invitees: inviteeProps[];
     }
 
     interface inviterProps {
@@ -34,10 +33,20 @@ declare module Direct {
         invitees: inviteeProps[]; // 초대받은사람
     }
 
-
-    type modalType = "deleteChat" | "block" | "report" | "newChat" | "convertAccount" | "deleteAll" | null;
-    type currentSectionViewType = "inbox" | "detail" | "chat" | "requests" | "requestsChat"
-
+    type modalType =
+        | "deleteChat"
+        | "block"
+        | "report"
+        | "newChat"
+        | "convertAccount"
+        | "deleteAll"
+        | null;
+    type currentSectionViewType =
+        | "inbox"
+        | "detail"
+        | "chat"
+        | "requests"
+        | "requestsChat";
 }
 
 declare module UI {
@@ -204,6 +213,17 @@ declare module ModalType {
         miniProfile?: MiniProfileStateProps;
         isFollowing?: boolean;
         isOnMiniProfile: boolean;
+    }
+}
+
+declare module UploadType {
+    type FileType = string | ArrayBuffer | null;
+    type StepType = "dragAndDrop" | "cut" | "filter" | "content";
+
+    interface UploadStateProps {
+        isUploading: boolean;
+        step: StepType;
+        files: FileType[];
     }
 }
 
