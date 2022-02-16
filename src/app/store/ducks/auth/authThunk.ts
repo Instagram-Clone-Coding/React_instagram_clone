@@ -1,9 +1,6 @@
-import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { SignInRequestType, Token } from "./authThunk.type";
 import { customAxios } from "customAxios";
-
-axios.defaults.withCredentials = true; // 백엔드와 쿠키공유 허용 -> 글로벌?
 
 export const checkUsername = createAsyncThunk<boolean, { username: string }>(
     "auth/checkUsername",
@@ -35,9 +32,8 @@ export const signIn = createAsyncThunk<Token, SignInRequestType>(
             });
             return response.data;
         } catch (error) {
-            if (String(error).includes("Network")) {
-                // eventHandler -> network 에러처리하는 거 알려줌 navigator.online
-                throw ThunkOptions.rejectWithValue(`네트워크 연결 확인하세요`); // 로그인 실패 | 네트워크 문제 | 서버 내부에러(status=500)
+            if (!window.navigator.onLine) {
+                throw ThunkOptions.rejectWithValue(`네트워크 연결 확인하세요`);
             } else {
                 await ThunkOptions.dispatch(
                     checkUsername({ username: payload.username }),
