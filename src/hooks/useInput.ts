@@ -1,12 +1,6 @@
 import { ChangeEvent, useState } from "react";
 
-type ReturnType = [
-    Login.useInputProps,
-    boolean | null,
-    boolean,
-    () => void,
-    () => void,
-];
+type ReturnType = [Login.useInputProps, boolean | null, boolean, () => void];
 
 const useInput = (
     initialValue: string,
@@ -28,11 +22,11 @@ const useInput = (
     };
 
     const resetValue = () => setValue("");
-    const resetIsValid = () => setIsValid(null);
 
     const onBlur = () => {
         setIsFocus(false);
         onBlurValidator && setIsValid(onBlurValidator(value));
+        console.log(`blur event handler`);
     };
 
     return [
@@ -44,7 +38,6 @@ const useInput = (
         isValid,
         isFocus,
         resetValue,
-        resetIsValid,
     ];
 };
 

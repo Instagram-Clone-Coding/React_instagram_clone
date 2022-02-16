@@ -8,7 +8,7 @@ import {
 } from "components/Signup/validator";
 import { customAxios } from "customAxios";
 import useInput from "hooks/useInput";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function InputAndButton() {
     const [isValidUsername, setIsValidUsername] = useState<boolean | null>(
@@ -30,6 +30,10 @@ export default function InputAndButton() {
         passwordValidator,
     );
 
+    // 문제: usernameValidatorWithDispatch를 어떤 조건으로 부를건지
+    // -> isValidUsernameBeforeAxios는 이전 값의 isValid임 -> 한템포 늦음
+    // onBlur와 함께 처리할 수 없음.
+
     useEffect(() => {
         const usernameValidatorWithDispatch = async (username: string) => {
             try {
@@ -48,10 +52,45 @@ export default function InputAndButton() {
             }
         };
 
+        console.log(`blur event in inputForm`, isValidUsernameBeforeAxios);
+
         isValidUsernameBeforeAxios &&
             usernameValidatorWithDispatch(usernameInputProps.value);
-    }, [isValidUsernameBeforeAxios, usernameInputProps.onBlur]);
-    // true -> true 체크가 안됨. -> onBlur 이벤트 발생 시?
+    }, [
+        usernameInputProps.onBlur &&
+            isValidUsernameBeforeAxios &&
+            usernameInputProps.value,
+    ]);
+    // true -> true 체크안됨. -> onBlur 이벤트 발생 시?
+
+    // const processedUsernameInputProps = {
+    //     ...usernameInputProps,
+    //     onBlur: () => {
+    //         usernameInputProps.onBlur && usernameInputProps.onBlur();
+
+    //         const usernameValidatorWithDispatch = async (username: string) => {
+    //             try {
+    //                 console.log(`db check`);
+    //                 const config = {
+    //                     params: {
+    //                         username,
+    //                     },
+    //                 };
+    //                 const {
+    //                     data: { data },
+    //                 } = await customAxios.post(`/accounts/check`, null, config);
+    //                 setIsValidUsername(data);
+    //             } catch (error) {
+    //                 setIsValidUsername(null);
+    //             }
+    //         };
+
+    //         console.log(isValidUsernameBeforeAxios, usernameInputProps.value);
+
+    //         isValidUsernameBeforeAxios &&
+    //             usernameValidatorWithDispatch(usernameInputProps.value);
+    //     },
+    // };
 
     return (
         <>
