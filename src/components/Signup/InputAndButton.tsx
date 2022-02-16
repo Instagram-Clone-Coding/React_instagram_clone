@@ -8,7 +8,7 @@ import {
 } from "components/Signup/validator";
 import { customAxios } from "customAxios";
 import useInput from "hooks/useInput";
-import { useState, useEffect } from "react";
+import { useState, useEffect, MouseEvent } from "react";
 
 export default function InputAndButton() {
     const [isValidUsername, setIsValidUsername] = useState<boolean | null>(
@@ -29,10 +29,6 @@ export default function InputAndButton() {
         "",
         passwordValidator,
     );
-
-    // 문제: usernameValidatorWithDispatch를 어떤 조건으로 부를건지
-    // -> isValidUsernameBeforeAxios는 이전 값의 isValid임 -> 한템포 늦음
-    // onBlur와 함께 처리할 수 없음.
 
     useEffect(() => {
         const usernameValidatorWithDispatch = async (username: string) => {
@@ -92,6 +88,30 @@ export default function InputAndButton() {
     //     },
     // };
 
+    const signUpButtonClickHandler = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        const callEmailConfirmAPI = async ({
+            email,
+            username,
+        }: {
+            email: string;
+            username: string;
+        }) => {
+            try {
+                await customAxios.post(`/accounts/email`, {
+                    email,
+                    username,
+                });
+            } catch (error) {
+                console.log(error, `user email confirm api error`);
+            }
+        };
+        callEmailConfirmAPI({
+            email: emailInputProps.value,
+            username: usernameInputProps.value,
+        });
+    };
+
     return (
         <>
             <Input
@@ -135,6 +155,7 @@ export default function InputAndButton() {
                         passwordIsValid
                     )
                 }
+                onClick={signUpButtonClickHandler}
             >
                 가입
             </SubmitButton>
