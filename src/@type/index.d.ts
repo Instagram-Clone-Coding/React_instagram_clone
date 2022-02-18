@@ -217,13 +217,18 @@ declare module ModalType {
 }
 
 declare module UploadType {
-    type FileType = string | ArrayBuffer | null;
+    interface FileProps {
+        width: number;
+        height: number;
+        url: string;
+    }
     type StepType = "dragAndDrop" | "cut" | "filter" | "content";
 
     interface UploadStateProps {
         isUploading: boolean;
+        isGrabbing: boolean;
         step: StepType;
-        files: FileType[];
+        files: FileProps[];
     }
 }
 
