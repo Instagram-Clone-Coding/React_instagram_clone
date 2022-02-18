@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: UploadType.UploadStateProps = {
     isUploading: false,
+    isGrabbing: false,
     step: "dragAndDrop",
     files: [],
 };
@@ -16,6 +17,9 @@ const uploadSlice = createSlice({
         },
         cancelUpload: (state) => {
             return initialState;
+        },
+        toCutStep: (state) => {
+            state.step = "cut";
         },
         prevStep: (state) => {
             switch (state.step) {
@@ -47,8 +51,14 @@ const uploadSlice = createSlice({
                     break;
             }
         },
-        addFile: (state, action: PayloadAction<UploadType.FileType>) => {
+        addFile: (state, action: PayloadAction<UploadType.FileProps>) => {
             state.files.push(action.payload);
+        },
+        startGrabbing: (state) => {
+            state.isGrabbing = true;
+        },
+        stopGrabbing: (state) => {
+            state.isGrabbing = false;
         },
     },
 });
