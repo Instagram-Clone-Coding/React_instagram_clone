@@ -24,10 +24,10 @@ const ACTIVE_COLOR = "#262626";
 const StyledCut = styled.div<StyledCutProps>`
     width: ${(props) => props.currentWidth}px;
     height: ${(props) => props.currentWidth}px;
-    @media (max-width: 720px) {
+    /* @media (max-width: 720px) {
         width: 348px;
         height: 348px;
-    }
+    } */
     overflow: hidden;
     border-radius: 0 0 12px 12px;
     cursor: grab;
@@ -119,6 +119,8 @@ interface CutProps {
     currentWidth: number;
 }
 
+const MIN_WIDTH = 348;
+
 const Cut = ({ currentWidth }: CutProps) => {
     const files = useAppSelector((state) => state.upload.files);
     const isGrabbing = useAppSelector((state) => state.upload.isGrabbing);
@@ -133,6 +135,10 @@ const Cut = ({ currentWidth }: CutProps) => {
     const imageRatio = useMemo(
         () => files[currentIndex].width / files[currentIndex].height,
         [currentIndex, files],
+    );
+    const processedCurrentWidth = useMemo(
+        () => (currentWidth <= MIN_WIDTH ? MIN_WIDTH : currentWidth),
+        [currentWidth],
     );
 
     const mouseDownhandler = useCallback(
@@ -151,7 +157,6 @@ const Cut = ({ currentWidth }: CutProps) => {
     );
 
     const mouseUpHandler = useCallback(
-        // (event: MouseEvent | globalThis.MouseEvent) => {
         (event: MouseEvent) => {
             event.preventDefault();
             event.stopPropagation();
@@ -247,7 +252,10 @@ const Cut = ({ currentWidth }: CutProps) => {
     // }, []);
 
     return (
-        <StyledCut url={files[currentIndex].url} currentWidth={currentWidth}>
+        <StyledCut
+            url={files[currentIndex].url}
+            currentWidth={processedCurrentWidth}
+        >
             <div
                 className="upload__image"
                 ref={imageRef}
@@ -262,12 +270,12 @@ const Cut = ({ currentWidth }: CutProps) => {
                             : `translate3d(${transformX}px,${transformY}px,0)`,
                     minWidth:
                         imageRatio >= 1
-                            ? currentWidth * imageRatio
-                            : currentWidth,
+                            ? processedCurrentWidth * imageRatio
+                            : processedCurrentWidth,
                     minHeight:
                         imageRatio < 1
-                            ? currentWidth / imageRatio
-                            : currentWidth,
+                            ? processedCurrentWidth / imageRatio
+                            : processedCurrentWidth,
                 }}
             ></div>
             <div className="upload__handleMenu">

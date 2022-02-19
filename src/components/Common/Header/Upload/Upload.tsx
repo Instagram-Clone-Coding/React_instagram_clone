@@ -66,18 +66,37 @@ const Upload = () => {
         () => (backDropwidth <= 1227 ? backDropwidth - 372 : 855),
         [backDropwidth],
     );
+    // console.log("상위에서 maxWidth: ", currentMaxWidth);
+    // console.log("상위에서 maxWidth: ",                                 modalCardWidth + BORDER_TOTAL_WIDTH,
+    // currentMaxWidth + BORDER_TOTAL_WIDTH);
+    // const modalCardHeight = useMemo(() => {
+    //     return currentWidth + BORDER_TOTAL_WIDTH + 43 >= backDropHeight - 184
+    //         ? backDropHeight - 184
+    //         : currentWidth + BORDER_TOTAL_WIDTH + 43;
+    // }, [backDropHeight, currentWidth]);
 
-    const modalCardHeight = useMemo(() => {
-        return currentWidth + BORDER_TOTAL_WIDTH + 43 >= backDropHeight - 184
-            ? backDropHeight - 184
-            : currentWidth + BORDER_TOTAL_WIDTH + 43;
-    }, [backDropHeight, currentWidth]);
+    // const modalCardWidth = useMemo(() => {
+    //     return modalCardHeight === backDropHeight - 184
+    //         ? modalCardHeight - 43
+    //         : currentWidth + BORDER_TOTAL_WIDTH;
+    // }, [modalCardHeight, backDropHeight, currentWidth]);
 
-    const modalCardWidth = useMemo(() => {
-        return modalCardHeight === backDropHeight - 184
-            ? modalCardHeight - 43
-            : currentWidth + BORDER_TOTAL_WIDTH;
-    }, [modalCardHeight, backDropHeight, currentWidth]);
+    const currentWidthLimitiedByWindowHeight = useMemo(
+        () =>
+            Math.min(
+                currentWidth + BORDER_TOTAL_WIDTH + 43,
+                backDropHeight - 184,
+            ),
+        [currentWidth, backDropHeight],
+    );
+    const currentHeightLimitedByWindowHeight = useMemo(
+        () =>
+            Math.min(
+                currentWidth + BORDER_TOTAL_WIDTH + 43,
+                backDropHeight - 184,
+            ),
+        [currentWidth, backDropHeight],
+    );
 
     useEffect(() => {
         window.addEventListener("resize", () => {
@@ -109,16 +128,16 @@ const Upload = () => {
                 case "cut":
                     return (
                         <Cut
-                            currentWidth={
-                                modalCardWidth <= 348
-                                    ? 348 + BORDER_TOTAL_WIDTH
-                                    : modalCardWidth + BORDER_TOTAL_WIDTH
-                            }
+                            currentWidth={Math.min(
+                                currentWidthLimitiedByWindowHeight +
+                                    BORDER_TOTAL_WIDTH,
+                                currentMaxWidth + BORDER_TOTAL_WIDTH,
+                            )}
                         />
                     );
             }
         },
-        [modalCardWidth],
+        [currentWidthLimitiedByWindowHeight, currentMaxWidth],
     );
 
     const checkIsGrabbingAndCancelUpload = () => {
@@ -133,8 +152,8 @@ const Upload = () => {
             onModalOn={() => dispatch(uploadActions.startUpload())}
             onModalOff={checkIsGrabbingAndCancelUpload}
             isWithCancelBtn={true}
-            width={modalCardWidth}
-            height={modalCardHeight}
+            width={currentWidthLimitiedByWindowHeight}
+            height={currentHeightLimitedByWindowHeight}
             maxWidth={currentMaxWidth + BORDER_TOTAL_WIDTH}
             maxHeight={currentMaxWidth + BORDER_TOTAL_WIDTH + 43}
             minWidth={348 + BORDER_TOTAL_WIDTH}
