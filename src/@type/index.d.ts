@@ -42,6 +42,7 @@ declare module Login {
         inputProps: useInputProps;
         isValid?: boolean | null;
         isFocus?: boolean;
+        hasValidator?: (value: string) => boolean;
     }
 
     interface useInputProps {

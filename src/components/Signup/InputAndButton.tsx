@@ -61,6 +61,7 @@ export default function InputAndButton() {
                 inputProps={emailInputProps}
                 isValid={emailIsValid}
                 isFocus={emailIsFocus}
+                hasValidator={emailFormValidator}
             />
             <Input
                 inputName="name"
@@ -69,6 +70,7 @@ export default function InputAndButton() {
                 inputProps={nameInputProps}
                 isValid={nameIsValid}
                 isFocus={nameIsFocus}
+                hasValidator={nameValidator}
             />
             <Input
                 inputName="username"
@@ -77,6 +79,7 @@ export default function InputAndButton() {
                 inputProps={usernameInputProps}
                 isValid={usernameIsValid}
                 isFocus={usernameIsFocus}
+                hasValidator={usernameValidator}
             />
             <Input
                 inputName="password"
@@ -85,6 +88,7 @@ export default function InputAndButton() {
                 inputProps={passwordInputProps}
                 isValid={passwordIsValid}
                 isFocus={passwordIsFocus}
+                hasValidator={passwordValidator}
             />
             <SubmitButton
                 disabled={

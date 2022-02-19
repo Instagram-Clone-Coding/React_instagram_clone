@@ -52,10 +52,8 @@ const useInput = (
     };
 
     return [
-        onBlurValidator
+        onBlurValidator || onChangeValidator
             ? { value, onChange, onBlur, onFocus }
-            : onChangeValidator
-            ? { value, onChange, onFocus }
             : { value, onChange },
         isValid,
         isFocus,
