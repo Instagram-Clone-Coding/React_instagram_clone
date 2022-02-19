@@ -1,3 +1,5 @@
+import { usernameValidator } from "components/Signup/validator";
+import { customAxios } from "customAxios";
 import { ChangeEvent, useState } from "react";
 
 type ReturnType = [Login.useInputProps, boolean | null, boolean, () => void];
@@ -23,10 +25,30 @@ const useInput = (
 
     const resetValue = () => setValue("");
 
+    const usernameValidatorWithDispatch = async (username: string) => {
+        try {
+            console.log(`db check`);
+            const config = {
+                params: {
+                    username,
+                },
+            };
+            const {
+                data: { data },
+            } = await customAxios.post(`/accounts/check`, null, config);
+            setIsValid(data);
+        } catch (error) {
+            setIsValid(null);
+        }
+    };
+
     const onBlur = () => {
         setIsFocus(false);
         onBlurValidator && setIsValid(onBlurValidator(value));
-        console.log(`blur event handler`);
+
+        if (onBlurValidator === usernameValidator) {
+            onBlurValidator(value) && usernameValidatorWithDispatch(value);
+        }
     };
 
     return [

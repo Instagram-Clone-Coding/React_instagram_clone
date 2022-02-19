@@ -8,13 +8,9 @@ import {
 } from "components/Signup/validator";
 import { customAxios } from "customAxios";
 import useInput from "hooks/useInput";
-import { useState, useEffect, MouseEvent } from "react";
+import { MouseEvent } from "react";
 
 export default function InputAndButton() {
-    const [isValidUsername, setIsValidUsername] = useState<boolean | null>(
-        null,
-    );
-
     const [emailInputProps, emailIsValid, emailIsFocus] = useInput(
         "",
         emailFormValidator,
@@ -23,70 +19,14 @@ export default function InputAndButton() {
         "",
         nameValidator,
     );
-    const [usernameInputProps, isValidUsernameBeforeAxios, usernameIsFocus] =
-        useInput("", usernameValidator);
+    const [usernameInputProps, usernameIsValid, usernameIsFocus] = useInput(
+        "",
+        usernameValidator,
+    );
     const [passwordInputProps, passwordIsValid, passwordIsFocus] = useInput(
         "",
         passwordValidator,
     );
-
-    useEffect(() => {
-        const usernameValidatorWithDispatch = async (username: string) => {
-            try {
-                console.log(`db check`);
-                const config = {
-                    params: {
-                        username,
-                    },
-                };
-                const {
-                    data: { data },
-                } = await customAxios.post(`/accounts/check`, null, config);
-                setIsValidUsername(data);
-            } catch (error) {
-                setIsValidUsername(null);
-            }
-        };
-
-        console.log(`blur event in inputForm`, isValidUsernameBeforeAxios);
-
-        isValidUsernameBeforeAxios &&
-            usernameValidatorWithDispatch(usernameInputProps.value);
-    }, [
-        usernameInputProps.onBlur &&
-            isValidUsernameBeforeAxios &&
-            usernameInputProps.value,
-    ]);
-    // true -> true 체크안됨. -> onBlur 이벤트 발생 시?
-
-    // const processedUsernameInputProps = {
-    //     ...usernameInputProps,
-    //     onBlur: () => {
-    //         usernameInputProps.onBlur && usernameInputProps.onBlur();
-
-    //         const usernameValidatorWithDispatch = async (username: string) => {
-    //             try {
-    //                 console.log(`db check`);
-    //                 const config = {
-    //                     params: {
-    //                         username,
-    //                     },
-    //                 };
-    //                 const {
-    //                     data: { data },
-    //                 } = await customAxios.post(`/accounts/check`, null, config);
-    //                 setIsValidUsername(data);
-    //             } catch (error) {
-    //                 setIsValidUsername(null);
-    //             }
-    //         };
-
-    //         console.log(isValidUsernameBeforeAxios, usernameInputProps.value);
-
-    //         isValidUsernameBeforeAxios &&
-    //             usernameValidatorWithDispatch(usernameInputProps.value);
-    //     },
-    // };
 
     const signUpButtonClickHandler = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
@@ -135,7 +75,7 @@ export default function InputAndButton() {
                 type="text"
                 innerText="사용자 이름"
                 inputProps={usernameInputProps}
-                isValid={isValidUsernameBeforeAxios && isValidUsername}
+                isValid={usernameIsValid}
                 isFocus={usernameIsFocus}
             />
             <Input
@@ -151,7 +91,7 @@ export default function InputAndButton() {
                     !(
                         emailIsValid &&
                         nameIsValid &&
-                        isValidUsername &&
+                        usernameIsValid &&
                         passwordIsValid
                     )
                 }
