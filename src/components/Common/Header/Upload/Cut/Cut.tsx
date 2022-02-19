@@ -163,9 +163,10 @@ const Cut = ({ currentWidth }: CutProps) => {
             if (!isGrabbing) return;
             if (!imageRef.current) return;
             dispatch(uploadActions.stopGrabbing());
-            const widthGap = (imageRef.current.offsetWidth - currentWidth) / 2;
+            const widthGap =
+                (imageRef.current.offsetWidth - processedCurrentWidth) / 2;
             const heightGap =
-                (imageRef.current.offsetHeight - currentWidth) / 2;
+                (imageRef.current.offsetHeight - processedCurrentWidth) / 2;
             // 객체 형태로 하면 최신 "값"을 가져오지 못함
             setTransformX((prev) => {
                 if (widthGap === 0) {
