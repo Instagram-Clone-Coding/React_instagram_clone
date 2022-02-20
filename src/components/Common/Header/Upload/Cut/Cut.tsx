@@ -99,6 +99,7 @@ const StyledCut = styled.div<StyledCutProps>`
         bottom: 0;
         width: 100%;
         & > div {
+            visibility: hidden;
             position: absolute;
             bottom: 56px;
             margin: 8px;
@@ -128,9 +129,11 @@ const StyledCut = styled.div<StyledCutProps>`
                     visibility: hidden;
                 }
             }
-            animation: disappear 0.4s forwards;
             &.on {
-                animation: appear 0.4s;
+                animation: appear 0.4s forwards;
+            }
+            &.off {
+                animation: disappear 0.4s forwards;
             }
             &.ratio {
                 left: 8px;
@@ -191,7 +194,7 @@ const Cut = ({ currentWidth }: CutProps) => {
     const isGrabbing = useAppSelector((state) => state.upload.isGrabbing);
     const dispatch = useAppDispatch();
     const [handlingMode, setHandlingMode] =
-        useState<"ratio" | "resize" | "gallery" | null>(null);
+        useState<"ratio" | "resize" | "gallery" | null | "first">("first");
     const [ratioMode, setRatioMode] = useState<RatioType>("square");
     const [currentIndex, setCurrentIndex] = useState(0);
     const [grabbedPosition, setGrabbedPosition] = useState({ x: 0, y: 0 });
@@ -349,9 +352,9 @@ const Cut = ({ currentWidth }: CutProps) => {
                     className={`ratio ${
                         handlingMode === "ratio"
                             ? "active"
-                            : handlingMode !== null
-                            ? "inactive"
-                            : ""
+                            : handlingMode === "first" || handlingMode === null
+                            ? ""
+                            : "inactive"
                     }`}
                     onClick={() => {
                         setHandlingMode((prev) =>
@@ -373,9 +376,9 @@ const Cut = ({ currentWidth }: CutProps) => {
                     className={`resize ${
                         handlingMode === "resize"
                             ? "active"
-                            : handlingMode !== null
-                            ? "inactive"
-                            : ""
+                            : handlingMode === "first" || handlingMode === null
+                            ? ""
+                            : "inactive"
                     }`}
                     onClick={() => {
                         setHandlingMode((prev) =>
@@ -402,9 +405,9 @@ const Cut = ({ currentWidth }: CutProps) => {
                     className={`gallery ${
                         handlingMode === "gallery"
                             ? "active"
-                            : handlingMode !== null
-                            ? "inactive"
-                            : ""
+                            : handlingMode === "first" || handlingMode === null
+                            ? ""
+                            : "inactive"
                     }`}
                     onClick={() => {
                         setHandlingMode((prev) =>
@@ -430,7 +433,13 @@ const Cut = ({ currentWidth }: CutProps) => {
             </div>
             <div className="upload__handleInput">
                 <div
-                    className={`ratio ${handlingMode === "ratio" ? "on" : ""}`}
+                    className={`ratio ${
+                        handlingMode === "ratio"
+                            ? "on"
+                            : handlingMode === "first"
+                            ? ""
+                            : "off"
+                    }`}
                 >
                     {ratioMenus.map((ratioMenu, index) => (
                         <>
@@ -470,14 +479,22 @@ const Cut = ({ currentWidth }: CutProps) => {
                 </div>
                 <div
                     className={`resize ${
-                        handlingMode === "resize" ? "on" : ""
+                        handlingMode === "resize"
+                            ? "on"
+                            : handlingMode === "first"
+                            ? ""
+                            : "off"
                     }`}
                 >
                     here
                 </div>
                 <div
                     className={`gallery ${
-                        handlingMode === "gallery" ? "on" : ""
+                        handlingMode === "gallery"
+                            ? "on"
+                            : handlingMode === "first"
+                            ? ""
+                            : "off"
                     }`}
                 >
                     gallery
