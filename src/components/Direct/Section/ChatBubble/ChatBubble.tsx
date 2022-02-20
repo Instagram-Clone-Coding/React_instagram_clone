@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
+import { useAppSelector } from "app/store/Hooks";
 
 interface ChatBubbleProps {
     message: string;
     me: boolean;
+    showDate:boolean ;
+    messageDate:string;
 }
 
 interface ChatBubbleContainerType {
@@ -17,6 +20,13 @@ const ChatBubbleContainer = styled.div<ChatBubbleContainerType>`
   text-align: ${props => props.me ? "right" : "left"};
   display: block;
   position: relative;
+  .date-section{
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    color: #8E8E8E;
+    margin: 10px 0;
+  }
 
   p {
     padding: 15px;
@@ -43,9 +53,19 @@ const ChatBubbleContainer = styled.div<ChatBubbleContainerType>`
 `;
 
 
-const ChatBubble = ({ me, message }: ChatBubbleProps) => {
+const ChatBubble = ({ me, message ,showDate,messageDate}: ChatBubbleProps) => {
+    const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
+    const renewScroll = useAppSelector(state => state.direct.renewScroll);
+    useEffect(() => {
+        if (renewScroll) {
+            scrollRef.current?.scrollIntoView();
+        }
+    }, [message]);
     return (
-        <ChatBubbleContainer me={me}>
+        <ChatBubbleContainer me={me} ref={scrollRef}>
+            {
+                showDate && <div className={"date-section"}>{messageDate}</div>
+            }
             {
                 !me &&
                 <img src={"https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150"} alt={"보낸사람"} />

@@ -39,37 +39,40 @@ const NewChatRecommendUserContainer = styled.div`
 
 `;
 
+interface NewChatRecommendUserProps extends Direct.ChatItem {
+    opponent: Direct.memberProps
+}
 
-const NewChatRecommendUser = ({ roomId, invitees }: Direct.ChatItem) => {
+const NewChatRecommendUser = ({ roomId, members,opponent }: NewChatRecommendUserProps) => {
     const { selectedNewChatUser } = useAppSelector(state => state.direct);
     const dispatch = useAppDispatch();
 
     const selectNewChatUserHandler = () => {
 
         if (!selectedNewChatUser) {
-            dispatch(selectNewChatUser(invitees[0].username));
-        }else if(selectedNewChatUser === invitees[0].username){
+            dispatch(selectNewChatUser(opponent.username));
+        }else if(selectedNewChatUser === opponent.username){
             dispatch(unSelectNewChatUser())
         }else {
-            dispatch(selectNewChatUser(invitees[0].username))
+            dispatch(selectNewChatUser(opponent.username))
         }
     };
     return (
         <NewChatRecommendUserContainer onClick={selectNewChatUserHandler}>
             <div className="user-info">
-                <img src={invitees[0].imageUrl} alt="avatarImg" className="user-image" />
+                <img src={opponent.imageUrl} alt="avatarImg" className="user-image" />
                 <div className="user-name-container">
                 <span className="user-memberUsername">
-                    {invitees[0].username}
+                    {opponent.username}
                 </span>
                     <span className="user-memberName">
-                    {invitees[0].name}
+                    {opponent.name}
                 </span>
                 </div>
             </div>
             <div className="circle-svg">
                 {
-                    selectedNewChatUser === invitees[0].username ? <CheckedCircle /> : <Circle />
+                    selectedNewChatUser === opponent.username ? <CheckedCircle /> : <Circle />
                 }
             </div>
         </NewChatRecommendUserContainer>

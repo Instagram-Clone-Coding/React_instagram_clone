@@ -30,14 +30,14 @@ const ChatListItemContainer = styled.div<ChatListItemContainerType>`
     flex: 1;
 
     .user-nickName {
-      font-weight: ${props => props.unreadFlag ? 400 : 600};
+      font-weight: ${props => props.unreadFlag ? 600 : 400};
 
     }
 
     .last-info {
       display: flex;
       font-size: 14px;
-      color: ${props => props.unreadFlag ? "#8e8e8e" : "#000"};
+      color: ${props => props.unreadFlag ? "#000" : "#8e8e8e"};
 
       .last-chat-container {
         white-space: nowrap;
@@ -46,7 +46,7 @@ const ChatListItemContainer = styled.div<ChatListItemContainerType>`
         display: inline;
         overflow: hidden;
         text-overflow: ellipsis;
-        font-weight: ${props => props.unreadFlag ? 400 : 600};
+        font-weight: ${props => props.unreadFlag ? 600 : 400};
         @media (max-width: 936px) {
           max-width: 120px;
         }
@@ -70,7 +70,7 @@ const ChatListItemContainer = styled.div<ChatListItemContainerType>`
 
 interface ChatListItemProps extends Direct.ChatItem {
     isSelected: boolean;
-    opponent: Direct.inviteeProps;
+    opponent: Direct.memberProps;
     chatListClickHandler: (chatRoomId: number, username: string) => void;
     isObserving: boolean;
     isTyping : boolean
@@ -98,6 +98,7 @@ const ChatListItem = ({
                 await dispatch(
                     lookUpChatList({
                         page: chatListPage,
+                        pageUp:true
                     }),
                 );
             } catch (error) {
@@ -133,7 +134,7 @@ const ChatListItem = ({
                 </div>
             </div>
             {
-                !unreadFlag &&
+                unreadFlag &&
                 <div className="blue-dot">
                 </div>
 

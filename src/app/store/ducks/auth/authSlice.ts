@@ -11,7 +11,6 @@ export interface AuthStateProps {
     hasUsername: boolean | null;
     isRefreshTokenChecking: boolean;
     userInfo:AuthType.UserInfo | null;
-
 }
 
 interface UserInfo {
@@ -26,7 +25,7 @@ const initialState: AuthStateProps = {
     errorMessage: "",
     hasUsername: null,
     isRefreshTokenChecking: true,
-    userInfo:null
+    userInfo:null,
 };
 
 const authSlice = createSlice({

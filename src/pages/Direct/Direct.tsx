@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import theme from "styles/theme";
 
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AsideBody from "components/Direct/Aside/AsideBody";
 import AsideHeader from "components/Direct/Aside/AsideHeader";
 import SectionBody from "components/Direct/Section/SectionBody";
@@ -11,8 +11,8 @@ import InboxSection from "components/Direct/Section/InboxSection";
 import RequestsSection from "components/Direct/Section/requestsSection";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-import { addChatMessageItem } from "app/store/ducks/direct/DirectSlice";
-import { addTyping } from "../../app/store/ducks/direct/DirectThunk";
+import { addChatMessageItem, addSubChatCount } from "app/store/ducks/direct/DirectSlice";
+import {  lookUpChatList, lookUpChatRoom } from "../../app/store/ducks/direct/DirectThunk";
 
 
 const Direct = () => {
@@ -24,30 +24,31 @@ const Direct = () => {
     const typingRoomList = useAppSelector(state => state.direct.typingRoomList);
     const chatList = useAppSelector(state => state.direct.chatList);
     const dispatch = useAppDispatch();
-
+    const chatListPage = useAppSelector(state => state.direct.chatListPage);
     const sockJS = new SockJS("http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/ws-connection");
     let stompClient: Stomp.Client = Stomp.over(sockJS);
     stompClient.debug = (log) => {
         // console.log(log);
     };
 
+
     // 내가 채팅 메시지를 타이핑하고 있을 때, 상대방에게 "입력 중" 표시를 표현하기 위함
-    useEffect(() => {
-        if (message !== "") {
-            waitForConnection(stompClient, function() {
-                stompClient.send("/pub/messages/indicate", {}, JSON.stringify({
-                    "senderId": userInfo?.memberId,
-                    "roomId": selectedRoom?.chatRoomId,
-                }));
-            });
-        }
-    }, [message]);
+    // useEffect(() => {
+    //     if (message !== "") {
+    //         waitForConnection(stompClient, function() {
+    //             stompClient.send("/pub/messages/indicate", {}, JSON.stringify({
+    //                 "senderId": userInfo?.memberId,
+    //                 "roomId": selectedRoom?.chatRoomId,
+    //             }));
+    //         });
+    //     }
+    // }, [message]);
 
 
     // title 변경해주는 역할
     // Todo: (1) 이 부분 데이터 받아서 안 읽은 메세지 개수로 처리해줘야 합니다.
     useEffect(() => {
-        document.title = "(1 ) 받은 메세지함 · Direct";
+        document.title = "(1) 받은 메세지함 · Direct";
     }, []);
 
     const username = useAppSelector(state => state.auth.username);
@@ -64,24 +65,31 @@ const Direct = () => {
         setMessage("");
     };
 
-    const [typings,setTypings] = useState<number[]>([3]);
 
     useEffect(() => {
         // 웹소켓 연결, 구독
         const wsConnectSubscribe = () => {
+            console.log("몇번");
             try {
                 stompClient.connect(
                     {},
                     () => {
                         stompClient.subscribe(
                             `/sub/${username}`,
-                            (data) => {
+                            async (data) => {
                                 const newMessage = JSON.parse(data.body);
                                 if (newMessage.action === "MESSAGE_ACK") {
-                                    dispatch(addTyping(newMessage.data.roomId))
+                                    // dispatch(addTyping(newMessage.data.roomId))
                                 } else {
-                                    // 새롭게 온 메세지 보여주는 로직
+                                    // API를 호출해서가 아닌 웹소켓을통해서 받은 메세지의 개수! 페이징 호출할때 다시 계산해서 보내줘야함
+                                    dispatch(addSubChatCount())
+                                    // 새롭게 온 메세지 보여주는 dispatch
                                     dispatch(addChatMessageItem(newMessage));
+                                    // unseenCount 를 줄여주는 dispatch
+                                    await dispatch(lookUpChatRoom({ roomId: newMessage.data.roomId }));
+                                    // 받을떄마다 unreadFlag 및 마지막 메세지 갱신을 위해서 왼쪽에 채팅방목록 다시 받아오기
+                                    // 페이지는 + 안해준다
+                                    await dispatch(lookUpChatList({ page: chatListPage, pageUp: false }));
                                 }
                             },
                         );
@@ -91,31 +99,27 @@ const Direct = () => {
                 console.log("웹소켓 통신에러떳어요", error);
             }
         };
+
+        // 연결해제, 구독해제
+        function wsDisConnectUnsubscribe() {
+            try {
+                stompClient.disconnect(
+                    () => {
+                        stompClient.unsubscribe("sub-0");
+                    },
+                );
+            } catch (error) {
+                console.log(error);
+            }
+        }
         wsConnectSubscribe();
         return () => {
-            // wsDisConnectUnsubscribe();
+            wsDisConnectUnsubscribe();
         };
     }, [dispatch, username]);
-    const logicHere = (dummy:string) => {
-        console.log(dummy);
-        console.log(chatList);
-    }
 
 
 
-
-    // 연결해제, 구독해제
-    function wsDisConnectUnsubscribe() {
-        try {
-            stompClient.disconnect(
-                () => {
-                    stompClient.unsubscribe("sub-0");
-                },
-            );
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
 
     // 웹소켓이 연결될 때 까지 실행하는 함수

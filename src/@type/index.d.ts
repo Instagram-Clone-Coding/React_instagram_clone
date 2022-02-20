@@ -14,8 +14,8 @@ declare module Direct {
         lastMessage:MessageDTO;
         unreadFlag:boolean;
         inviter:inviterProps;
-        invitees:inviteeProps[];
-        typing:boolean
+        members:memberProps[];
+        typing?:boolean
     }
 
     interface inviterProps {
@@ -24,7 +24,7 @@ declare module Direct {
         imageUrl: string;
     }
 
-    interface inviteeProps {
+    interface memberProps {
         username: string;
         name: string;
         imageUrl: string;
@@ -34,7 +34,7 @@ declare module Direct {
         status: boolean;
         chatRoomId: number;
         inviter: inviterProps; // 초대한사람
-        invitees: inviteeProps[]; // 초대받은사람
+        members: memberProps[]; // 초대받은사람
     }
 
 

@@ -4,11 +4,15 @@ import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { selectChatItem, selectView } from "app/store/ducks/direct/DirectSlice";
 import { lookUpChatList, lookUpChatRoom, makeRoom } from "app/store/ducks/direct/DirectThunk";
 import { useCallback, useEffect } from "react";
+import styled from "styled-components";
 
+
+const ChatListContainer = styled.div`
+
+`
 
 const ChatList = ({}: ChatListProps) => {
     const dispatch = useAppDispatch();
-    const selectedChatItem = useAppSelector((state => state.direct.selectedChatItem));
     const selectedRoom = useAppSelector((state => state.direct.selectedRoom));
 
     const view = useAppSelector(state => state.direct.view);
@@ -20,7 +24,11 @@ const ChatList = ({}: ChatListProps) => {
 
 
     const chatListClickHandler = useCallback(async (roomId: number, username: string) => {
+
+        // 내가 이 방을 선택했다.
         dispatch(selectChatItem(roomId));
+
+
         if (view === "requests" || view === "requestsChat") {
             dispatch(selectView("requestsChat"));
         } else {
@@ -30,6 +38,9 @@ const ChatList = ({}: ChatListProps) => {
 
             // 채팅방 클릭시 채팅방조회(채팅방을 클릭하면 unseen count를 감소시키는 API) 호출
             await dispatch(lookUpChatRoom({ roomId }));
+
+            // 방을 선택한거 반영하려면 채팅리스트 다시 불러와야함
+            await dispatch(lookUpChatList({page:chatListPage,pageUp:false}))
         }
     }, []);
 
@@ -40,26 +51,32 @@ const ChatList = ({}: ChatListProps) => {
     // - `채팅방 생성`
     // - `상대방과 참여한 채팅방이 없는 상황에서, 상대방이 본인에게 메시지 송신`
     useEffect(() => {
-        dispatch(lookUpChatList({ page: chatListPage }));
+        dispatch(lookUpChatList({ page: chatListPage,pageUp:true }));
     }, []);
 
-    console.log(chatList);
+
+    // 시간 처리해줘서 시간 껴넣어줘야함 시간 처리해주는 useEffect
+
+    useEffect(()=>{
+
+    },[])
+
     return (
-        <div>
-            {/*{chatList.length > 0 && chatList.map((chatListItem, index) => (*/}
-            {/*    <ChatListItem chatListClickHandler={chatListClickHandler}*/}
-            {/*                  opponent={chatListItem.invitees.filter(invitee => {*/}
-            {/*                      return invitee.username !== username;*/}
-            {/*                  })[0]}*/}
-            {/*                  isSelected={selectedRoom?.chatRoomId === chatListItem.roomId}*/}
-            {/*                  key={index} {...chatListItem}*/}
-            {/*                  isObserving={chatList.length-1 === index}*/}
-            {/*                  isTyping={typingRoomList.filter(typingRoom => (*/}
-            {/*                      typingRoom.roomId === chatListItem.roomId*/}
-            {/*                  )).length > 0}*/}
-            {/*    />*/}
-            {/*))}*/}
-        </div>
+        <ChatListContainer>
+            {chatList.length > 0 && chatList.map((chatListItem, index) => (
+                <ChatListItem chatListClickHandler={chatListClickHandler}
+                              opponent={chatListItem.members.filter(member => {
+                                  return member.username !== username;
+                              })[0]}
+                              isSelected={selectedRoom?.chatRoomId === chatListItem.roomId}
+                              key={index} {...chatListItem}
+                              isObserving={chatList.length-1 === index}
+                              isTyping={typingRoomList.filter(typingRoom => (
+                                  typingRoom.roomId === chatListItem.roomId
+                              )).length > 0}
+                />
+            ))}
+        </ChatListContainer>
     );
 };
 

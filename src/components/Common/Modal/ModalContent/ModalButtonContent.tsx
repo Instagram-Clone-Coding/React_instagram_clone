@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { closeModal, selectView } from "app/store/ducks/direct/DirectSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import axios from "axios";
-import { deleteRoom } from "../../../../app/store/ducks/direct/DirectThunk";
+import { deleteRoom, lookUpChatList } from "../../../../app/store/ducks/direct/DirectThunk";
 
 
 
@@ -33,7 +33,8 @@ const ModalButtonContent = ({ actionName }: ModalButtonContentProps) => {
 
 
     const dispatch = useAppDispatch();
-    const { selectedRoom } = useAppSelector(state => state.direct);
+    const selectedRoom = useAppSelector(state => state.direct.selectedRoom);
+    const chatListPage = useAppSelector(state => state.direct.chatListPage);
 
     const deleteRoomHandler = async () => {
 
@@ -44,6 +45,8 @@ const ModalButtonContent = ({ actionName }: ModalButtonContentProps) => {
                         roomId: selectedRoom.chatRoomId,
                     }),
                 );
+
+                await dispatch(lookUpChatList({ page: chatListPage, pageUp: false }));
             } catch (error) {
                 console.log(error);
             }

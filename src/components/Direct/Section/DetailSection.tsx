@@ -100,10 +100,10 @@ const DetailSection = () => {
             <div className="member-container">
                 <h3>멤버</h3>
                 <div className="member-profile-container">
-                    <img src={selectedRoom?.invitees[0].imageUrl} alt="맴버 사진" />
+                    <img src={selectedRoom?.members[0].imageUrl} alt="맴버 사진" />
                     <div className="member-id-name">
-                        <span className="username">{selectedRoom?.invitees[0].username}</span>
-                        <span className="name">{selectedRoom?.invitees[0].name}</span>
+                        <span className="username">{selectedRoom?.members[0].username}</span>
+                        <span className="name">{selectedRoom?.members[0].name}</span>
                     </div>
                 </div>
             </div>
@@ -132,7 +132,7 @@ const DetailSection = () => {
             }
             {
                 modal === "block" && <CommonDirectModal modalType={"block"} actionName={"차단"}
-                                                        title={`${selectedRoom?.invitees[0].username}님을 차단하시겠어요?`}
+                                                        title={`${selectedRoom?.members[0].username}님을 차단하시겠어요?`}
                                                         description={"상대방은 Instagram에서 회원님의 프로필, 게시물 또는 스토리를 찾을 수 없습니다. Instagram은 회원님이 차단한 사실을 상대방에게 알리지 않습니다."}
                 />
             }

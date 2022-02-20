@@ -55,17 +55,19 @@ export const deleteRoom = createAsyncThunk<any, { roomId: number }>(
 
 // 채팅방 클릭시 채팅방조회(채팅방을 클릭하면 unseen count를 감소시키는 API) 호출
 
-export const lookUpChatRoom = createAsyncThunk<any, { roomId: number }>(
+export const lookUpChatRoom = createAsyncThunk<any, { roomId: number }, { state: RootState }>(
     "chat/rooms/lookUp",
-    async (payload, ThunkOptions) => {
+    async (payload, { getState,dispatch,rejectWithValue }) => {
+        const selectedRoom = getState().direct.selectedRoom;
         try {
-            const { data } = await authorizedCustomAxios.delete(`/chat/rooms/${payload.roomId}`);
+            if (selectedRoom?.chatRoomId === payload.roomId) {
+                const { data } = await authorizedCustomAxios.delete(`/chat/rooms/${payload.roomId}`);
+            }
         } catch (error) {
             error === FAIL_TO_REISSUE_MESSAGE &&
-            ThunkOptions.dispatch(authAction.logout());
-            throw ThunkOptions.rejectWithValue(error);
+            dispatch(authAction.logout());
+            throw rejectWithValue(error);
         }
-
     },
 );
 
@@ -76,15 +78,14 @@ export const lookUpChatRoom = createAsyncThunk<any, { roomId: number }>(
 // - `채팅방 생성`
 // - `상대방과 참여한 채팅방이 없는 상황에서, 상대방이 본인에게 메시지 송신`
 
-export const lookUpChatList = createAsyncThunk<any, { page: number }>(
+export const lookUpChatList = createAsyncThunk<{ content: Direct.ChatItem[], pageUp: boolean }, { page: number, pageUp: boolean },{state:RootState}>(
     "chat/rooms/lookUpList",
     async (payload, ThunkOptions) => {
         try {
             const {
                 data: { data },
             } = await authorizedCustomAxios.get(`/chat/rooms?page=${payload.page}`);
-            console.log(data);
-            return data;
+            return { content: data.content, pageUp: payload.pageUp };
         } catch (error) {
             error === FAIL_TO_REISSUE_MESSAGE &&
             ThunkOptions.dispatch(authAction.logout());
@@ -97,54 +98,56 @@ export const lookUpChatList = createAsyncThunk<any, { page: number }>(
 // /chat/rooms/{roomId}/messages
 // 채팅방 메시지 목록 페이징 조회
 // 페이지당 10개씩 조회할 수 있습니다.
-export const lookUpChatMessageList = createAsyncThunk<any, { page: number, roomId: number }>(
+export const lookUpChatMessageList = createAsyncThunk<Direct.MessageDTO[], { page: number, roomId: number }, { state: RootState }>(
     "chat/rooms/lookUpChatList",
-    async (payload, ThunkOptions) => {
+    async (payload, { getState ,dispatch,rejectWithValue}) => {
+        const subChatCount = getState().direct.subChatCount;
+        const newPage = parseInt(`${payload.page + (subChatCount / 10)}`);
         try {
             const config = {
                 params: {
-                    page: payload.page,
+                    page: newPage,
                 },
             };
             const {
                 data: { data },
             } = await authorizedCustomAxios.get(`/chat/rooms/${payload.roomId}/messages`, config);
-            return data;
+            return data.content;
         } catch (error) {
             error === FAIL_TO_REISSUE_MESSAGE &&
-            ThunkOptions.dispatch(authAction.logout());
-            throw ThunkOptions.rejectWithValue(error);
+            dispatch(authAction.logout());
+            throw rejectWithValue(error);
         }
 
     },
 );
 
 
-export const addTyping = createAsyncThunk<any,number,{state:RootState}>(
+export const addTyping = createAsyncThunk<any, number, { state: RootState }>(
     "chat/addTyping",
-    async (payload, { getState,dispatch }) => {
+    async (payload, { getState, dispatch }) => {
         try {
             const state = getState();
             const typingRoomList = state.direct.typingRoomList;
 
             typingRoomList.forEach(typingRoom => {
                 // 이미 있으므로 갱신해줘야함
-                if(typingRoom.roomId === payload){
-                    reissueTyping(payload)
+                if (typingRoom.roomId === payload) {
+                    reissueTyping(payload);
                 }
-            })
-            const timer = window.setTimeout(()=>{
-                dispatch(removeTyping(payload))
-            },1500)
+            });
+            const timer = window.setTimeout(() => {
+                dispatch(removeTyping(payload));
+            }, 12000);
 
-            return {roomId:payload,timer};
+            return { roomId: payload, timer };
         } catch (error) {
             console.log(error);
         }
     },
 );
 
-export const removeTyping = createAsyncThunk<any,number,{state:RootState}>(
+export const removeTyping = createAsyncThunk<any, number, { state: RootState }>(
     "chat/removeTyping",
     async (payload, { getState }) => {
         try {
@@ -155,15 +158,15 @@ export const removeTyping = createAsyncThunk<any,number,{state:RootState}>(
     },
 );
 
-export const reissueTyping = createAsyncThunk<any, number,{state:RootState}>(
+export const reissueTyping = createAsyncThunk<any, number, { state: RootState }>(
     "chat/reissueTyping",
-    async (payload, { getState,dispatch }) => {
+    async (payload, {  dispatch }) => {
         try {
-            const timer = window.setTimeout(()=>{
-                dispatch(removeTyping(payload))
-            },1500)
+            const timer = window.setTimeout(() => {
+                dispatch(removeTyping(payload));
+            }, 12000);
 
-            return {roomId:payload,timer};
+            return { roomId: payload, timer };
         } catch (error) {
             console.log(error);
         }

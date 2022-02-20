@@ -33,6 +33,7 @@ const ChatBarContainer = styled.div<ChatBarContainerType>`
 
   .emoji-picker-react {
     width: 50% !important;
+    height: 400px;
     @media (max-width: 970px) {
       width: 100% !important;
     }
@@ -128,13 +129,11 @@ const ChatBar = ({ sendMessage, message, setMessage }: ChatBarType) => {
                 onEmojiClick={onEmojiClick} />}
             <div className="input-container">
                 <Emoji onClick={() => setShowPicker(!showPicker)} />
-
                 <textarea value={message} placeholder="메시지 입력..." className="chat-input" onChange={messageChangeHandler}
                           onKeyPress={pressEnterHandler} />
                 {message.trim().length === 0 ?
                     <>
                         <label htmlFor={"img"}>
-
                             <ImageUpload />
                         </label>
                         <input
