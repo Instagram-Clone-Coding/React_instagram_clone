@@ -192,7 +192,7 @@ const Cut = ({ currentWidth }: CutProps) => {
     const dispatch = useAppDispatch();
     const [handlingMode, setHandlingMode] =
         useState<"ratio" | "resize" | "gallery" | null>(null);
-    const [ratioMode, setRatioMode] = useState<RatioType>("original");
+    const [ratioMode, setRatioMode] = useState<RatioType>("square");
     const [currentIndex, setCurrentIndex] = useState(0);
     const [grabbedPosition, setGrabbedPosition] = useState({ x: 0, y: 0 });
     const [transformX, setTransformX] = useState(0);
