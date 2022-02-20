@@ -207,6 +207,41 @@ const Cut = ({ currentWidth }: CutProps) => {
         [currentWidth],
     );
 
+    const fixOverTranformedImage = useCallback(() => {
+        if (!imageRef.current) return;
+        const widthGap =
+            (imageRef.current.offsetWidth - processedCurrentWidth) / 2;
+        const heightGap =
+            (imageRef.current.offsetHeight - processedCurrentWidth) / 2;
+        // 객체 형태로 하면 최신 "값"을 가져오지 못함
+        setTransformX((prev) => {
+            if (widthGap === 0) {
+                return 0;
+            } else {
+                if (prev > widthGap) {
+                    return widthGap;
+                } else if (prev < -widthGap) {
+                    return -widthGap;
+                } else {
+                    return prev;
+                }
+            }
+        });
+        setTransformY((prev) => {
+            if (heightGap === 0) {
+                return 0;
+            } else {
+                if (prev > heightGap) {
+                    return heightGap;
+                } else if (prev < -heightGap) {
+                    return -heightGap;
+                } else {
+                    return prev;
+                }
+            }
+        });
+    }, [processedCurrentWidth]);
+
     const mouseDownhandler = useCallback(
         (event: MouseEvent) => {
             event.preventDefault();
@@ -228,42 +263,11 @@ const Cut = ({ currentWidth }: CutProps) => {
             event.preventDefault();
             event.stopPropagation();
             if (!isGrabbing) return;
-            if (!imageRef.current) return;
             dispatch(uploadActions.stopGrabbing());
-            const widthGap =
-                (imageRef.current.offsetWidth - processedCurrentWidth) / 2;
-            const heightGap =
-                (imageRef.current.offsetHeight - processedCurrentWidth) / 2;
-            // 객체 형태로 하면 최신 "값"을 가져오지 못함
-            setTransformX((prev) => {
-                if (widthGap === 0) {
-                    return 0;
-                } else {
-                    if (prev > widthGap) {
-                        return widthGap;
-                    } else if (prev < -widthGap) {
-                        return -widthGap;
-                    } else {
-                        return prev;
-                    }
-                }
-            });
-            setTransformY((prev) => {
-                if (heightGap === 0) {
-                    return 0;
-                } else {
-                    if (prev > heightGap) {
-                        return heightGap;
-                    } else if (prev < -heightGap) {
-                        return -heightGap;
-                    } else {
-                        return prev;
-                    }
-                }
-            });
+            fixOverTranformedImage();
             setGrabbedPosition({ x: 0, y: 0 });
         },
-        [isGrabbing],
+        [isGrabbing, dispatch, fixOverTranformedImage],
     );
 
     const mouseMoveHandler = useCallback(
