@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { saveToken } from "customAxios";
 import { signIn } from "./authThunk";
 
@@ -10,10 +10,6 @@ export interface AuthStateProps {
     errorMessage: string | undefined;
     hasUsername: boolean | null;
     isRefreshTokenChecking: boolean;
-}
-
-interface UserInfo {
-    username: string;
 }
 
 const initialState: AuthStateProps = {
@@ -30,9 +26,6 @@ const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        setUserName: (state, action: PayloadAction<UserInfo>) => {
-            state.username = action.payload.username;
-        },
         login: (state) => {
             state.isLogin = true;
         },
