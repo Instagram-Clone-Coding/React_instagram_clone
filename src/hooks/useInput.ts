@@ -25,29 +25,37 @@ const useInput = (
 
     const resetValue = () => setValue("");
 
-    const usernameValidatorWithDispatch = async (username: string) => {
-        try {
-            console.log(`db check`);
-            const config = {
-                params: {
-                    username,
-                },
-            };
-            const {
-                data: { data },
-            } = await customAxios.post(`/accounts/check`, null, config);
-            setIsValid(data);
-        } catch (error) {
-            setIsValid(null);
-        }
-    };
-
     const onBlur = () => {
         setIsFocus(false);
-        onBlurValidator && setIsValid(onBlurValidator(value));
+        if (onBlurValidator) {
+            const validResult = onBlurValidator(value);
+            setIsValid(validResult);
 
-        if (onBlurValidator === usernameValidator) {
-            onBlurValidator(value) && usernameValidatorWithDispatch(value);
+            if (onBlurValidator === usernameValidator) {
+                const usernameValidatorWithDispatch = async (
+                    username: string,
+                ) => {
+                    try {
+                        console.log(`db check`);
+                        const config = {
+                            params: {
+                                username,
+                            },
+                        };
+                        const {
+                            data: { data },
+                        } = await customAxios.post(
+                            `/accounts/check`,
+                            null,
+                            config,
+                        );
+                        setIsValid(data);
+                    } catch (error) {
+                        setIsValid(null);
+                    }
+                };
+                validResult && usernameValidatorWithDispatch(value);
+            }
         }
     };
 
