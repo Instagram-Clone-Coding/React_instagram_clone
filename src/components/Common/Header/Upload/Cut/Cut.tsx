@@ -7,19 +7,20 @@ import React, {
     useRef,
     useState,
 } from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { ReactComponent as CutIcon } from "assets/Svgs/cut.svg";
 import { ReactComponent as Resize } from "assets/Svgs/resize.svg";
 import { ReactComponent as Gallery } from "assets/Svgs/gallery.svg";
+import { ReactComponent as PhotoOutline } from "assets/Svgs/photoOutline.svg";
+import { ReactComponent as SquareCut } from "assets/Svgs/squareCut.svg";
+import { ReactComponent as ThinRectangle } from "assets/Svgs/thinRectangle.svg";
+import { ReactComponent as FatRectangle } from "assets/Svgs/fatRectangle.svg";
 import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 
 interface StyledCutProps {
     url: string;
     currentWidth: number;
 }
-
-const INACTIVE_COLOR = "#FFFFFF";
-const ACTIVE_COLOR = "#262626";
 
 const StyledCut = styled.div<StyledCutProps>`
     width: ${(props) => props.currentWidth}px;
@@ -51,7 +52,7 @@ const StyledCut = styled.div<StyledCutProps>`
         & > div {
             background-color: rgba(26, 26, 26, 0.8);
             position: absolute;
-            bottom: 0;
+            bottom: 8px;
             margin: 8px;
             display: flex;
             justify-content: center;
@@ -75,16 +76,17 @@ const StyledCut = styled.div<StyledCutProps>`
                 align-items: center;
             }
             &.ratio {
-                left: 0;
+                left: 8px;
             }
             &.resize {
-                left: 0;
+                left: 8px;
                 margin-left: 52px;
             }
             &.gallery {
-                right: 0;
+                right: 8px;
             }
             &.active {
+                box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
                 background-color: white;
             }
             &.inactive {
@@ -98,18 +100,78 @@ const StyledCut = styled.div<StyledCutProps>`
         width: 100%;
         & > div {
             position: absolute;
-            bottom: 48px;
+            bottom: 56px;
             margin: 8px;
             background-color: rgba(26, 26, 26, 0.8);
+            border-radius: 8px;
+            @keyframes appear {
+                0% {
+                    bottom: 40px;
+                    opacity: 0;
+                    visibility: hidden;
+                }
+                100% {
+                    bottom: 56px;
+                    opacity: 1;
+                    visibility: visible;
+                }
+            }
+            @keyframes disappear {
+                0% {
+                    bottom: 56px;
+                    opacity: 1;
+                    visibility: visible;
+                }
+                100% {
+                    bottom: 40px;
+                    opacity: 0;
+                    visibility: hidden;
+                }
+            }
+            animation: disappear 0.4s forwards;
+            &.on {
+                animation: appear 0.4s;
+            }
             &.ratio {
-                left: 0;
+                left: 8px;
+                display: flex;
+                flex-direction: column;
+                & > button {
+                    background-color: transparent;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 0 4px 0 16px;
+                    &.active > div {
+                        color: white;
+                    }
+                    & > div {
+                        color: ${(props) => props.theme.font.gray};
+                        & > div {
+                            margin: -3px 0 -4px;
+                            font-weight: 600;
+                        }
+                    }
+                    & > div:last-child {
+                        padding: 12px;
+                        /* width: 24px; */
+                        /* height: 24px; */
+                        display: flex;
+                    }
+                }
+                & > hr {
+                    width: 100%;
+                    opacity: 0.15;
+                    height: 1px;
+                    margin: 0;
+                }
             }
             &.resize {
-                left: 0;
+                left: 8px;
                 margin-left: 52px;
             }
             &.gallery {
-                right: 0;
+                right: 8px;
             }
         }
     }
@@ -121,12 +183,16 @@ interface CutProps {
 
 const MIN_WIDTH = 348;
 
+type RatioType = "original" | "square" | "thin" | "fat";
+
 const Cut = ({ currentWidth }: CutProps) => {
+    const theme = useTheme();
     const files = useAppSelector((state) => state.upload.files);
     const isGrabbing = useAppSelector((state) => state.upload.isGrabbing);
     const dispatch = useAppDispatch();
     const [handlingMode, setHandlingMode] =
         useState<"ratio" | "resize" | "gallery" | null>(null);
+    const [ratioMode, setRatioMode] = useState<RatioType>("original");
     const [currentIndex, setCurrentIndex] = useState(0);
     const [grabbedPosition, setGrabbedPosition] = useState({ x: 0, y: 0 });
     const [transformX, setTransformX] = useState(0);
@@ -147,6 +213,7 @@ const Cut = ({ currentWidth }: CutProps) => {
             event.stopPropagation();
             if (isGrabbing) return;
             const { screenX, screenY } = event;
+            setHandlingMode(null);
             dispatch(uploadActions.startGrabbing());
             setGrabbedPosition({
                 x: screenX,
@@ -231,26 +298,20 @@ const Cut = ({ currentWidth }: CutProps) => {
         [isGrabbing, grabbedPosition],
     );
 
-    // useEffect(() => {
-    //     const backdrop = document
-    //         .getElementById("modal-root")
-    //         ?.getElementsByTagName("div")[0];
-    //     console.log(backdrop);
-    //     backdrop?.addEventListener("mouseup", (event) => {
-    //         event.preventDefault();
-    //         event.stopPropagation();
-    //         console.log("backdrop에서 이벤트 발생");
-    //         mouseUpHandler(event);
-    //     });
-    //     return () => {
-    //         backdrop?.removeEventListener("mouseup", (event) => {
-    //             event.preventDefault();
-    //             event.stopPropagation();
-    //             console.log("backdrop에서 초기화");
-    //             mouseUpHandler(event);
-    //         });
-    //     };
-    // }, []);
+    const ratioMenus: {
+        text: string;
+        svgComponent: React.FunctionComponent<
+            React.SVGProps<SVGSVGElement> & {
+                title?: string | undefined;
+            }
+        >;
+        type: RatioType;
+    }[] = [
+        { text: "원본", svgComponent: PhotoOutline, type: "original" },
+        { text: "1:1", svgComponent: SquareCut, type: "square" },
+        { text: "4:5", svgComponent: ThinRectangle, type: "thin" },
+        { text: "16:9", svgComponent: FatRectangle, type: "fat" },
+    ];
 
     return (
         <StyledCut
@@ -298,8 +359,8 @@ const Cut = ({ currentWidth }: CutProps) => {
                         <CutIcon
                             fill={
                                 handlingMode === "ratio"
-                                    ? ACTIVE_COLOR
-                                    : INACTIVE_COLOR
+                                    ? theme.font.default_black
+                                    : theme.color.bg_white
                             }
                         />
                     </button>
@@ -322,13 +383,13 @@ const Cut = ({ currentWidth }: CutProps) => {
                         <Resize
                             fill={
                                 handlingMode === "resize"
-                                    ? ACTIVE_COLOR
-                                    : INACTIVE_COLOR
+                                    ? theme.font.default_black
+                                    : theme.color.bg_white
                             }
                             color={
                                 handlingMode === "resize"
-                                    ? ACTIVE_COLOR
-                                    : INACTIVE_COLOR
+                                    ? theme.font.default_black
+                                    : theme.color.bg_white
                             }
                         />
                     </button>
@@ -351,13 +412,13 @@ const Cut = ({ currentWidth }: CutProps) => {
                         <Gallery
                             fill={
                                 handlingMode === "gallery"
-                                    ? ACTIVE_COLOR
-                                    : INACTIVE_COLOR
+                                    ? theme.font.default_black
+                                    : theme.color.bg_white
                             }
                             color={
                                 handlingMode === "gallery"
-                                    ? ACTIVE_COLOR
-                                    : INACTIVE_COLOR
+                                    ? theme.font.default_black
+                                    : theme.color.bg_white
                             }
                         />
                     </button>
@@ -367,22 +428,41 @@ const Cut = ({ currentWidth }: CutProps) => {
                 <div
                     className={`ratio ${handlingMode === "ratio" ? "on" : ""}`}
                 >
-                    <button>
-                        <div>원본</div>
-                        <div></div>
-                    </button>
-                    <button>
-                        <div>1:1</div>
-                        <div></div>
-                    </button>
-                    <button>
-                        <div>4:5</div>
-                        <div></div>
-                    </button>
-                    <button>
-                        <div>16:9</div>
-                        <div></div>
-                    </button>
+                    {ratioMenus.map((ratioMenu, index) => (
+                        <>
+                            <button
+                                className={
+                                    ratioMode === ratioMenu.type ? "active" : ""
+                                }
+                                onClick={() =>
+                                    setRatioMode((prev) =>
+                                        prev !== ratioMenu.type
+                                            ? ratioMenu.type
+                                            : prev,
+                                    )
+                                }
+                            >
+                                <div>
+                                    <div>{ratioMenu.text}</div>
+                                </div>
+                                <div>
+                                    <ratioMenu.svgComponent
+                                        fill={
+                                            ratioMode === ratioMenu.type
+                                                ? "white"
+                                                : theme.font.gray
+                                        }
+                                        color={
+                                            ratioMode === ratioMenu.type
+                                                ? "white"
+                                                : theme.font.gray
+                                        }
+                                    />
+                                </div>
+                            </button>
+                            {index < ratioMenus.length - 1 && <hr />}
+                        </>
+                    ))}
                 </div>
                 <div
                     className={`resize ${
