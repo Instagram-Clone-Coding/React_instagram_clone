@@ -29,6 +29,7 @@ const StyledUploadModalInner = styled.div<ModalInnerProps>`
         align-items: center;
         width: 100%;
         height: 42px;
+        min-height: 42px;
         border-bottom: 1px solid ${(props) => props.theme.color.bd_gray};
         & > h1 {
             font-weight: ${(props) => props.theme.font.bold};
@@ -81,12 +82,12 @@ const Upload = () => {
     //         : currentWidth + BORDER_TOTAL_WIDTH;
     // }, [modalCardHeight, backDropHeight, currentWidth]);
 
-    const currentWidthLimitiedByWindowHeight = useMemo(
+    const currentWidthLimitedByWindowHeight = useMemo(
         () =>
             Math.min(
                 currentWidth + BORDER_TOTAL_WIDTH + 43,
                 backDropHeight - 184,
-            ),
+            ) - 43,
         [currentWidth, backDropHeight],
     );
     const currentHeightLimitedByWindowHeight = useMemo(
@@ -129,15 +130,14 @@ const Upload = () => {
                     return (
                         <Cut
                             currentWidth={Math.min(
-                                currentWidthLimitiedByWindowHeight +
-                                    BORDER_TOTAL_WIDTH,
-                                currentMaxWidth + BORDER_TOTAL_WIDTH,
+                                currentWidthLimitedByWindowHeight,
+                                currentMaxWidth,
                             )}
                         />
                     );
             }
         },
-        [currentWidthLimitiedByWindowHeight, currentMaxWidth],
+        [currentWidthLimitedByWindowHeight, currentMaxWidth],
     );
 
     const checkIsGrabbingAndCancelUpload = () => {
@@ -152,7 +152,7 @@ const Upload = () => {
             onModalOn={() => dispatch(uploadActions.startUpload())}
             onModalOff={checkIsGrabbingAndCancelUpload}
             isWithCancelBtn={true}
-            width={currentWidthLimitiedByWindowHeight}
+            width={currentWidthLimitedByWindowHeight}
             height={currentHeightLimitedByWindowHeight}
             maxWidth={currentMaxWidth + BORDER_TOTAL_WIDTH}
             maxHeight={currentMaxWidth + BORDER_TOTAL_WIDTH + 43}
