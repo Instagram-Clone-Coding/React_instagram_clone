@@ -261,11 +261,15 @@ const Cut = ({ currentWidth }: CutProps) => {
     const dispatch = useAppDispatch();
     const [handlingMode, setHandlingMode] = useState<HandlingType>("first");
     const [ratioMode, setRatioMode] = useState<RatioType>("square");
+    const [ratioState, setRatioState] = useState<boolean | null>(null);
+    const [resizeState, setResizeState] = useState<boolean | null>(null);
+    const [galleryState, setGalleryState] = useState<boolean | null>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [grabbedPosition, setGrabbedPosition] = useState({ x: 0, y: 0 });
     const [transformX, setTransformX] = useState(0);
     const [transformY, setTransformY] = useState(0);
     const imageRef = useRef<HTMLDivElement | null>(null);
+
     const imageRatio = useMemo(
         () => files[currentIndex].width / files[currentIndex].height,
         [currentIndex, files],
@@ -406,6 +410,53 @@ const Cut = ({ currentWidth }: CutProps) => {
         }
     }, [imageRatio, processedCurrentWidth, ratioMode]);
 
+    const toggleInputState = useCallback(
+        (prevType: HandlingType, type: HandlingType) => {
+            switch (type) {
+                case "ratio":
+                    if (prevType === "first" || prevType === null) {
+                        setRatioState(true);
+                    } else if (prevType === "ratio") {
+                        setRatioState(false);
+                    } else if (prevType === "resize") {
+                        setRatioState(true);
+                        setResizeState(false);
+                    } else if (prevType === "gallery") {
+                        setRatioState(true);
+                        setGalleryState(false);
+                    }
+                    break;
+                case "resize":
+                    if (prevType === "first" || prevType === null) {
+                        setResizeState(true);
+                    } else if (prevType === "resize") {
+                        setResizeState(false);
+                    } else if (prevType === "ratio") {
+                        setResizeState(true);
+                        setRatioState(false);
+                    } else if (prevType === "gallery") {
+                        setResizeState(true);
+                        setGalleryState(false);
+                    }
+                    break;
+                case "gallery":
+                    if (prevType === "first" || prevType === null) {
+                        setGalleryState(true);
+                    } else if (prevType === "gallery") {
+                        setGalleryState(false);
+                    } else if (prevType === "ratio") {
+                        setGalleryState(true);
+                        setRatioState(false);
+                    } else if (prevType === "resize") {
+                        setGalleryState(true);
+                        setResizeState(false);
+                    }
+                    break;
+            }
+        },
+        [],
+    );
+
     return (
         <StyledCut
             url={files[currentIndex].url}
@@ -424,9 +475,12 @@ const Cut = ({ currentWidth }: CutProps) => {
                                 : "inactive"
                         }`}
                         onClick={() => {
-                            setHandlingMode((prev) =>
-                                prev === menuObj.type ? null : menuObj.type,
-                            );
+                            setHandlingMode((prev) => {
+                                toggleInputState(prev, menuObj.type);
+                                return prev === menuObj.type
+                                    ? null
+                                    : menuObj.type;
+                            });
                         }}
                     >
                         <button>
@@ -459,11 +513,7 @@ const Cut = ({ currentWidth }: CutProps) => {
             <div className="upload__handleInput">
                 <div
                     className={`ratio ${
-                        handlingMode === "ratio"
-                            ? "on"
-                            : handlingMode === "first"
-                            ? ""
-                            : "off"
+                        ratioState ? "on" : ratioState === null ? "" : "off"
                     }`}
                 >
                     {RATIO_MENUS.map((ratioMenu, index) => (
@@ -504,22 +554,14 @@ const Cut = ({ currentWidth }: CutProps) => {
                 </div>
                 <div
                     className={`resize ${
-                        handlingMode === "resize"
-                            ? "on"
-                            : handlingMode === "first"
-                            ? ""
-                            : "off"
+                        resizeState ? "on" : resizeState === null ? "" : "off"
                     }`}
                 >
                     here
                 </div>
                 <div
                     className={`gallery ${
-                        handlingMode === "gallery"
-                            ? "on"
-                            : handlingMode === "first"
-                            ? ""
-                            : "off"
+                        galleryState ? "on" : galleryState === null ? "" : "off"
                     }`}
                 >
                     gallery
