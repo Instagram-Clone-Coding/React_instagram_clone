@@ -142,8 +142,11 @@ const Upload = () => {
 
     const checkIsGrabbingAndCancelUpload = () => {
         console.log("is triggered");
-        if (isGrabbing) return;
-        dispatch(uploadActions.cancelUpload());
+        if (isGrabbing) {
+            dispatch(uploadActions.stopGrabbing());
+        } else {
+            dispatch(uploadActions.cancelUpload());
+        }
     };
 
     return (

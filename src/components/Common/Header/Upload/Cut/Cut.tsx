@@ -292,17 +292,10 @@ const Cut = ({ currentWidth }: CutProps) => {
             event.preventDefault();
             event.stopPropagation();
             if (!isGrabbing) return;
-            const { screenX, screenY } = event;
-            const gapX = screenX - grabbedPosition.x;
-            const gapY = screenY - grabbedPosition.y;
-            setTransformX(gapX + transformX);
-            setTransformY(gapY + transformY);
-            // setTransform({
-            //     x: gapX + transform.x,
-            //     y: gapY + transform.y,
-            // });
+            fixOverTranformedImage();
+            // grab 취소는 상위 컴포넌트인 Uplaod에서!
         },
-        [isGrabbing, grabbedPosition],
+        [fixOverTranformedImage, isGrabbing],
     );
 
     const ratioMenus: {
