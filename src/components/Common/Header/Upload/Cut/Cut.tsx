@@ -18,6 +18,38 @@ import { ReactComponent as FatRectangle } from "assets/Svgs/fatRectangle.svg";
 import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 
 type RatioType = "original" | "square" | "thin" | "fat";
+type HandlingType = "ratio" | "resize" | "gallery" | null | "first";
+
+const MIN_WIDTH = 348;
+
+const HANDLE_MENUS: {
+    isColorContained: boolean;
+    svgComponent: React.FunctionComponent<
+        React.SVGProps<SVGSVGElement> & {
+            title?: string | undefined;
+        }
+    >;
+    type: HandlingType;
+}[] = [
+    { isColorContained: false, svgComponent: CutIcon, type: "ratio" },
+    { isColorContained: true, svgComponent: Resize, type: "resize" },
+    { isColorContained: true, svgComponent: Gallery, type: "gallery" },
+];
+
+const RATIO_MENUS: {
+    text: string;
+    svgComponent: React.FunctionComponent<
+        React.SVGProps<SVGSVGElement> & {
+            title?: string | undefined;
+        }
+    >;
+    type: RatioType;
+}[] = [
+    { text: "원본", svgComponent: PhotoOutline, type: "original" },
+    { text: "1:1", svgComponent: SquareCut, type: "square" },
+    { text: "4:5", svgComponent: ThinRectangle, type: "thin" },
+    { text: "16:9", svgComponent: FatRectangle, type: "fat" },
+];
 
 const getRatioCalculatedBoxWidth = (
     ratioType: RatioType,
@@ -222,15 +254,12 @@ interface CutProps {
     currentWidth: number;
 }
 
-const MIN_WIDTH = 348;
-
 const Cut = ({ currentWidth }: CutProps) => {
     const theme = useTheme();
     const files = useAppSelector((state) => state.upload.files);
     const isGrabbing = useAppSelector((state) => state.upload.isGrabbing);
     const dispatch = useAppDispatch();
-    const [handlingMode, setHandlingMode] =
-        useState<"ratio" | "resize" | "gallery" | null | "first">("first");
+    const [handlingMode, setHandlingMode] = useState<HandlingType>("first");
     const [ratioMode, setRatioMode] = useState<RatioType>("square");
     const [currentIndex, setCurrentIndex] = useState(0);
     const [grabbedPosition, setGrabbedPosition] = useState({ x: 0, y: 0 });
@@ -377,21 +406,6 @@ const Cut = ({ currentWidth }: CutProps) => {
         }
     }, [imageRatio, processedCurrentWidth, ratioMode]);
 
-    const ratioMenus: {
-        text: string;
-        svgComponent: React.FunctionComponent<
-            React.SVGProps<SVGSVGElement> & {
-                title?: string | undefined;
-            }
-        >;
-        type: RatioType;
-    }[] = [
-        { text: "원본", svgComponent: PhotoOutline, type: "original" },
-        { text: "1:1", svgComponent: SquareCut, type: "square" },
-        { text: "4:5", svgComponent: ThinRectangle, type: "thin" },
-        { text: "16:9", svgComponent: FatRectangle, type: "fat" },
-    ];
-
     return (
         <StyledCut
             url={files[currentIndex].url}
@@ -399,88 +413,48 @@ const Cut = ({ currentWidth }: CutProps) => {
             ratioType={ratioMode}
         >
             <div className="upload__handleMenu">
-                <div
-                    className={`ratio ${
-                        handlingMode === "ratio"
-                            ? "active"
-                            : handlingMode === "first" || handlingMode === null
-                            ? ""
-                            : "inactive"
-                    }`}
-                    onClick={() => {
-                        setHandlingMode((prev) =>
-                            prev === "ratio" ? null : "ratio",
-                        );
-                    }}
-                >
-                    <button>
-                        <CutIcon
-                            fill={
-                                handlingMode === "ratio"
-                                    ? theme.font.default_black
-                                    : theme.color.bg_white
-                            }
-                        />
-                    </button>
-                </div>
-                <div
-                    className={`resize ${
-                        handlingMode === "resize"
-                            ? "active"
-                            : handlingMode === "first" || handlingMode === null
-                            ? ""
-                            : "inactive"
-                    }`}
-                    onClick={() => {
-                        setHandlingMode((prev) =>
-                            prev === "resize" ? null : "resize",
-                        );
-                    }}
-                >
-                    <button>
-                        <Resize
-                            fill={
-                                handlingMode === "resize"
-                                    ? theme.font.default_black
-                                    : theme.color.bg_white
-                            }
-                            color={
-                                handlingMode === "resize"
-                                    ? theme.font.default_black
-                                    : theme.color.bg_white
-                            }
-                        />
-                    </button>
-                </div>
-                <div
-                    className={`gallery ${
-                        handlingMode === "gallery"
-                            ? "active"
-                            : handlingMode === "first" || handlingMode === null
-                            ? ""
-                            : "inactive"
-                    }`}
-                    onClick={() => {
-                        setHandlingMode((prev) =>
-                            prev === "gallery" ? null : "gallery",
-                        );
-                    }}
-                >
-                    <button>
-                        <Gallery
-                            fill={
-                                handlingMode === "gallery"
-                                    ? theme.font.default_black
-                                    : theme.color.bg_white
-                            }
-                            color={
-                                handlingMode === "gallery"
-                                    ? theme.font.default_black
-                                    : theme.color.bg_white
-                            }
-                        />
-                    </button>
-                </div>
+                {HANDLE_MENUS.map((menuObj) => (
+                    <div
+                        className={`${menuObj.type} ${
+                            handlingMode === menuObj.type
+                                ? "active"
+                                : handlingMode === "first" ||
+                                  handlingMode === null
+                                ? ""
+                                : "inactive"
+                        }`}
+                        onClick={() => {
+                            setHandlingMode((prev) =>
+                                prev === menuObj.type ? null : menuObj.type,
+                            );
+                        }}
+                    >
+                        <button>
+                            {menuObj.isColorContained ? (
+                                <menuObj.svgComponent
+                                    fill={
+                                        handlingMode === menuObj.type
+                                            ? theme.font.default_black
+                                            : theme.color.bg_white
+                                    }
+                                    color={
+                                        handlingMode === menuObj.type
+                                            ? theme.font.default_black
+                                            : theme.color.bg_white
+                                    }
+                                />
+                            ) : (
+                                <menuObj.svgComponent
+                                    fill={
+                                        handlingMode === menuObj.type
+                                            ? theme.font.default_black
+                                            : theme.color.bg_white
+                                    }
+                                />
+                            )}
+                        </button>
+                    </div>
+                ))}
             </div>
             <div className="upload__handleInput">
                 <div
@@ -492,7 +466,7 @@ const Cut = ({ currentWidth }: CutProps) => {
                             : "off"
                     }`}
                 >
-                    {ratioMenus.map((ratioMenu, index) => (
+                    {RATIO_MENUS.map((ratioMenu, index) => (
                         <>
                             <button
                                 className={
@@ -524,7 +498,7 @@ const Cut = ({ currentWidth }: CutProps) => {
                                     />
                                 </div>
                             </button>
-                            {index < ratioMenus.length - 1 && <hr />}
+                            {index < RATIO_MENUS.length - 1 && <hr />}
                         </>
                     ))}
                 </div>
@@ -565,15 +539,6 @@ const Cut = ({ currentWidth }: CutProps) => {
                                 ? "none"
                                 : `translate3d(${transformX}px,${transformY}px,0)`,
                         ...processedMinSize,
-                        // minWidth:
-                        //     imageRatio >= 1
-                        //         ? processedCurrentWidth * imageRatio
-                        //         : processedCurrentWidth,
-                        // minHeight:
-                        //     imageRatio < 1
-
-                        //         ? processedCurrentWidth / imageRatio
-                        //         : processedCurrentWidth,
                     }}
                 ></div>
             </div>
