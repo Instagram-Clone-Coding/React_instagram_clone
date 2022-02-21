@@ -17,34 +17,50 @@ import { ReactComponent as ThinRectangle } from "assets/Svgs/thinRectangle.svg";
 import { ReactComponent as FatRectangle } from "assets/Svgs/fatRectangle.svg";
 import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 
+type RatioType = "original" | "square" | "thin" | "fat";
+
+const getRatioCalculatedBoxWidth = (
+    ratioType: RatioType,
+    currentWidth: number,
+) => {
+    switch (ratioType) {
+        case "thin":
+            return currentWidth * 0.8;
+        default:
+            return currentWidth;
+    }
+};
+
+const getRatioCalculatedBoxHeight = (
+    ratioType: RatioType,
+    currentWidth: number,
+) => {
+    switch (ratioType) {
+        case "original":
+            return currentWidth / 1.93;
+        case "fat":
+            return (currentWidth * 9) / 16;
+        default:
+            return currentWidth;
+    }
+};
 interface StyledCutProps {
     url: string;
     currentWidth: number;
+    ratioType: RatioType;
 }
 
 const StyledCut = styled.div<StyledCutProps>`
     width: ${(props) => props.currentWidth}px;
     height: ${(props) => props.currentWidth}px;
-    /* @media (max-width: 720px) {
-        width: 348px;
-        height: 348px;
-    } */
-    overflow: hidden;
-    border-radius: 0 0 12px 12px;
-    cursor: grab;
     position: relative;
+    border-radius: 0 0 12px 12px;
     display: flex;
     justify-content: center;
     align-items: center;
-    & > .upload__image {
-        background-image: url(${(props) => props.url});
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        overflow: hidden;
-    }
     & > .upload__handleMenu {
         position: absolute;
+        z-index: 999;
         bottom: 0;
         width: 100%;
         padding: 8px;
@@ -52,6 +68,7 @@ const StyledCut = styled.div<StyledCutProps>`
         & > div {
             background-color: rgba(26, 26, 26, 0.8);
             position: absolute;
+            z-index: 999;
             bottom: 8px;
             margin: 8px;
             display: flex;
@@ -96,11 +113,13 @@ const StyledCut = styled.div<StyledCutProps>`
     }
     & > .upload__handleInput {
         position: absolute;
+        z-index: 999;
         bottom: 0;
         width: 100%;
         & > div {
             visibility: hidden;
             position: absolute;
+            z-index: 999;
             bottom: 56px;
             margin: 8px;
             background-color: rgba(26, 26, 26, 0.8);
@@ -178,6 +197,25 @@ const StyledCut = styled.div<StyledCutProps>`
             }
         }
     }
+    & > .upload__ratioBox {
+        width: ${(props) =>
+            getRatioCalculatedBoxWidth(props.ratioType, props.currentWidth)}px;
+        height: ${(props) =>
+            getRatioCalculatedBoxHeight(props.ratioType, props.currentWidth)}px;
+        transition: width 0.3s, height 0.3s;
+        overflow: hidden; // 고려
+        cursor: grab;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        & > .upload__image {
+            background-image: url(${(props) => props.url});
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            overflow: hidden;
+        }
+    }
 `;
 
 interface CutProps {
@@ -185,8 +223,6 @@ interface CutProps {
 }
 
 const MIN_WIDTH = 348;
-
-type RatioType = "original" | "square" | "thin" | "fat";
 
 const Cut = ({ currentWidth }: CutProps) => {
     const theme = useTheme();
@@ -213,9 +249,13 @@ const Cut = ({ currentWidth }: CutProps) => {
     const fixOverTranformedImage = useCallback(() => {
         if (!imageRef.current) return;
         const widthGap =
-            (imageRef.current.offsetWidth - processedCurrentWidth) / 2;
+            (imageRef.current.offsetWidth -
+                getRatioCalculatedBoxWidth(ratioMode, processedCurrentWidth)) /
+            2;
         const heightGap =
-            (imageRef.current.offsetHeight - processedCurrentWidth) / 2;
+            (imageRef.current.offsetHeight -
+                getRatioCalculatedBoxHeight(ratioMode, processedCurrentWidth)) /
+            2;
         // 객체 형태로 하면 최신 "값"을 가져오지 못함
         setTransformX((prev) => {
             if (widthGap === 0) {
@@ -243,7 +283,7 @@ const Cut = ({ currentWidth }: CutProps) => {
                 }
             }
         });
-    }, [processedCurrentWidth]);
+    }, [processedCurrentWidth, ratioMode]);
 
     const mouseDownhandler = useCallback(
         (event: MouseEvent) => {
@@ -298,6 +338,45 @@ const Cut = ({ currentWidth }: CutProps) => {
         [fixOverTranformedImage, isGrabbing],
     );
 
+    const processedMinSize: {
+        minWidth: number;
+        minHeight: number;
+    } = useMemo(() => {
+        if (ratioMode !== "square") {
+            switch (ratioMode) {
+                // case "square":
+                case "thin":
+                    return {
+                        minWidth: processedCurrentWidth * imageRatio,
+                        minHeight: processedCurrentWidth,
+                    };
+                case "original":
+                    return {
+                        minWidth: (processedCurrentWidth / 1.93) * imageRatio,
+                        minHeight: processedCurrentWidth / 1.93,
+                    };
+                case "fat":
+                    return {
+                        minWidth:
+                            ((processedCurrentWidth * 9) / 16) * imageRatio,
+                        minHeight: (processedCurrentWidth * 9) / 16,
+                    };
+            }
+        } else {
+            if (imageRatio > 1) {
+                return {
+                    minWidth: processedCurrentWidth * imageRatio,
+                    minHeight: processedCurrentWidth,
+                };
+            } else {
+                return {
+                    minWidth: processedCurrentWidth,
+                    minHeight: processedCurrentWidth / imageRatio,
+                };
+            }
+        }
+    }, [imageRatio, processedCurrentWidth, ratioMode]);
+
     const ratioMenus: {
         text: string;
         svgComponent: React.FunctionComponent<
@@ -317,29 +396,8 @@ const Cut = ({ currentWidth }: CutProps) => {
         <StyledCut
             url={files[currentIndex].url}
             currentWidth={processedCurrentWidth}
+            ratioType={ratioMode}
         >
-            <div
-                className="upload__image"
-                ref={imageRef}
-                onMouseDown={mouseDownhandler}
-                onMouseMove={mouseMoveHandler}
-                onMouseUp={mouseUpHandler}
-                onMouseLeave={mouseLeaveHandler}
-                style={{
-                    transform:
-                        transformX === 0 && transformY === 0
-                            ? "none"
-                            : `translate3d(${transformX}px,${transformY}px,0)`,
-                    minWidth:
-                        imageRatio >= 1
-                            ? processedCurrentWidth * imageRatio
-                            : processedCurrentWidth,
-                    minHeight:
-                        imageRatio < 1
-                            ? processedCurrentWidth / imageRatio
-                            : processedCurrentWidth,
-                }}
-            ></div>
             <div className="upload__handleMenu">
                 <div
                     className={`ratio ${
@@ -492,6 +550,32 @@ const Cut = ({ currentWidth }: CutProps) => {
                 >
                     gallery
                 </div>
+            </div>
+            <div className="upload__ratioBox">
+                <div
+                    className="upload__image"
+                    ref={imageRef}
+                    onMouseDown={mouseDownhandler}
+                    onMouseMove={mouseMoveHandler}
+                    onMouseUp={mouseUpHandler}
+                    onMouseLeave={mouseLeaveHandler}
+                    style={{
+                        transform:
+                            transformX === 0 && transformY === 0
+                                ? "none"
+                                : `translate3d(${transformX}px,${transformY}px,0)`,
+                        ...processedMinSize,
+                        // minWidth:
+                        //     imageRatio >= 1
+                        //         ? processedCurrentWidth * imageRatio
+                        //         : processedCurrentWidth,
+                        // minHeight:
+                        //     imageRatio < 1
+
+                        //         ? processedCurrentWidth / imageRatio
+                        //         : processedCurrentWidth,
+                    }}
+                ></div>
             </div>
         </StyledCut>
     );
