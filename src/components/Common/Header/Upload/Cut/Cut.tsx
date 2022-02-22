@@ -1,5 +1,7 @@
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import React, {
+    ChangeEvent,
+    Fragment,
     MouseEvent,
     useCallback,
     useEffect,
@@ -223,6 +225,43 @@ const StyledCut = styled.div<StyledCutProps>`
             &.resize {
                 left: 8px;
                 margin-left: 52px;
+                width: 132px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                padding: 8px 12px;
+                & > .upload__progressClickable {
+                    width: 100%;
+                    height: 5px;
+                    display: flex;
+                    align-items: center;
+                    & > input[type="range"] {
+                        -webkit-appearance: none;
+                        width: 100%;
+                        height: 1px;
+                        background: transparent;
+                        border: none;
+                        cursor: pointer;
+                    }
+                    & > input[type="range"]:focus {
+                        //  blue border 제거
+                        outline: none;
+                    }
+                    & > input[type="range"]::-ms-track {
+                        width: 100%;
+                        background: transparent;
+                        border-color: transparent;
+                        color: transparent;
+                    }
+
+                    & > input[type="range"]::-webkit-slider-thumb {
+                        -webkit-appearance: none;
+                        background-color: white;
+                        width: 16px;
+                        height: 16px;
+                        border-radius: 50%;
+                    }
+                }
             }
             &.gallery {
                 right: 8px;
@@ -268,6 +307,7 @@ const Cut = ({ currentWidth }: CutProps) => {
     const [grabbedPosition, setGrabbedPosition] = useState({ x: 0, y: 0 });
     const [transformX, setTransformX] = useState(0);
     const [transformY, setTransformY] = useState(0);
+    const [scale, setScale] = useState(0);
     const imageRef = useRef<HTMLDivElement | null>(null);
 
     const imageRatio = useMemo(
@@ -282,14 +322,20 @@ const Cut = ({ currentWidth }: CutProps) => {
     const fixOverTranformedImage = useCallback(() => {
         if (!imageRef.current) return;
         const widthGap =
-            (imageRef.current.offsetWidth -
+            (imageRef.current.offsetWidth * (scale / 100 + 1) -
                 getRatioCalculatedBoxWidth(ratioMode, processedCurrentWidth)) /
             2;
         const heightGap =
-            (imageRef.current.offsetHeight -
+            (imageRef.current.offsetHeight * (scale / 100 + 1) -
                 getRatioCalculatedBoxHeight(ratioMode, processedCurrentWidth)) /
             2;
         // 객체 형태로 하면 최신 "값"을 가져오지 못함
+        console.log(
+            imageRef.current.offsetWidth,
+            // imageRef.current.offsetWidth * (scale / 100 + 1),
+            getRatioCalculatedBoxWidth(ratioMode, processedCurrentWidth) *
+                (scale / 100 + 1),
+        );
         setTransformX((prev) => {
             if (widthGap === 0) {
                 return 0;
@@ -316,7 +362,7 @@ const Cut = ({ currentWidth }: CutProps) => {
                 }
             }
         });
-    }, [processedCurrentWidth, ratioMode]);
+    }, [processedCurrentWidth, ratioMode, scale]);
 
     const mouseDownhandler = useCallback(
         (event: MouseEvent) => {
@@ -331,7 +377,7 @@ const Cut = ({ currentWidth }: CutProps) => {
                 y: screenY,
             });
         },
-        [isGrabbing],
+        [isGrabbing, dispatch],
     );
 
     const mouseUpHandler = useCallback(
@@ -457,6 +503,13 @@ const Cut = ({ currentWidth }: CutProps) => {
         [],
     );
 
+    const scaleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        const {
+            target: { value },
+        } = event;
+        setScale(Number(value));
+    };
+
     return (
         <StyledCut
             url={files[currentIndex].url}
@@ -466,6 +519,7 @@ const Cut = ({ currentWidth }: CutProps) => {
             <div className="upload__handleMenu">
                 {HANDLE_MENUS.map((menuObj) => (
                     <div
+                        key={menuObj.type}
                         className={`${menuObj.type} ${
                             handlingMode === menuObj.type
                                 ? "active"
@@ -517,7 +571,7 @@ const Cut = ({ currentWidth }: CutProps) => {
                     }`}
                 >
                     {RATIO_MENUS.map((ratioMenu, index) => (
-                        <>
+                        <Fragment key={ratioMenu.type}>
                             <button
                                 className={
                                     ratioMode === ratioMenu.type ? "active" : ""
@@ -549,7 +603,7 @@ const Cut = ({ currentWidth }: CutProps) => {
                                 </div>
                             </button>
                             {index < RATIO_MENUS.length - 1 && <hr />}
-                        </>
+                        </Fragment>
                     ))}
                 </div>
                 <div
@@ -557,7 +611,29 @@ const Cut = ({ currentWidth }: CutProps) => {
                         resizeState ? "on" : resizeState === null ? "" : "off"
                     }`}
                 >
-                    here
+                    <div className="upload__progressClickable">
+                        {/* <div className="upload__progress">
+                            <div className="upload__progressCircle"></div>
+                        </div> */}
+                        <input
+                            className="upload__progress"
+                            max="100"
+                            min="0"
+                            type="range"
+                            value={scale}
+                            onChange={scaleChangeHandler}
+                            style={{
+                                background:
+                                    scale >= 50
+                                        ? `linear-gradient(to right, white ${scale}%, black ${
+                                              100 - scale
+                                          }%)`
+                                        : `linear-gradient(to left, black ${
+                                              100 - scale
+                                          }%, white ${scale}%)`,
+                            }}
+                        ></input>
+                    </div>
                 </div>
                 <div
                     className={`gallery ${
@@ -577,9 +653,11 @@ const Cut = ({ currentWidth }: CutProps) => {
                     onMouseLeave={mouseLeaveHandler}
                     style={{
                         transform:
-                            transformX === 0 && transformY === 0
+                            transformX === 0 && transformY === 0 && scale === 0
                                 ? "none"
-                                : `translate3d(${transformX}px,${transformY}px,0)`,
+                                : `translate3d(${transformX}px,${transformY}px,0) scale(${
+                                      scale / 100 + 1
+                                  })`,
                         ...processedMinSize,
                     }}
                 ></div>
