@@ -456,52 +456,25 @@ const Cut = ({ currentWidth }: CutProps) => {
         }
     }, [imageRatio, processedCurrentWidth, ratioMode]);
 
-    const toggleInputState = useCallback(
-        (prevType: HandlingType, type: HandlingType) => {
-            switch (type) {
-                case "ratio":
-                    if (prevType === "first" || prevType === null) {
-                        setRatioState(true);
-                    } else if (prevType === "ratio") {
-                        setRatioState(false);
-                    } else if (prevType === "resize") {
-                        setRatioState(true);
-                        setResizeState(false);
-                    } else if (prevType === "gallery") {
-                        setRatioState(true);
-                        setGalleryState(false);
-                    }
-                    break;
-                case "resize":
-                    if (prevType === "first" || prevType === null) {
-                        setResizeState(true);
-                    } else if (prevType === "resize") {
-                        setResizeState(false);
-                    } else if (prevType === "ratio") {
-                        setResizeState(true);
-                        setRatioState(false);
-                    } else if (prevType === "gallery") {
-                        setResizeState(true);
-                        setGalleryState(false);
-                    }
-                    break;
-                case "gallery":
-                    if (prevType === "first" || prevType === null) {
-                        setGalleryState(true);
-                    } else if (prevType === "gallery") {
-                        setGalleryState(false);
-                    } else if (prevType === "ratio") {
-                        setGalleryState(true);
-                        setRatioState(false);
-                    } else if (prevType === "resize") {
-                        setGalleryState(true);
-                        setResizeState(false);
-                    }
-                    break;
-            }
-        },
-        [],
-    );
+    const toggleInputState = useCallback((type: HandlingType) => {
+        switch (type) {
+            case "ratio":
+                setRatioState((prev) => (prev === true ? false : true));
+                setResizeState((prev) => (prev !== null ? false : null));
+                setGalleryState((prev) => (prev !== null ? false : null));
+                break;
+            case "resize":
+                setResizeState((prev) => (prev === true ? false : true));
+                setRatioState((prev) => (prev !== null ? false : null));
+                setGalleryState((prev) => (prev !== null ? false : null));
+                break;
+            case "gallery":
+                setGalleryState((prev) => (prev === true ? false : true));
+                setRatioState((prev) => (prev !== null ? false : null));
+                setResizeState((prev) => (prev !== null ? false : null));
+                break;
+        }
+    }, []);
 
     const scaleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const {
@@ -530,11 +503,11 @@ const Cut = ({ currentWidth }: CutProps) => {
                         }`}
                         onClick={() => {
                             setHandlingMode((prev) => {
-                                toggleInputState(prev, menuObj.type);
                                 return prev === menuObj.type
                                     ? null
                                     : menuObj.type;
                             });
+                            toggleInputState(menuObj.type);
                         }}
                     >
                         <button>
