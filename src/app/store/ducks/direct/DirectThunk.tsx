@@ -78,14 +78,14 @@ export const lookUpChatRoom = createAsyncThunk<any, { roomId: number }, { state:
 // - `채팅방 생성`
 // - `상대방과 참여한 채팅방이 없는 상황에서, 상대방이 본인에게 메시지 송신`
 
-export const lookUpChatList = createAsyncThunk<{ content: Direct.ChatItem[], pageUp: boolean }, { page: number, pageUp: boolean },{state:RootState}>(
+export const lookUpChatList = createAsyncThunk<Direct.ChatItem[], number,{state:RootState}>(
     "chat/rooms/lookUpList",
     async (payload, ThunkOptions) => {
         try {
             const {
                 data: { data },
-            } = await authorizedCustomAxios.get(`/chat/rooms?page=${payload.page}`);
-            return { content: data.content, pageUp: payload.pageUp };
+            } = await authorizedCustomAxios.get(`/chat/rooms?page=${payload}`);
+            return data.content;
         } catch (error) {
             error === FAIL_TO_REISSUE_MESSAGE &&
             ThunkOptions.dispatch(authAction.logout());
@@ -95,10 +95,36 @@ export const lookUpChatList = createAsyncThunk<{ content: Direct.ChatItem[], pag
     },
 );
 
+
+
+// 채팅방 목록 재발급 페이징 조회 API
+// 1. `DM 페이지 입장(새로고침)`
+// 2. `DB의 JoinRoom 테이블에 본인이 추가되는 상황`
+// - `채팅방 생성`
+// - `상대방과 참여한 채팅방이 없는 상황에서, 상대방이 본인에게 메시지 송신`
+
+export const reissueChatList = createAsyncThunk<Direct.ChatItem[], number,{state:RootState}>(
+    "chat/rooms/reissueChatList",
+    async (payload, ThunkOptions) => {
+        try {
+            const {
+                data: { data },
+            } = await authorizedCustomAxios.get(`/chat/rooms?page=${payload-1}`);
+            return data.content;
+        } catch (error) {
+            error === FAIL_TO_REISSUE_MESSAGE &&
+            ThunkOptions.dispatch(authAction.logout());
+            throw ThunkOptions.rejectWithValue(error);
+        }
+
+    },
+);
+
+
 // /chat/rooms/{roomId}/messages
 // 채팅방 메시지 목록 페이징 조회
 // 페이지당 10개씩 조회할 수 있습니다.
-export const lookUpChatMessageList = createAsyncThunk<Direct.MessageDTO[], { page: number, roomId: number }, { state: RootState }>(
+export const lookUpChatMessageList = createAsyncThunk<{content : Direct.MessageDTO[],last:boolean}, { page: number, roomId: number }, { state: RootState }>(
     "chat/rooms/lookUpChatList",
     async (payload, { getState ,dispatch,rejectWithValue}) => {
         const subChatCount = getState().direct.subChatCount;
@@ -112,7 +138,7 @@ export const lookUpChatMessageList = createAsyncThunk<Direct.MessageDTO[], { pag
             const {
                 data: { data },
             } = await authorizedCustomAxios.get(`/chat/rooms/${payload.roomId}/messages`, config);
-            return data.content;
+            return { content: data.content , last:data.last };
         } catch (error) {
             error === FAIL_TO_REISSUE_MESSAGE &&
             dispatch(authAction.logout());

@@ -63,7 +63,7 @@ const ChatListItemContainer = styled.div<ChatListItemContainerType>`
     width: 8px;
     height: 8px;
     background-color: #0095f6;
-    border-radius: 50%;
+    border-radius: 50%; 
   }
 
 `;
@@ -96,16 +96,13 @@ const ChatListItem = ({
         const dispatchExtraChatList = async () => {
             try {
                 await dispatch(
-                    lookUpChatList({
-                        page: chatListPage,
-                        pageUp:true
-                    }),
+                    lookUpChatList(chatListPage),
                 );
             } catch (error) {
                 console.log(error);
             }
         };
-        isObserving && isVisible && dispatchExtraChatList(); // 이 때 비동기 작업 및 무한 스크롤
+        false && isObserving && isVisible && dispatchExtraChatList(); // 이 때 비동기 작업 및 무한 스크롤
     }, [isObserving, isVisible, dispatch]);
 
     return (

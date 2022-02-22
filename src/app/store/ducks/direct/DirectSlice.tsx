@@ -5,7 +5,7 @@ import {
     lookUpChatList,
     lookUpChatMessageList,
     lookUpChatRoom,
-    makeRoom, reissueTyping,
+    makeRoom, reissueChatList, reissueTyping,
     removeTyping,
 } from "./DirectThunk";
 
@@ -24,6 +24,7 @@ export interface InitialStateType {
     typingRoomList: { roomId: number, timer: number }[];
     renewScroll: boolean;
     subChatCount: number; // 채팅메시지 subscribe 를 통해서 읽은 개수입니다.
+    messageScrollable: boolean;
 }
 
 
@@ -41,6 +42,7 @@ const initialState: InitialStateType = {
     typingRoomList: [],
     renewScroll: false,
     subChatCount: 0,
+    messageScrollable: true,
 };
 
 const directSlice = createSlice({
@@ -73,18 +75,18 @@ const directSlice = createSlice({
             state.chatMessageListPage = 1;
         },
         addChatMessageItem: (state, action: PayloadAction<any>) => {
-            // state.renewScroll = true;
+            state.renewScroll = true;
             state.chatMessageList.push(action.payload.data);
         },
         addSubChatCount: (state) => {
             state.subChatCount = state.subChatCount + 1;
         },
-        resetSubChatCount : (state) => {
+        resetSubChatCount: (state) => {
             state.subChatCount = 0;
         },
-        resetSelectedRoom : (state) => {
-            state.selectedRoom = null
-        }
+        resetSelectedRoom: (state) => {
+            state.selectedRoom = null;
+        },
     },
     extraReducers: (build) => {
         build
@@ -124,28 +126,42 @@ const directSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(lookUpChatList.fulfilled, (state, action) => {
+
                 // 스크롤을 아래로 하여 더받아올 경우
-                if (action.payload.pageUp) {
-                    action.payload.content.forEach((chatListItem: any) => {
-                        state.chatList.push(chatListItem);
-                    });
-                    state.chatListPage = state.chatListPage + 1;
-                } else {
-                    // 웹소켓을 통해 알림이 와서 채팅방 목록의 unseenFlag 와 마지막 메세지를 갱신해줄 경우
-                    // 10개 넘어가면 바꿔쳐주는 로직 필요함 .
-                    state.chatList = action.payload.content;
-                }
+                action.payload.forEach((chatListItem: any) => {
+                    state.chatList.push(chatListItem);
+                });
+                state.chatListPage = state.chatListPage + 1;
                 state.isLoading = false;
 
             })
             .addCase(lookUpChatList.rejected, (state) => {
                 state.isLoading = false;
             })
+            .addCase(reissueChatList.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(reissueChatList.fulfilled, (state, action) => {
+
+                // 어떠한 액션이 일어나서 새로운(업데이트된) chatList 정보를 받아와야함
+                state.chatList = action.payload
+                state.isLoading = false;
+
+            })
+            .addCase(reissueChatList.rejected, (state) => {
+                state.isLoading = false;
+            })
             .addCase(lookUpChatMessageList.pending, (state) => {
                 state.isLoading = true;
             })
             .addCase(lookUpChatMessageList.fulfilled, (state, action) => {
-                state.isLoading = false
+                state.isLoading = false;
+
+                if (action.payload.last) {
+                    state.messageScrollable = false;
+                } else {
+                    state.messageScrollable = true;
+                }
 
                 // 첫번째 page 일땐 13시에보낸거 14시에버낸거 15시에보낸거 순서대로 오고 두번째부터는 리버스 할 필요가없다
                 // 13시 부터 뿌려줘야되죠
@@ -155,18 +171,18 @@ const directSlice = createSlice({
 
                 state.renewScroll = false;
                 if (state.chatMessageListPage === 1) {
-                    action.payload.reverse().forEach((chatMessageListItem: Direct.MessageDTO) => {
+                    action.payload.content.reverse().forEach((chatMessageListItem: Direct.MessageDTO) => {
                         state.chatMessageList.push(chatMessageListItem);
                     });
                 } else {
-                    action.payload.forEach((chatMessageListItem: Direct.MessageDTO) => {
+                    action.payload.content.forEach((chatMessageListItem: Direct.MessageDTO) => {
                         state.chatMessageList.unshift(chatMessageListItem);
                     });
                     // 추가로 받은 메세지 정보중에 기존의 정보가 있을 수 있다 페이지 단위로 메세지를 10개씩 받고있기 때문
                     // 중복 id 를 가진것은 제거해주자!
                     state.chatMessageList = state.chatMessageList.filter(
-                        (chatMessageListItem,index,callback) => index === callback.findIndex(t => t.messageId === chatMessageListItem.messageId)
-                    )
+                        (chatMessageListItem, index, callback) => index === callback.findIndex(t => t.messageId === chatMessageListItem.messageId),
+                    );
                 }
                 state.chatMessageListPage = state.chatMessageListPage + 1;
             })
@@ -229,7 +245,7 @@ export const {
     addSubChatCount,
     resetSubChatCount,
     resetChatMessagePage,
-    resetSelectedRoom
+    resetSelectedRoom,
 
 } = directSlice.actions;
 export const directReducer = directSlice.reducer;

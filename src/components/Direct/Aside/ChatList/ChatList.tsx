@@ -2,14 +2,14 @@ import ChatListItem from "./ChatListItem";
 import ChatListProps from "./ChatList.type";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { selectChatItem, selectView } from "app/store/ducks/direct/DirectSlice";
-import { lookUpChatList, lookUpChatRoom, makeRoom } from "app/store/ducks/direct/DirectThunk";
+import { lookUpChatList, lookUpChatRoom, makeRoom, reissueChatList } from "app/store/ducks/direct/DirectThunk";
 import { useCallback, useEffect } from "react";
 import styled from "styled-components";
 
 
 const ChatListContainer = styled.div`
 
-`
+`;
 
 const ChatList = ({}: ChatListProps) => {
     const dispatch = useAppDispatch();
@@ -20,7 +20,6 @@ const ChatList = ({}: ChatListProps) => {
     const chatList = useAppSelector(state => state.direct.chatList);
     const chatListPage = useAppSelector(state => state.direct.chatListPage);
     const typingRoomList = useAppSelector(state => state.direct.typingRoomList);
-
 
 
     const chatListClickHandler = useCallback(async (roomId: number, username: string) => {
@@ -40,7 +39,7 @@ const ChatList = ({}: ChatListProps) => {
             await dispatch(lookUpChatRoom({ roomId }));
 
             // 방을 선택한거 반영하려면 채팅리스트 다시 불러와야함
-            await dispatch(lookUpChatList({page:chatListPage,pageUp:false}))
+            await dispatch(reissueChatList(chatListPage));
         }
     }, []);
 
@@ -51,15 +50,12 @@ const ChatList = ({}: ChatListProps) => {
     // - `채팅방 생성`
     // - `상대방과 참여한 채팅방이 없는 상황에서, 상대방이 본인에게 메시지 송신`
     useEffect(() => {
-        dispatch(lookUpChatList({ page: chatListPage,pageUp:true }));
+        const getChatList = async () => {
+            await dispatch(lookUpChatList(chatListPage))
+        };
+        getChatList();
     }, []);
 
-
-    // 시간 처리해줘서 시간 껴넣어줘야함 시간 처리해주는 useEffect
-
-    useEffect(()=>{
-
-    },[])
 
     return (
         <ChatListContainer>
@@ -70,7 +66,7 @@ const ChatList = ({}: ChatListProps) => {
                               })[0]}
                               isSelected={selectedRoom?.chatRoomId === chatListItem.roomId}
                               key={index} {...chatListItem}
-                              isObserving={chatList.length-1 === index}
+                              isObserving={chatList.length - 1 === index}
                               isTyping={typingRoomList.filter(typingRoom => (
                                   typingRoom.roomId === chatListItem.roomId
                               )).length > 0}

@@ -9,9 +9,6 @@ import CommonDirectModal from "./Modals/CommonDirectModal";
 
 
 interface SectionBodyProps {
-    message: string;
-    setMessage: Dispatch<SetStateAction<string>>;
-    sendMessage: () => void
 }
 
 const SectionBodyContainer = styled.section`
@@ -21,7 +18,7 @@ const SectionBodyContainer = styled.section`
 `;
 
 
-const SectionBody = ({ message, setMessage,sendMessage }: SectionBodyProps) => {
+const SectionBody = ({}: SectionBodyProps) => {
     const { view, modal } = useAppSelector((state => state.direct));
     const viewRender = () => {
         switch (view) {
@@ -30,7 +27,7 @@ const SectionBody = ({ message, setMessage,sendMessage }: SectionBodyProps) => {
             case "chat":
                 return <>
                     <ChatSection />
-                    <ChatBar sendMessage={sendMessage} message={message} setMessage={setMessage} />
+                    <ChatBar />
                 </>;
             case "requestsChat":
                 return <>

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { closeModal, selectView } from "app/store/ducks/direct/DirectSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import axios from "axios";
-import { deleteRoom, lookUpChatList } from "../../../../app/store/ducks/direct/DirectThunk";
+import { deleteRoom, lookUpChatList, reissueChatList } from "../../../../app/store/ducks/direct/DirectThunk";
 
 
 
@@ -46,7 +46,7 @@ const ModalButtonContent = ({ actionName }: ModalButtonContentProps) => {
                     }),
                 );
 
-                await dispatch(lookUpChatList({ page: chatListPage, pageUp: false }));
+                await dispatch(reissueChatList(chatListPage));
             } catch (error) {
                 console.log(error);
             }
