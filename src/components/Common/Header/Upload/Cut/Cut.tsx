@@ -80,13 +80,13 @@ const getRatioCalculatedBoxHeight = (
 };
 interface StyledCutProps {
     url: string;
-    currentWidth: number;
+    processedCurrentWidth: number;
     ratioType: RatioType;
 }
 
 const StyledCut = styled.div<StyledCutProps>`
-    width: ${(props) => props.currentWidth}px;
-    height: ${(props) => props.currentWidth}px;
+    width: ${(props) => props.processedCurrentWidth}px;
+    height: ${(props) => props.processedCurrentWidth}px;
     position: relative;
     border-radius: 0 0 12px 12px;
     display: flex;
@@ -270,9 +270,15 @@ const StyledCut = styled.div<StyledCutProps>`
     }
     & > .upload__ratioBox {
         width: ${(props) =>
-            getRatioCalculatedBoxWidth(props.ratioType, props.currentWidth)}px;
+            getRatioCalculatedBoxWidth(
+                props.ratioType,
+                props.processedCurrentWidth,
+            )}px;
         height: ${(props) =>
-            getRatioCalculatedBoxHeight(props.ratioType, props.currentWidth)}px;
+            getRatioCalculatedBoxHeight(
+                props.ratioType,
+                props.processedCurrentWidth,
+            )}px;
         transition: width 0.3s, height 0.3s;
         overflow: hidden; // 고려
         cursor: grab;
@@ -304,12 +310,13 @@ const Cut = ({ currentWidth }: CutProps) => {
     const [resizeState, setResizeState] = useState<boolean | null>(null);
     const [galleryState, setGalleryState] = useState<boolean | null>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [grabbedPosition, setGrabbedPosition] = useState({ x: 0, y: 0 });
-    const [transformX, setTransformX] = useState(0);
-    const [transformY, setTransformY] = useState(0);
-    const [scale, setScale] = useState(0);
-    const imageRef = useRef<HTMLDivElement | null>(null);
+    const [grabbedPosition, setGrabbedPosition] = useState({ x: 0, y: 0 }); // 각 인덱스
+    const [transformX, setTransformX] = useState(0); // 각 인덱스
+    const [transformY, setTransformY] = useState(0); // 각 인덱스
+    const [scale, setScale] = useState(0); // 각 인덱스
+    const imageRef = useRef<HTMLDivElement | null>(null); // 각 인덱스
 
+    // 각 인덱스
     const imageRatio = useMemo(
         () => files[currentIndex].width / files[currentIndex].height,
         [currentIndex, files],
@@ -330,12 +337,6 @@ const Cut = ({ currentWidth }: CutProps) => {
                 getRatioCalculatedBoxHeight(ratioMode, processedCurrentWidth)) /
             2;
         // 객체 형태로 하면 최신 "값"을 가져오지 못함
-        console.log(
-            imageRef.current.offsetWidth,
-            // imageRef.current.offsetWidth * (scale / 100 + 1),
-            getRatioCalculatedBoxWidth(ratioMode, processedCurrentWidth) *
-                (scale / 100 + 1),
-        );
         setTransformX((prev) => {
             if (widthGap === 0) {
                 return 0;
@@ -486,7 +487,7 @@ const Cut = ({ currentWidth }: CutProps) => {
     return (
         <StyledCut
             url={files[currentIndex].url}
-            currentWidth={processedCurrentWidth}
+            processedCurrentWidth={processedCurrentWidth}
             ratioType={ratioMode}
         >
             <div className="upload__handleMenu">
