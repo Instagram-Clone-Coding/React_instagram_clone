@@ -585,9 +585,6 @@ const Cut = ({ currentWidth }: CutProps) => {
                     }`}
                 >
                     <div className="upload__progressClickable">
-                        {/* <div className="upload__progress">
-                            <div className="upload__progressCircle"></div>
-                        </div> */}
                         <input
                             className="upload__progress"
                             max="100"
@@ -595,6 +592,7 @@ const Cut = ({ currentWidth }: CutProps) => {
                             type="range"
                             value={scale}
                             onChange={scaleChangeHandler}
+                            onMouseUp={fixOverTranformedImage}
                             style={{
                                 background:
                                     scale >= 50
