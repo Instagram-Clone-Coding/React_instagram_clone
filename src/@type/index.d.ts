@@ -217,18 +217,37 @@ declare module ModalType {
 }
 
 declare module UploadType {
-    interface FileProps {
+    interface GrabbedPositionProps {
+        x: number;
+        y: number;
+    }
+    interface TranslateProps {
+        translateX: number;
+        translateY: number;
+    }
+    interface FileDragAndDropProps {
         width: number;
         height: number;
         url: string;
     }
+    interface FileCutProps extends TranslateProps {
+        grabbedPosition: GrabbedPositionProps;
+        scale: number;
+    }
+
+    interface FileProps extends FileDragAndDropProps, FileCutProps {}
+    // type FileProps = FileDragAndDropProps & FileCutProps;
+
+    type RatioType = "original" | "square" | "thin" | "fat";
     type StepType = "dragAndDrop" | "cut" | "filter" | "content";
 
     interface UploadStateProps {
         isUploading: boolean;
         isGrabbing: boolean;
         step: StepType;
+        ratioMode: RatioType;
         files: FileProps[];
+        currentIndex: number;
     }
 }
 

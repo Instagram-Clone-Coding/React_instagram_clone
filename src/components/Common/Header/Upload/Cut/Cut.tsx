@@ -2,9 +2,7 @@ import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import React, {
     ChangeEvent,
     Fragment,
-    MouseEvent,
     useCallback,
-    useEffect,
     useMemo,
     useRef,
     useState,
@@ -18,8 +16,8 @@ import { ReactComponent as SquareCut } from "assets/Svgs/squareCut.svg";
 import { ReactComponent as ThinRectangle } from "assets/Svgs/thinRectangle.svg";
 import { ReactComponent as FatRectangle } from "assets/Svgs/fatRectangle.svg";
 import { uploadActions } from "app/store/ducks/upload/uploadSlice";
+import CutImgUnit from "components/Common/Header/Upload/Cut/CutImgUnit";
 
-type RatioType = "original" | "square" | "thin" | "fat";
 type HandlingType = "ratio" | "resize" | "gallery" | null | "first";
 
 const MIN_WIDTH = 348;
@@ -45,7 +43,7 @@ const RATIO_MENUS: {
             title?: string | undefined;
         }
     >;
-    type: RatioType;
+    type: UploadType.RatioType;
 }[] = [
     { text: "원본", svgComponent: PhotoOutline, type: "original" },
     { text: "1:1", svgComponent: SquareCut, type: "square" },
@@ -54,7 +52,7 @@ const RATIO_MENUS: {
 ];
 
 const getRatioCalculatedBoxWidth = (
-    ratioType: RatioType,
+    ratioType: UploadType.RatioType,
     currentWidth: number,
 ) => {
     switch (ratioType) {
@@ -66,7 +64,7 @@ const getRatioCalculatedBoxWidth = (
 };
 
 const getRatioCalculatedBoxHeight = (
-    ratioType: RatioType,
+    ratioType: UploadType.RatioType,
     currentWidth: number,
 ) => {
     switch (ratioType) {
@@ -81,7 +79,7 @@ const getRatioCalculatedBoxHeight = (
 interface StyledCutProps {
     url: string;
     processedCurrentWidth: number;
-    ratioType: RatioType;
+    ratioType: UploadType.RatioType;
 }
 
 const StyledCut = styled.div<StyledCutProps>`
@@ -268,31 +266,6 @@ const StyledCut = styled.div<StyledCutProps>`
             }
         }
     }
-    & > .upload__ratioBox {
-        width: ${(props) =>
-            getRatioCalculatedBoxWidth(
-                props.ratioType,
-                props.processedCurrentWidth,
-            )}px;
-        height: ${(props) =>
-            getRatioCalculatedBoxHeight(
-                props.ratioType,
-                props.processedCurrentWidth,
-            )}px;
-        transition: width 0.3s, height 0.3s;
-        overflow: hidden; // 고려
-        cursor: grab;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        & > .upload__image {
-            background-image: url(${(props) => props.url});
-            background-position: center center;
-            background-repeat: no-repeat;
-            background-size: cover;
-            overflow: hidden;
-        }
-    }
 `;
 
 interface CutProps {
@@ -302,160 +275,44 @@ interface CutProps {
 const Cut = ({ currentWidth }: CutProps) => {
     const theme = useTheme();
     const files = useAppSelector((state) => state.upload.files);
-    const isGrabbing = useAppSelector((state) => state.upload.isGrabbing);
+    const ratioMode = useAppSelector(({ upload }) => upload.ratioMode);
+    const currentIndex = useAppSelector(({ upload }) => upload.currentIndex);
     const dispatch = useAppDispatch();
     const [handlingMode, setHandlingMode] = useState<HandlingType>("first");
-    const [ratioMode, setRatioMode] = useState<RatioType>("square");
     const [ratioState, setRatioState] = useState<boolean | null>(null);
     const [resizeState, setResizeState] = useState<boolean | null>(null);
     const [galleryState, setGalleryState] = useState<boolean | null>(null);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [grabbedPosition, setGrabbedPosition] = useState({ x: 0, y: 0 }); // 각 인덱스
-    const [transformX, setTransformX] = useState(0); // 각 인덱스
-    const [transformY, setTransformY] = useState(0); // 각 인덱스
-    const [scale, setScale] = useState(0); // 각 인덱스
-    const imageRef = useRef<HTMLDivElement | null>(null); // 각 인덱스
+    const imageRef = useRef<HTMLDivElement | null>(null);
 
-    // 각 인덱스
-    const imageRatio = useMemo(
-        () => files[currentIndex].width / files[currentIndex].height,
-        [currentIndex, files],
-    );
+    // window 너비에 따라 변경되는 값
     const processedCurrentWidth = useMemo(
         () => (currentWidth <= MIN_WIDTH ? MIN_WIDTH : currentWidth),
         [currentWidth],
     );
 
-    const fixOverTranformedImage = useCallback(() => {
-        if (!imageRef.current) return;
-        const widthGap =
-            (imageRef.current.offsetWidth * (scale / 100 + 1) -
-                getRatioCalculatedBoxWidth(ratioMode, processedCurrentWidth)) /
-            2;
-        const heightGap =
-            (imageRef.current.offsetHeight * (scale / 100 + 1) -
-                getRatioCalculatedBoxHeight(ratioMode, processedCurrentWidth)) /
-            2;
-        // 객체 형태로 하면 최신 "값"을 가져오지 못함
-        setTransformX((prev) => {
-            if (widthGap === 0) {
-                return 0;
-            } else {
-                if (prev > widthGap) {
-                    return widthGap;
-                } else if (prev < -widthGap) {
-                    return -widthGap;
-                } else {
-                    return prev;
-                }
-            }
-        });
-        setTransformY((prev) => {
-            if (heightGap === 0) {
-                return 0;
-            } else {
-                if (prev > heightGap) {
-                    return heightGap;
-                } else if (prev < -heightGap) {
-                    return -heightGap;
-                } else {
-                    return prev;
-                }
-            }
-        });
-    }, [processedCurrentWidth, ratioMode, scale]);
-
-    const mouseDownhandler = useCallback(
-        (event: MouseEvent) => {
-            event.preventDefault();
-            event.stopPropagation();
-            if (isGrabbing) return;
-            const { screenX, screenY } = event;
-            setHandlingMode(null);
-            dispatch(uploadActions.startGrabbing());
-            setGrabbedPosition({
-                x: screenX,
-                y: screenY,
-            });
+    const fixOverTranformedImage = useCallback(
+        (scale: number) => {
+            if (!imageRef.current) return;
+            const widthGap =
+                (imageRef.current.offsetWidth * (scale / 100 + 1) -
+                    getRatioCalculatedBoxWidth(
+                        ratioMode,
+                        processedCurrentWidth,
+                    )) /
+                2;
+            const heightGap =
+                (imageRef.current.offsetHeight * (scale / 100 + 1) -
+                    getRatioCalculatedBoxHeight(
+                        ratioMode,
+                        processedCurrentWidth,
+                    )) /
+                2;
+            dispatch(
+                uploadActions.fixOverTranslatedImg({ widthGap, heightGap }),
+            );
         },
-        [isGrabbing, dispatch],
+        [processedCurrentWidth, ratioMode, dispatch],
     );
-
-    const mouseUpHandler = useCallback(
-        (event: MouseEvent) => {
-            event.preventDefault();
-            event.stopPropagation();
-            if (!isGrabbing) return;
-            dispatch(uploadActions.stopGrabbing());
-            fixOverTranformedImage();
-            setGrabbedPosition({ x: 0, y: 0 });
-        },
-        [isGrabbing, dispatch, fixOverTranformedImage],
-    );
-
-    const mouseMoveHandler = useCallback(
-        (event: MouseEvent) => {
-            event.preventDefault();
-            event.stopPropagation();
-            if (!isGrabbing) return;
-            const { screenX, screenY } = event;
-            const gapX = screenX - grabbedPosition.x;
-            const gapY = screenY - grabbedPosition.y;
-            setTransformX(gapX + transformX);
-            setTransformY(gapY + transformY);
-        },
-        [isGrabbing, grabbedPosition], // 여기서 transform을 deps로 넣으면 엄청 중첩되서 빠르게 움직여버림
-    );
-
-    const mouseLeaveHandler = useCallback(
-        (event: MouseEvent) => {
-            event.preventDefault();
-            event.stopPropagation();
-            if (!isGrabbing) return;
-            fixOverTranformedImage();
-            // grab 취소는 상위 컴포넌트인 Uplaod에서!
-        },
-        [fixOverTranformedImage, isGrabbing],
-    );
-
-    const processedMinSize: {
-        minWidth: number;
-        minHeight: number;
-    } = useMemo(() => {
-        if (ratioMode !== "square") {
-            switch (ratioMode) {
-                // case "square":
-                case "thin":
-                    return {
-                        minWidth: processedCurrentWidth * imageRatio,
-                        minHeight: processedCurrentWidth,
-                    };
-                case "original":
-                    return {
-                        minWidth: (processedCurrentWidth / 1.93) * imageRatio,
-                        minHeight: processedCurrentWidth / 1.93,
-                    };
-                case "fat":
-                    return {
-                        minWidth:
-                            ((processedCurrentWidth * 9) / 16) * imageRatio,
-                        minHeight: (processedCurrentWidth * 9) / 16,
-                    };
-            }
-        } else {
-            if (imageRatio > 1) {
-                return {
-                    minWidth: processedCurrentWidth * imageRatio,
-                    minHeight: processedCurrentWidth,
-                };
-            } else {
-                return {
-                    minWidth: processedCurrentWidth,
-                    minHeight: processedCurrentWidth / imageRatio,
-                };
-            }
-        }
-    }, [imageRatio, processedCurrentWidth, ratioMode]);
 
     const toggleInputState = useCallback((type: HandlingType) => {
         switch (type) {
@@ -477,12 +334,16 @@ const Cut = ({ currentWidth }: CutProps) => {
         }
     }, []);
 
-    const scaleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        const {
-            target: { value },
-        } = event;
-        setScale(Number(value));
-    };
+    const scaleChangeHandler = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) => {
+            const {
+                target: { value },
+            } = event;
+            // setScale(Number(value));
+            dispatch(uploadActions.changeScale(Number(value)));
+        },
+        [dispatch],
+    );
 
     return (
         <StyledCut
@@ -551,10 +412,10 @@ const Cut = ({ currentWidth }: CutProps) => {
                                     ratioMode === ratioMenu.type ? "active" : ""
                                 }
                                 onClick={() =>
-                                    setRatioMode((prev) =>
-                                        prev !== ratioMenu.type
-                                            ? ratioMenu.type
-                                            : prev,
+                                    dispatch(
+                                        uploadActions.changeRatioMode(
+                                            ratioMenu.type,
+                                        ),
                                     )
                                 }
                             >
@@ -591,18 +452,26 @@ const Cut = ({ currentWidth }: CutProps) => {
                             max="100"
                             min="0"
                             type="range"
-                            value={scale}
+                            value={files[currentIndex].scale}
                             onChange={scaleChangeHandler}
-                            onMouseUp={fixOverTranformedImage}
+                            onMouseUp={() =>
+                                fixOverTranformedImage(
+                                    files[currentIndex].scale,
+                                )
+                            }
                             style={{
                                 background:
-                                    scale >= 50
-                                        ? `linear-gradient(to right, white ${scale}%, black ${
-                                              100 - scale
+                                    files[currentIndex].scale >= 50
+                                        ? `linear-gradient(to right, white ${
+                                              files[currentIndex].scale
+                                          }%, black ${
+                                              100 - files[currentIndex].scale
                                           }%)`
                                         : `linear-gradient(to left, black ${
-                                              100 - scale
-                                          }%, white ${scale}%)`,
+                                              100 - files[currentIndex].scale
+                                          }%, white ${
+                                              files[currentIndex].scale
+                                          }%)`,
                             }}
                         ></input>
                     </div>
@@ -615,25 +484,17 @@ const Cut = ({ currentWidth }: CutProps) => {
                     gallery
                 </div>
             </div>
-            <div className="upload__ratioBox">
-                <div
-                    className="upload__image"
-                    ref={imageRef}
-                    onMouseDown={mouseDownhandler}
-                    onMouseMove={mouseMoveHandler}
-                    onMouseUp={mouseUpHandler}
-                    onMouseLeave={mouseLeaveHandler}
-                    style={{
-                        transform:
-                            transformX === 0 && transformY === 0 && scale === 0
-                                ? "none"
-                                : `translate3d(${transformX}px,${transformY}px,0) scale(${
-                                      scale / 100 + 1
-                                  })`,
-                        ...processedMinSize,
-                    }}
-                ></div>
-            </div>
+            <CutImgUnit
+                currentFile={files[currentIndex]}
+                ratioMode={ratioMode}
+                processedCurrentWidth={processedCurrentWidth}
+                onGrabStart={() => {
+                    setHandlingMode(null);
+                    toggleInputState(handlingMode);
+                }}
+                onFixTransform={fixOverTranformedImage}
+                ref={imageRef}
+            />
         </StyledCut>
     );
 };

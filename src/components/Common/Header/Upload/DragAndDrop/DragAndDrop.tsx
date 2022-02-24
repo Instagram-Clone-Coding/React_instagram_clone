@@ -1,7 +1,7 @@
 import React, { ChangeEvent, DragEvent, useRef, useState } from "react";
 import { ReactComponent as ImgOrVideoIcon } from "assets/Svgs/imgOrVideo.svg";
 import Button from "styles/UI/Button";
-import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { useAppDispatch } from "app/store/Hooks";
 import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import styled from "styled-components";
 
