@@ -12,9 +12,9 @@ import { ReactComponent as Heart } from "assets/Svgs/heart.svg";
 import Picker, { IEmojiData } from "emoji-picker-react";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-import { useAppDispatch, useAppSelector } from "../../../app/store/Hooks";
-import { addChatMessageItem, addSubChatCount } from "../../../app/store/ducks/direct/DirectSlice";
-import { lookUpChatList, lookUpChatRoom, reissueChatList } from "../../../app/store/ducks/direct/DirectThunk";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { addChatMessageItem, addSubChatCount } from "app/store/ducks/direct/DirectSlice";
+import {  lookUpChatRoom, reissueChatList } from "app/store/ducks/direct/DirectThunk";
 
 interface ChatBarType {
 }
