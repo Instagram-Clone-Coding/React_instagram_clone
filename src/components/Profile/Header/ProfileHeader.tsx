@@ -113,7 +113,7 @@ const ProfileHeader = ({}:ProfileHeaderProps) => {
             <div className="profile-img">
                 <StoryCircle
                     type="read" // 백엔드 소통 후 읽었는지 여부 확인
-                    avatarUrl={"https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150"}
+                    avatarUrl={memberProfile?.memberImage.imageUrl}
                     username={"chanhyuk"}
                     scale={2.5}
                 />

@@ -169,7 +169,7 @@ const ArticleHeader = ({
                         onMouseEnter={mouseEnterHandler}
                         onMouseLeave={mouseLeaveHandler}
                     >
-                        <Link to={`/${memberNickname}`}>{memberNickname}</Link>
+                        <Link to={`/profile/${memberUsername}`}>{memberNickname}</Link>
                     </Username>
                     {!isFollowing && (
                         <div className="header-followBox">
