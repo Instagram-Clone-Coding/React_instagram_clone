@@ -279,6 +279,10 @@ const StyledCut = styled.div<StyledCutProps>`
         display: flex;
         justify-content: center;
         align-items: center;
+        transition: background-color 0.2s;
+        &:hover {
+            background-color: rgba(26, 26, 26, 0.5);
+        }
     }
     & > .upload__leftArrow {
         left: 8px;
