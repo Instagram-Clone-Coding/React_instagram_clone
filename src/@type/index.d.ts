@@ -225,3 +225,29 @@ declare module Common {
         url: string;
     }
 }
+
+declare module Profile{
+    interface MemberProfileProps {
+        memberUsername:string;
+        memberName:string;
+        memberWebsite:string | null,
+        memberImage : MemberImageProps;
+        memberIntroduce:string | null,
+        memberPostsCount:number;
+        memberFollowingsCount:number;
+        memberFollowersCount:number;
+        followingMemberFollow : null;
+        blocking:boolean;
+        following:boolean;
+        follower:boolean;
+        blocked:boolean;
+        me:boolean
+    }
+
+    interface MemberImageProps{
+        imageUrl:string;
+        imageType:string;
+        imageName:string;
+        imageUUID:string
+    }
+}

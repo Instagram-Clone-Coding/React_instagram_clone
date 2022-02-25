@@ -49,7 +49,7 @@ const AuthedContainer = () => {
     return (
         <>
             <Header />
-            <Route path="/profile" component={Profile} />
+            <Route path="/profile/:username" component={Profile} />
 
             <Route exact path="/" component={Home} />
             {/* Direct */}

@@ -1,10 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import StoryCircle from "components/Common/StoryCircle";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ReactComponent as SettingSvg } from "assets/Svgs/setting.svg";
 import { ReactComponent as ThreeDots } from "assets/Svgs/threeDots.svg";
 import Button from "styles/UI/Button/Button";
+import { useAppSelector } from "../../../app/store/Hooks";
+import Profile from "../../../pages/Profile";
 
 interface ProfileHeaderContainerProps {
     me: boolean;
@@ -102,12 +104,12 @@ const ProfileHeaderContainer = styled.header<ProfileHeaderContainerProps>`
 
 
 interface ProfileHeaderProps {
-    me: boolean;
 }
 
-const ProfileHeader = ({ me }: ProfileHeaderProps) => {
+const ProfileHeader = ({}:ProfileHeaderProps) => {
+    const memberProfile  = useAppSelector(state => state.profile.memberProfile as Profile.MemberProfileProps)
     return (
-        <ProfileHeaderContainer me={me}>
+        <ProfileHeaderContainer me={memberProfile?.me}>
             <div className="profile-img">
                 <StoryCircle
                     type="read" // 백엔드 소통 후 읽었는지 여부 확인
@@ -118,12 +120,12 @@ const ProfileHeader = ({ me }: ProfileHeaderProps) => {
             </div>
             <section className="profile-content">
                 <div className="name-with-icon">
-                    <h2 className="name">yokattadesune</h2>
+                    <h2 className="name">{memberProfile?.memberUsername}</h2>
                     {/*나와 타인에 따라서 아이콘을 다르게 랜더링 해줍니다*/}
                     {
-                        me ?
+                        memberProfile?.me ?
                             <>
-                                <Link className="edit" to={"/"}>프로필 편집</Link>
+                                <Link className="edit" to={"/accounts/edit"}>프로필 편집</Link>
                                 <SettingSvg />
                             </> :
                             <>
@@ -134,16 +136,16 @@ const ProfileHeader = ({ me }: ProfileHeaderProps) => {
                 </div>
                 <ul className="follower">
                     <li className="follower-with-number">
-                        게시물 <span>10</span>
+                        게시물 <span>{memberProfile?.memberPostsCount}</span>
                     </li>
                     <li className="follower-with-number">
-                        게시물 <span>610</span>
+                        팔로워 <span>{memberProfile?.memberFollowersCount}</span>
                     </li>
                     <li className="follower-with-number">
-                        게시물 <span>610</span>
+                        게시물 <span>{memberProfile?.memberFollowingsCount}</span>
                     </li>
                 </ul>
-                <div className="detail-info">박찬혁</div>
+                <div className="detail-info">{memberProfile?.memberName}</div>
             </section>
         </ProfileHeaderContainer>
     );

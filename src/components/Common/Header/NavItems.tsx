@@ -51,7 +51,6 @@ const NavItems = () => {
 
     const dispatch = useAppDispatch();
     const userInfo = useAppSelector(state => state.auth.userInfo);
-
     const navItems = [
         {
             id: "홈",
@@ -99,7 +98,7 @@ const NavItems = () => {
                 ))}
 
                 <AvatarWrapper>
-                    <Link to={"/profile"}>
+                    <Link to={`/profile/${userInfo?.memberUsername}`}>
                         <img
                             alt="minsoo_web님의 프로필 사진"
                             data-testid="user-avatar"
