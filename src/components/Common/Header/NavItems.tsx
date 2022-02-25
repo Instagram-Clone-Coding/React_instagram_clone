@@ -14,7 +14,7 @@ import { ReactComponent as MapActive } from "assets/Svgs/map-active.svg";
 import { ReactComponent as Heart } from "assets/Svgs/heart.svg";
 import { ReactComponent as HeartActive } from "assets/Svgs/heart-active.svg";
 
-import { NavLink } from "react-router-dom";
+import { NavLink ,Link} from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { selectView } from "app/store/ducks/direct/DirectSlice";
 
@@ -39,7 +39,7 @@ const NavItemWrapper = styled.div`
 `;
 
 const AvatarWrapper = styled(NavItemWrapper)`
-  & > img {
+  img {
     border-radius: 50%;
     width: 25px;
     height: 25px;
@@ -99,12 +99,14 @@ const NavItems = () => {
                 ))}
 
                 <AvatarWrapper>
-                    <img
-                        alt="minsoo_web님의 프로필 사진"
-                        data-testid="user-avatar"
-                        draggable="false"
-                        src={userInfo?.memberImageUrl}
-                    />
+                    <Link to={"/profile"}>
+                        <img
+                            alt="minsoo_web님의 프로필 사진"
+                            data-testid="user-avatar"
+                            draggable="false"
+                            src={userInfo?.memberImageUrl}
+                        />
+                    </Link>
                 </AvatarWrapper>
             </NavLitemContainer>
         </Container>
