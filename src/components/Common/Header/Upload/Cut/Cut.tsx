@@ -15,6 +15,8 @@ import { ReactComponent as PhotoOutline } from "assets/Svgs/photoOutline.svg";
 import { ReactComponent as SquareCut } from "assets/Svgs/squareCut.svg";
 import { ReactComponent as ThinRectangle } from "assets/Svgs/thinRectangle.svg";
 import { ReactComponent as FatRectangle } from "assets/Svgs/fatRectangle.svg";
+import { ReactComponent as LeftArrow } from "assets/Svgs/leftArrow.svg";
+import { ReactComponent as RightArrow } from "assets/Svgs/rightArrow.svg";
 import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import CutImgUnit from "components/Common/Header/Upload/Cut/CutImgUnit";
 
@@ -266,6 +268,41 @@ const StyledCut = styled.div<StyledCutProps>`
             }
         }
     }
+    & > .upload__leftArrow,
+    & > .upload__rightArrow {
+        position: absolute;
+        z-index: 999;
+        background-color: rgba(26, 26, 26, 0.8);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    & > .upload__leftArrow {
+        left: 8px;
+    }
+    & > .upload__rightArrow {
+        right: 8px;
+    }
+    & > .upload__imgDots {
+        position: absolute;
+        bottom: 32px;
+        display: flex;
+        & > div {
+            background-color: ${(props) => props.theme.font.gray};
+            border-radius: 50%;
+            width: 6px;
+            height: 6px;
+            &.current {
+                background-color: ${(props) => props.theme.color.blue};
+            }
+        }
+        & > div:not(:last-child) {
+            margin-right: 4px;
+        }
+    }
 `;
 
 interface CutProps {
@@ -484,6 +521,54 @@ const Cut = ({ currentWidth }: CutProps) => {
                     gallery
                 </div>
             </div>
+            {files.length > 1 && (
+                <>
+                    {currentIndex > 0 && (
+                        <button
+                            className="upload__leftArrow"
+                            onClick={() => {
+                                setHandlingMode((prev) => {
+                                    return prev !== "first" ? null : "first";
+                                });
+                                toggleInputState(handlingMode);
+                                fixOverTranformedImage(
+                                    files[currentIndex].scale,
+                                );
+                                dispatch(uploadActions.prevIndex());
+                            }}
+                        >
+                            <LeftArrow />
+                        </button>
+                    )}
+                    {currentIndex < files.length - 1 && (
+                        <button
+                            className="upload__rightArrow"
+                            onClick={() => {
+                                setHandlingMode((prev) => {
+                                    return prev !== "first" ? null : "first";
+                                });
+                                toggleInputState(handlingMode);
+                                fixOverTranformedImage(
+                                    files[currentIndex].scale,
+                                );
+                                dispatch(uploadActions.nextIndex());
+                            }}
+                        >
+                            <RightArrow />
+                        </button>
+                    )}
+                    <div className="upload__imgDots">
+                        {files.map((file, index) => (
+                            <div
+                                key={file.url}
+                                className={`${
+                                    currentIndex === index ? "current" : ""
+                                }`}
+                            ></div>
+                        ))}
+                    </div>
+                </>
+            )}
             <CutImgUnit
                 currentFile={files[currentIndex]}
                 ratioMode={ratioMode}

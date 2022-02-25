@@ -125,6 +125,12 @@ const uploadSlice = createSlice({
         changeScale: (state, action: PayloadAction<number>) => {
             state.files[state.currentIndex].scale = action.payload;
         },
+        nextIndex: (state) => {
+            state.currentIndex++;
+        },
+        prevIndex: (state) => {
+            state.currentIndex--;
+        },
     },
 });
 
