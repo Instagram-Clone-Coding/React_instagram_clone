@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ReportModal from "components/Home/Modals/ReportModal";
 import { closeModal, openModal } from "app/store/ducks/direct/DirectSlice";
@@ -92,6 +92,14 @@ const DetailSectionContainer = styled.div`
 const DetailSection = () => {
     const dispatch = useAppDispatch();
     const { modal, selectedRoom } = useAppSelector((state => state.direct));
+    const [opponent,setOpponent] = useState<Direct.memberProps>()
+    const username = useAppSelector(state => state.auth.username);
+
+    useEffect(()=>{
+        setOpponent(selectedRoom?.members.filter(member => {
+            return member.username !== username;
+        })[0])
+    },[selectedRoom])
     return (
         <DetailSectionContainer>
             <div className="direct-notification-check">
@@ -100,10 +108,10 @@ const DetailSection = () => {
             <div className="member-container">
                 <h3>멤버</h3>
                 <div className="member-profile-container">
-                    <img src={selectedRoom?.members[0].imageUrl} alt="맴버 사진" />
+                    <img src={opponent?.imageUrl} alt="맴버 사진" />
                     <div className="member-id-name">
-                        <span className="username">{selectedRoom?.members[0].username}</span>
-                        <span className="name">{selectedRoom?.members[0].name}</span>
+                        <span className="username">{opponent?.username}</span>
+                        <span className="name">{opponent?.name}</span>
                     </div>
                 </div>
             </div>
