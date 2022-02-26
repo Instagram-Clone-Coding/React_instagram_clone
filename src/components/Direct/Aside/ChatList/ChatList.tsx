@@ -1,7 +1,7 @@
 import ChatListItem from "./ChatListItem";
 import ChatListProps from "./ChatList.type";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import { selectChatItem, selectView } from "app/store/ducks/direct/DirectSlice";
+import { resetChatList, selectChatItem, selectView } from "app/store/ducks/direct/DirectSlice";
 import { lookUpChatList, lookUpChatRoom, makeRoom, reissueChatList } from "app/store/ducks/direct/DirectThunk";
 import { useCallback, useEffect } from "react";
 import styled from "styled-components";
@@ -54,6 +54,9 @@ const ChatList = ({}: ChatListProps) => {
             await dispatch(lookUpChatList(chatListPage))
         };
         getChatList();
+        return () => {
+            dispatch(resetChatList());
+        }
     }, []);
 
 

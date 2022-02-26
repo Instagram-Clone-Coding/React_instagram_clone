@@ -96,7 +96,7 @@ const ChatBar = ({}: ChatBarType) => {
                 "roomId": selectedRoom?.chatRoomId,
             }),
         });
-    }, [message,client]);
+    }, [message, client]);
 
     useEffect(() => {
         const connect = () => {
@@ -114,7 +114,7 @@ const ChatBar = ({}: ChatBarType) => {
                         const newMessage = JSON.parse(body);
                         if (newMessage.action === "MESSAGE_ACK") {
                             // 내가 채팅 메시지를 타이핑하고 있을 때, 상대방에게 "입력 중" 표시를 표현하기 위함
-                            dispatch(addTyping(newMessage.data.roomId))
+                            dispatch(addTyping(newMessage.data.roomId));
                         } else {
                             // API를 호출해서가 아닌 웹소켓을통해서 받은 메세지의 개수! 페이징 호출할때 다시 계산해서 보내줘야함
                             dispatch(addSubChatCount());
@@ -148,6 +148,9 @@ const ChatBar = ({}: ChatBarType) => {
         // if (!stompClient.connected) {
         //     return;
         // }
+        if (message.trim() === "") {
+            return;
+        }
 
         client?.current?.publish({
             destination: "/pub/messages", body: JSON.stringify({

@@ -58,6 +58,7 @@ const ChatSection = () => {
             sectionRef.current.scrollTop = sectionRef.current.scrollHeight;
         }
     }, [chatMessageList]);
+
     // 방이 바뀐거처리 해주는 useEffect 입니다.
     useEffect(() => {
 
@@ -82,11 +83,7 @@ const ChatSection = () => {
 
     // chatsection 에서 상단의 비행기 모양을 누르면 inbox view 로 바뀝니다. 그때 왼쪽 채팅방 리스트가 클릭되어있으면 안되기때문에
     // seletedRoom 을 null 로 바꿔줘서 아무것도 클릭 안한 상태를 만들어줘야합니다다
-    useEffect(() => {
-        return () => {
-            dispatch(resetSelectedRoom());
-        };
-    }, [dispatch]);
+
 
 
     const handleScroll = useCallback(async (e) => {

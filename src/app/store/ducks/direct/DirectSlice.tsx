@@ -69,7 +69,7 @@ const directSlice = createSlice({
         },
         resetChatMessageList: (state) => {
             state.chatMessageList = [];
-            state.chatListPage = 1;
+            state.chatMessageListPage = 1;
         },
         resetChatMessagePage: (state) => {
             state.chatMessageListPage = 1;
@@ -87,6 +87,10 @@ const directSlice = createSlice({
         resetSelectedRoom: (state) => {
             state.selectedRoom = null;
         },
+        resetChatList : (state) => {
+            state.chatList = [];
+            state.chatListPage = 1;
+        }
     },
     extraReducers: (build) => {
         build
@@ -246,6 +250,7 @@ export const {
     resetSubChatCount,
     resetChatMessagePage,
     resetSelectedRoom,
+    resetChatList
 
 } = directSlice.actions;
 export const directReducer = directSlice.reducer;
