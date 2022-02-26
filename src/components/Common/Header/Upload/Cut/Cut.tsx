@@ -17,6 +17,7 @@ import { ReactComponent as ThinRectangle } from "assets/Svgs/thinRectangle.svg";
 import { ReactComponent as FatRectangle } from "assets/Svgs/fatRectangle.svg";
 import { ReactComponent as LeftArrow } from "assets/Svgs/leftArrow.svg";
 import { ReactComponent as RightArrow } from "assets/Svgs/rightArrow.svg";
+import { ReactComponent as Delete } from "assets/Svgs/delete.svg";
 import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import CutImgUnit from "components/Common/Header/Upload/Cut/CutImgUnit";
 
@@ -264,7 +265,39 @@ const StyledCut = styled.div<StyledCutProps>`
                 }
             }
             &.gallery {
+                height: 118px;
                 right: 8px;
+                padding: 8px;
+                & > .upload__galleryImgs {
+                    display: flex;
+                    align-items: center;
+                    height: 100%;
+                    & > .upload__galleryImgWrapper {
+                        width: 94px;
+                        height: 94px;
+                        margin: 0 6px;
+                        overflow: hidden;
+                        position: relative;
+                        & > .upload__galleryImg {
+                            width: 100%;
+                            height: 100%;
+                            cursor: pointer;
+                        }
+                        & > .uplaod__galleryDeleteBtn {
+                            position: absolute;
+                            top: 4px;
+                            right: 4px;
+                            width: 20px;
+                            height: 20px;
+                            background: rgba(26, 26, 26, 0.8);
+                            border-radius: 50%;
+                            padding: 4px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                    }
+                }
             }
         }
     }
@@ -522,7 +555,65 @@ const Cut = ({ currentWidth }: CutProps) => {
                         galleryState ? "on" : galleryState === null ? "" : "off"
                     }`}
                 >
-                    gallery
+                    <div className="upload__galleryImgs">
+                        {files.map((file, index) => (
+                            <div
+                                className="upload__galleryImgWrapper"
+                                key={file.url}
+                            >
+                                <div
+                                    className="upload__galleryImg"
+                                    onClick={() =>
+                                        dispatch(
+                                            uploadActions.changeIndex(index),
+                                        )
+                                    }
+                                    style={{
+                                        backgroundImage: `
+                                            linear-gradient(rgba(0, 0, 0, ${
+                                                currentIndex === index ? 0 : 0.5
+                                            }), rgba(0, 0, 0, ${
+                                            currentIndex === index ? 0 : 0.5
+                                        })),
+                                         url(${file.url})`,
+                                        backgroundPosition: "center center",
+                                        backgroundRepeat: "no-repeat",
+                                        backgroundSize: "cover",
+                                        overflow: "hidden",
+                                        transform:
+                                            file.translateX === 0 &&
+                                            file.translateY === 0 &&
+                                            file.scale === 0
+                                                ? "none"
+                                                : `translate3d(${
+                                                      (file.translateX /
+                                                          processedCurrentWidth) *
+                                                      100
+                                                  }%,${
+                                                      (file.translateY /
+                                                          processedCurrentWidth) *
+                                                      100
+                                                  }%,0) scale(${
+                                                      file.scale / 100 + 1
+                                                  })`,
+                                    }}
+                                ></div>
+                                {currentIndex === index && (
+                                    <button
+                                        className="uplaod__galleryDeleteBtn"
+                                        onClick={() =>
+                                            dispatch(
+                                                uploadActions.deleteFile(index),
+                                            )
+                                        }
+                                    >
+                                        <Delete />
+                                    </button>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                    <div></div>
                 </div>
             </div>
             {files.length > 1 && (
