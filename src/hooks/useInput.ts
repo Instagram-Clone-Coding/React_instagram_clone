@@ -36,7 +36,6 @@ const useInput = (
                     username: string,
                 ) => {
                     try {
-                        console.log(`db check`);
                         const config = {
                             params: {
                                 username,
@@ -44,11 +43,7 @@ const useInput = (
                         };
                         const {
                             data: { data },
-                        } = await customAxios.post(
-                            `/accounts/check`,
-                            null,
-                            config,
-                        );
+                        } = await customAxios.get(`/accounts/check`, config);
                         setIsValid(data);
                     } catch (error) {
                         setIsValid(null);
