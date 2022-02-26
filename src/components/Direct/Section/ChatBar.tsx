@@ -13,7 +13,7 @@ import * as StompJs from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { addChatMessageItem, addSubChatCount } from "app/store/ducks/direct/DirectSlice";
-import { lookUpChatRoom, reissueChatList } from "app/store/ducks/direct/DirectThunk";
+import { addTyping, lookUpChatRoom, reissueChatList } from "app/store/ducks/direct/DirectThunk";
 
 interface ChatBarType {
 }
@@ -85,27 +85,39 @@ const ChatBar = ({}: ChatBarType) => {
     const selectedRoom = useAppSelector(state => state.direct.selectedRoom);
     const chatListPage = useAppSelector(state => state.direct.chatListPage);
 
-
     const client = useRef<StompJs.Client>();
+
+
+    // 내가 채팅 메시지를 타이핑하고 있을 때, 상대방에게 "입력 중" 표시를 표현하기 위함
+    useEffect(() => {
+        client?.current?.publish({
+            destination: "/pub/messages/indicate", body: JSON.stringify({
+                "senderId": userInfo?.memberId,
+                "roomId": selectedRoom?.chatRoomId,
+            }),
+        });
+    }, [message,client]);
+
     useEffect(() => {
         const connect = () => {
             client.current = new StompJs.Client({
                 //  brokerURL: "ws://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/ws-connection", // 웹소켓 서버로 직접 접속
                 webSocketFactory: () => new SockJS("http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080/ws-connection"), // proxy를 통한 접속
                 debug: function(str) {
-                    console.log(str);
+                    // console.log(str);
                 },
                 reconnectDelay: 5000,
                 heartbeatIncoming: 4000,
                 heartbeatOutgoing: 4000,
                 onConnect: () => {
-                    client?.current?.subscribe(`/sub/dlwlrma`, async ({ body }) => {
+                    client?.current?.subscribe(`/sub/${username}`, async ({ body }) => {
                         const newMessage = JSON.parse(body);
                         if (newMessage.action === "MESSAGE_ACK") {
-                            // dispatch(addTyping(newMessage.data.roomId))
+                            // 내가 채팅 메시지를 타이핑하고 있을 때, 상대방에게 "입력 중" 표시를 표현하기 위함
+                            dispatch(addTyping(newMessage.data.roomId))
                         } else {
                             // API를 호출해서가 아닌 웹소켓을통해서 받은 메세지의 개수! 페이징 호출할때 다시 계산해서 보내줘야함
-                            dispatch(addSubChatCount())
+                            dispatch(addSubChatCount());
                             // 새롭게 온 메세지 보여주는 dispatch
                             dispatch(addChatMessageItem(newMessage));
                             // unseenCount 를 줄여주는 dispatch
@@ -147,23 +159,6 @@ const ChatBar = ({}: ChatBarType) => {
         });
         setMessage("");
     };
-
-
-    // // 웹소켓이 연결될 때 까지 실행하는 함수
-    // function waitForConnection(stompClient: Stomp.Client, callback: any) {
-    //     setTimeout(
-    //         function() {
-    //             // 연결되었을 때 콜백함수 실행
-    //             if (stompClient.ws.readyState === 1) {
-    //                 callback();
-    //                 // 연결이 안 되었으면 재호출
-    //             } else {
-    //                 waitForConnection(stompClient, callback);
-    //             }
-    //         },
-    //         1, // 밀리초 간격으로 실행
-    //     );
-    // }
 
 
     // message to be trimed
