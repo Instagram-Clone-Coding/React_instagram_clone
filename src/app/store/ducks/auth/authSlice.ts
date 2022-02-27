@@ -3,7 +3,6 @@ import { saveToken } from "customAxios";
 import { signIn } from "./authThunk";
 
 export interface AuthStateProps {
-    username: string;
     isLogin: boolean;
     isLoading: boolean;
     isAsyncReject: boolean;
@@ -13,7 +12,6 @@ export interface AuthStateProps {
 }
 
 const initialState: AuthStateProps = {
-    username: "",
     isLoading: false,
     isLogin: false,
     isAsyncReject: false,
@@ -48,10 +46,9 @@ const authSlice = createSlice({
             .addCase(signIn.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isLogin = true;
-                state.username = action.meta.arg.username;
                 saveToken(action.payload);
             })
-            .addCase(signIn.rejected, (state, action) => {
+            .addCase(signIn.rejected, (state) => {
                 state.isAsyncReject = true;
                 if (state.hasUsername) {
                     state.errorMessage = `잘못된 비밀번호입니다. 다시 확인하세요.`;
