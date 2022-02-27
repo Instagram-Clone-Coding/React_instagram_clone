@@ -1,4 +1,3 @@
-import { Footer } from "components/Login/Footer/Footer";
 import SignUpForm from "components/Signup/SignUpForm";
 import styled from "styled-components";
 import Appdownload from "components/Common/AppDownload";
@@ -35,11 +34,10 @@ export default function SignUp() {
                     <SignUpForm />
                 </ContentBox>
                 <ContentBox padding={Props.padding} margin={Props.margin}>
-                    <Suggest currentRouter="emailsignup" />
+                    <Suggest />
                 </ContentBox>
                 <Appdownload />
             </div>
-            <Footer />
         </Container>
     );
 }

@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import ContentBox from "components/Common/ContentBox";
-import Appdownload from "components/Common/AppDownload";
 import Suggest from "components/Common/Suggest";
 import FormLayout from "components/Login/LoginForm/FormLayout";
+import Appdownload from "components/Common/AppDownload";
 
 const FormContainer = styled.div`
     display: flex;
@@ -25,7 +25,7 @@ export default function LoginForm() {
                 <FormLayout />
             </ContentBox>
             <ContentBox padding={Props.padding} margin={Props.margin}>
-                <Suggest currentRouter="signin" />
+                <Suggest />
             </ContentBox>
             <Appdownload />
         </FormContainer>
