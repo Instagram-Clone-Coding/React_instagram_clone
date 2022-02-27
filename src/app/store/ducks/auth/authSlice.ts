@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { saveToken } from "customAxios";
 import { signIn } from "./authThunk";
 
@@ -9,6 +9,7 @@ export interface AuthStateProps {
     errorMessage: string | undefined;
     hasUsername: boolean | null;
     isRefreshTokenChecking: boolean;
+    currentFormState: "signUp" | "confirmEmail" | null;
 }
 
 const initialState: AuthStateProps = {
@@ -18,6 +19,7 @@ const initialState: AuthStateProps = {
     errorMessage: "",
     hasUsername: null,
     isRefreshTokenChecking: true,
+    currentFormState: null,
 };
 
 const authSlice = createSlice({
@@ -35,6 +37,12 @@ const authSlice = createSlice({
         },
         hasUser: (state, action: { payload: { data: boolean } }) => {
             state.hasUsername = !action.payload.data;
+        },
+        changeFormState: (
+            state,
+            action: PayloadAction<"signUp" | "confirmEmail" | null>,
+        ) => {
+            state.currentFormState = action.payload;
         },
     },
     extraReducers: (bulid) => {

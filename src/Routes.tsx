@@ -1,14 +1,14 @@
 import Home from "pages/Home";
-import SignUp from "pages/SignUp";
-import Login from "pages/Login";
 import Direct from "pages/Direct";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import Header from "components/Common/Header";
 
 import { useAppSelector } from "app/store/Hooks";
+import Landing from "pages/Landing";
+import AuthPage from "pages/Auth";
 
 const Routes = () => {
-    const { isLogin } = useAppSelector((state) => state.auth);
+    const isLogin = useAppSelector((state) => state.auth.isLogin);
 
     return (
         <BrowserRouter basename={process.env.PUBLIC_URL}>
@@ -27,12 +27,14 @@ const Routes = () => {
                 ) : (
                     <>
                         {/* <Route exact path="/" component={Home} /> */}
-                        <Route path="/accounts/signin" component={Login} />
-                        <Route
-                            path="/accounts/emailsignup"
-                            component={SignUp}
-                        />
-                        <Redirect to="/accounts/signin" />
+                        <Route exact path="/" component={Landing} />
+                        <Route path="/accounts/emailsignup">
+                            <AuthPage router="signUp" />
+                        </Route>
+                        <Route path="/accounts/login">
+                            <AuthPage router="signIn" />
+                        </Route>
+                        <Redirect to="/" />
                     </>
                 )}
             </Switch>
