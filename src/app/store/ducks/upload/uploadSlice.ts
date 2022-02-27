@@ -139,10 +139,13 @@ const uploadSlice = createSlice({
                 state.currentIndex = action.payload;
             }
         },
-        deleteFile: (state, action: PayloadAction<number>) => {
+        deleteFile: (state) => {
             state.files = state.files.filter(
-                (file, index) => index !== action.payload,
+                (file, index) => index !== state.currentIndex,
             );
+            if (state.currentIndex !== 0) {
+                state.currentIndex--;
+            }
         },
     },
 });

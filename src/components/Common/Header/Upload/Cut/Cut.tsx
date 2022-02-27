@@ -601,11 +601,13 @@ const Cut = ({ currentWidth }: CutProps) => {
                                 {currentIndex === index && (
                                     <button
                                         className="uplaod__galleryDeleteBtn"
-                                        onClick={() =>
+                                        onClick={() => {
+                                            setHandlingMode(null);
+                                            toggleInputState("gallery");
                                             dispatch(
-                                                uploadActions.deleteFile(index),
-                                            )
-                                        }
+                                                uploadActions.deleteFile(),
+                                            );
+                                        }}
                                     >
                                         <Delete />
                                     </button>
