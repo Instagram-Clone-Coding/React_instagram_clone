@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Appdownload from "components/Common/AppDownload";
 import ContentBox from "components/Common/ContentBox";
 import Suggest from "components/Common/Suggest";
+import { useAppSelector } from "app/store/Hooks";
+import EmailConfirmForm from "./EmailConfirmForm";
 
 const Container = styled.div`
     display: flex;
@@ -27,11 +29,17 @@ const Props: Login.NewCardProps = {
 };
 
 export default function SignUp() {
+    const currentForm = useAppSelector((state) => state.auth.currentFormState);
+
     return (
         <Container>
             <div className="formContainer">
                 <ContentBox padding={Props.padding} margin={Props.margin}>
-                    <SignUpForm />
+                    {currentForm === "confirmEmail" ? (
+                        <EmailConfirmForm />
+                    ) : (
+                        <SignUpForm />
+                    )}
                 </ContentBox>
                 <ContentBox padding={Props.padding} margin={Props.margin}>
                     <Suggest />

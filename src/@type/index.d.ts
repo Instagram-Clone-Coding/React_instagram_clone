@@ -36,7 +36,7 @@ declare module Login {
     }
 
     interface InputProps {
-        inputName: "email" | "name" | "username" | "password" | "id";
+        inputName: "email" | "name" | "username" | "password" | "id" | "code";
         innerText: string;
         type: "text" | "password";
         inputProps: useInputProps;

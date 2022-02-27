@@ -10,6 +10,14 @@ export interface AuthStateProps {
     hasUsername: boolean | null;
     isRefreshTokenChecking: boolean;
     currentFormState: "signUp" | "confirmEmail" | null;
+    signUpUserData: signUpUserData | null;
+}
+
+interface signUpUserData {
+    email: string;
+    name: string;
+    password: string;
+    username: string;
 }
 
 const initialState: AuthStateProps = {
@@ -20,6 +28,7 @@ const initialState: AuthStateProps = {
     hasUsername: null,
     isRefreshTokenChecking: true,
     currentFormState: null,
+    signUpUserData: null,
 };
 
 const authSlice = createSlice({
@@ -43,6 +52,12 @@ const authSlice = createSlice({
             action: PayloadAction<"signUp" | "confirmEmail" | null>,
         ) => {
             state.currentFormState = action.payload;
+        },
+        saveUserInputTemporary: (
+            state,
+            action: PayloadAction<signUpUserData | null>,
+        ) => {
+            state.signUpUserData = action.payload;
         },
     },
     extraReducers: (bulid) => {

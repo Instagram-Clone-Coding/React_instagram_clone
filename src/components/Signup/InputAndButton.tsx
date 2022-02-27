@@ -1,3 +1,5 @@
+import { authAction } from "app/store/ducks/auth/authSlice";
+import { useAppDispatch } from "app/store/Hooks";
 import Input from "components/Common/Input";
 import SubmitButton from "components/Common/SubmitButton";
 import {
@@ -28,6 +30,8 @@ export default function InputAndButton() {
         passwordValidator,
     );
 
+    const dispatch = useAppDispatch();
+
     const signUpButtonClickHandler = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         const callEmailConfirmAPI = async ({
@@ -38,10 +42,23 @@ export default function InputAndButton() {
             username: string;
         }) => {
             try {
-                await customAxios.post(`/accounts/email`, {
+                const {
+                    data: { status },
+                } = await customAxios.post(`/accounts/email`, {
                     email,
                     username,
                 });
+                if (status === 200) {
+                    dispatch(authAction.changeFormState("confirmEmail"));
+                    dispatch(
+                        authAction.saveUserInputTemporary({
+                            email: emailInputProps.value,
+                            name: nameInputProps.value,
+                            username: usernameInputProps.value,
+                            password: passwordInputProps.value,
+                        }),
+                    );
+                }
             } catch (error) {
                 console.log(error, `user email confirm api error`);
             }
