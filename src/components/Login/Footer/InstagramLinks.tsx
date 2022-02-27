@@ -63,12 +63,11 @@ const SearchResult = [
 
 function InstagramLinks() {
     const { pathname } = useLocation();
-    const isLoginPage = pathname.includes(`signin`);
 
     return (
         <Links>
             <FooterRow content={InstagramRelateLink} />
-            {isLoginPage && <FooterRow content={SearchResult} />}
+            {pathname === "/" && <FooterRow content={SearchResult} />}
         </Links>
     );
 }
