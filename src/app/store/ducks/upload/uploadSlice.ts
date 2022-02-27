@@ -146,6 +146,9 @@ const uploadSlice = createSlice({
             if (state.currentIndex !== 0) {
                 state.currentIndex--;
             }
+            if (state.files.length === 0) {
+                state.step = "dragAndDrop";
+            }
         },
     },
 });
