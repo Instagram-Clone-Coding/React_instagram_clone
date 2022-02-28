@@ -30,6 +30,7 @@ const uploadSlice = createSlice({
                 case "cut":
                     // 나중에 경고 모달 필요
                     state.files = [];
+                    state.currentIndex = 0;
                     state.step = "dragAndDrop";
                     break;
                 case "filter":
@@ -147,6 +148,7 @@ const uploadSlice = createSlice({
                 state.currentIndex--;
             }
             if (state.files.length === 0) {
+                state.currentIndex = 0;
                 state.step = "dragAndDrop";
             }
         },
