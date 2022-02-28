@@ -278,8 +278,10 @@ const StyledCut = styled.div<StyledCutProps>`
                         margin: 0 6px;
                         overflow: hidden;
                         position: relative;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
                         & > .upload__galleryImg {
-                            width: 100%;
                             height: 100%;
                             cursor: pointer;
                         }
@@ -569,6 +571,9 @@ const Cut = ({ currentWidth }: CutProps) => {
                                         )
                                     }
                                     style={{
+                                        minWidth: `${
+                                            (94 * file.width) / file.height
+                                        }px`,
                                         backgroundImage: `
                                             linear-gradient(rgba(0, 0, 0, ${
                                                 currentIndex === index ? 0 : 0.5
@@ -586,13 +591,19 @@ const Cut = ({ currentWidth }: CutProps) => {
                                             file.scale === 0
                                                 ? "none"
                                                 : `translate3d(${
-                                                      (file.translateX /
-                                                          processedCurrentWidth) *
-                                                      100
+                                                      imageRef.current
+                                                          ? (file.translateX /
+                                                                imageRef.current
+                                                                    .offsetWidth) *
+                                                            100
+                                                          : 0
                                                   }%,${
-                                                      (file.translateY /
-                                                          processedCurrentWidth) *
-                                                      100
+                                                      imageRef.current
+                                                          ? (file.translateY /
+                                                                imageRef.current
+                                                                    .offsetHeight) *
+                                                            100
+                                                          : 0
                                                   }%,0) scale(${
                                                       file.scale / 100 + 1
                                                   })`,
