@@ -32,22 +32,14 @@ const Container = styled.section`
 
 export default function Landing() {
     const formState = useAppSelector((state) => state.auth.currentFormState);
-    const formComponent = () => {
-        switch (formState) {
-            case "signUp":
-                return <SignUp />;
-            case "confirmEmail":
-                return <div>confirmEmail</div>;
-            default:
-                return <LoginForm />;
-        }
-    };
 
     return (
         <Container>
             <main className="container">
                 <ShowingInstagram />
-                <div className="form">{formComponent()}</div>
+                <div className="form">
+                    {formState === "signIn" ? <LoginForm /> : <SignUp />}
+                </div>
             </main>
             <Footer />
         </Container>

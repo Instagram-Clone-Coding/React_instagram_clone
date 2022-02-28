@@ -3,6 +3,9 @@ import ContentBox from "components/Common/ContentBox";
 import Suggest from "components/Common/Suggest";
 import FormLayout from "components/Login/LoginForm/FormLayout";
 import Appdownload from "components/Common/AppDownload";
+import { useAppDispatch } from "app/store/Hooks";
+import { useEffect } from "react";
+import { authAction } from "app/store/ducks/auth/authSlice";
 
 const FormContainer = styled.div`
     display: flex;
@@ -19,6 +22,11 @@ const Props: Login.NewCardProps = {
 };
 
 export default function LoginForm() {
+    const dispatch = useAppDispatch();
+    useEffect(() => {
+        dispatch(authAction.changeFormState("signIn"));
+    }, []);
+
     return (
         <FormContainer>
             <ContentBox padding={Props.padding} margin={Props.margin}>
