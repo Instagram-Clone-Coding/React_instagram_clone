@@ -12,3 +12,7 @@ export interface Token {
         accessToken: string;
     };
 }
+
+export type FormState = "signUp" | "confirmEmail" | "signIn";
+
+//해당 thunk 안에서만 쓰면 여기에

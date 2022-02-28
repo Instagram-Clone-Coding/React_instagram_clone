@@ -106,7 +106,7 @@ export default function EmailConfirmForm() {
                 });
 
                 if (status === 200) {
-                    dispatch(authAction.saveUserInputTemporary(null));
+                    dispatch(authAction.resetUserInputData());
                     dispatch(
                         signIn({
                             username: userInput.username,
@@ -115,6 +115,7 @@ export default function EmailConfirmForm() {
                     );
                 }
             } catch (error) {
+                // 인증번호를 잘못적었을때**
                 console.log(error, `call signUp api`);
             }
         };

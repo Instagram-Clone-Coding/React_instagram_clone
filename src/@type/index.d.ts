@@ -27,6 +27,13 @@ declare module AuthType {
             accessToken: string;
         };
     }
+
+    interface signUpUserData {
+        email: string;
+        name: string;
+        password: string;
+        username: string;
+    }
 }
 
 declare module Login {

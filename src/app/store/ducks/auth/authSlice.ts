@@ -1,23 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { saveToken } from "customAxios";
 import { signIn } from "./authThunk";
+import { FormState } from "./authThunk.type";
 
 export interface AuthStateProps {
     isLogin: boolean;
     isLoading: boolean;
     isAsyncReject: boolean;
     errorMessage: string | undefined;
+    // optional ? or | null, undefined -> 옵셔널도 생각해보기
     hasUsername: boolean | null;
     isRefreshTokenChecking: boolean;
-    currentFormState: "signUp" | "confirmEmail" | null;
-    signUpUserData: signUpUserData | null;
-}
-
-interface signUpUserData {
-    email: string;
-    name: string;
-    password: string;
-    username: string;
+    currentFormState: FormState;
+    signUpUserData: AuthType.signUpUserData | null;
 }
 
 const initialState: AuthStateProps = {
@@ -27,7 +22,7 @@ const initialState: AuthStateProps = {
     errorMessage: "",
     hasUsername: null,
     isRefreshTokenChecking: true,
-    currentFormState: null,
+    currentFormState: "signIn",
     signUpUserData: null,
 };
 
@@ -37,6 +32,7 @@ const authSlice = createSlice({
     reducers: {
         login: (state) => {
             state.isLogin = true;
+            // userData 가져오는 거, 헤더에서 작업하는게 나으려나
         },
         logout: (state) => {
             state.isLogin = false;
@@ -44,20 +40,20 @@ const authSlice = createSlice({
         finishRefreshTokenChecking: (state) => {
             state.isRefreshTokenChecking = false;
         },
-        hasUser: (state, action: { payload: { data: boolean } }) => {
+        hasUser: (state, action: PayloadAction<{ data: boolean }>) => {
             state.hasUsername = !action.payload.data;
         },
-        changeFormState: (
-            state,
-            action: PayloadAction<"signUp" | "confirmEmail" | null>,
-        ) => {
+        changeFormState: (state, action: PayloadAction<FormState>) => {
             state.currentFormState = action.payload;
         },
         saveUserInputTemporary: (
             state,
-            action: PayloadAction<signUpUserData | null>,
+            action: PayloadAction<AuthType.signUpUserData>,
         ) => {
             state.signUpUserData = action.payload;
+        },
+        resetUserInputData: (state) => {
+            state.signUpUserData = null;
         },
     },
     extraReducers: (bulid) => {
