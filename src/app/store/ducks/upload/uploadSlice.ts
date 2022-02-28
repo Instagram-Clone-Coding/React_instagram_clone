@@ -29,10 +29,7 @@ const uploadSlice = createSlice({
                     return initialState;
                 case "cut":
                     // 나중에 경고 모달 필요
-                    state.files = [];
-                    state.currentIndex = 0;
-                    state.step = "dragAndDrop";
-                    break;
+                    return { ...initialState, isUploading: true };
                 case "filter":
                     state.step = "cut";
                     break;
