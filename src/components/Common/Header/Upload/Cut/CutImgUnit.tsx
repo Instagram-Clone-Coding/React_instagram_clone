@@ -168,22 +168,76 @@ const CutImgUnit = forwardRef<HTMLDivElement, CutImgUnitProps>(
                 switch (ratioMode) {
                     // case "square":
                     case "thin":
-                        return {
-                            minWidth: processedCurrentWidth * imageRatio,
-                            minHeight: processedCurrentWidth,
-                        };
+                        if (imageRatio > 1) {
+                            return {
+                                minWidth: processedCurrentWidth * imageRatio,
+                                minHeight: processedCurrentWidth,
+                            };
+                        } else {
+                            return {
+                                minWidth: getRatioCalculatedBoxWidth(
+                                    "thin",
+                                    processedCurrentWidth,
+                                ),
+                                minHeight:
+                                    getRatioCalculatedBoxWidth(
+                                        "thin",
+                                        processedCurrentWidth,
+                                    ) / imageRatio,
+                            };
+                        }
                     case "original":
-                        return {
-                            minWidth:
-                                (processedCurrentWidth / 1.93) * imageRatio,
-                            minHeight: processedCurrentWidth / 1.93,
-                        };
+                        if (imageRatio > 1) {
+                            return {
+                                minWidth:
+                                    getRatioCalculatedBoxHeight(
+                                        "original",
+                                        processedCurrentWidth,
+                                    ) * imageRatio,
+                                minHeight: getRatioCalculatedBoxHeight(
+                                    "original",
+                                    processedCurrentWidth,
+                                ),
+                            };
+                        } else {
+                            return {
+                                minWidth: getRatioCalculatedBoxWidth(
+                                    "original",
+                                    processedCurrentWidth,
+                                ),
+                                minHeight:
+                                    getRatioCalculatedBoxWidth(
+                                        "original",
+                                        processedCurrentWidth,
+                                    ) / imageRatio,
+                            };
+                        }
                     case "fat":
-                        return {
-                            minWidth:
-                                ((processedCurrentWidth * 9) / 16) * imageRatio,
-                            minHeight: (processedCurrentWidth * 9) / 16,
-                        };
+                        if (imageRatio > 1) {
+                            return {
+                                minWidth:
+                                    getRatioCalculatedBoxHeight(
+                                        "fat",
+                                        processedCurrentWidth,
+                                    ) * imageRatio,
+                                minHeight: getRatioCalculatedBoxHeight(
+                                    "fat",
+                                    processedCurrentWidth,
+                                ),
+                            };
+                        } else {
+                            return {
+                                minWidth: getRatioCalculatedBoxWidth(
+                                    "fat",
+                                    processedCurrentWidth,
+                                ),
+                                minHeight:
+                                    getRatioCalculatedBoxWidth(
+                                        "fat",
+                                        processedCurrentWidth,
+                                    ) / imageRatio,
+                            };
+                        }
                 }
             } else {
                 if (imageRatio > 1) {
