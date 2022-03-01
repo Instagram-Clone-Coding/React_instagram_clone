@@ -18,6 +18,7 @@ import { ReactComponent as FatRectangle } from "assets/Svgs/fatRectangle.svg";
 import { ReactComponent as LeftArrow } from "assets/Svgs/leftArrow.svg";
 import { ReactComponent as RightArrow } from "assets/Svgs/rightArrow.svg";
 import { ReactComponent as Delete } from "assets/Svgs/delete.svg";
+import { ReactComponent as PlusIcon } from "assets/Svgs/plus.svg";
 import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import CutImgUnit from "components/Common/Header/Upload/Cut/CutImgUnit";
 
@@ -268,12 +269,35 @@ const StyledCut = styled.div<StyledCutProps>`
                 height: 118px;
                 right: 8px;
                 padding: 8px;
+                max-width: ${(props) =>
+                    getRatioCalculatedBoxWidth(
+                        props.ratioType,
+                        props.processedCurrentWidth,
+                    ) - 32}px;
+                display: flex;
                 & > .upload__galleryImgs {
                     display: flex;
                     align-items: center;
                     height: 100%;
+                    max-width: ${(props) =>
+                        getRatioCalculatedBoxWidth(
+                            props.ratioType,
+                            props.processedCurrentWidth,
+                        ) -
+                        32 -
+                        58}px;
+                    margin-right: 6px;
+                    overflow-x: auto;
+                    overflow-y: hidden;
+                    -ms-overflow-style: none; /* IE and Edge */
+                    scrollbar-width: none; /* Firefox */
+                    &::-webkit-scrollbar {
+                        display: none; /* Chrome , Safari , Opera */
+                    }
+
                     & > .upload__galleryImgWrapper {
                         width: 94px;
+                        min-width: 94px;
                         height: 94px;
                         margin: 0 6px;
                         overflow: hidden;
@@ -298,6 +322,25 @@ const StyledCut = styled.div<StyledCutProps>`
                             justify-content: center;
                             align-items: center;
                         }
+                    }
+                }
+                & > .upload__addBtnLayout {
+                    margin: 0 4px 0 6px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    & > button {
+                        border-radius: 50%;
+                        border: 1px solid
+                            ${(props) => props.theme.color.bd_gray};
+                        width: 48px;
+                        height: 48px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                    & > form > input {
+                        display: none !important;
                     }
                 }
             }
@@ -359,6 +402,7 @@ const Cut = ({ currentWidth }: CutProps) => {
     const [resizeState, setResizeState] = useState<boolean | null>(null);
     const [galleryState, setGalleryState] = useState<boolean | null>(null);
     const imageRef = useRef<HTMLDivElement | null>(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
     // window 너비에 따라 변경되는 값
     const processedCurrentWidth = useMemo(
@@ -420,6 +464,31 @@ const Cut = ({ currentWidth }: CutProps) => {
         },
         [dispatch],
     );
+
+    const buttonClickHandler = () => {
+        if (inputRef.current) {
+            inputRef.current.click();
+        }
+    };
+
+    const fileInputChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        const addedFiles = event.target.files;
+        if (!addedFiles) return;
+        Array.from(addedFiles).forEach((file) => {
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+            img.onload = () => {
+                // window.URL.revokeObjectURL(img.src);
+                dispatch(
+                    uploadActions.addFile({
+                        url: img.src,
+                        width: img.width,
+                        height: img.height,
+                    }),
+                );
+            };
+        });
+    };
 
     return (
         <StyledCut
@@ -625,6 +694,24 @@ const Cut = ({ currentWidth }: CutProps) => {
                                 )}
                             </div>
                         ))}
+                    </div>
+                    <div className="upload__addBtnLayout">
+                        <button onClick={buttonClickHandler}>
+                            <PlusIcon />
+                        </button>
+                        <form
+                            encType="multipart/form-data"
+                            method="POST"
+                            role="presentation"
+                        >
+                            <input
+                                accept="image/jpeg,image/png,image/heic,image/heif"
+                                multiple={true}
+                                type="file"
+                                ref={inputRef}
+                                onChange={fileInputChangeHandler}
+                            />
+                        </form>
                     </div>
                     <div></div>
                 </div>

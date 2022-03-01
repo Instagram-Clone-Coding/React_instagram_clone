@@ -134,24 +134,6 @@ const DragAndDrop = () => {
                 );
                 dispatch(uploadActions.toCutStep());
             };
-            // const reader = new FileReader();
-            // reader.readAsDataURL(file);
-            // reader.onloadend = () => {
-            //     const img = new Image();
-            //     if (reader.result) {
-            //         img.src = reader.result.toString();
-            //         img.onload = () => {
-            //             dispatch(
-            //                 uploadActions.addFile({
-            //                     url: img.src,
-            //                     width: img.width,
-            //                     height: img.height,
-            //                 }),
-            //             );
-            //             dispatch(uploadActions.toCutStep());
-            //         };
-            //     }
-            // };
         });
     };
 
