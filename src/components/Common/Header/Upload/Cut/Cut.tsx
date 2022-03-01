@@ -21,6 +21,7 @@ import { ReactComponent as Delete } from "assets/Svgs/delete.svg";
 import { ReactComponent as PlusIcon } from "assets/Svgs/plus.svg";
 import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import CutImgUnit from "components/Common/Header/Upload/Cut/CutImgUnit";
+import sprite from "assets/Images/sprite.png";
 
 type HandlingType = "ratio" | "resize" | "gallery" | null | "first";
 
@@ -275,52 +276,86 @@ const StyledCut = styled.div<StyledCutProps>`
                         props.processedCurrentWidth,
                     ) - 32}px;
                 display: flex;
-                & > .upload__galleryImgs {
-                    display: flex;
-                    align-items: center;
-                    height: 100%;
+                & > .upload__galleryImgsWrapper {
+                    position: relative;
                     max-width: ${(props) =>
                         getRatioCalculatedBoxWidth(
                             props.ratioType,
                             props.processedCurrentWidth,
                         ) -
-                        32 -
+                        48 -
                         58}px;
-                    margin-right: 6px;
-                    overflow-x: auto;
-                    overflow-y: hidden;
-                    -ms-overflow-style: none; /* IE and Edge */
-                    scrollbar-width: none; /* Firefox */
-                    &::-webkit-scrollbar {
-                        display: none; /* Chrome , Safari , Opera */
-                    }
-
-                    & > .upload__galleryImgWrapper {
-                        width: 94px;
-                        min-width: 94px;
-                        height: 94px;
-                        margin: 0 6px;
-                        overflow: hidden;
-                        position: relative;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    & > .upload__galleryImgs-leftArrow {
+                        position: absolute;
+                        left: 0;
                         display: flex;
                         justify-content: center;
                         align-items: center;
-                        & > .upload__galleryImg {
-                            height: 100%;
-                            cursor: pointer;
+                        & > div {
+                            background-image: url(${sprite});
+                            background-repeat: no-repeat;
+                            background-position: -379px -128px;
+                            height: 45px;
+                            width: 45px;
                         }
-                        & > .uplaod__galleryDeleteBtn {
-                            position: absolute;
-                            top: 4px;
-                            right: 4px;
-                            width: 20px;
-                            height: 20px;
-                            background: rgba(26, 26, 26, 0.8);
-                            border-radius: 50%;
-                            padding: 4px;
+                    }
+                    & > .upload__galleryImgs-rightArrow {
+                        position: absolute;
+                        right: 0;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        & > div {
+                            background-image: url(${sprite});
+                            background-repeat: no-repeat;
+                            background-position: -244px -107px;
+                            height: 45px;
+                            width: 45px;
+                        }
+                    }
+                    & > .upload__galleryImgs {
+                        display: flex;
+                        align-items: center;
+                        height: 100%;
+                        width: 100%;
+                        margin-right: 6px;
+                        overflow-x: auto;
+                        overflow-y: hidden;
+                        -ms-overflow-style: none; /* IE and Edge */
+                        scrollbar-width: none; /* Firefox */
+                        &::-webkit-scrollbar {
+                            display: none; /* Chrome , Safari , Opera */
+                        }
+                        & > .upload__galleryImgWrapper {
+                            width: 94px;
+                            min-width: 94px;
+                            height: 94px;
+                            margin: 0 6px;
+                            overflow: hidden;
+                            position: relative;
                             display: flex;
                             justify-content: center;
                             align-items: center;
+                            & > .upload__galleryImg {
+                                height: 100%;
+                                cursor: pointer;
+                            }
+                            & > .uplaod__galleryDeleteBtn {
+                                position: absolute;
+                                top: 4px;
+                                right: 4px;
+                                width: 20px;
+                                height: 20px;
+                                background: rgba(26, 26, 26, 0.8);
+                                border-radius: 50%;
+                                padding: 4px;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                            }
                         }
                     }
                 }
@@ -403,6 +438,8 @@ const Cut = ({ currentWidth }: CutProps) => {
     const [galleryState, setGalleryState] = useState<boolean | null>(null);
     const imageRef = useRef<HTMLDivElement | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
+    const [isGalleryScrollInLeft, setIsGalleryScrollInLeft] = useState(true);
+    const gallerySliderRef = useRef<HTMLDivElement | null>(null);
 
     // window 너비에 따라 변경되는 값
     const processedCurrentWidth = useMemo(
@@ -488,6 +525,30 @@ const Cut = ({ currentWidth }: CutProps) => {
                 );
             };
         });
+    };
+
+    const galleryLeftScrollHandler = () => {
+        if (!gallerySliderRef.current) return;
+        gallerySliderRef.current.scrollTo({
+            left: 0,
+            behavior: "smooth",
+        });
+    };
+    const galleryRightScrollHandler = () => {
+        if (!gallerySliderRef.current) return;
+        gallerySliderRef.current.scrollTo({
+            left: gallerySliderRef.current.scrollWidth,
+            behavior: "smooth",
+        });
+    };
+
+    const scrollLeftChangeHandler = () => {
+        if (!gallerySliderRef.current) return;
+        if (gallerySliderRef.current.scrollLeft === 0) {
+            setIsGalleryScrollInLeft(true);
+        } else {
+            setIsGalleryScrollInLeft(false);
+        }
     };
 
     return (
@@ -626,75 +687,102 @@ const Cut = ({ currentWidth }: CutProps) => {
                         galleryState ? "on" : galleryState === null ? "" : "off"
                     }`}
                 >
-                    <div className="upload__galleryImgs">
-                        {files.map((file, index) => (
-                            <div
-                                className="upload__galleryImgWrapper"
-                                key={file.url}
-                            >
+                    <div className="upload__galleryImgsWrapper">
+                        <div
+                            className="upload__galleryImgs"
+                            ref={gallerySliderRef}
+                            onScroll={scrollLeftChangeHandler}
+                        >
+                            {files.map((file, index) => (
                                 <div
-                                    className="upload__galleryImg"
-                                    onClick={() =>
-                                        dispatch(
-                                            uploadActions.changeIndex(index),
-                                        )
-                                    }
-                                    style={{
-                                        minWidth: `${
-                                            (94 * file.width) / file.height
-                                        }px`,
-                                        backgroundImage: `
+                                    className="upload__galleryImgWrapper"
+                                    key={file.url}
+                                >
+                                    <div
+                                        className="upload__galleryImg"
+                                        onClick={() =>
+                                            dispatch(
+                                                uploadActions.changeIndex(
+                                                    index,
+                                                ),
+                                            )
+                                        }
+                                        style={{
+                                            minWidth: `${
+                                                (94 * file.width) / file.height
+                                            }px`,
+                                            backgroundImage: `
                                             linear-gradient(rgba(0, 0, 0, ${
                                                 currentIndex === index ? 0 : 0.5
                                             }), rgba(0, 0, 0, ${
-                                            currentIndex === index ? 0 : 0.5
-                                        })),
+                                                currentIndex === index ? 0 : 0.5
+                                            })),
                                          url(${file.url})`,
-                                        backgroundPosition: "center center",
-                                        backgroundRepeat: "no-repeat",
-                                        backgroundSize: "cover",
-                                        overflow: "hidden",
-                                        transform:
-                                            file.translateX === 0 &&
-                                            file.translateY === 0 &&
-                                            file.scale === 0
-                                                ? "none"
-                                                : `translate3d(${
-                                                      imageRef.current
-                                                          ? (file.translateX /
-                                                                imageRef.current
-                                                                    .offsetWidth) *
-                                                            100
-                                                          : 0
-                                                  }%,${
-                                                      imageRef.current
-                                                          ? (file.translateY /
-                                                                imageRef.current
-                                                                    .offsetHeight) *
-                                                            100
-                                                          : 0
-                                                  }%,0) scale(${
-                                                      file.scale / 100 + 1
-                                                  })`,
-                                    }}
-                                ></div>
-                                {currentIndex === index && (
-                                    <button
-                                        className="uplaod__galleryDeleteBtn"
-                                        onClick={() => {
-                                            setHandlingMode(null);
-                                            toggleInputState("gallery");
-                                            dispatch(
-                                                uploadActions.deleteFile(),
-                                            );
+                                            backgroundPosition: "center center",
+                                            backgroundRepeat: "no-repeat",
+                                            backgroundSize: "cover",
+                                            overflow: "hidden",
+                                            transform:
+                                                file.translateX === 0 &&
+                                                file.translateY === 0 &&
+                                                file.scale === 0
+                                                    ? "none"
+                                                    : `translate3d(${
+                                                          imageRef.current
+                                                              ? (file.translateX /
+                                                                    imageRef
+                                                                        .current
+                                                                        .offsetWidth) *
+                                                                100
+                                                              : 0
+                                                      }%,${
+                                                          imageRef.current
+                                                              ? (file.translateY /
+                                                                    imageRef
+                                                                        .current
+                                                                        .offsetHeight) *
+                                                                100
+                                                              : 0
+                                                      }%,0) scale(${
+                                                          file.scale / 100 + 1
+                                                      })`,
                                         }}
-                                    >
-                                        <Delete />
-                                    </button>
-                                )}
-                            </div>
-                        ))}
+                                    ></div>
+                                    {currentIndex === index && (
+                                        <button
+                                            className="uplaod__galleryDeleteBtn"
+                                            onClick={() => {
+                                                setHandlingMode(null);
+                                                toggleInputState("gallery");
+                                                dispatch(
+                                                    uploadActions.deleteFile(),
+                                                );
+                                            }}
+                                        >
+                                            <Delete />
+                                        </button>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                        {!isGalleryScrollInLeft && (
+                            <button
+                                className="upload__galleryImgs-leftArrow"
+                                onClick={galleryLeftScrollHandler}
+                            >
+                                <div></div>
+                            </button>
+                        )}
+                        {isGalleryScrollInLeft && (
+                            <button
+                                className="upload__galleryImgs-rightArrow"
+                                onClick={galleryRightScrollHandler}
+                            >
+                                <div></div>
+                            </button>
+                        )}
                     </div>
+
                     <div className="upload__addBtnLayout">
                         <button onClick={buttonClickHandler}>
                             <PlusIcon />
