@@ -128,6 +128,7 @@ const StyledCut = styled.div<StyledCutProps>`
                 justify-content: center;
                 align-items: center;
             }
+            box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
             &.ratio {
                 left: 8px;
             }
@@ -139,7 +140,6 @@ const StyledCut = styled.div<StyledCutProps>`
                 right: 8px;
             }
             &.active {
-                box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
                 background-color: white;
             }
             &.inactive {
