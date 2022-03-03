@@ -248,6 +248,8 @@ declare module UploadType {
         ratioMode: RatioType;
         files: FileProps[];
         currentIndex: number;
+        grabbedGalleryImgIndex: number | null;
+        grabbedGalleryImgNewIndex: number | null;
     }
 }
 

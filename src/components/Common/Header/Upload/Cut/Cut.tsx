@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import React, {
     ChangeEvent,
     Fragment,
+    MouseEvent,
     useCallback,
     useMemo,
     useRef,
@@ -85,6 +86,7 @@ interface StyledCutProps {
     url: string;
     processedCurrentWidth: number;
     ratioType: UploadType.RatioType;
+    counts: number;
 }
 
 const StyledCut = styled.div<StyledCutProps>`
@@ -278,6 +280,7 @@ const StyledCut = styled.div<StyledCutProps>`
                 display: flex;
                 & > .upload__galleryImgsWrapper {
                     position: relative;
+                    width: ${(props) => props.counts * 106}px;
                     max-width: ${(props) =>
                         getRatioCalculatedBoxWidth(
                             props.ratioType,
@@ -317,6 +320,7 @@ const StyledCut = styled.div<StyledCutProps>`
                         }
                     }
                     & > .upload__galleryImgs {
+                        position: relative;
                         display: flex;
                         align-items: center;
                         height: 100%;
@@ -429,8 +433,14 @@ interface CutProps {
 const Cut = ({ currentWidth }: CutProps) => {
     const theme = useTheme();
     const files = useAppSelector((state) => state.upload.files);
-    const ratioMode = useAppSelector(({ upload }) => upload.ratioMode);
-    const currentIndex = useAppSelector(({ upload }) => upload.currentIndex);
+    const ratioMode = useAppSelector((state) => state.upload.ratioMode);
+    const currentIndex = useAppSelector((state) => state.upload.currentIndex);
+    const grabbedGalleryImgIndex = useAppSelector(
+        (state) => state.upload.grabbedGalleryImgIndex,
+    );
+    const grabbedGalleryImgNewIndex = useAppSelector(
+        (state) => state.upload.grabbedGalleryImgNewIndex,
+    );
     const dispatch = useAppDispatch();
     const [handlingMode, setHandlingMode] = useState<HandlingType>("first");
     const [ratioState, setRatioState] = useState<boolean | null>(null);
@@ -440,6 +450,10 @@ const Cut = ({ currentWidth }: CutProps) => {
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [isGalleryScrollInLeft, setIsGalleryScrollInLeft] = useState(true);
     const gallerySliderRef = useRef<HTMLDivElement | null>(null);
+    const [isGalleryImgGrabbed, setIsGalleryImgGrabbed] = useState(false);
+    const [grabbedGalleryImgClientX, setGrabbedGalleryImgClientX] = useState(0);
+    const [grabbedGalleryImgTranslateX, setGrabbedGalleryImgTranslateX] =
+        useState(0); // 클릭된 galleryImg가 이동하는 값
 
     // window 너비에 따라 변경되는 값
     const processedCurrentWidth = useMemo(
@@ -502,60 +516,159 @@ const Cut = ({ currentWidth }: CutProps) => {
         [dispatch],
     );
 
-    const buttonClickHandler = () => {
+    const buttonClickHandler = useCallback(() => {
         if (inputRef.current) {
             inputRef.current.click();
         }
-    };
+    }, []);
 
-    const fileInputChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        const addedFiles = event.target.files;
-        if (!addedFiles) return;
-        Array.from(addedFiles).forEach((file) => {
-            const img = new Image();
-            img.src = URL.createObjectURL(file);
-            img.onload = () => {
-                // window.URL.revokeObjectURL(img.src);
-                dispatch(
-                    uploadActions.addFile({
-                        url: img.src,
-                        width: img.width,
-                        height: img.height,
-                    }),
-                );
-            };
-        });
-    };
+    const fileInputChangeHandler = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) => {
+            const addedFiles = event.target.files;
+            if (!addedFiles) return;
+            Array.from(addedFiles).forEach((file) => {
+                const img = new Image();
+                img.src = URL.createObjectURL(file);
+                img.onload = () => {
+                    // window.URL.revokeObjectURL(img.src);
+                    dispatch(
+                        uploadActions.addFile({
+                            url: img.src,
+                            width: img.width,
+                            height: img.height,
+                        }),
+                    );
+                };
+            });
+        },
+        [dispatch],
+    );
 
-    const galleryLeftScrollHandler = () => {
+    const galleryLeftScrollHandler = useCallback(() => {
         if (!gallerySliderRef.current) return;
         gallerySliderRef.current.scrollTo({
             left: 0,
             behavior: "smooth",
         });
-    };
-    const galleryRightScrollHandler = () => {
+    }, []);
+    const galleryRightScrollHandler = useCallback(() => {
         if (!gallerySliderRef.current) return;
         gallerySliderRef.current.scrollTo({
             left: gallerySliderRef.current.scrollWidth,
             behavior: "smooth",
         });
-    };
+    }, []);
 
-    const scrollLeftChangeHandler = () => {
+    const scrollLeftChangeHandler = useCallback(() => {
         if (!gallerySliderRef.current) return;
         if (gallerySliderRef.current.scrollLeft === 0) {
             setIsGalleryScrollInLeft(true);
         } else {
             setIsGalleryScrollInLeft(false);
         }
-    };
+    }, []);
+
+    const galleryGrabHandler = useCallback(
+        (event: MouseEvent<HTMLDivElement>, clickedIndex: number) => {
+            if (isGalleryImgGrabbed) return;
+            const { clientX } = event;
+            setIsGalleryImgGrabbed(true);
+            setGrabbedGalleryImgClientX(clientX);
+            dispatch(uploadActions.startGrabbingGalleryImg(clickedIndex));
+        },
+        [dispatch, isGalleryImgGrabbed],
+    );
+
+    const grabbedGalleryTranslateHandler = useCallback(
+        (event: MouseEvent<HTMLDivElement>) => {
+            if (!isGalleryImgGrabbed) return;
+            if (grabbedGalleryImgIndex === null) return;
+            const { clientX } = event;
+            const gap = clientX - grabbedGalleryImgClientX;
+            const indexToChange =
+                (gap >= 0 ? Math.floor(gap / 106) : Math.ceil(gap / 106)) +
+                parseInt(String((gap % 106) / 53));
+            const filesIndexLimit = files.length - 1;
+            const newIndex = grabbedGalleryImgIndex + indexToChange;
+            const newIndexFixed =
+                newIndex > filesIndexLimit
+                    ? filesIndexLimit
+                    : newIndex < 0
+                    ? 0
+                    : newIndex;
+            dispatch(
+                uploadActions.changeGrabbedGalleryTranslateCount(newIndexFixed),
+            );
+            setGrabbedGalleryImgTranslateX(gap);
+        },
+        [
+            dispatch,
+            files.length,
+            grabbedGalleryImgIndex,
+            grabbedGalleryImgClientX,
+            isGalleryImgGrabbed,
+        ],
+    );
+
+    const stopGalleryGrabbingHandler = useCallback(() => {
+        if (!isGalleryImgGrabbed) return;
+        if (grabbedGalleryImgIndex === null) return;
+        setIsGalleryImgGrabbed(false);
+        setGrabbedGalleryImgClientX(0);
+        setGrabbedGalleryImgTranslateX(0);
+        dispatch(uploadActions.changeGalleryOrder());
+        dispatch(uploadActions.stopGrabbingGalleryImg());
+    }, [isGalleryImgGrabbed, grabbedGalleryImgIndex, dispatch]);
+
+    const calculatedGalleryImgTranslateX = useCallback(
+        (index: number) => {
+            // 아예 그랩을 시작하지 않음
+            // console.log(grabbedGalleryImgNewIndex);
+            if (grabbedGalleryImgIndex === null) return index * 106;
+            // 그랩을 시작했는데, translate를 아예 안함
+            if (grabbedGalleryImgTranslateX === null) return index * 106;
+            // 그랩 시작하고 transition도 있음. 그랩한 index에 대해
+            if (grabbedGalleryImgIndex === index) {
+                return index * 106 + grabbedGalleryImgTranslateX;
+            }
+            // 그랩 시작하고 transition도 있음. 그랩하지 않은 index에 대해
+            else {
+                // translate 정도가 다른 요소를 움직일만큼은 아님
+                if (
+                    grabbedGalleryImgNewIndex === grabbedGalleryImgIndex ||
+                    grabbedGalleryImgNewIndex === null
+                ) {
+                    return index * 106;
+                }
+                if (
+                    index <= grabbedGalleryImgIndex &&
+                    index >= grabbedGalleryImgNewIndex
+                ) {
+                    return (index + 1) * 106;
+                } else if (
+                    index >= grabbedGalleryImgIndex &&
+                    index <= grabbedGalleryImgNewIndex
+                ) {
+                    return (index - 1) * 106;
+                } else {
+                    // 그랩한 img가 다시 돌아올 떄 다른 img 원상복귀
+                    return index * 106;
+                }
+            }
+        },
+        [
+            grabbedGalleryImgTranslateX,
+            grabbedGalleryImgNewIndex,
+            grabbedGalleryImgIndex,
+        ],
+    );
 
     return (
         <StyledCut
             url={files[currentIndex].url}
             processedCurrentWidth={processedCurrentWidth}
             ratioType={ratioMode}
+            counts={files.length}
         >
             <div className="upload__handleMenu">
                 {HANDLE_MENUS.map((menuObj) => (
@@ -697,16 +810,39 @@ const Cut = ({ currentWidth }: CutProps) => {
                                 <div
                                     className="upload__galleryImgWrapper"
                                     key={file.url}
+                                    onClick={() =>
+                                        dispatch(
+                                            uploadActions.changeIndex(index),
+                                        )
+                                    }
+                                    onMouseDown={(
+                                        event: MouseEvent<HTMLDivElement>,
+                                    ) => galleryGrabHandler(event, index)}
+                                    onMouseMove={grabbedGalleryTranslateHandler}
+                                    onMouseUp={stopGalleryGrabbingHandler}
+                                    onMouseLeave={stopGalleryGrabbingHandler}
+                                    style={{
+                                        position: "absolute",
+                                        zIndex:
+                                            grabbedGalleryImgIndex !== null &&
+                                            grabbedGalleryImgIndex === index
+                                                ? 1
+                                                : 0,
+                                        transform: `translate3d(${calculatedGalleryImgTranslateX(
+                                            index,
+                                        )}px,0px,0px) scale(${
+                                            grabbedGalleryImgIndex === index
+                                                ? 1.2
+                                                : 1
+                                        })`,
+                                        transition:
+                                            grabbedGalleryImgIndex === index
+                                                ? "none"
+                                                : "transform 0.4s",
+                                    }}
                                 >
                                     <div
                                         className="upload__galleryImg"
-                                        onClick={() =>
-                                            dispatch(
-                                                uploadActions.changeIndex(
-                                                    index,
-                                                ),
-                                            )
-                                        }
                                         style={{
                                             minWidth: `${
                                                 (94 * file.width) / file.height

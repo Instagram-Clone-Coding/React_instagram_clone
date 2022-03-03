@@ -7,6 +7,8 @@ const initialState: UploadType.UploadStateProps = {
     ratioMode: "square",
     files: [],
     currentIndex: 0,
+    grabbedGalleryImgIndex: null,
+    grabbedGalleryImgNewIndex: null,
 };
 
 const uploadSlice = createSlice({
@@ -147,6 +149,73 @@ const uploadSlice = createSlice({
             if (state.files.length === 0) {
                 state.currentIndex = 0;
                 state.step = "dragAndDrop";
+            }
+        },
+        startGrabbingGalleryImg: (state, action: PayloadAction<number>) => {
+            state.grabbedGalleryImgIndex = action.payload;
+            state.grabbedGalleryImgNewIndex = action.payload;
+        },
+        stopGrabbingGalleryImg: (state) => {
+            state.grabbedGalleryImgIndex = null;
+            state.grabbedGalleryImgNewIndex = null;
+        },
+        changeGrabbedGalleryTranslateCount: (
+            state,
+            action: PayloadAction<number>,
+        ) => {
+            state.grabbedGalleryImgNewIndex = action.payload;
+        },
+        changeGalleryOrder: (state) => {
+            if (
+                state.grabbedGalleryImgIndex !== null &&
+                state.grabbedGalleryImgNewIndex !== null
+            ) {
+                const translatedFile =
+                    state.files[state.grabbedGalleryImgIndex];
+                // 3 -> 2
+                // 0 1 2 3 4 5
+                // 0 1 3 2 4 5  0~1 / / 2~5(본인 뺴고)
+                //
+                // 3 -> 4
+                // 0 1 2 3 4 5
+                // 0 1 2 4 3 5 0~4(본인 빼고) / / 5
+                if (
+                    state.grabbedGalleryImgNewIndex <
+                    state.grabbedGalleryImgIndex
+                ) {
+                    const prevFiles = state.files.filter(
+                        (file, index) =>
+                            state.grabbedGalleryImgNewIndex !== null &&
+                            index < state.grabbedGalleryImgNewIndex,
+                    );
+
+                    const nextFiles = state.files.filter(
+                        (file, index) =>
+                            state.grabbedGalleryImgNewIndex !== null &&
+                            index >= state.grabbedGalleryImgNewIndex &&
+                            file !== translatedFile,
+                    );
+                    state.files = [...prevFiles, translatedFile, ...nextFiles];
+                } else if (
+                    state.grabbedGalleryImgNewIndex >
+                    state.grabbedGalleryImgIndex
+                ) {
+                    const prevFiles = state.files.filter(
+                        (file, index) =>
+                            state.grabbedGalleryImgNewIndex !== null &&
+                            index <= state.grabbedGalleryImgNewIndex &&
+                            file !== translatedFile,
+                    );
+
+                    const nextFiles = state.files.filter(
+                        (file, index) =>
+                            state.grabbedGalleryImgNewIndex !== null &&
+                            index > state.grabbedGalleryImgNewIndex,
+                    );
+                    state.files = [...prevFiles, translatedFile, ...nextFiles];
+                }
+                state.currentIndex = state.grabbedGalleryImgNewIndex;
+                // state.files = [...prevArr, translatedFile, ...nextArr];
             }
         },
     },
