@@ -1,4 +1,3 @@
-import { Token } from "app/store/ducks/auth/authThunk.type";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import {
     EXPIRED_TOKEN_MESSAGE,
@@ -68,7 +67,7 @@ export const checkToken = async (config: AxiosRequestConfig) => {
 };
 
 //  다른사람들은 어디 두는지 알아보기 **
-export const saveToken = (token: Token) => {
+export const saveToken = (token: AuthType.Token) => {
     const { type, accessToken } = token.data;
 
     authorizedCustomAxios.defaults.headers.common[

@@ -17,12 +17,17 @@ declare module UI {
     }
 }
 
-declare module AuthType {
-    interface Token {
+declare module AxiosType {
+    interface ResponseType {
         status: number;
         code: number;
         message: string;
-        data?: {
+    }
+}
+
+declare module AuthType {
+    interface Token extends AxiosType.ResponseType {
+        data: {
             type: string;
             accessToken: string;
         };

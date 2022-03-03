@@ -1,10 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { SignInRequestType, Token } from "./authThunk.type";
+import { SignInRequestType } from "./authThunk.type";
 import { customAxios } from "customAxios";
 import { authAction } from "./authSlice";
 
 // 로그인(토큰최초발급) + 토큰만료 시, 로그인 홈페이지로 **
-export const signIn = createAsyncThunk<Token, SignInRequestType>(
+export const signIn = createAsyncThunk<AuthType.Token, SignInRequestType>(
     "auth/signIn",
     async (payload, ThunkOptions) => {
         try {
