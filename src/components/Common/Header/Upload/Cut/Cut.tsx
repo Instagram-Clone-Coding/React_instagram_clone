@@ -839,6 +839,10 @@ const Cut = ({ currentWidth }: CutProps) => {
                                             grabbedGalleryImgIndex === index
                                                 ? "none"
                                                 : "transform 0.4s",
+                                        opacity:
+                                            grabbedGalleryImgIndex === index
+                                                ? 0.9
+                                                : 1,
                                     }}
                                 >
                                     <div
