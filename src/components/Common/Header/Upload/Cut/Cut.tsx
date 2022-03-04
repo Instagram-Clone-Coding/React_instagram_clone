@@ -4,6 +4,7 @@ import React, {
     Fragment,
     MouseEvent,
     useCallback,
+    useEffect,
     useMemo,
     useRef,
     useState,
@@ -448,13 +449,38 @@ const Cut = ({ currentWidth }: CutProps) => {
     const [galleryState, setGalleryState] = useState<boolean | null>(null);
     const imageRef = useRef<HTMLDivElement | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const [isGalleryScrollInLeft, setIsGalleryScrollInLeft] = useState(true);
+    const [isGalleryScrollInLeft, setIsGalleryScrollInLeft] =
+        useState<boolean | null>(true);
+    const [isGalleryScrollInRight, setIsGalleryScrollInRight] =
+        useState<boolean | null>(false);
     const gallerySliderRef = useRef<HTMLDivElement | null>(null);
     const [isGalleryImgGrabbed, setIsGalleryImgGrabbed] = useState(false);
     const [grabbedGalleryImgClientX, setGrabbedGalleryImgClientX] = useState(0);
     const [grabbedGalleryImgTranslateX, setGrabbedGalleryImgTranslateX] =
         useState(0); // 클릭된 galleryImg가 이동하는 값
 
+    useEffect(() => {
+        if (!gallerySliderRef.current) return;
+        const resizeArrowHandler = () => {
+            if (!gallerySliderRef.current) return;
+            if (
+                gallerySliderRef.current.clientWidth ===
+                gallerySliderRef.current.scrollWidth
+            ) {
+                setIsGalleryScrollInLeft(null);
+                setIsGalleryScrollInRight(null);
+            } else {
+                // 무조건 resize될 때 오른쪽이 줄어듭니다.
+                setIsGalleryScrollInLeft(true);
+                setIsGalleryScrollInRight(false);
+            }
+        };
+        window.addEventListener("resize", resizeArrowHandler);
+
+        return () => {
+            window.removeEventListener("resize", resizeArrowHandler);
+        };
+    }, []);
     // window 너비에 따라 변경되는 값
     const processedCurrentWidth = useMemo(
         () => (currentWidth <= MIN_WIDTH ? MIN_WIDTH : currentWidth),
@@ -559,12 +585,21 @@ const Cut = ({ currentWidth }: CutProps) => {
         });
     }, []);
 
-    const scrollLeftChangeHandler = useCallback(() => {
+    const scrollHandler = useCallback(() => {
         if (!gallerySliderRef.current) return;
         if (gallerySliderRef.current.scrollLeft === 0) {
             setIsGalleryScrollInLeft(true);
+            setIsGalleryScrollInRight(false);
+        } else if (
+            gallerySliderRef.current.clientWidth ===
+            gallerySliderRef.current.scrollWidth -
+                gallerySliderRef.current.scrollLeft
+        ) {
+            setIsGalleryScrollInLeft(false);
+            setIsGalleryScrollInRight(true);
         } else {
             setIsGalleryScrollInLeft(false);
+            setIsGalleryScrollInRight(false);
         }
     }, []);
 
@@ -623,7 +658,6 @@ const Cut = ({ currentWidth }: CutProps) => {
     const calculatedGalleryImgTranslateX = useCallback(
         (index: number) => {
             // 아예 그랩을 시작하지 않음
-            // console.log(grabbedGalleryImgNewIndex);
             if (grabbedGalleryImgIndex === null) return index * 106;
             // 그랩을 시작했는데, translate를 아예 안함
             if (grabbedGalleryImgTranslateX === null) return index * 106;
@@ -804,7 +838,7 @@ const Cut = ({ currentWidth }: CutProps) => {
                         <div
                             className="upload__galleryImgs"
                             ref={gallerySliderRef}
-                            onScroll={scrollLeftChangeHandler}
+                            onScroll={scrollHandler}
                         >
                             {files.map((file, index) => (
                                 <div
@@ -905,22 +939,24 @@ const Cut = ({ currentWidth }: CutProps) => {
                                 </div>
                             ))}
                         </div>
-                        {!isGalleryScrollInLeft && (
-                            <button
-                                className="upload__galleryImgs-leftArrow"
-                                onClick={galleryLeftScrollHandler}
-                            >
-                                <div></div>
-                            </button>
-                        )}
-                        {isGalleryScrollInLeft && (
-                            <button
-                                className="upload__galleryImgs-rightArrow"
-                                onClick={galleryRightScrollHandler}
-                            >
-                                <div></div>
-                            </button>
-                        )}
+                        {isGalleryScrollInLeft !== null &&
+                            !isGalleryScrollInLeft && (
+                                <button
+                                    className="upload__galleryImgs-leftArrow"
+                                    onClick={galleryLeftScrollHandler}
+                                >
+                                    <div></div>
+                                </button>
+                            )}
+                        {isGalleryScrollInRight !== null &&
+                            !isGalleryScrollInRight && (
+                                <button
+                                    className="upload__galleryImgs-rightArrow"
+                                    onClick={galleryRightScrollHandler}
+                                >
+                                    <div></div>
+                                </button>
+                            )}
                     </div>
 
                     <div className="upload__addBtnLayout">
