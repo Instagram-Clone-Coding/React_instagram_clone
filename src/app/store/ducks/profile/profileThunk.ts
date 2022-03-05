@@ -3,6 +3,7 @@ import { authorizedCustomAxios, customAxios } from "customAxios";
 import { FAIL_TO_REISSUE_MESSAGE } from "utils/constant";
 import { authAction } from "../auth/authSlice";
 import { RootState } from "app/store/store";
+import { increaseExtraPostPage } from "./profileSlice";
 
 export const lookUpUserProfile = createAsyncThunk<any,
     {
@@ -21,27 +22,71 @@ export const lookUpUserProfile = createAsyncThunk<any,
 
 export const getPosts = createAsyncThunk<Profile.PostType[],
     {
-        page: number,
         username: string
-    },{state:RootState}>("profile/getPost", async (payload, { getState, dispatch, rejectWithValue }) => {
+    }, { state: RootState }>("profile/getPost", async (payload, { getState, dispatch, rejectWithValue }) => {
 
     try {
-        const currentCategory = getState().profile.currentCategory
-        let url = `/accounts/${payload.username}/posts/recent`
-        switch (currentCategory){
+        const currentCategory = getState().profile.currentCategory;
+        let url = `/accounts/${payload.username}/posts/recent`;
+        switch (currentCategory) {
             case "":
-                url = `/accounts/${payload.username}/posts/recent`
+                url = `/accounts/${payload.username}/posts/recent`;
                 break;
             case "tagged":
-                url = `/accounts/${payload.username}/posts/tagged/recent`
+                url = `/accounts/${payload.username}/posts/tagged/recent`;
                 break;
             case "saved":
-                url = `/accounts/${payload.username}/posts/saved/recent`
+                url = `/accounts/${payload.username}/posts/saved/recent`;
                 break;
 
         }
         const { data } = await customAxios.get(url);
         return data.data;
+    } catch (error) {
+        error === FAIL_TO_REISSUE_MESSAGE &&
+        dispatch(authAction.logout());
+        throw rejectWithValue(error);
+    }
+});
+
+export const getExtraPosts = createAsyncThunk<Profile.PostType[],
+    {
+        page: number,
+        username: string
+    }, { state: RootState }>("profile/getExtraPosts", async (payload, { getState, dispatch, rejectWithValue }) => {
+    const config = {
+        params: {
+            page: payload.page,
+        },
+    };
+    try {
+        const currentCategory = getState().profile.currentCategory;
+        let url = `/accounts/${payload.username}/posts`;
+        switch (currentCategory) {
+            case "":
+                url = `/accounts/${payload.username}/posts`;
+                break;
+            case "tagged":
+                url = `/accounts/${payload.username}/posts/tagged`;
+                break;
+            case "saved":
+                url = `/accounts/${payload.username}/posts/saved`;
+                break;
+
+        }
+        const {
+            data: {
+                data: { content: data, empty },
+            },
+        } = await customAxios.get(url, config);
+
+        if (empty) {
+            throw rejectWithValue(
+                "게시물이 더 이상 존재하지 않습니다.",
+            );
+        }
+        dispatch(increaseExtraPostPage())
+        return data;
     } catch (error) {
         error === FAIL_TO_REISSUE_MESSAGE &&
         dispatch(authAction.logout());

@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getPosts, lookUpUserProfile } from "./profileThunk";
+import { getExtraPosts, getPosts, lookUpUserProfile } from "./profileThunk";
 
 export interface InitialStateType {
     isLoading: boolean;
     memberProfile: Profile.MemberProfileProps | null;
     currentCategory: "" | "tagged" | "saved";
     posts: Profile.PostType[];
+    isExtraPostLoading : boolean;
+    extraPostPage : number
 }
 
 const initialState: InitialStateType = {
@@ -13,6 +15,8 @@ const initialState: InitialStateType = {
     memberProfile: null,
     currentCategory: "",
     posts: [],
+    isExtraPostLoading : false,
+    extraPostPage : 0
 };
 
 
@@ -23,6 +27,12 @@ const profileSlice = createSlice({
         selectCategory: (state, action: PayloadAction<"" | "tagged" | "saved">) => {
             state.currentCategory = action.payload;
         },
+        increaseExtraPostPage: (state) => {
+            state.extraPostPage++;
+        },
+        resetExtraPostPage: (state) => {
+            state.extraPostPage = 0;
+        }
     },
     extraReducers: (build) => {
         build
@@ -45,11 +55,23 @@ const profileSlice = createSlice({
             })
             .addCase(getPosts.rejected, (state) => {
                 state.isLoading = false;
+            })
+            .addCase(getExtraPosts.pending, (state) => {
+                state.isExtraPostLoading = true;
+            })
+            .addCase(getExtraPosts.fulfilled, (state, action) => {
+                state.isExtraPostLoading = false;
+                state.posts = [...state.posts, ...action.payload]
+            })
+            .addCase(getExtraPosts.rejected, (state) => {
+                state.isExtraPostLoading = false;
             });
 
     },
 });
 export const {
     selectCategory,
+    increaseExtraPostPage,
+    resetExtraPostPage
 } = profileSlice.actions;
 export const profileReducer = profileSlice.reducer;

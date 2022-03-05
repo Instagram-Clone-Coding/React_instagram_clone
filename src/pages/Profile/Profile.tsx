@@ -5,8 +5,9 @@ import ProfileHeader from "components/Profile/Header/ProfileHeader";
 import Category from "components/Profile/Category";
 import Article from "components/Profile/Article/Article";
 import { useParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../app/store/Hooks";
-import { getPosts, lookUpUserProfile } from "../../app/store/ducks/profile/profileThunk";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { getPosts, lookUpUserProfile } from "app/store/ducks/profile/profileThunk";
+import { resetExtraPostPage } from "app/store/ducks/profile/profileSlice";
 
 const Layout = styled.main`
   display: flex;
@@ -54,8 +55,9 @@ const Profile = () => {
     // 게시글들을 가져와 줍니다.
     useEffect(() => {
         const getPost = async () => {
-            dispatch(getPosts({ page: 1, username: username }));
+            await dispatch(getPosts({username: username }));
         };
+        dispatch(resetExtraPostPage())
         getPost();
     }, [currentCategory]);
 
