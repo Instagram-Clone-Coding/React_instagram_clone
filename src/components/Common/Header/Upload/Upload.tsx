@@ -6,6 +6,7 @@ import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import { ReactComponent as BackIcon } from "assets/Svgs/back.svg";
 import DragAndDrop from "components/Common/Header/Upload/DragAndDrop";
 import Cut from "components/Common/Header/Upload/Cut";
+import Filter from "components/Common/Header/Upload/Filter";
 
 interface ModalInnerProps {
     backdropWidth: number;
@@ -67,20 +68,6 @@ const Upload = () => {
         () => (backDropwidth <= 1227 ? backDropwidth - 372 : 855),
         [backDropwidth],
     );
-    // console.log("상위에서 maxWidth: ", currentMaxWidth);
-    // console.log("상위에서 maxWidth: ",                                 modalCardWidth + BORDER_TOTAL_WIDTH,
-    // currentMaxWidth + BORDER_TOTAL_WIDTH);
-    // const modalCardHeight = useMemo(() => {
-    //     return currentWidth + BORDER_TOTAL_WIDTH + 43 >= backDropHeight - 184
-    //         ? backDropHeight - 184
-    //         : currentWidth + BORDER_TOTAL_WIDTH + 43;
-    // }, [backDropHeight, currentWidth]);
-
-    // const modalCardWidth = useMemo(() => {
-    //     return modalCardHeight === backDropHeight - 184
-    //         ? modalCardHeight - 43
-    //         : currentWidth + BORDER_TOTAL_WIDTH;
-    // }, [modalCardHeight, backDropHeight, currentWidth]);
 
     const currentWidthLimitedByWindowHeight = useMemo(
         () =>
@@ -118,6 +105,8 @@ const Upload = () => {
                 return "새 게시물 만들기";
             case "cut":
                 return "자르기";
+            case "filter":
+                return "편집";
         }
     }, []);
 
@@ -135,6 +124,8 @@ const Upload = () => {
                             )}
                         />
                     );
+                case "filter":
+                    return <Filter />;
             }
         },
         [currentWidthLimitedByWindowHeight, currentMaxWidth],
@@ -176,7 +167,7 @@ const Upload = () => {
                     )}
                     <h1>{currentHeading(step)}</h1>
                     {step !== "dragAndDrop" && (
-                        <div>
+                        <div onClick={() => dispatch(uploadActions.nextStep())}>
                             <button className="upload__next">다음</button>
                         </div>
                     )}
