@@ -6,8 +6,9 @@ export interface InitialStateType {
     memberProfile: Profile.MemberProfileProps | null;
     currentCategory: "" | "tagged" | "saved";
     posts: Profile.PostType[];
-    isExtraPostLoading : boolean;
-    extraPostPage : number
+    isExtraPostLoading: boolean;
+    extraPostPage: number;
+    modal: Profile.modalType;
 }
 
 const initialState: InitialStateType = {
@@ -15,8 +16,9 @@ const initialState: InitialStateType = {
     memberProfile: null,
     currentCategory: "",
     posts: [],
-    isExtraPostLoading : false,
-    extraPostPage : 0
+    isExtraPostLoading: false,
+    extraPostPage: 0,
+    modal: null,
 };
 
 
@@ -32,7 +34,10 @@ const profileSlice = createSlice({
         },
         resetExtraPostPage: (state) => {
             state.extraPostPage = 0;
-        }
+        },
+        selectModal: (state, action: PayloadAction<Profile.modalType>) => {
+            state.modal = action.payload;
+        },
     },
     extraReducers: (build) => {
         build
@@ -61,7 +66,7 @@ const profileSlice = createSlice({
             })
             .addCase(getExtraPosts.fulfilled, (state, action) => {
                 state.isExtraPostLoading = false;
-                state.posts = [...state.posts, ...action.payload]
+                state.posts = [...state.posts, ...action.payload];
             })
             .addCase(getExtraPosts.rejected, (state) => {
                 state.isExtraPostLoading = false;
@@ -72,6 +77,7 @@ const profileSlice = createSlice({
 export const {
     selectCategory,
     increaseExtraPostPage,
-    resetExtraPostPage
+    resetExtraPostPage,
+    selectModal
 } = profileSlice.actions;
 export const profileReducer = profileSlice.reducer;

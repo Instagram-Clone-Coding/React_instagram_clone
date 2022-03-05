@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import StoryCircle from "components/Common/StoryCircle";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ReactComponent as SettingSvg } from "assets/Svgs/setting.svg";
 import { ReactComponent as ThreeDots } from "assets/Svgs/threeDots.svg";
 import Button from "styles/UI/Button/Button";
-import { useAppSelector } from "../../../app/store/Hooks";
-import Profile from "../../../pages/Profile";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { selectModal } from "app/store/ducks/profile/profileSlice";
+import UserActionModal from "../Modals/UserActionModal";
+import SettingModal from "../Modals/SettingModal";
+import FollowerModal from "../Modals/FollowerModal";
 
 interface ProfileHeaderContainerProps {
     me: boolean;
@@ -47,7 +50,7 @@ const ProfileHeaderContainer = styled.header<ProfileHeaderContainerProps>`
       .edit {
         background-color: transparent;
         margin-left: 20px;
-        border: ${props => props.me && '1px solid #dbdbdb'};
+        border: ${props => props.me && "1px solid #dbdbdb"};
         border-radius: 4px;
         color: #262626;
         text-decoration: none;
@@ -60,6 +63,7 @@ const ProfileHeaderContainer = styled.header<ProfileHeaderContainerProps>`
 
       svg {
         margin: 8px;
+        cursor: pointer;
       }
     }
 
@@ -75,6 +79,11 @@ const ProfileHeaderContainer = styled.header<ProfileHeaderContainerProps>`
           font-weight: 600;
         }
       }
+
+      li:not(:first-child) {
+        cursor: pointer;
+      }
+
     }
 
     .detail-info {
@@ -106,8 +115,12 @@ const ProfileHeaderContainer = styled.header<ProfileHeaderContainerProps>`
 interface ProfileHeaderProps {
 }
 
-const ProfileHeader = ({}:ProfileHeaderProps) => {
-    const memberProfile  = useAppSelector(state => state.profile.memberProfile as Profile.MemberProfileProps)
+const ProfileHeader = ({}: ProfileHeaderProps) => {
+    const dispatch = useAppDispatch();
+
+    const memberProfile = useAppSelector(state => state.profile.memberProfile as Profile.MemberProfileProps);
+    const modal = useAppSelector(state => state.profile.modal);
+    const [isFollowerModal, setIsFollowerModal] = useState<boolean>(true); // 기본값은 팔로워 모달입니다. false 라면 팔로우 입니다
     return (
         <ProfileHeaderContainer me={memberProfile?.me}>
             <div className="profile-img">
@@ -126,11 +139,17 @@ const ProfileHeader = ({}:ProfileHeaderProps) => {
                         memberProfile?.me ?
                             <>
                                 <Link className="edit" to={"/accounts/edit"}>프로필 편집</Link>
-                                <SettingSvg />
+                                <SettingSvg onClick={() => {
+                                    dispatch(selectModal("setting"));
+                                }
+                                } />
                             </> :
                             <>
                                 <Link className="edit" to={"/"}><Button>팔로우</Button></Link>
-                                <ThreeDots />
+                                <ThreeDots onClick={() => {
+                                    dispatch(selectModal("userAction"));
+                                }
+                                } />
                             </>
                     }
                 </div>
@@ -138,15 +157,45 @@ const ProfileHeader = ({}:ProfileHeaderProps) => {
                     <li className="follower-with-number">
                         게시물 <span>{memberProfile?.memberPostsCount}</span>
                     </li>
-                    <li className="follower-with-number">
+                    <li className="follower-with-number" onClick={() => {
+                        dispatch(selectModal("follower"));
+                        setIsFollowerModal(true);
+                    }}>
                         팔로워 <span>{memberProfile?.memberFollowersCount}</span>
                     </li>
-                    <li className="follower-with-number">
+                    <li className="follower-with-number" onClick={() => {
+                        dispatch(selectModal("follower"));
+                        setIsFollowerModal(false);
+
+                    }}>
                         팔로우 <span>{memberProfile?.memberFollowingsCount}</span>
                     </li>
                 </ul>
                 <div className="detail-info">{memberProfile?.memberName}</div>
             </section>
+            {
+                modal === "userAction" && <UserActionModal onModalOn={() => {
+                    dispatch(selectModal("userAction"));
+                }} onModalOff={() => {
+                    dispatch(selectModal(null));
+                }} />
+            }
+
+            {
+                modal === "setting" && <SettingModal onModalOn={() => {
+                    dispatch(selectModal("setting"));
+                }} onModalOff={() => {
+                    dispatch(selectModal(null));
+                }} />
+            }
+
+            {
+                modal === "follower" && <FollowerModal isFollowerModal={isFollowerModal} onModalOn={() => {
+                    dispatch(selectModal("follower"));
+                }} onModalOff={() => {
+                    dispatch(selectModal(null));
+                }} />
+            }
         </ProfileHeaderContainer>
     );
 };
