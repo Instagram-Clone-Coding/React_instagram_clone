@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import SingleRow from "./SingleRow";
 import { useAppSelector } from "app/store/Hooks";
+import Loading from "components/Common/Loading";
 
 const ArticleContainer = styled.main`
   display: flex;
@@ -16,7 +17,7 @@ const ArticleContainer = styled.main`
 
 function Article() {
     const posts = useAppSelector(state => state.profile.posts);
-
+    const isExtraPostLoading = useAppSelector(state => state.profile.isExtraPostLoading);
 
     return (
         <ArticleContainer>
@@ -25,6 +26,9 @@ function Article() {
                            isObserving={(posts.length / 3) - 2 === index}
                 />
             ))}
+            {
+                isExtraPostLoading && <Loading size={32}/>
+            }
         </ArticleContainer>
     );
 }
