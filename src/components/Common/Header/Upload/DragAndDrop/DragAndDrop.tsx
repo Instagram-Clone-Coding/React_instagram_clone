@@ -81,7 +81,7 @@ const DragAndDrop = () => {
         event.stopPropagation();
 
         const droppedFiles = event.dataTransfer.files;
-        Array.from(droppedFiles).forEach((file) => {
+        Array.from(droppedFiles).forEach((file, index) => {
             const img = new Image();
             img.src = URL.createObjectURL(file);
             img.onload = () => {
@@ -93,26 +93,10 @@ const DragAndDrop = () => {
                         height: img.height,
                     }),
                 );
-                dispatch(uploadActions.toCutStep());
+                if (index === droppedFiles.length - 1) {
+                    dispatch(uploadActions.toCutStep());
+                }
             };
-            // const reader = new FileReader();
-            // reader.readAsDataURL(file);
-            // reader.onloadend = () => {
-            //     const img = new Image();
-            //     if (reader.result) {
-            //         img.src = reader.result.toString();
-            //         img.onload = () => {
-            //             dispatch(
-            //                 uploadActions.addFile({
-            //                     url: img.src,
-            //                     width: img.width,
-            //                     height: img.height,
-            //                 }),
-            //             );
-            //             dispatch(uploadActions.toCutStep());
-            //         };
-            //     }
-            // };
         });
         setIsDraggingOver(false);
     };
@@ -120,7 +104,7 @@ const DragAndDrop = () => {
     const fileInputChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const addedFiles = event.target.files;
         if (!addedFiles) return;
-        Array.from(addedFiles).forEach((file) => {
+        Array.from(addedFiles).forEach((file, index) => {
             const img = new Image();
             img.src = URL.createObjectURL(file);
             img.onload = () => {
@@ -132,7 +116,9 @@ const DragAndDrop = () => {
                         height: img.height,
                     }),
                 );
-                dispatch(uploadActions.toCutStep());
+                if (index === addedFiles.length - 1) {
+                    dispatch(uploadActions.toCutStep());
+                }
             };
         });
     };
