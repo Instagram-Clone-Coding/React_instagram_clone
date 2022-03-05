@@ -142,7 +142,7 @@ const ProfileHeader = ({}:ProfileHeaderProps) => {
                         팔로워 <span>{memberProfile?.memberFollowersCount}</span>
                     </li>
                     <li className="follower-with-number">
-                        게시물 <span>{memberProfile?.memberFollowingsCount}</span>
+                        팔로우 <span>{memberProfile?.memberFollowingsCount}</span>
                     </li>
                 </ul>
                 <div className="detail-info">{memberProfile?.memberName}</div>

@@ -1,21 +1,27 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { lookUpUserProfile } from "./profileThunk";
 
 export interface InitialStateType {
     isLoading: boolean;
     memberProfile: Profile.MemberProfileProps | null;
+    currentCategory : "normal" | "tag" | "video"
 }
 
 const initialState: InitialStateType = {
     isLoading: false,
     memberProfile: null,
+    currentCategory : "normal"
 };
 
 
 const profileSlice = createSlice({
     name: "profile",
     initialState,
-    reducers: {},
+    reducers: {
+        selectCategory:(state,action:PayloadAction<"normal" | "tag" | "video">) => {
+            state.currentCategory = action.payload
+        }
+    },
     extraReducers: (build) => {
         build
             .addCase(lookUpUserProfile.pending, (state) => {
@@ -30,5 +36,7 @@ const profileSlice = createSlice({
             });
     },
 });
-
+export const {
+    selectCategory
+} = profileSlice.actions
 export const profileReducer = profileSlice.reducer;

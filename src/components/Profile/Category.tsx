@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { ReactComponent as GridSvg } from "assets/Svgs/grid.svg";
 import { ReactComponent as TagSvg } from "assets/Svgs/tag.svg";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { selectCategory } from "app/store/ducks/profile/profileSlice";
 
 
 const CategoryContainer = styled.div`
@@ -16,31 +17,50 @@ const CategoryContainer = styled.div`
   border-top: 1px solid #dbdbdb;
   color: #8e8e8e;
 
-  span{
+  span {
     margin-left: 8px;
   }
-  a {
+
+  div {
+    cursor: pointer;
     text-decoration: none;
     display: flex;
     align-items: center;
     height: 52px;
-
   }
 
+  .current{
+    color: black;
+    font-weight: bold;
+    svg{
+      color: black;
+      fill: black;
+    }
+  }
 
   @media (min-width: 736px) {
-    a {
+    div {
       margin: 0 30px;
     }
   }
 `;
 
 const Category = () => {
+    const dispatch = useAppDispatch();
+    const currentCategory = useAppSelector(state => state.profile.currentCategory);
+
     return (
         <CategoryContainer>
-            <Link to={"/"}><GridSvg /><span>게시물</span></Link>
-            <Link to={"/"}><GridSvg /><span>저장됨</span></Link>
-            <Link to={"/"}><TagSvg /><span>태그됨</span></Link>
+            <div className={currentCategory === "normal" ? 'current' : ''} onClick={() => {
+                dispatch(selectCategory("normal"));
+            }}>
+                <GridSvg /><span>게시물</span>
+            </div>
+            <div className={currentCategory === "tag" ? 'current' : ''}  onClick={() => {
+                dispatch(selectCategory("tag"));
+            }}>
+                <TagSvg /><span>태그됨</span>
+            </div>
         </CategoryContainer>
     );
 };
