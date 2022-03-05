@@ -9,6 +9,7 @@ export interface InitialStateType {
     isExtraPostLoading: boolean;
     extraPostPage: number;
     modal: Profile.modalType;
+    unFollowSelectedUser: { imageUrl: string, username: string };
 }
 
 const initialState: InitialStateType = {
@@ -19,6 +20,7 @@ const initialState: InitialStateType = {
     isExtraPostLoading: false,
     extraPostPage: 0,
     modal: null,
+    unFollowSelectedUser: { imageUrl: "", username: "" },
 };
 
 
@@ -37,6 +39,9 @@ const profileSlice = createSlice({
         },
         selectModal: (state, action: PayloadAction<Profile.modalType>) => {
             state.modal = action.payload;
+        },
+        setUnFollowSelectedUser: (state, action: PayloadAction<{ imageUrl: string, username: string }>) => {
+            state.unFollowSelectedUser = action.payload;
         },
     },
     extraReducers: (build) => {
@@ -78,6 +83,7 @@ export const {
     selectCategory,
     increaseExtraPostPage,
     resetExtraPostPage,
-    selectModal
+    selectModal,
+    setUnFollowSelectedUser
 } = profileSlice.actions;
 export const profileReducer = profileSlice.reducer;

@@ -5,7 +5,7 @@ import { authAction } from "../auth/authSlice";
 import { RootState } from "app/store/store";
 import { increaseExtraPostPage } from "./profileSlice";
 
-export const lookUpUserProfile = createAsyncThunk<any,
+export const lookUpUserProfile = createAsyncThunk<Profile.MemberProfileProps,
     {
         username: string
     }>("profile/lookUpUserProfile", async (payload, ThunkOptions) => {
@@ -85,7 +85,7 @@ export const getExtraPosts = createAsyncThunk<Profile.PostType[],
                 "게시물이 더 이상 존재하지 않습니다.",
             );
         }
-        dispatch(increaseExtraPostPage())
+        dispatch(increaseExtraPostPage());
         return data;
     } catch (error) {
         error === FAIL_TO_REISSUE_MESSAGE &&
@@ -93,3 +93,21 @@ export const getExtraPosts = createAsyncThunk<Profile.PostType[],
         throw rejectWithValue(error);
     }
 });
+
+// 굳이 thunk 에서 처리할 필요 없음
+export const follow = createAsyncThunk<Profile.PostType[],
+    {
+        username: string
+    }, { state: RootState }>("profile/follow", async (payload, { getState, dispatch, rejectWithValue }) => {
+    try {
+
+        const { data } = await authorizedCustomAxios.post(`/${payload.username}/follow`);
+        console.log(data);
+        return data;
+    } catch (error) {
+        error === FAIL_TO_REISSUE_MESSAGE &&
+        dispatch(authAction.logout());
+        throw rejectWithValue(error);
+    }
+});
+

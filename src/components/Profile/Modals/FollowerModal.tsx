@@ -4,12 +4,13 @@ import ModalCard from "styles/UI/ModalCard";
 import CloseSVG from "assets/Svgs/CloseSVG";
 import { authorizedCustomAxios } from "customAxios";
 import { useParams } from "react-router-dom";
-import Card from "styles/UI/Card";
+import Loading from "../../Common/Loading";
 
 
 const FollowerModalInner = styled.div`
   padding-top: 30px;
-  .header{
+
+  .header {
 
     margin-top: -30px;
     padding: 10px 15px;
@@ -27,35 +28,49 @@ const FollowerModalInner = styled.div`
       font-weight: 600;
     }
   }
-  
-  .content{
+
+  .content {
     display: flex;
     flex-direction: column;
-    
-    .one-person{
+
+    .one-person {
       height: 54px;
       padding: 8px 16px;
       display: flex;
-      .person-info{
+
+      .person-info {
         display: flex;
         align-items: center;
-        img{
+
+        img {
           width: 30px;
           height: 30px;
           margin-right: 10px;
         }
-        .person-name-container{
+
+        .person-name-container {
           display: flex;
           flex-direction: column;
-          
-          .username{
+
+
+          .username {
             font-weight: 600;
           }
-          .name{
+
+          .follow-guide {
+            font-size: 12px;
+            line-height: 16px;
+            font-weight: 600;
+            color: #0095f6;
+            cursor: pointer;
+          }
+
+
+          .name {
             color: #8e8e8e;
           }
         }
-        
+
       }
 
       .action-button {
@@ -74,21 +89,27 @@ const FollowerModalInner = styled.div`
 interface FollowerModalProps {
     onModalOn: () => void;
     onModalOff: () => void;
-    isFollowerModal : boolean
+    isFollowerModal: boolean;
 }
 
-const FollowerModal = ({ onModalOn, onModalOff,isFollowerModal }: FollowerModalProps) => {
+const FollowerModal = ({ onModalOn, onModalOff, isFollowerModal }: FollowerModalProps) => {
     const { username } = useParams<{ username: string }>();
-    const [people,setPeople] = useState<Profile.personType[]>([])
+    const [people, setPeople] = useState<Profile.personType[]>([]);
+    const [isFollowLoading, setIsFollowLoading] = useState<boolean>(false);
 
-    useEffect(()=>{
-        const getPeople = async () => {
-            const {data} = await authorizedCustomAxios.get(`/${username}/${isFollowerModal ? "followers" : "following"}`)
-            setPeople(data.data)
-        }
+    const getPeople = async () => {
+        const { data } = await authorizedCustomAxios.get(`/${username}/${isFollowerModal ? "followers" : "following"}`);
+        setPeople(data.data);
+    };
+    useEffect(() => {
         getPeople();
-    },[])
+    }, []);
 
+    const followHandler = async (username: string) => {
+        setIsFollowLoading(true);
+        await authorizedCustomAxios.post(`/${username}/follow`);
+        setIsFollowLoading(false);
+    };
     return (
         <ModalCard
             modalType="withBackDrop"
@@ -102,19 +123,39 @@ const FollowerModal = ({ onModalOn, onModalOff,isFollowerModal }: FollowerModalP
             </div>
             <div className="content">
                 {people.map(person => (
-                    <div className={'one-person'}>
+                    <div className={"one-person"} key={person.username}>
                         <div className="person-info">
                             <img src={person.image.imageUrl} alt={person.image.imageName} />
                             <div className="person-name-container">
-                                <span className="username">{person.username}</span>
+                                <div>
+                                    <span className="username">{person.username}</span>
+                                    {/*나이거나 내가 이미 팔로우했다면 팔로우 가이드를 보여주면 안된다*/}
+                                    {!person.me && !person.isFollowing &&
+                                    <>
+                                        {
+                                            isFollowLoading ?
+                                                <Loading size={18} />
+                                                :
+                                                <span className="follow-guide"
+                                                      onClick={async () => {
+                                                          await followHandler(person.username);
+                                                          await getPeople();
+                                                      }
+                                                      }> · 팔로우
+                                        </span>
+                                        }
+                                    </>
+                                    }
+                                </div>
                                 <span className="name">{person.name}</span>
                             </div>
                         </div>
                         {isFollowerModal ? <button className="action-button">
-                            삭제
-                        </button> : <button className={'action-button'}>
-                            팔로잉
-                        </button>
+                                삭제
+                            </button> :
+                            <button className={"action-button"}>
+                                팔로잉
+                            </button>
                         }
                     </div>
                 ))}

@@ -274,5 +274,5 @@ declare module Profile{
     }
 
 
-    type modalType = "userAction" | "setting" | "follower" | null
+    type modalType = "userAction" | "setting" | "follower" | "unFollow" |  null
 }

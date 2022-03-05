@@ -6,10 +6,15 @@ import { ReactComponent as SettingSvg } from "assets/Svgs/setting.svg";
 import { ReactComponent as ThreeDots } from "assets/Svgs/threeDots.svg";
 import Button from "styles/UI/Button/Button";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import { selectModal } from "app/store/ducks/profile/profileSlice";
+import { selectModal, setUnFollowSelectedUser } from "app/store/ducks/profile/profileSlice";
 import UserActionModal from "../Modals/UserActionModal";
 import SettingModal from "../Modals/SettingModal";
 import FollowerModal from "../Modals/FollowerModal";
+import sprite from "assets/Images/sprite5.png";
+import ImageSprite from "../../Common/ImageSprite";
+import UnFollowModal from "../Modals/UnFollowModal";
+import { authorizedCustomAxios } from "../../../customAxios";
+import { lookUpUserProfile } from "../../../app/store/ducks/profile/profileThunk";
 
 interface ProfileHeaderContainerProps {
     me: boolean;
@@ -61,9 +66,26 @@ const ProfileHeaderContainer = styled.header<ProfileHeaderContainerProps>`
         text-overflow: ellipsis;
       }
 
+      .following {
+        button {
+          margin-left: 10px;
+          border: 1px solid #dbdbdb;
+          color: #262626;
+          border-radius: 4px;
+          font-size: 14px;
+          font-weight: 600;
+          padding: 5px 9px;
+          height: 30px;
+        }
+      }
+
       svg {
         margin: 8px;
         cursor: pointer;
+      }
+      
+      .follow-button{
+        margin-left: 10px;
       }
     }
 
@@ -115,12 +137,29 @@ const ProfileHeaderContainer = styled.header<ProfileHeaderContainerProps>`
 interface ProfileHeaderProps {
 }
 
+
+const memberImage: Common.ImageProps = {
+    width: 24,
+    height: 12,
+    position: `-553px -100px`,
+    url: sprite,
+};
+
 const ProfileHeader = ({}: ProfileHeaderProps) => {
     const dispatch = useAppDispatch();
 
     const memberProfile = useAppSelector(state => state.profile.memberProfile as Profile.MemberProfileProps);
     const modal = useAppSelector(state => state.profile.modal);
     const [isFollowerModal, setIsFollowerModal] = useState<boolean>(true); // 기본값은 팔로워 모달입니다. false 라면 팔로우 입니다
+
+    const followHandler = async () => {
+        await authorizedCustomAxios.post(`/${memberProfile.memberUsername}/follow`);
+
+        // 팔로우한거 반영해주자 (언팔로우 버튼으로 바뀝니다)
+        await dispatch(lookUpUserProfile({ username: memberProfile.memberUsername }));
+    };
+
+
     return (
         <ProfileHeaderContainer me={memberProfile?.me}>
             <div className="profile-img">
@@ -145,13 +184,26 @@ const ProfileHeader = ({}: ProfileHeaderProps) => {
                                 } />
                             </> :
                             <>
-                                <Link className="edit" to={"/"}><Button>팔로우</Button></Link>
-                                <ThreeDots onClick={() => {
-                                    dispatch(selectModal("userAction"));
+                                {memberProfile?.following ?
+                                    <div className={"following"}>
+                                        <button>메세지 보내기</button>
+                                        <button onClick={() => {
+                                            dispatch(setUnFollowSelectedUser({
+                                                imageUrl: memberProfile.memberImage.imageUrl,
+                                                username: memberProfile.memberUsername,
+                                            }));
+                                            dispatch(selectModal("unFollow"));
+                                        }}>
+                                            <ImageSprite {...memberImage} />
+                                        </button>
+                                    </div> :
+                                    <Button className={'follow-button'} onClick={followHandler}>팔로우</Button>
                                 }
-                                } />
                             </>
                     }
+                    <ThreeDots onClick={() => {
+                        dispatch(selectModal("userAction"));
+                    }} />
                 </div>
                 <ul className="follower">
                     <li className="follower-with-number">
@@ -196,6 +248,15 @@ const ProfileHeader = ({}: ProfileHeaderProps) => {
                     dispatch(selectModal(null));
                 }} />
             }
+
+            {
+                modal === "unFollow" && <UnFollowModal onModalOn={() => {
+                    dispatch(selectModal("unFollow"));
+                }} onModalOff={() => {
+                    dispatch(selectModal(null));
+                }} />
+            }
+
         </ProfileHeaderContainer>
     );
 };
