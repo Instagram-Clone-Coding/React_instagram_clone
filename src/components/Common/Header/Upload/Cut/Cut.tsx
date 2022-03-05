@@ -569,7 +569,7 @@ const Cut = ({ currentWidth }: CutProps) => {
         },
         [dispatch],
     );
-
+    // gallery scroll
     const galleryLeftScrollHandler = useCallback(() => {
         if (!gallerySliderRef.current) return;
         gallerySliderRef.current.scrollTo({
@@ -585,7 +585,7 @@ const Cut = ({ currentWidth }: CutProps) => {
         });
     }, []);
 
-    const scrollHandler = useCallback(() => {
+    const galleryScrollHandler = useCallback(() => {
         if (!gallerySliderRef.current) return;
         if (gallerySliderRef.current.scrollLeft === 0) {
             setIsGalleryScrollInLeft(true);
@@ -603,6 +603,7 @@ const Cut = ({ currentWidth }: CutProps) => {
         }
     }, []);
 
+    // gallery grab
     const galleryGrabHandler = useCallback(
         (event: MouseEvent<HTMLDivElement>, clickedIndex: number) => {
             if (isGalleryImgGrabbed) return;
@@ -838,7 +839,7 @@ const Cut = ({ currentWidth }: CutProps) => {
                         <div
                             className="upload__galleryImgs"
                             ref={gallerySliderRef}
-                            onScroll={scrollHandler}
+                            onScroll={galleryScrollHandler}
                         >
                             {files.map((file, index) => (
                                 <div
