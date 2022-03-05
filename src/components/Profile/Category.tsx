@@ -32,6 +32,7 @@ const CategoryContainer = styled.div`
   .current{
     color: black;
     font-weight: bold;
+    border-top: 1px solid black;
     svg{
       color: black;
       fill: black;
