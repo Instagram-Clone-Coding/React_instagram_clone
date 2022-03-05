@@ -43,7 +43,7 @@ const Layout = styled.main`
 const Profile = () => {
     const { username } = useParams<{ username: string }>();
     const dispatch = useAppDispatch();
-
+    const currentCategory = useAppSelector(state => state.profile.currentCategory)
 
     // mount 가 되면 받은 username 으로 이 유저의 모든 프로필 정보를 호출합니다.
     useEffect(() => {
@@ -57,7 +57,7 @@ const Profile = () => {
             dispatch(getPosts({ page: 1, username: username }));
         };
         getPost();
-    }, []);
+    }, [currentCategory]);
 
 
     return (

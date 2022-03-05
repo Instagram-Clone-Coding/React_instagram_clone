@@ -52,13 +52,13 @@ const Category = () => {
 
     return (
         <CategoryContainer>
-            <div className={currentCategory === "normal" ? 'current' : ''} onClick={() => {
-                dispatch(selectCategory("normal"));
+            <div className={currentCategory === "" ? 'current' : ''} onClick={() => {
+                dispatch(selectCategory(""));
             }}>
                 <GridSvg /><span>게시물</span>
             </div>
-            <div className={currentCategory === "tag" ? 'current' : ''}  onClick={() => {
-                dispatch(selectCategory("tag"));
+            <div className={currentCategory === "tagged" ? 'current' : ''}  onClick={() => {
+                dispatch(selectCategory("tagged"));
             }}>
                 <TagSvg /><span>태그됨</span>
             </div>

@@ -4,14 +4,14 @@ import { getPosts, lookUpUserProfile } from "./profileThunk";
 export interface InitialStateType {
     isLoading: boolean;
     memberProfile: Profile.MemberProfileProps | null;
-    currentCategory: "normal" | "tag" | "video";
+    currentCategory: "" | "tagged" | "saved";
     posts: Profile.PostType[];
 }
 
 const initialState: InitialStateType = {
     isLoading: false,
     memberProfile: null,
-    currentCategory: "normal",
+    currentCategory: "",
     posts: [],
 };
 
@@ -20,7 +20,7 @@ const profileSlice = createSlice({
     name: "profile",
     initialState,
     reducers: {
-        selectCategory: (state, action: PayloadAction<"normal" | "tag" | "video">) => {
+        selectCategory: (state, action: PayloadAction<"" | "tagged" | "saved">) => {
             state.currentCategory = action.payload;
         },
     },
