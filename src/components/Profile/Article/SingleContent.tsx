@@ -24,11 +24,17 @@ const SingleContentContainer = styled.div`
   }
 `;
 
-const SingleContent = () => {
+interface SingleContentContainer {
+    post:Profile.PostType
+}
+const SingleContent = ({post}:SingleContentContainer) => {
+    console.log(
+        post
+    );
     return (
         <SingleContentContainer>
             <img
-                src="https://user-images.githubusercontent.com/69495129/155657560-916152aa-827a-4c06-85c8-1f9caacc99e2.png"
+                src={post.postImageUrl}
                 alt="content" className="single-content" />
         </SingleContentContainer>
     );

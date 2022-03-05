@@ -250,4 +250,12 @@ declare module Profile{
         imageName:string;
         imageUUID:string
     }
+
+    interface PostType{
+        postId:number;
+        postImageUrl:string;
+        hasManyPosts:boolean;
+        postCommentsCount:number;
+        postLikesCount:number
+    }
 }
