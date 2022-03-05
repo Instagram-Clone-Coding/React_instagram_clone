@@ -3,7 +3,7 @@ import Username from "components/Common/Username";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { ReactComponent as ThreeDots } from "../../../assets/Svgs/threeDots.svg";
+import { ReactComponent as ThreeDots } from "assets/Svgs/threeDots.svg";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { getMiniProfile } from "app/store/ducks/modal/modalThunk";

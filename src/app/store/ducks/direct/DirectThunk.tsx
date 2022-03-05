@@ -6,11 +6,21 @@ import { RootState } from "../../store";
 
 export const makeRoom = createAsyncThunk<Direct.RoomsProps,
     {
-        username: string;
+        usernames: string[];
     }>("chat/rooms", async (payload, ThunkOptions) => {
+
+
+
     const config = {
-        params: {
-            username: payload.username,
+        params: { usernames: payload.usernames },
+        // 배열을 알맞은 형태로 axios 호출하도록 만들어주는 부분입니다.
+        paramsSerializer: (paramObj: { [x: string]: string; }) => {
+            const params = new URLSearchParams();
+            for (const key in paramObj) {
+                params.append(key, paramObj[key])
+            }
+
+            return params.toString();
         },
     };
     try {
@@ -19,6 +29,7 @@ export const makeRoom = createAsyncThunk<Direct.RoomsProps,
             null,
             config,
         );
+        console.log(data);
         return data.data;
     } catch (error) {
         error === FAIL_TO_REISSUE_MESSAGE &&

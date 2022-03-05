@@ -26,14 +26,12 @@ const ChatList = ({}: ChatListProps) => {
 
         // 내가 이 방을 선택했다.
         dispatch(selectChatItem(roomId));
-
-
         if (view === "requests" || view === "requestsChat") {
             dispatch(selectView("requestsChat"));
         } else {
             dispatch(selectView("chat"));
             // 채팅방 클릭시 채팅방 생성 이 경우에는 기존에 목록에 있는 채팅방을 클릭하므로 실제 생성되진 않고, 기존의 Room 이 return 된다.
-            await dispatch(makeRoom({ username: username }));
+            await dispatch(makeRoom({ usernames: [username] }));
 
             // 채팅방 클릭시 채팅방조회(채팅방을 클릭하면 unseen count를 감소시키는 API) 호출
             await dispatch(lookUpChatRoom({ roomId }));

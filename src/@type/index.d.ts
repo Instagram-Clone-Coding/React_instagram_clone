@@ -1,21 +1,31 @@
 declare module Direct {
 
+    interface PostMessageDTO {
+        postId: number;
+        postImage: Common.ImageInfo;
+        postImageCount: number;
+        status: string;
+        uploader: AuthType.UserInfo;
+    }
+
     interface MessageDTO {
-        messageId:number;
-        content:string;
-        messageType:string;
-        messageDate:string;
-        senderId:number;
-        roomId:number;
+        messageId: number;
+        content: string | PostMessageDTO;
+        messageType: messageType;
+        messageDate: string;
+        senderId: number;
+        roomId: number;
+        senderImage: Common.ImageInfo;
+        likeMembers: AuthType.UserInfo[];
     }
 
     interface ChatItem {
-        roomId:number;
-        lastMessage:MessageDTO;
-        unreadFlag:boolean;
-        inviter:inviterProps;
-        members:memberProps[];
-        typing?:boolean
+        roomId: number;
+        lastMessage: MessageDTO;
+        unreadFlag: boolean;
+        inviter: inviterProps;
+        members: memberProps[];
+        typing?: boolean;
     }
 
     interface inviterProps {
@@ -38,8 +48,9 @@ declare module Direct {
     }
 
 
-    type modalType = "deleteChat" | "block" | "report" | "newChat" | "convertAccount" | "deleteAll" | null;
+    type modalType = "deleteChat" | "block" | "report" | "newChat" | "convertAccount" | "deleteAll" | "deleteChatMessage" | null;
     type currentSectionViewType = "inbox" | "detail" | "chat" | "requests" | "requestsChat"
+    type messageType = "TEXT" | "POST"
 
 }
 
@@ -63,10 +74,10 @@ declare module AuthType {
     }
 
     interface UserInfo {
-        memberId:number;
-        memberImageUrl:string;
-        memberName:string;
-        memberUsername:string
+        memberId: number;
+        memberImageUrl: string;
+        memberName: string;
+        memberUsername: string;
     }
 }
 
@@ -172,6 +183,7 @@ declare module ModalType {
         | "articleMenu"
         | "shareWith"
         | null;
+
     interface ModalPositionProps {
         top: number;
         bottom: number;
@@ -223,5 +235,12 @@ declare module Common {
         height: number;
         position: string;
         url: string;
+    }
+
+    interface ImageInfo {
+        imageUrl: string;
+        imageType: string;
+        imageName: string;
+        imageUUID: string;
     }
 }
