@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { ReactComponent as GridSvg } from "assets/Svgs/grid.svg";
 import { ReactComponent as TagSvg } from "assets/Svgs/tag.svg";
+import { ReactComponent as BookmarkSvg } from "assets/Svgs/emptyBookmark.svg";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { selectCategory } from "app/store/ducks/profile/profileSlice";
 import { useParams } from "react-router-dom";
@@ -66,10 +67,10 @@ const Category = () => {
             {/*내가 나의 프로필을 보고 있다면 저장됨을 보여줘라*/}
             {/*다른사람 프로필을 보고있다면 게시물과 태그됨만 보여줘라*/}
             {userInfo?.memberUsername === username &&
-            <div className={currentCategory === "tagged" ? "current" : ""} onClick={() => {
-                dispatch(selectCategory("tagged"));
+            <div className={currentCategory === "saved" ? "current" : ""} onClick={() => {
+                dispatch(selectCategory("saved"));
             }}>
-                <TagSvg /><span>저장됨</span>
+                <BookmarkSvg /><span>저장됨</span>
             </div>}
 
             <div className={currentCategory === "tagged" ? "current" : ""} onClick={() => {
