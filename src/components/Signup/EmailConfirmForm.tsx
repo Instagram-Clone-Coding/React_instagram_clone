@@ -9,6 +9,7 @@ import SubmitButton from "components/Common/SubmitButton";
 import Button from "styles/UI/Button";
 import { authAction } from "app/store/ducks/auth/authSlice";
 import { signIn } from "app/store/ducks/auth/authThunk";
+import { useState } from "react";
 
 const Container = styled.div`
     .form-description {
@@ -50,6 +51,14 @@ const Container = styled.div`
         flex-direction: column;
         width: 100%;
         margin: 8px 0px;
+
+        .errorMessage {
+            color: #ed4956;
+            font-size: 14px;
+            line-height: 18px;
+            text-align: center;
+            margin: 10px 40px;
+        }
     }
 `;
 
@@ -63,11 +72,12 @@ const messageImage: Common.ImageProps = {
 export default function EmailConfirmForm() {
     const userInput = useAppSelector((state) => state.auth.signUpUserData);
     const dispatch = useAppDispatch();
+    const [errorMessage, setErrorMessage] = useState("");
 
     const [codeInputProps, isValid, isFocus] = useInput(
         "",
         undefined,
-        (value: string) => value.length > 0,
+        (value: string) => value.length >= 6,
     );
 
     const reCallEmailConfirmHandler = () => {
@@ -99,13 +109,13 @@ export default function EmailConfirmForm() {
             if (!userInput) return;
             try {
                 const {
-                    data: { status },
+                    data: { status, message, data },
                 } = await customAxios.post(`/accounts`, {
                     ...userInput,
                     code: codeInputProps.value,
                 });
 
-                if (status === 200) {
+                if (status === 200 && data) {
                     dispatch(authAction.resetUserInputData());
                     dispatch(
                         signIn({
@@ -113,9 +123,10 @@ export default function EmailConfirmForm() {
                             password: userInput.password,
                         }),
                     );
+                } else if (status === 200 && !data) {
+                    setErrorMessage(message);
                 }
             } catch (error) {
-                // 인증번호를 잘못적었을때**
                 console.log(error, `call signUp api`);
             }
         };
@@ -163,6 +174,11 @@ export default function EmailConfirmForm() {
                 >
                     돌아가기
                 </Button>
+                {errorMessage && (
+                    <div className="errorMessage">
+                        <p>{errorMessage}</p>
+                    </div>
+                )}
             </div>
         </Container>
     );
