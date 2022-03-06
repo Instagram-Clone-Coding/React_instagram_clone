@@ -11,8 +11,12 @@ import InboxSection from "components/Direct/Section/InboxSection";
 import RequestsSection from "components/Direct/Section/requestsSection";
 import * as StompJs from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import { addTyping, lookUpChatRoom, reissueChatList } from "../../app/store/ducks/direct/DirectThunk";
-import { addChatMessageItem, addSubChatCount } from "../../app/store/ducks/direct/DirectSlice";
+import { addTyping, lookUpChatRoom, reissueChatList } from "app/store/ducks/direct/DirectThunk";
+import {
+    addChatMessageItem,
+    addSubChatCount,
+    likeChatMessageItem, setSelectedMessageId, unLikeChatMessageItem,
+} from "app/store/ducks/direct/DirectSlice";
 
 const Direct = () => {
 
@@ -41,7 +45,6 @@ const Direct = () => {
                 onConnect: () => {
                     client?.current?.subscribe(`/sub/${username}`, async ({ body }) => {
                         const newMessage = JSON.parse(body);
-                        console.log(newMessage.action);
 
                         switch (newMessage.action) {
                             case "MESSAGE_SEEN":
@@ -62,8 +65,17 @@ const Direct = () => {
                             case "MESSAGE_DELETE":
                                 console.log("삭제완료");
                                 break;
-                            case "MESSAGE_LIKE(UNLIKE)":
-                                console.log("좋아요 싫어요 완료");
+                            case "MESSAGE_LIKE":
+                                // 좋아요 누른것이 바로 반영되도록 해준다.
+                                dispatch(likeChatMessageItem({messageId:newMessage.data.messageId,userInfo:userInfo as AuthType.UserInfo}))
+                                dispatch(setSelectedMessageId(null))
+                                break;
+                            case "MESSAGE_UNLIKE":
+                                // 좋아요 취소 누른것이 바로 반영되도록 해준다.
+                                dispatch(unLikeChatMessageItem({messageId:newMessage.data.messageId,memberId:newMessage.data.memberId}))
+                                dispatch(setSelectedMessageId(null))
+
+
                                 break;
                         }
 
@@ -138,7 +150,6 @@ const Direct = () => {
 
     //  메세지 좋아요
     const likeMessageHandler = () => {
-        console.log("메시지 좋아요");
         client?.current?.publish({
             destination: "/pub/messages/like", body: JSON.stringify({
                 "memberId": userInfo?.memberId,
@@ -149,7 +160,6 @@ const Direct = () => {
 
     //  메세지 좋아요 취소
     const unlikeMessageHandler = () => {
-        console.log("메시지 싫어요");
         client?.current?.publish({
             destination: "/pub/messages/unlike", body: JSON.stringify({
                 "memberId": userInfo?.memberId,

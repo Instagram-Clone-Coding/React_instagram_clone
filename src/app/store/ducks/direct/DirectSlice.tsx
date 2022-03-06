@@ -94,8 +94,31 @@ const directSlice = createSlice({
             state.chatListPage = 1;
         },
         setSelectedMessageId : (state,action : PayloadAction<number | null>) => {
-
             state.selectedMessageId = action.payload
+        },
+        likeChatMessageItem: (state,action:PayloadAction<{messageId:number,userInfo:AuthType.UserInfo}>) => {
+            // 내가 좋아요 누른 메세지의 likemembers 에 내 정보를 추가해준다. 그래야 바로 반영이된다.
+            state.chatMessageList.forEach(chatMessageItem => {
+                if(chatMessageItem.messageId === action.payload.messageId){
+                    chatMessageItem.likeMembers.push(action.payload.userInfo)
+                    return;
+                }
+            })
+        },
+        unLikeChatMessageItem: (state,action:PayloadAction<{messageId:number,memberId:number}>) => {
+            // 내가 좋아요 취소 누른 메세지의 likemembers 에 내 정보를 삭제해준다. 그래야 바로 반영이된다.
+            state.chatMessageList.forEach(chatMessageItem => {
+                // 내가 찾는 메세지라면
+                if(chatMessageItem.messageId === action.payload.messageId){
+                    chatMessageItem.likeMembers = chatMessageItem.likeMembers.filter(member => {
+                        return member.memberId !== action.payload.memberId
+                    })
+                    return;
+                }
+            })
+        },
+        deleteChatMessageItem:(state,action : PayloadAction<number>) => {
+
         }
     },
     extraReducers: (build) => {
@@ -257,7 +280,9 @@ export const {
     resetChatMessagePage,
     resetSelectedRoom,
     resetChatList,
-    setSelectedMessageId
+    setSelectedMessageId,
+    likeChatMessageItem,
+    unLikeChatMessageItem
 
 } = directSlice.actions;
 export const directReducer = directSlice.reducer;

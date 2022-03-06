@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { ReactComponent as ThreeDots } from "assets/Svgs/threeDots.svg";
 import { openModal, setSelectedMessageId } from "app/store/ducks/direct/DirectSlice";
+import moment from "moment";
 
 interface ChatBubbleProps {
     content: string | Direct.PostMessageDTO;
@@ -10,8 +11,9 @@ interface ChatBubbleProps {
     showDate: boolean;
     messageDate: string;
     messageId: number;
-    likeMessageHandler : () => void;
-    unlikeMessageHandler : () => void;
+    likeMessageHandler: () => void;
+    unlikeMessageHandler: () => void;
+    likeMembers: AuthType.UserInfo[];
 }
 
 interface ChatBubbleContainerType {
@@ -24,6 +26,7 @@ interface ChatBubbleContainerType {
     onMouseLeave: (
         event: React.MouseEvent<HTMLDivElement>,
     ) => void;
+    liked: AuthType.UserInfo | undefined;
 }
 
 const ChatBubbleContainer = styled.div<ChatBubbleContainerType>`
@@ -33,6 +36,7 @@ const ChatBubbleContainer = styled.div<ChatBubbleContainerType>`
   text-align: ${props => props.me ? "right" : "left"};
   display: block;
   position: relative;
+  margin-bottom: ${props => props.liked ? "15px" : "0"};
 
   .date-section {
     width: 100%;
@@ -138,24 +142,35 @@ const ChatBubbleContainer = styled.div<ChatBubbleContainerType>`
     object-fit: cover;
   }
 
-  .heart{
+  .heart {
     background-color: #efefef;
     border-radius: 50%;
     border: 2px solid #fff;
     position: absolute;
     right: 0;
-    padding: 6px ;
+    padding: 6px;
     bottom: -14px;
   }
 
 `;
 
 
-const ChatBubble = ({ me, content, showDate, messageDate, messageId ,likeMessageHandler,unlikeMessageHandler}: ChatBubbleProps) => {
+const ChatBubble = ({
+                        me,
+                        content,
+                        showDate,
+                        messageDate,
+                        messageId,
+                        likeMessageHandler,
+                        unlikeMessageHandler,
+                        likeMembers,
+                    }: ChatBubbleProps) => {
     const [showThreeDotsButton, setShowThreeDotsButton] = useState<boolean>(false);
+    const [showGuide, setShowGuide] = useState<boolean>(false);
     const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
     const renewScroll = useAppSelector(state => state.direct.renewScroll);
     const selectedMessageId = useAppSelector(state => state.direct.selectedMessageId);
+    const userInfo = useAppSelector(state => state.auth.userInfo);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -164,6 +179,14 @@ const ChatBubble = ({ me, content, showDate, messageDate, messageId ,likeMessage
         }
     }, [content]);
 
+    // 내가 좋아요 했는지 판단하는 상수
+    const liked = likeMembers.find(member => {
+        return member.memberId === userInfo?.memberId;
+    });
+
+    useEffect(() => {
+        setShowGuide(selectedMessageId === messageId);
+    }, [selectedMessageId]);
     return (
         <ChatBubbleContainer me={me} ref={scrollRef}
                              onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
@@ -175,10 +198,11 @@ const ChatBubble = ({ me, content, showDate, messageDate, messageId ,likeMessage
                                  setShowThreeDotsButton(false);
                              }}
                              showThreeDotsButton={showThreeDotsButton}
-                             showGuide={selectedMessageId === messageId}
+                             showGuide={showGuide}
+                             liked={liked}
         >
             {
-                showDate && <div className={"date-section"}>{messageDate}</div>
+                showDate && <div className={"date-section"}>{moment(messageDate).format("YYYY년 M월 DD일 a  h:mm")}</div>
             }
             {
                 !me &&
@@ -193,11 +217,24 @@ const ChatBubble = ({ me, content, showDate, messageDate, messageId ,likeMessage
                                 <div className="arrow-detail"></div>
                             </div>
                             <div className="guide-content">
-                                <button onClick={likeMessageHandler}>좋아요</button>
+
+                                {
+                                    liked ? <button onClick={() => {
+                                            unlikeMessageHandler();
+                                            setShowGuide(false);
+                                        }
+                                        }>좋아요 취소</button>
+                                        : <button onClick={() => {
+                                            likeMessageHandler();
+                                            setShowGuide(false);
+                                        }
+                                        }>좋아요</button>
+                                }
                                 <button>복사</button>
-                                <button  onClick={() => {
+                                <button onClick={() => {
                                     dispatch(openModal("deleteChatMessage"));
-                                }}>전송 취소</button>
+                                }}>전송 취소
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -211,13 +248,15 @@ const ChatBubble = ({ me, content, showDate, messageDate, messageId ,likeMessage
                 </p>
 
             </div>
-
-            <div className={"heart"}>
-                <div>
-                    ❤️
+            {/*그 메세지에 좋아요를 누른 사람중에 내가 있다면 하트를 표시해주자*/}
+            {
+                liked &&
+                <div className={"heart"}>
+                    <div>
+                        ❤️
+                    </div>
                 </div>
-            </div>
-
+            }
 
 
         </ChatBubbleContainer>

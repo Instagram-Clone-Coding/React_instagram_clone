@@ -142,11 +142,10 @@ const ChatSection = ({ deleteMessageHandler,likeMessageHandler,unlikeMessageHand
             <div className="chat-bubble-section" ref={scrollCheckRef}>
 
                 {[...chatMessageList].map((chatMessageListItem, index) => (
-                    <ChatBubble key={index} content={chatMessageListItem.content}
+                    <ChatBubble key={index}
                                 showDate={index === 0 ? true : index >= 1 && Math.abs(moment(chatMessageList[index - 1].messageDate).diff(moment(chatMessageListItem.messageDate), "minute")) > 10}
-                                messageDate={moment(chatMessageListItem.messageDate).format("YYYY년 M월 DD일 a  h:mm")}
                                 me={userInfo?.memberId === chatMessageListItem.senderId}
-                                messageId={chatMessageListItem.messageId}
+                                {...chatMessageListItem}
                                 likeMessageHandler={likeMessageHandler}
                                 unlikeMessageHandler={unlikeMessageHandler}
                     />

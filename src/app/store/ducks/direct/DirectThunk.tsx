@@ -149,6 +149,7 @@ export const lookUpChatMessageList = createAsyncThunk<{content : Direct.MessageD
             const {
                 data: { data },
             } = await authorizedCustomAxios.get(`/chat/rooms/${payload.roomId}/messages`, config);
+            console.log(data.content);
             return { content: data.content , last:data.last };
         } catch (error) {
             error === FAIL_TO_REISSUE_MESSAGE &&
