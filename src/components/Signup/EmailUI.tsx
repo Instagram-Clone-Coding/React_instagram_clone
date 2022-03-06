@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import sprite from "assets/Images/sprite3.png";
-import ImageSprite from "components/Common/ImageSprite";
 import { useAppSelector } from "app/store/Hooks";
 import emailLogo from "assets/Images/emailLogo.png";
+import EmailFooter from "components/Signup/EmailFooter";
 
 const Container = styled.div`
     margin: 0;
@@ -44,30 +43,7 @@ const Container = styled.div`
         text-align: center;
         padding-bottom: 25px;
     }
-
-    footer {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-bottom: 52px;
-        .meta_logo {
-            background-size: 569px 521px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-        & > div {
-            color: #abadae;
-            font-size: 5px;
-        }
-    }
 `;
-
-const metaLogo: Common.ImageProps = {
-    width: 52,
-    height: 26,
-    position: ` -427px -398px`,
-    url: sprite,
-};
 
 export default function EmailUI() {
     const userEmail =
@@ -91,14 +67,9 @@ export default function EmailUI() {
                         {/* 인증코드 넣는 곳(임시값 넣어둠) */}132560
                     </div>
                 </main>
-                <footer>
-                    <ImageSprite {...metaLogo} className="meta_logo" />
-                    <div>
-                        © Instagram. Meta Platforms, Inc., 1601 Willow Road,
-                        Menlo Park, CA 94025
-                    </div>
-                    <div>This message was sent to {userEmail}</div>
-                </footer>
+                <EmailFooter
+                    sentence={[`This message was sent to ${userEmail}`]}
+                />
             </div>
         </Container>
     );
