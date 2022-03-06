@@ -189,15 +189,15 @@ const CutImgUnit = forwardRef<HTMLDivElement, CutImgUnitProps>(
                     case "original":
                         if (imageRatio > 1) {
                             return {
-                                minWidth:
-                                    getRatioCalculatedBoxHeight(
-                                        "original",
-                                        processedCurrentWidth,
-                                    ) * imageRatio,
-                                minHeight: getRatioCalculatedBoxHeight(
+                                minWidth: getRatioCalculatedBoxWidth(
                                     "original",
                                     processedCurrentWidth,
                                 ),
+                                minHeight:
+                                    getRatioCalculatedBoxWidth(
+                                        "original",
+                                        processedCurrentWidth,
+                                    ) / imageRatio,
                             };
                         } else {
                             return {
@@ -253,6 +253,8 @@ const CutImgUnit = forwardRef<HTMLDivElement, CutImgUnitProps>(
                 }
             }
         }, [imageRatio, processedCurrentWidth, ratioMode]);
+
+        console.log(processedMinSize.minWidth);
         return (
             <StyledCutImgUnit
                 ratioType={ratioMode}
