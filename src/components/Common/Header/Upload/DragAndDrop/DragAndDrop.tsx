@@ -89,8 +89,7 @@ const DragAndDrop = () => {
                 dispatch(
                     uploadActions.addFile({
                         url: img.src,
-                        width: img.width,
-                        height: img.height,
+                        imageRatio: img.width / img.height,
                     }),
                 );
                 if (index === droppedFiles.length - 1) {
@@ -112,8 +111,7 @@ const DragAndDrop = () => {
                 dispatch(
                     uploadActions.addFile({
                         url: img.src,
-                        width: img.width,
-                        height: img.height,
+                        imageRatio: img.width / img.height,
                     }),
                 );
                 if (index === addedFiles.length - 1) {

@@ -560,8 +560,7 @@ const Cut = ({ currentWidth }: CutProps) => {
                     dispatch(
                         uploadActions.addFile({
                             url: img.src,
-                            width: img.width,
-                            height: img.height,
+                            imageRatio: img.width / img.height,
                         }),
                     );
                 };
@@ -884,7 +883,7 @@ const Cut = ({ currentWidth }: CutProps) => {
                                         className="upload__galleryImg"
                                         style={{
                                             minWidth: `${
-                                                (94 * file.width) / file.height
+                                                94 * file.imageRatio
                                             }px`,
                                             backgroundImage: `
                                             linear-gradient(rgba(0, 0, 0, ${

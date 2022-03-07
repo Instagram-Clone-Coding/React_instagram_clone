@@ -88,12 +88,6 @@ const CutImgUnit = forwardRef<HTMLDivElement, CutImgUnitProps>(
     ) => {
         const dispatch = useAppDispatch();
         const isGrabbing = useAppSelector((state) => state.upload.isGrabbing);
-        // const imageRef = useRef<HTMLDivElement | null>(null); // 각 인덱스
-
-        const imageRatio = useMemo(
-            () => currentFile.width / currentFile.height,
-            [currentFile.width, currentFile.height],
-        );
 
         const mouseDownhandler = useCallback(
             (event: MouseEvent) => {
@@ -164,6 +158,7 @@ const CutImgUnit = forwardRef<HTMLDivElement, CutImgUnitProps>(
             minWidth: number;
             minHeight: number;
         } = useMemo(() => {
+            const imageRatio = currentFile.imageRatio;
             if (ratioMode !== "square") {
                 switch (ratioMode) {
                     case "thin":
@@ -203,7 +198,7 @@ const CutImgUnit = forwardRef<HTMLDivElement, CutImgUnitProps>(
                     };
                 }
             }
-        }, [imageRatio, processedCurrentWidth, ratioMode]);
+        }, [currentFile.imageRatio, processedCurrentWidth, ratioMode]);
 
         return (
             <StyledCutImgUnit
