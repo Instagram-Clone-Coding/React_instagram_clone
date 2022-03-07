@@ -166,7 +166,6 @@ const CutImgUnit = forwardRef<HTMLDivElement, CutImgUnitProps>(
         } = useMemo(() => {
             if (ratioMode !== "square") {
                 switch (ratioMode) {
-                    // case "square":
                     case "thin":
                         if (imageRatio > 1) {
                             return {
@@ -175,69 +174,21 @@ const CutImgUnit = forwardRef<HTMLDivElement, CutImgUnitProps>(
                             };
                         } else {
                             return {
-                                minWidth: getRatioCalculatedBoxWidth(
-                                    "thin",
-                                    processedCurrentWidth,
-                                ),
+                                minWidth: processedCurrentWidth * 0.8,
                                 minHeight:
-                                    getRatioCalculatedBoxWidth(
-                                        "thin",
-                                        processedCurrentWidth,
-                                    ) / imageRatio,
+                                    (processedCurrentWidth * 0.8) / imageRatio,
                             };
                         }
                     case "original":
-                        if (imageRatio > 1) {
-                            return {
-                                minWidth: getRatioCalculatedBoxWidth(
-                                    "original",
-                                    processedCurrentWidth,
-                                ),
-                                minHeight:
-                                    getRatioCalculatedBoxWidth(
-                                        "original",
-                                        processedCurrentWidth,
-                                    ) / imageRatio,
-                            };
-                        } else {
-                            return {
-                                minWidth: getRatioCalculatedBoxWidth(
-                                    "original",
-                                    processedCurrentWidth,
-                                ),
-                                minHeight:
-                                    getRatioCalculatedBoxWidth(
-                                        "original",
-                                        processedCurrentWidth,
-                                    ) / imageRatio,
-                            };
-                        }
+                        return {
+                            minWidth: processedCurrentWidth,
+                            minHeight: processedCurrentWidth / imageRatio,
+                        };
                     case "fat":
-                        if (imageRatio > 1) {
-                            return {
-                                minWidth:
-                                    getRatioCalculatedBoxHeight(
-                                        "fat",
-                                        processedCurrentWidth,
-                                    ) * imageRatio,
-                                minHeight: getRatioCalculatedBoxHeight(
-                                    "fat",
-                                    processedCurrentWidth,
-                                ),
-                            };
-                        } else {
-                            return {
-                                minWidth: getRatioCalculatedBoxWidth(
-                                    "fat",
-                                    processedCurrentWidth,
-                                ),
-                                minHeight:
-                                    getRatioCalculatedBoxWidth(
-                                        "fat",
-                                        processedCurrentWidth,
-                                    ) / imageRatio,
-                            };
-                        }
+                        return {
+                            minWidth: processedCurrentWidth,
+                            minHeight: processedCurrentWidth / imageRatio,
+                        };
                 }
             } else {
                 if (imageRatio > 1) {
@@ -254,7 +205,6 @@ const CutImgUnit = forwardRef<HTMLDivElement, CutImgUnitProps>(
             }
         }, [imageRatio, processedCurrentWidth, ratioMode]);
 
-        console.log(processedMinSize.minWidth);
         return (
             <StyledCutImgUnit
                 ratioType={ratioMode}
