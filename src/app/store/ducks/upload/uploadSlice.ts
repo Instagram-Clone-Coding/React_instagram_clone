@@ -35,11 +35,11 @@ const uploadSlice = createSlice({
                         window.URL.revokeObjectURL(file.url),
                     );
                     return { ...initialState, isUploading: true };
-                case "filter":
+                case "edit":
                     state.step = "cut";
                     break;
                 case "content":
-                    state.step = "filter";
+                    state.step = "edit";
                     break;
             }
         },
@@ -49,9 +49,9 @@ const uploadSlice = createSlice({
                     state.step = "cut";
                     break;
                 case "cut":
-                    state.step = "filter";
+                    state.step = "edit";
                     break;
-                case "filter":
+                case "edit":
                     state.step = "content";
                     break;
             }

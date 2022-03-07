@@ -6,7 +6,7 @@ import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import { ReactComponent as BackIcon } from "assets/Svgs/back.svg";
 import DragAndDrop from "components/Common/Header/Upload/DragAndDrop";
 import Cut from "components/Common/Header/Upload/Cut";
-import Filter from "components/Common/Header/Upload/Filter";
+import Edit from "components/Common/Header/Upload/Edit";
 
 interface ModalInnerProps {
     backdropWidth: number;
@@ -105,7 +105,7 @@ const Upload = () => {
                 return "새 게시물 만들기";
             case "cut":
                 return "자르기";
-            case "filter":
+            case "edit":
                 return "편집";
         }
     }, []);
@@ -124,8 +124,8 @@ const Upload = () => {
                             )}
                         />
                     );
-                case "filter":
-                    return <Filter />;
+                case "edit":
+                    return <Edit />;
             }
         },
         [currentWidthLimitedByWindowHeight, currentMaxWidth],

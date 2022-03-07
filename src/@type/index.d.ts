@@ -239,7 +239,7 @@ declare module UploadType {
     // type FileProps = FileDragAndDropProps & FileCutProps;
 
     type RatioType = "original" | "square" | "thin" | "fat";
-    type StepType = "dragAndDrop" | "cut" | "filter" | "content";
+    type StepType = "dragAndDrop" | "cut" | "edit" | "content";
 
     interface UploadStateProps {
         isUploading: boolean;
