@@ -9,11 +9,23 @@ declare module Direct {
     }
 }
 
+declare module CommonType {
+    interface FooterTextProps {
+        text: string;
+        url?: string;
+    }
+}
+
 declare module UI {
     interface ButtonProps {
         bgColor?: string;
         radius?: number;
         color?: string;
+    }
+
+    interface ContentBoxProps {
+        padding: string;
+        margin: string;
     }
 }
 
@@ -39,12 +51,12 @@ declare module AuthType {
         password: string;
         username: string;
     }
-}
 
-declare module Login {
-    interface FooterTextProps {
-        text: string;
-        url?: string;
+    interface useInputProps {
+        value: string;
+        onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+        onBlur?: () => void;
+        onFocus?: () => void;
     }
 
     interface InputProps {
@@ -55,18 +67,6 @@ declare module Login {
         isValid?: boolean | null;
         isFocus?: boolean;
         hasValidator?: (value: string) => boolean;
-    }
-
-    interface useInputProps {
-        value: string;
-        onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-        onBlur?: () => void;
-        onFocus?: () => void;
-    }
-
-    interface NewCardProps {
-        padding: string;
-        margin: string;
     }
 }
 

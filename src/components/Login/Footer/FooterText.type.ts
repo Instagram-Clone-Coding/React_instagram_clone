@@ -1,3 +1,3 @@
 export default interface FooterContentProps {
-    content: Array<Login.FooterTextProps>;
+    content: Array<CommonType.FooterTextProps>;
 }

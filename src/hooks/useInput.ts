@@ -2,7 +2,7 @@ import { usernameValidator } from "components/Signup/validator";
 import { customAxios } from "customAxios";
 import { ChangeEvent, useState } from "react";
 
-type ReturnType = [Login.useInputProps, boolean | null, boolean, () => void];
+type ReturnType = [AuthType.useInputProps, boolean | null, boolean, () => void];
 
 const useInput = (
     initialValue: string,

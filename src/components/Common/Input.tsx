@@ -94,7 +94,7 @@ const InvalidFlag: Common.ImageProps = {
     url: sprite,
 };
 
-const Input = (props: Login.InputProps) => {
+const Input = (props: AuthType.InputProps) => {
     const { innerText, type, inputName } = props;
     const [isSmallInnerText, setInnerTextSize] = useState(false);
     const [inputType, setInputType] = useState(type);

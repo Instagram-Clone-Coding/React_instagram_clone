@@ -16,7 +16,7 @@ const FormContainer = styled.div`
     flex-grow: 1;
 `;
 
-const Props: Login.NewCardProps = {
+const Props: UI.ContentBoxProps = {
     padding: `10px 0`,
     margin: `0 0 10px`,
 };
