@@ -121,7 +121,7 @@ const Upload = () => {
                     return (
                         <Cut
                             currentWidth={Math.min(
-                                currentWidthLimitedByWindowHeight,
+                                currentHeightLimitedByWindowHeight,
                                 currentMaxWidth,
                             )}
                         />
@@ -130,14 +130,14 @@ const Upload = () => {
                     return (
                         <Edit
                             currentWidth={Math.min(
-                                currentWidthLimitedByWindowHeight,
+                                currentHeightLimitedByWindowHeight - 43,
                                 currentMaxWidth,
                             )}
                         />
                     );
             }
         },
-        [currentWidthLimitedByWindowHeight, currentMaxWidth],
+        [currentHeightLimitedByWindowHeight, currentMaxWidth],
     );
 
     const checkIsGrabbingAndCancelUpload = () => {
@@ -154,10 +154,7 @@ const Upload = () => {
             onModalOn={() => dispatch(uploadActions.startUpload())}
             onModalOff={checkIsGrabbingAndCancelUpload}
             isWithCancelBtn={true}
-            width={
-                currentWidthLimitedByWindowHeight
-                // + step !== "edit" ? 0 : 340
-            }
+            width={currentWidthLimitedByWindowHeight}
             height={currentHeightLimitedByWindowHeight}
             maxWidth={
                 currentMaxWidth +
