@@ -74,8 +74,10 @@ const Upload = () => {
             Math.min(
                 currentWidth + BORDER_TOTAL_WIDTH + 43,
                 backDropHeight - 184,
-            ) - 43,
-        [currentWidth, backDropHeight],
+            ) -
+            43 +
+            (step !== "edit" ? 0 : 340),
+        [currentWidth, backDropHeight, step],
     );
     const currentHeightLimitedByWindowHeight = useMemo(
         () =>
@@ -125,14 +127,20 @@ const Upload = () => {
                         />
                     );
                 case "edit":
-                    return <Edit />;
+                    return (
+                        <Edit
+                            currentWidth={Math.min(
+                                currentWidthLimitedByWindowHeight,
+                                currentMaxWidth,
+                            )}
+                        />
+                    );
             }
         },
         [currentWidthLimitedByWindowHeight, currentMaxWidth],
     );
 
     const checkIsGrabbingAndCancelUpload = () => {
-        console.log("is triggered");
         if (isGrabbing) {
             dispatch(uploadActions.stopGrabbing());
         } else {
@@ -146,9 +154,16 @@ const Upload = () => {
             onModalOn={() => dispatch(uploadActions.startUpload())}
             onModalOff={checkIsGrabbingAndCancelUpload}
             isWithCancelBtn={true}
-            width={currentWidthLimitedByWindowHeight}
+            width={
+                currentWidthLimitedByWindowHeight
+                // + step !== "edit" ? 0 : 340
+            }
             height={currentHeightLimitedByWindowHeight}
-            maxWidth={currentMaxWidth + BORDER_TOTAL_WIDTH}
+            maxWidth={
+                currentMaxWidth +
+                BORDER_TOTAL_WIDTH +
+                (step !== "edit" ? 0 : 340)
+            }
             maxHeight={currentMaxWidth + BORDER_TOTAL_WIDTH + 43}
             minWidth={348 + BORDER_TOTAL_WIDTH}
             minHeight={391 + BORDER_TOTAL_WIDTH}
