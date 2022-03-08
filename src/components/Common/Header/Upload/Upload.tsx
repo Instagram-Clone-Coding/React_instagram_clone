@@ -162,7 +162,7 @@ const Upload = () => {
                 (step !== "edit" ? 0 : 340)
             }
             maxHeight={currentMaxWidth + BORDER_TOTAL_WIDTH + 43}
-            minWidth={348 + BORDER_TOTAL_WIDTH}
+            minWidth={348 + BORDER_TOTAL_WIDTH + (step !== "edit" ? 0 : 340)}
             minHeight={391 + BORDER_TOTAL_WIDTH}
         >
             <StyledUploadModalInner
