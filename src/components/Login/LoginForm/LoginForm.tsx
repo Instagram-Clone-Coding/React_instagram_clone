@@ -7,11 +7,12 @@ import { useAppDispatch } from "app/store/Hooks";
 import { useEffect } from "react";
 import { authAction } from "app/store/ducks/auth/authSlice";
 
-const FormContainer = styled.div`
+const Container = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    min-height: 100vh;
     margin-top: 12px;
+    justify-content: center;
     max-width: 350px;
     flex-grow: 1;
 `;
@@ -28,7 +29,7 @@ export default function LoginForm() {
     }, []);
 
     return (
-        <FormContainer>
+        <Container>
             <ContentBox padding={Props.padding} margin={Props.margin}>
                 <FormLayout />
             </ContentBox>
@@ -36,6 +37,6 @@ export default function LoginForm() {
                 <Suggest />
             </ContentBox>
             <Appdownload />
-        </FormContainer>
+        </Container>
     );
 }

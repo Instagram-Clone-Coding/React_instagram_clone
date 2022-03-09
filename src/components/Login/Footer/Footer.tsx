@@ -2,11 +2,12 @@ import styled from "styled-components";
 import FooterRow from "components/Login/Footer/FooterRow";
 import InstagramLinks from "components/Login/Footer/InstagramLinks";
 
-const FooterContainer = styled.div`
+const FooterContainer = styled.footer`
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 0 16px;
+    margin-bottom: 40px;
 
     .copyrightContainer {
         margin: 12px 0;
