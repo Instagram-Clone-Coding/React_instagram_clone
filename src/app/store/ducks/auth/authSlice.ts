@@ -69,6 +69,7 @@ const authSlice = createSlice({
             })
             .addCase(signIn.rejected, (state, action) => {
                 state.isAsyncReject = true;
+                state.isLoading = false;
                 if (action.payload && typeof action.payload === "string") {
                     state.errorMessage = action.payload;
                 } else if (state.hasUsername) {
