@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
-import FooterRow from "components/Login/Footer/FooterRow";
+import FooterRow from "components/Common/Footer/FooterRow";
 
 const Links = styled.div`
     display: flex;
@@ -63,12 +63,11 @@ const SearchResult = [
 
 function InstagramLinks() {
     const { pathname } = useLocation();
-    const isLoginPage = pathname.includes(`signin`);
 
     return (
         <Links>
             <FooterRow content={InstagramRelateLink} />
-            {isLoginPage && <FooterRow content={SearchResult} />}
+            {pathname === "/" && <FooterRow content={SearchResult} />}
         </Links>
     );
 }

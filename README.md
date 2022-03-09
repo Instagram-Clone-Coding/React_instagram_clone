@@ -119,13 +119,18 @@ Frontend
     ```ts
     return <ExampleComponent onSubmit={exampleHandler} />;
     ```
-3. Interface 네이밍: Pascal Case + ~Props
+3. Interface 네이밍: Pascal Case +
+
+    - props으로 넘길 때 ~Props
 
     ```ts
     interface ExampleProps {
         name: string;
     }
     ```
+
+    - 다른 모든 경우, ~Type
+      <br />
 
 4. styled-components 구조: 최상위 태그에만 한 번
 

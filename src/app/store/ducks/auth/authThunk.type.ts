@@ -3,12 +3,4 @@ export interface SignInRequestType {
     password: string;
 }
 
-export interface Token {
-    status: number;
-    code: number;
-    message: string;
-    data: {
-        type: string;
-        accessToken: string;
-    };
-}
+export type FormState = "signUp" | "confirmEmail" | "signIn";

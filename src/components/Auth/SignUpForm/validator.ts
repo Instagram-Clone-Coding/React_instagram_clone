@@ -15,7 +15,7 @@ export const emailFormValidator = (email: string): boolean => {
 };
 
 export const nameValidator = (name: string): boolean => {
-    return lengthScopeValidator(name, 2, 8);
+    return lengthScopeValidator(name, 2, 12);
 };
 
 export const usernameValidator = (username: string): boolean => {
@@ -31,8 +31,13 @@ export const usernameValidator = (username: string): boolean => {
 };
 
 export const passwordValidator = (password: string): boolean => {
-    if (!lengthScopeValidator(password, 4, 20)) {
+    if (!lengthScopeValidator(password, 8, 20)) {
         return false;
     }
+
+    if (!/\d+/g.test(password)) {
+        return false;
+    }
+
     return true;
 };
