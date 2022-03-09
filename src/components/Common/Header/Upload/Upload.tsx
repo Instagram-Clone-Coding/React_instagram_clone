@@ -121,7 +121,7 @@ const Upload = () => {
                     return (
                         <Cut
                             currentWidth={Math.min(
-                                currentHeightLimitedByWindowHeight,
+                                currentHeightLimitedByWindowHeight - 43,
                                 currentMaxWidth,
                             )}
                         />
