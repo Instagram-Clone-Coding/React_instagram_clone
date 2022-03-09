@@ -15,6 +15,7 @@ import { addTyping, lookUpChatRoom, reissueChatList } from "app/store/ducks/dire
 import {
     addChatMessageItem,
     addSubChatCount,
+    deleteChatMessageItem,
     likeChatMessageItem, setSelectedMessageId, unLikeChatMessageItem,
 } from "app/store/ducks/direct/DirectSlice";
 
@@ -62,8 +63,8 @@ const Direct = () => {
                                 // 페이지는 + 안해준다
                                 await dispatch(reissueChatList(chatListPage));
                                 break;
-                            case "MESSAGE_DELETE":
-                                console.log("삭제완료");
+                            case "MESSAGE_DELETE": 
+                                dispatch(deleteChatMessageItem(newMessage.data.messageId))
                                 break;
                             case "MESSAGE_LIKE":
                                 // 좋아요 누른것이 바로 반영되도록 해준다.
@@ -74,8 +75,6 @@ const Direct = () => {
                                 // 좋아요 취소 누른것이 바로 반영되도록 해준다.
                                 dispatch(unLikeChatMessageItem({messageId:newMessage.data.messageId,memberId:newMessage.data.memberId}))
                                 dispatch(setSelectedMessageId(null))
-
-
                                 break;
                         }
 

@@ -118,7 +118,9 @@ const directSlice = createSlice({
             })
         },
         deleteChatMessageItem:(state,action : PayloadAction<number>) => {
-
+            state.chatMessageList = state.chatMessageList.filter(chatMessageListItem => {
+                return chatMessageListItem.messageId !== action.payload
+            })
         }
     },
     extraReducers: (build) => {
@@ -282,7 +284,7 @@ export const {
     resetChatList,
     setSelectedMessageId,
     likeChatMessageItem,
-    unLikeChatMessageItem
-
+    unLikeChatMessageItem,
+    deleteChatMessageItem
 } = directSlice.actions;
 export const directReducer = directSlice.reducer;

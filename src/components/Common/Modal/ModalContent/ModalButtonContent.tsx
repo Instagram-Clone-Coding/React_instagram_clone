@@ -68,6 +68,7 @@ const ModalButtonContent = ({ actionName,actionHandler }: ModalButtonContentProp
                 return <button onClick={() => {
                     if (actionHandler) {
                         actionHandler();
+                        dispatch(closeModal())
                     }}
                 }>{actionName}</button>;
         }

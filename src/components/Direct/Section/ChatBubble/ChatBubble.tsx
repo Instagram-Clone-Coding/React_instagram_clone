@@ -275,10 +275,13 @@ const ChatBubble = ({
                                 }
                                 {
                                     typeof content === "string" && <button onClick={copyhandler}>복사</button>}
-                                <button onClick={() => {
+                                {me ? <button onClick={() => {
                                     dispatch(openModal("deleteChatMessage"));
                                 }}>전송 취소
-                                </button>
+                                </button> : <button onClick={() => {
+                                    console.log("신고로직구현")
+                                }}>신고
+                                </button>}
                             </div>
                         </div>
                     </div>
