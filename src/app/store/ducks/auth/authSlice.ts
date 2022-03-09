@@ -16,10 +16,6 @@ export interface AuthStateProps {
     userInfo: AuthType.UserInfo | null;
 }
 
-interface UserInfo {
-    username: string;
-}
-
 const initialState: AuthStateProps = {
     isLoading: false,
     isLogin: false,
