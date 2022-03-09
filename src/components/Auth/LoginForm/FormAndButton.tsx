@@ -1,6 +1,6 @@
 import Input from "components/Common/Input";
 import { MouseEvent } from "react";
-import SubmitButton from "components/Common/SubmitButton";
+import SubmitButton from "components/Auth/SubmitButton";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { signIn } from "app/store/ducks/auth/authThunk";
 import useInput from "hooks/useInput";

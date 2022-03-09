@@ -5,7 +5,7 @@ import ImageSprite from "components/Common/ImageSprite";
 import { customAxios } from "customAxios";
 import useInput from "hooks/useInput";
 import Input from "components/Common/Input";
-import SubmitButton from "components/Common/SubmitButton";
+import SubmitButton from "components/Auth/SubmitButton";
 import Button from "styles/UI/Button";
 import { authAction } from "app/store/ducks/auth/authSlice";
 import { signIn } from "app/store/ducks/auth/authThunk";

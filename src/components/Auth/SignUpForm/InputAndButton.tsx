@@ -2,13 +2,13 @@ import { authAction } from "app/store/ducks/auth/authSlice";
 import { useAppDispatch } from "app/store/Hooks";
 import Input from "components/Common/Input";
 import Loading from "components/Common/Loading";
-import SubmitButton from "components/Common/SubmitButton";
+import SubmitButton from "components/Auth/SubmitButton";
 import {
     emailFormValidator,
     nameValidator,
     passwordValidator,
     usernameValidator,
-} from "components/Signup/validator";
+} from "components/Auth/SignUpForm/validator";
 import { customAxios } from "customAxios";
 import useInput from "hooks/useInput";
 import { MouseEvent, useState } from "react";

@@ -1,4 +1,4 @@
-import { usernameValidator } from "components/Signup/validator";
+import { usernameValidator } from "components/Auth/SignUpForm/validator";
 import { customAxios } from "customAxios";
 import { ChangeEvent, useState } from "react";
 

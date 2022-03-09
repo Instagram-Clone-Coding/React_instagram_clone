@@ -1,12 +1,9 @@
 import styled from "styled-components";
-import FacebookLogin from "components/Common/FacebookLogin";
-import Line from "components/Common/Line";
+import FacebookLogin from "components/Auth/FacebookLogin";
+import Line from "components/Auth/Line";
 import InputAndButton from "./InputAndButton";
 import ImageSprite from "components/Common/ImageSprite";
 import sprite from "assets/Images/loginPageSprite.png";
-import { useEffect } from "react";
-import { useAppDispatch } from "app/store/Hooks";
-import { authAction } from "app/store/ducks/auth/authSlice";
 
 const SignUpFormContainer = styled.div`
     display: flex;
@@ -40,11 +37,6 @@ const instagramImage: Common.ImageProps = {
 };
 
 export default function SignUpForm() {
-    const dispatch = useAppDispatch();
-    useEffect(() => {
-        dispatch(authAction.changeFormState("signUp"));
-    }, []);
-
     return (
         <SignUpFormContainer>
             <ImageSprite {...instagramImage} className="logo" />

@@ -1,6 +1,8 @@
-import { Footer } from "components/Login/Footer/Footer";
-import LoginForm from "components/Login/LoginForm/LoginForm";
-import SignUp from "components/Signup";
+import { authAction } from "app/store/ducks/auth/authSlice";
+import { useAppDispatch } from "app/store/Hooks";
+import Form from "components/Auth/Form";
+import { Footer } from "components/Common/Footer/Footer";
+import { useEffect } from "react";
 import styled from "styled-components";
 
 const Section = styled.section`
@@ -15,11 +17,16 @@ const Section = styled.section`
     }
 `;
 
-export default function AuthPage(props: { router: string }) {
+export default function AuthPage(props: { router: "signIn" | "signUp" }) {
+    const dispatch = useAppDispatch();
+    useEffect(() => {
+        dispatch(authAction.changeFormState(props.router));
+    }, []);
+
     return (
         <Section>
             <main className="form-container">
-                {props.router === "signIn" ? <LoginForm /> : <SignUp />}
+                <Form router={props.router} />
             </main>
             <Footer />
         </Section>

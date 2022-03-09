@@ -1,9 +1,8 @@
 import styled from "styled-components";
-import ShowingInstagram from "components/Login/InstagramSlider/ShowingInsta";
-import { Footer } from "components/Login/Footer/Footer";
+import ShowingInstagram from "components/Auth/InstagramImageSlider";
+import { Footer } from "components/Common/Footer/Footer";
 import { useAppSelector } from "app/store/Hooks";
-import LoginForm from "components/Login/LoginForm/LoginForm";
-import SignUp from "components/Signup";
+import Form from "components/Auth/Form";
 
 const Container = styled.section`
     display: flex;
@@ -38,7 +37,9 @@ export default function Landing() {
             <main className="container">
                 <ShowingInstagram />
                 <div className="form">
-                    {formState === "signIn" ? <LoginForm /> : <SignUp />}
+                    <Form
+                        router={formState === "signIn" ? "signIn" : "signUp"}
+                    />
                 </div>
             </main>
             <Footer />
