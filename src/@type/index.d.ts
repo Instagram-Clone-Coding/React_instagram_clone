@@ -1,17 +1,30 @@
 declare module Direct {
+    interface PostMessageDTO {
+        postId: number;
+        postImage: Common.ImageInfo;
+        postImageCount: number;
+        status: string;
+        uploader: AuthType.UserInfo;
+    }
+
     interface MessageDTO {
         messageId: number;
-        content: string;
-        userId: number;
-        messageType: string;
+        content: string | PostMessageDTO;
+        messageType: messageType;
+        messageDate: string;
+        senderId: number;
+        roomId: number;
+        senderImage: Common.ImageInfo;
+        likeMembers: AuthType.UserInfo[];
     }
 
     interface ChatItem {
-        chatRoomId: number;
+        roomId: number;
         lastMessage: MessageDTO;
         unreadFlag: boolean;
         inviter: inviterProps;
-        invitees: inviteeProps[];
+        members: memberProps[];
+        typing?: boolean;
     }
 
     interface inviterProps {
@@ -20,7 +33,7 @@ declare module Direct {
         imageUrl: string;
     }
 
-    interface inviteeProps {
+    interface memberProps {
         username: string;
         name: string;
         imageUrl: string;
@@ -30,23 +43,11 @@ declare module Direct {
         status: boolean;
         chatRoomId: number;
         inviter: inviterProps; // 초대한사람
-        invitees: inviteeProps[]; // 초대받은사람
+        members: memberProps[]; // 초대받은사람
     }
-
-    type modalType =
-        | "deleteChat"
-        | "block"
-        | "report"
-        | "newChat"
-        | "convertAccount"
-        | "deleteAll"
-        | null;
-    type currentSectionViewType =
-        | "inbox"
-        | "detail"
-        | "chat"
-        | "requests"
-        | "requestsChat";
+    type modalType = "deleteChat" | "block" | "report" | "newChat" | "convertAccount" | "deleteAll" | "deleteChatMessage" | null;
+    type currentSectionViewType = "inbox" | "detail" | "chat" | "requests" | "requestsChat"
+    type messageType = "TEXT" | "POST"
 }
 
 declare module UI {
@@ -66,6 +67,13 @@ declare module AuthType {
             type: string;
             accessToken: string;
         };
+    }
+
+    interface UserInfo {
+        memberId: number;
+        memberImageUrl: string;
+        memberName: string;
+        memberUsername: string;
     }
 }
 
@@ -171,6 +179,7 @@ declare module ModalType {
         | "articleMenu"
         | "shareWith"
         | null;
+
     interface ModalPositionProps {
         top: number;
         bottom: number;
@@ -259,4 +268,55 @@ declare module Common {
         position: string;
         url: string;
     }
+
+    interface ImageInfo {
+        imageUrl: string;
+        imageType: string;
+        imageName: string;
+        imageUUID: string;
+    }
+}
+
+declare module Profile{
+    interface MemberProfileProps {
+        memberUsername:string;
+        memberName:string;
+        memberWebsite:string | null,
+        memberImage : Common.ImageInfo;
+        memberIntroduce:string | null,
+        memberPostsCount:number;
+        memberFollowingsCount:number;
+        memberFollowersCount:number;
+        followingMemberFollow : null;
+        blocking:boolean;
+        following:boolean;
+        follower:boolean;
+        blocked:boolean;
+        me:boolean
+    }
+
+
+    interface PostType{
+        postId:number;
+        postImageUrl:string;
+        hasManyPosts:boolean;
+        postCommentsCount:number;
+        postLikesCount:number
+    }
+
+    interface personType{  // 팔로잉 팔로워 한명을 나타내는 타입입니다.
+        username: string;
+        name: string;
+        image:Common.ImageInfo;
+        isFollowing:boolean;
+        isFollower:boolean;
+        hasStory:boolean;
+        isMe:boolean;
+        following:boolean;
+        follower:boolean;
+        me:boolean
+    }
+
+
+    type modalType = "userAction" | "setting" | "follower" | "unFollow" |  null
 }

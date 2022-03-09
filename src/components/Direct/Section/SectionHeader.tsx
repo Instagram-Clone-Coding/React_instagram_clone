@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import styled from "styled-components";
 import theme from "styles/theme";
 import { ReactComponent as DetailInfo } from "assets/Svgs/direct-detail-info.svg";
@@ -52,6 +52,8 @@ const SectionHeaderContainer = styled.section<SectionHeaderContainerType>`
 const SectionHeader = () => {
     const dispatch = useAppDispatch();
     const { view,selectedRoom } = useAppSelector((state => state.direct));
+    const username = useAppSelector(state => state.auth.username);
+    const [opponent,setOpponent] = useState<Direct.memberProps>()
     const viewConvertHandler = () => {
         switch (view) {
             case "detail":
@@ -68,6 +70,12 @@ const SectionHeader = () => {
         }
     };
 
+    useEffect(()=>{
+        setOpponent(selectedRoom?.members.filter(member => {
+            return member.username !== username;
+        })[0])
+    },[selectedRoom])
+
     return (
         <SectionHeaderContainer view={view}>
             <div className="dummy-container">
@@ -76,8 +84,8 @@ const SectionHeader = () => {
             <div className="user-profile-container">
                 {view === "detail" ? <h3>상세 정보</h3> :
                     <>
-                        <img src={selectedRoom?.invitees[0].imageUrl} alt="selected-user-image" />
-                        <h3>{selectedRoom?.invitees[0].username}</h3>
+                        <img src={opponent?.imageUrl} alt="selected-user-image" />
+                        <h3>{opponent?.username}</h3>
                     </>
                 }
             </div>
