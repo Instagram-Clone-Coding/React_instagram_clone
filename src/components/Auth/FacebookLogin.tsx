@@ -23,28 +23,24 @@ const backgroundWhiteFacebook: Common.ImageProps = {
     width: 16,
     height: 16,
     position: `-414px -259px`,
-    url:sprite
+    url: sprite,
 };
 
 const backgroundBlueFacebook: Common.ImageProps = {
     width: 16,
     height: 16,
     position: `-414px -300px`,
-    url:sprite
+    url: sprite,
 };
 
-export default function FacebookLogin({ bgColor, color }: UI.ButtonProps) {
+export default function FacebookLogin({ bgColor, color }: UIType.ButtonProps) {
     return (
         <FacebookButtonContainer>
             <Button bgColor={bgColor} color={color} type="button">
                 {bgColor ? (
-                    <ImageSprite
-                        {...backgroundWhiteFacebook}
-                    />
+                    <ImageSprite {...backgroundWhiteFacebook} />
                 ) : (
-                    <ImageSprite
-                        {...backgroundBlueFacebook}
-                    />
+                    <ImageSprite {...backgroundBlueFacebook} />
                 )}
                 Facebook으로 로그인
             </Button>
