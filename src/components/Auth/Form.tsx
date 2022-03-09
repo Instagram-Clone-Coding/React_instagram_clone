@@ -18,7 +18,7 @@ const Container = styled.div<{ pathname: string }>`
     flex-grow: 1;
 `;
 
-const contentBox: UI.ContentBoxProps = {
+const contentBox: UIType.ContentBoxProps = {
     padding: `10px 0`,
     margin: `0 0 10px`,
 };

@@ -16,7 +16,7 @@ declare module CommonType {
     }
 }
 
-declare module UI {
+declare module UIType {
     interface ButtonProps {
         bgColor?: string;
         radius?: number;
