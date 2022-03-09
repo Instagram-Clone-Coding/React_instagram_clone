@@ -1,4 +1,5 @@
-import { useAppSelector } from "app/store/Hooks";
+import { uploadActions } from "app/store/ducks/upload/uploadSlice";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { ReactComponent as LeftArrow } from "assets/Svgs/leftArrow.svg";
 import { ReactComponent as RightArrow } from "assets/Svgs/rightArrow.svg";
 import React, { useEffect, useMemo, useRef } from "react";
@@ -55,6 +56,7 @@ const Edit = ({ currentWidth }: EditProps) => {
     const files = useAppSelector((state) => state.upload.files);
     const ratioMode = useAppSelector((state) => state.upload.ratioMode);
     const currentIndex = useAppSelector((state) => state.upload.currentIndex);
+    const dispatch = useAppDispatch();
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     // window 너비에 따라 변경되는 값
@@ -219,12 +221,22 @@ const Edit = ({ currentWidth }: EditProps) => {
                         alt={`${currentIndex + 1}번째 게시물`}
                     />
                 </canvas>
-                <button className="left">
-                    <LeftArrow />
-                </button>
-                <button className="right">
-                    <RightArrow />
-                </button>
+                {currentIndex > 0 && (
+                    <button
+                        className="left"
+                        onClick={() => dispatch(uploadActions.prevIndex())}
+                    >
+                        <LeftArrow />
+                    </button>
+                )}
+                {currentIndex < files.length - 1 && (
+                    <button
+                        className="right"
+                        onClick={() => dispatch(uploadActions.nextIndex())}
+                    >
+                        <RightArrow />
+                    </button>
+                )}
             </div>
             <div className="upload__imgEditor">필터</div>
         </StyledEdit>
