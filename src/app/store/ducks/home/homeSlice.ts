@@ -7,6 +7,7 @@ import {
     postUnfollow,
     postLike,
 } from "app/store/ducks/home/homThunk";
+import { stat } from "fs";
 
 const DUMMY_ARTICLES: HomeType.ArticleStateProps[] = [
     {
