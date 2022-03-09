@@ -14,8 +14,9 @@ const useInput = (
     const [isFocus, setIsFocus] = useState<boolean>(false);
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setValue(event.target.value);
-        onChangeValidator && setIsValid(onChangeValidator(event.target.value));
+        const processdValue = event.target.value.trim();
+        setValue(processdValue);
+        onChangeValidator && setIsValid(onChangeValidator(processdValue));
     };
 
     const onFocus = () => {

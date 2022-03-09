@@ -104,7 +104,7 @@ const Input = (props: AuthType.InputProps) => {
     >("비밀번호 표시");
 
     const textChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        const hasValue = event.target.value.length ? true : false;
+        const hasValue = event.target.value.trim().length ? true : false;
         setInnerTextSize(hasValue);
         setShowPassword(inputName === "password" && hasValue);
     };
