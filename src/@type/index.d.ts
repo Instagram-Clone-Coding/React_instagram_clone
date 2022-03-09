@@ -244,3 +244,47 @@ declare module Common {
         imageUUID: string;
     }
 }
+
+declare module Profile{
+    interface MemberProfileProps {
+        memberUsername:string;
+        memberName:string;
+        memberWebsite:string | null,
+        memberImage : Common.ImageInfo;
+        memberIntroduce:string | null,
+        memberPostsCount:number;
+        memberFollowingsCount:number;
+        memberFollowersCount:number;
+        followingMemberFollow : null;
+        blocking:boolean;
+        following:boolean;
+        follower:boolean;
+        blocked:boolean;
+        me:boolean
+    }
+
+
+    interface PostType{
+        postId:number;
+        postImageUrl:string;
+        hasManyPosts:boolean;
+        postCommentsCount:number;
+        postLikesCount:number
+    }
+
+    interface personType{  // 팔로잉 팔로워 한명을 나타내는 타입입니다.
+        username: string;
+        name: string;
+        image:Common.ImageInfo;
+        isFollowing:boolean;
+        isFollower:boolean;
+        hasStory:boolean;
+        isMe:boolean;
+        following:boolean;
+        follower:boolean;
+        me:boolean
+    }
+
+
+    type modalType = "userAction" | "setting" | "follower" | "unFollow" |  null
+}
