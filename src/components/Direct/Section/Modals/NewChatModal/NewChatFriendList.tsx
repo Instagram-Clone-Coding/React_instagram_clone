@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { dummyChatList } from "components/Direct/Aside/AsideBody";
+// import { dummyChatList } from "components/Direct/Aside/AsideBody";
 import NewChatRecommendUser from "./NewChatRecommendUser";
+import { useAppSelector } from "../../../../../app/store/Hooks";
 
 
 const NewChatFriendListContainer = styled.div`
@@ -27,14 +28,23 @@ const NewChatFriendListContainer = styled.div`
 `
 
 const NewChatFriendList = () => {
+
+    const chatList = useAppSelector(state => state.direct.chatList);
+    const username = useAppSelector(state => state.auth.username);
+
+
     return (
         <NewChatFriendListContainer>
             <span>추천</span>
 
             <div className="new-chat-recommend-container">
                 {
-                    dummyChatList.map(item => (
-                        <NewChatRecommendUser key={item.chatRoomId} {...item}/>
+                    chatList.map(chatListItem => (
+                        <NewChatRecommendUser key={chatListItem.roomId} {...chatListItem}
+                                              opponent={chatListItem.members.filter(member => {
+                                                  return member.username !== username;
+                                              })[0]}
+                        />
                     ))
                 }
             </div>

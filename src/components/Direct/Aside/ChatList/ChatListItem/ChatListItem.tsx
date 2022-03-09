@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import useGapText from "hooks/useGapText";
-import React from "react";
-import Direct from "../../../../../pages/Direct";
-
+import React, { useEffect, useRef } from "react";
+import Direct from "pages/Direct";
+import useOnView from "hooks/useOnView";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { lookUpChatList } from "app/store/ducks/direct/DirectThunk";
 
 
 interface ChatListItemContainerType {
@@ -10,7 +12,7 @@ interface ChatListItemContainerType {
     isSelected: boolean;
 }
 
-const ChatListItemContainer = styled.a<ChatListItemContainerType>`
+const ChatListItemContainer = styled.div<ChatListItemContainerType>`
   display: flex;
   padding: 8px 20px;
   align-items: center;
@@ -28,14 +30,14 @@ const ChatListItemContainer = styled.a<ChatListItemContainerType>`
     flex: 1;
 
     .user-nickName {
-      font-weight: ${props => props.unreadFlag ? 400 : 600};
+      font-weight: ${props => props.unreadFlag ? 600 : 400};
 
     }
 
     .last-info {
       display: flex;
       font-size: 14px;
-      color: ${props => props.unreadFlag ? "#8e8e8e" : "#000"};
+      color: ${props => props.unreadFlag ? "#000" : "#8e8e8e"};
 
       .last-chat-container {
         white-space: nowrap;
@@ -44,7 +46,7 @@ const ChatListItemContainer = styled.a<ChatListItemContainerType>`
         display: inline;
         overflow: hidden;
         text-overflow: ellipsis;
-        font-weight: ${props => props.unreadFlag ? 400 : 600};
+        font-weight: ${props => props.unreadFlag ? 600 : 400};
         @media (max-width: 936px) {
           max-width: 120px;
         }
@@ -61,34 +63,65 @@ const ChatListItemContainer = styled.a<ChatListItemContainerType>`
     width: 8px;
     height: 8px;
     background-color: #0095f6;
-    border-radius: 50%;
+    border-radius: 50%; 
   }
 
 `;
 
 interface ChatListItemProps extends Direct.ChatItem {
     isSelected: boolean;
-    chatListClickHandler: (chatRoomId:number,username:string) => void
+    opponent: Direct.memberProps;
+    chatListClickHandler: (chatRoomId: number, username: string) => void;
+    isObserving: boolean;
+    isTyping : boolean
 }
 
-const ChatListItem = ({ chatRoomId, invitees, lastMessage, unreadFlag, isSelected ,chatListClickHandler}: ChatListItemProps) => {
-    const calculatedTime = useGapText("2021.11.22 21:00:00");
+const ChatListItem = ({
+                          roomId,
+                          lastMessage,
+                          unreadFlag,
+                          isSelected,
+                          chatListClickHandler,
+                          opponent,
+                          isObserving,
+                          isTyping
+                      }: ChatListItemProps) => {
+    const calculatedTime = useGapText(lastMessage.messageDate);
+    const chatListItemRef = useRef<HTMLDivElement>(null);
+    const isVisible = useOnView(chatListItemRef);
+    const dispatch = useAppDispatch();
+    const chatListPage = useAppSelector(state => state.direct.chatListPage);
+
+    useEffect(() => {
+        const dispatchExtraChatList = async () => {
+            try {
+                await dispatch(
+                    lookUpChatList(chatListPage),
+                );
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        false && isObserving && isVisible && dispatchExtraChatList(); // 이 때 비동기 작업 및 무한 스크롤
+    }, [isObserving, isVisible, dispatch]);
 
     return (
-        <ChatListItemContainer unreadFlag={unreadFlag} isSelected={isSelected}
-                               onClick={()=>{
-                                   chatListClickHandler(chatRoomId,invitees[0].username)
+        <ChatListItemContainer ref={chatListItemRef} unreadFlag={unreadFlag} isSelected={isSelected}
+                               onClick={() => {
+                                   chatListClickHandler(roomId, opponent.username);
                                }}>
-            <img src={invitees[0].imageUrl} alt="avatarImg" className="user-image" />
+            <img src={opponent.imageUrl} alt="avatarImg" className="user-image" />
             <div className="right-section-container">
 
                 <div className="user-nickName">
-                    {invitees[0].username}님
+                    {opponent.username}님
                 </div>
 
                 <div className="last-info">
                     <div className="last-chat-container">
-                        {lastMessage.content}
+                        {
+                            lastMessage.messageType === "TEXT" ? lastMessage.content : "사진"
+                        }
                     </div>
                     <span className={"dot"}>
                     ·
@@ -100,7 +133,7 @@ const ChatListItem = ({ chatRoomId, invitees, lastMessage, unreadFlag, isSelecte
                 </div>
             </div>
             {
-                !unreadFlag &&
+                unreadFlag &&
                 <div className="blue-dot">
                 </div>
 

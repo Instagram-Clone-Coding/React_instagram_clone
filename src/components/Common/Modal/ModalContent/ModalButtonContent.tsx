@@ -3,12 +3,13 @@ import styled from "styled-components";
 import { closeModal, selectView } from "app/store/ducks/direct/DirectSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import axios from "axios";
-import { deleteRoom } from "../../../../app/store/ducks/direct/DirectThunk";
+import { deleteRoom, lookUpChatList, reissueChatList } from "../../../../app/store/ducks/direct/DirectThunk";
 
 
 
 interface ModalButtonContentProps {
     actionName: string;
+    actionHandler?: () => void  // message 삭제에서 사용
 }
 
 const ModalButtonContentContainer = styled.div`
@@ -29,11 +30,13 @@ const ModalButtonContentContainer = styled.div`
 `;
 
 
-const ModalButtonContent = ({ actionName }: ModalButtonContentProps) => {
+const ModalButtonContent = ({ actionName,actionHandler }: ModalButtonContentProps) => {
 
 
     const dispatch = useAppDispatch();
-    const { selectedRoom } = useAppSelector(state => state.direct);
+    const selectedRoom = useAppSelector(state => state.direct.selectedRoom);
+    const chatListPage = useAppSelector(state => state.direct.chatListPage);
+    const selectedMessageId = useAppSelector(state => state.direct.selectedMessageId);
 
     const deleteRoomHandler = async () => {
 
@@ -44,6 +47,8 @@ const ModalButtonContent = ({ actionName }: ModalButtonContentProps) => {
                         roomId: selectedRoom.chatRoomId,
                     }),
                 );
+
+                await dispatch(reissueChatList(chatListPage));
             } catch (error) {
                 console.log(error);
             }
@@ -59,6 +64,13 @@ const ModalButtonContent = ({ actionName }: ModalButtonContentProps) => {
                 return <button >{actionName}</button>;
             case "모두 삭제":
                 return <button >{actionName}</button>;
+            case "전송 취소":
+                return <button onClick={() => {
+                    if (actionHandler) {
+                        actionHandler();
+                        dispatch(closeModal())
+                    }}
+                }>{actionName}</button>;
         }
     };
 

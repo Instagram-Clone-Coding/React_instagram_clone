@@ -16,9 +16,10 @@ interface CommonDirectModalProps {
     title:string;
     description:string
     actionName:string
+    actionHandler?: () => void  // message 삭제에서 사용
 }
 
-const CommonDirectModal = ({modalType,title,description,actionName}:CommonDirectModalProps) => {
+const CommonDirectModal = ({modalType,title,description,actionName,actionHandler}:CommonDirectModalProps) => {
     const dispatch = useAppDispatch();
 
     return (
@@ -30,7 +31,7 @@ const CommonDirectModal = ({modalType,title,description,actionName}:CommonDirect
             <CommonDirectModalContainer>
                 <ModalTitleContent title={title}
                                    description={description} />
-                <ModalButtonContent  actionName={actionName}/>
+                <ModalButtonContent actionHandler={actionHandler}  actionName={actionName}/>
             </CommonDirectModalContainer>
         </ModalCard>
     );
