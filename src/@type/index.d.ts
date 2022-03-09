@@ -1,5 +1,4 @@
 declare module Direct {
-
     interface PostMessageDTO {
         postId: number;
         postImage: Common.ImageInfo;
@@ -46,12 +45,9 @@ declare module Direct {
         inviter: inviterProps; // 초대한사람
         members: memberProps[]; // 초대받은사람
     }
-
-
     type modalType = "deleteChat" | "block" | "report" | "newChat" | "convertAccount" | "deleteAll" | "deleteChatMessage" | null;
     type currentSectionViewType = "inbox" | "detail" | "chat" | "requests" | "requestsChat"
     type messageType = "TEXT" | "POST"
-
 }
 
 declare module UI {
@@ -226,6 +222,42 @@ declare module ModalType {
         miniProfile?: MiniProfileStateProps;
         isFollowing?: boolean;
         isOnMiniProfile: boolean;
+    }
+}
+
+declare module UploadType {
+    interface GrabbedPositionProps {
+        x: number;
+        y: number;
+    }
+    interface TranslateProps {
+        translateX: number;
+        translateY: number;
+    }
+    interface FileDragAndDropProps {
+        imageRatio: number;
+        url: string;
+    }
+    interface FileCutProps extends TranslateProps {
+        grabbedPosition: GrabbedPositionProps;
+        scale: number;
+    }
+
+    interface FileProps extends FileDragAndDropProps, FileCutProps {}
+    // type FileProps = FileDragAndDropProps & FileCutProps;
+
+    type RatioType = "original" | "square" | "thin" | "fat";
+    type StepType = "dragAndDrop" | "cut" | "edit" | "content";
+
+    interface UploadStateProps {
+        isUploading: boolean;
+        isGrabbing: boolean;
+        step: StepType;
+        ratioMode: RatioType;
+        files: FileProps[];
+        currentIndex: number;
+        grabbedGalleryImgIndex: number | null;
+        grabbedGalleryImgNewIndex: number | null;
     }
 }
 
