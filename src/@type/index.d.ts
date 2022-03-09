@@ -1,12 +1,66 @@
 declare module Direct {
-    interface ChatItem {
-        id: number;
-        avatarImg: string;
-        userName: string;
-        lastLoggedIn: string;
-        lastMessage: string;
-        isImLast: boolean;
+    interface PostMessageDTO {
+        postId: number;
+        postImage: Common.ImageInfo;
+        postImageCount: number;
+        status: string;
+        uploader: AuthType.UserInfo;
     }
+
+    interface MessageDTO {
+        messageId: number;
+        content: string | PostMessageDTO;
+        messageType: messageType;
+        messageDate: string;
+        senderId: number;
+        roomId: number;
+        senderImage: Common.ImageInfo;
+        likeMembers: AuthType.UserInfo[];
+    }
+
+    interface ChatItem {
+        roomId: number;
+        lastMessage: MessageDTO;
+        unreadFlag: boolean;
+        inviter: inviterProps;
+        members: memberProps[];
+        typing?: boolean;
+    }
+
+    interface inviterProps {
+        username: string;
+        name: string;
+        imageUrl: string;
+    }
+
+    interface memberProps {
+        username: string;
+        name: string;
+        imageUrl: string;
+    }
+
+    interface RoomsProps {
+        status: boolean;
+        chatRoomId: number;
+        inviter: inviterProps; // 초대한사람
+        members: memberProps[]; // 초대받은사람
+    }
+    type modalType =
+        | "deleteChat"
+        | "block"
+        | "report"
+        | "newChat"
+        | "convertAccount"
+        | "deleteAll"
+        | "deleteChatMessage"
+        | null;
+    type currentSectionViewType =
+        | "inbox"
+        | "detail"
+        | "chat"
+        | "requests"
+        | "requestsChat";
+    type messageType = "TEXT" | "POST";
 }
 
 declare module CommonType {
@@ -45,6 +99,13 @@ declare module AuthType {
         };
     }
 
+    interface UserInfo {
+        memberId: number;
+        memberImageUrl: string;
+        memberName: string;
+        memberUsername: string;
+    }
+
     interface signUpUserData {
         email: string;
         name: string;
@@ -72,14 +133,6 @@ declare module AuthType {
 
 declare module HomeType {
     type StoriesScrollPositionType = "left" | "right" | "center";
-
-    type ActivatedModalType =
-        | "hover"
-        | "unfollowing"
-        | "report"
-        | "articleMenu"
-        | "shareWith"
-        | null;
 
     interface PostImgTagDTOProps {
         id: number;
@@ -113,13 +166,14 @@ declare module HomeType {
         // comment 몇 개 가져오기
     }
 
-    interface homeModalProps {
-        activatedModal: activatedModalType;
-        handledObj: null;
+    interface ArticleStateProps extends ArticleProps {
+        isFollowing: boolean;
+        followLoading: boolean;
     }
+
     interface homeStateProps {
         storiesScrollPosition: storiesScrollPositionType;
-        articles: ArticleProps[];
+        articles: ArticleStateProps[];
         // location?
         isLoading: boolean; // 더미 로딩
         isExtraArticleLoading: boolean;
@@ -141,7 +195,95 @@ declare module HomeType {
             }[]; // 최신 3개
         } | null;
         isCopiedNotification: boolean;
-        homeModal: homeModalProps;
+    }
+}
+
+declare module ModalType {
+    type ActivatedModalType =
+        | "unfollowing"
+        | "report"
+        | "articleMenu"
+        | "shareWith"
+        | null;
+
+    interface ModalPositionProps {
+        top: number;
+        bottom: number;
+        left: number;
+    }
+
+    interface MiniProfileProps {
+        blocked: boolean;
+        blocking: boolean;
+        follower: boolean;
+        following: boolean;
+        followingMemberFollow: string;
+        me: boolean;
+        memberFollowersCount: number;
+        memberFollowingsCount: number;
+        memberPostsCount: number;
+        memberImage: {
+            imageUrl: string;
+            imageType: string;
+            imageName: string;
+            imageUUID: string;
+        };
+        memberName: string;
+        memberPosts: { postId: number; postImageUrl: string }[]; // string
+        memberUsername: string;
+        memberWebsite: null | string;
+    }
+
+    interface MiniProfileStateProps extends MiniProfileProps {
+        isLoading: boolean;
+        modalPosition: ModalPositionProps;
+    }
+
+    interface ModalStateProps {
+        activatedModal: ActivatedModalType;
+        memberUsername: string;
+        memberNickname: string;
+        memberImageUrl: string;
+        postId?: number;
+        miniProfile?: MiniProfileStateProps;
+        isFollowing?: boolean;
+        isOnMiniProfile: boolean;
+    }
+}
+
+declare module UploadType {
+    interface GrabbedPositionProps {
+        x: number;
+        y: number;
+    }
+    interface TranslateProps {
+        translateX: number;
+        translateY: number;
+    }
+    interface FileDragAndDropProps {
+        imageRatio: number;
+        url: string;
+    }
+    interface FileCutProps extends TranslateProps {
+        grabbedPosition: GrabbedPositionProps;
+        scale: number;
+    }
+
+    interface FileProps extends FileDragAndDropProps, FileCutProps {}
+    // type FileProps = FileDragAndDropProps & FileCutProps;
+
+    type RatioType = "original" | "square" | "thin" | "fat";
+    type StepType = "dragAndDrop" | "cut" | "edit" | "content";
+
+    interface UploadStateProps {
+        isUploading: boolean;
+        isGrabbing: boolean;
+        step: StepType;
+        ratioMode: RatioType;
+        files: FileProps[];
+        currentIndex: number;
+        grabbedGalleryImgIndex: number | null;
+        grabbedGalleryImgNewIndex: number | null;
     }
 }
 
@@ -152,4 +294,54 @@ declare module Common {
         position: string;
         url: string;
     }
+
+    interface ImageInfo {
+        imageUrl: string;
+        imageType: string;
+        imageName: string;
+        imageUUID: string;
+    }
+}
+
+declare module Profile {
+    interface MemberProfileProps {
+        memberUsername: string;
+        memberName: string;
+        memberWebsite: string | null;
+        memberImage: Common.ImageInfo;
+        memberIntroduce: string | null;
+        memberPostsCount: number;
+        memberFollowingsCount: number;
+        memberFollowersCount: number;
+        followingMemberFollow: null;
+        blocking: boolean;
+        following: boolean;
+        follower: boolean;
+        blocked: boolean;
+        me: boolean;
+    }
+
+    interface PostType {
+        postId: number;
+        postImageUrl: string;
+        hasManyPosts: boolean;
+        postCommentsCount: number;
+        postLikesCount: number;
+    }
+
+    interface personType {
+        // 팔로잉 팔로워 한명을 나타내는 타입입니다.
+        username: string;
+        name: string;
+        image: Common.ImageInfo;
+        isFollowing: boolean;
+        isFollower: boolean;
+        hasStory: boolean;
+        isMe: boolean;
+        following: boolean;
+        follower: boolean;
+        me: boolean;
+    }
+
+    type modalType = "userAction" | "setting" | "follower" | "unFollow" | null;
 }

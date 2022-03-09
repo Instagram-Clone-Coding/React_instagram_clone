@@ -1,5 +1,5 @@
-import { ReactComponent as Close } from "../../../assets/Svgs/close.svg";
 import styled from "styled-components";
+import CloseSVG from "assets/Svgs/CloseSVG";
 
 const StyledModalHeader = styled.div`
     height: 43px;
@@ -29,7 +29,7 @@ const ModalHeader = ({ title, onModalOff }: ModalHeaderProps) => {
             <div></div>
             <h1>{title}</h1>
             <button onClick={onModalOff}>
-                <Close />
+                <CloseSVG color={"#262626"} size={"18"}/>
             </button>
         </StyledModalHeader>
     );

@@ -39,7 +39,10 @@ const instagramImage: Common.ImageProps = {
 export default function SignUpForm() {
     return (
         <SignUpFormContainer>
-            <ImageSprite {...instagramImage} className="logo" />
+            <ImageSprite
+                {...instagramImage}
+                className="logo"
+            />
             <form className="signUpForm">
                 <h2 className="signUpMessage">
                     친구들의 사진과 동영상을 보려면 가입하세요.

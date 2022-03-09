@@ -9,10 +9,12 @@ var jwt = require(`jsonwebtoken`);
 
 export const customAxios: AxiosInstance = axios.create({
     baseURL: `http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080`,
+    withCredentials: true,
 });
 
 export const authorizedCustomAxios: AxiosInstance = axios.create({
     baseURL: `http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080`,
+    withCredentials: true,
 });
 
 export const checkToken = async (config: AxiosRequestConfig) => {
@@ -51,18 +53,6 @@ export const checkToken = async (config: AxiosRequestConfig) => {
             return Promise.reject(FAIL_TO_REISSUE_MESSAGE);
         }
     }
-    // } else {
-    //     const accessToken =
-    //         authorizedCustomAxios.defaults.headers.common.Authorization.split(
-    //             " ",
-    //         )[1];
-
-    //     const decode = jwt.decode(accessToken);
-    //     const nowDate = new Date().getTime() / 1000;
-
-    //     if (decode?.exp < nowDate) {
-    //     }
-    // }
     return config; // 이거 실패 시, isLogin = false로 해서 화면 로그인으로
 };
 

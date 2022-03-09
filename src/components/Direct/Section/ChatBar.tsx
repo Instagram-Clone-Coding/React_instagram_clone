@@ -1,4 +1,8 @@
-import React, { ChangeEvent, Dispatch, KeyboardEventHandler, MouseEventHandler, SetStateAction, useState } from "react";
+import React, {
+    ChangeEvent, Dispatch,
+    KeyboardEventHandler, SetStateAction,
+    useState,
+} from "react";
 import styled from "styled-components";
 import { ReactComponent as Emoji } from "assets/Svgs/direct-emoji-icon.svg";
 import { ReactComponent as ImageUpload } from "assets/Svgs/direct-image-upload.svg";
@@ -8,6 +12,8 @@ import Picker, { IEmojiData } from "emoji-picker-react";
 interface ChatBarType {
     message: string;
     setMessage: Dispatch<SetStateAction<string>>;
+    sendMessageHandler: () => void;
+    imageUploadHandler: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 interface ChatBarContainerType {
@@ -24,8 +30,9 @@ const ChatBarContainer = styled.div<ChatBarContainerType>`
 
   .emoji-picker-react {
     width: 50% !important;
+    height: 400px;
     @media (max-width: 970px) {
-      width: 100% !important;      
+      width: 100% !important;
     }
   }
 
@@ -67,18 +74,12 @@ const ChatBarContainer = styled.div<ChatBarContainerType>`
 `;
 
 
-const ChatBar = ({ message, setMessage }: ChatBarType) => {
-    // message to be trimed
+const ChatBar = ({ message, setMessage, sendMessageHandler, imageUploadHandler }: ChatBarType) => {
 
 
     const [sendButtonClicked, setSendButtonClicked] = useState<boolean>(false);
-    const [image, setImage] = useState<File>();
     const [showPicker, setShowPicker] = useState(false);
-    const sendMessage = () => {
-        // Todo : axios
-        console.log(message);
-        setMessage("");
-    };
+
 
     const onEmojiClick = (event: React.MouseEvent, emojiObject: IEmojiData) => {
         setMessage(prevInput => prevInput + emojiObject.emoji);
@@ -98,34 +99,30 @@ const ChatBar = ({ message, setMessage }: ChatBarType) => {
     };
 
     const sendButtonClickHandler = () => {
-        sendMessage();
+        sendMessageHandler();
     };
 
     const pressEnterHandler: KeyboardEventHandler<HTMLTextAreaElement> = (event) => {
         if (event.key === "Enter") {
             event.preventDefault();
-            sendMessage();
+            sendMessageHandler();
         }
-    };
-
-    const imageUploadHandler = (e: ChangeEvent<HTMLInputElement>) => {
     };
 
 
     return (
         <ChatBarContainer sendButtonClicked={sendButtonClicked}>
+
             {showPicker && <Picker
                 pickerStyle={{ width: "100%" }}
                 onEmojiClick={onEmojiClick} />}
             <div className="input-container">
                 <Emoji onClick={() => setShowPicker(!showPicker)} />
-
                 <textarea value={message} placeholder="메시지 입력..." className="chat-input" onChange={messageChangeHandler}
                           onKeyPress={pressEnterHandler} />
                 {message.trim().length === 0 ?
                     <>
                         <label htmlFor={"img"}>
-
                             <ImageUpload />
                         </label>
                         <input

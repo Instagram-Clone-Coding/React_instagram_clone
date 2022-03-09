@@ -1,7 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { SignInRequestType } from "./authThunk.type";
-import { customAxios } from "customAxios";
 import { authAction } from "./authSlice";
+import { authorizedCustomAxios, customAxios } from "customAxios";
+import { FAIL_TO_REISSUE_MESSAGE } from "../../../../utils/constant";
 
 // 로그인(토큰최초발급) + 토큰만료 시, 로그인 홈페이지로 **
 export const signIn = createAsyncThunk<AuthType.Token, SignInRequestType>(
@@ -38,6 +39,20 @@ export const signIn = createAsyncThunk<AuthType.Token, SignInRequestType>(
                 });
                 throw ThunkOptions.rejectWithValue(error);
             }
+        }
+    },
+);
+
+export const getUserInfo = createAsyncThunk<AuthType.UserInfo>(
+    "auth/userInfo",
+    async (payload, ThunkOptions) => {
+        try {
+            const response = await authorizedCustomAxios.get("/menu/profile");
+            return response.data.data;
+        } catch (error) {
+            error === FAIL_TO_REISSUE_MESSAGE &&
+                ThunkOptions.dispatch(authAction.logout());
+            throw ThunkOptions.rejectWithValue(error);
         }
     },
 );

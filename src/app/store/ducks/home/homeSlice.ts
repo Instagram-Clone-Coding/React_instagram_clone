@@ -3,11 +3,16 @@ import {
     deleteLike,
     getExtraArticle,
     getHomeArticles,
+    postFollow,
+    postUnfollow,
     postLike,
 } from "app/store/ducks/home/homThunk";
+import { stat } from "fs";
 
-const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
+const DUMMY_ARTICLES: HomeType.ArticleStateProps[] = [
     {
+        followLoading: false,
+        isFollowing: true,
         postId: 10,
         followingMemberUsernameLikedPost: null,
         memberImageUrl:
@@ -90,6 +95,8 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
         postUploadDate: "2022-01-03T13:33:00",
     },
     {
+        followLoading: false,
+        isFollowing: true,
         postId: 11,
         followingMemberUsernameLikedPost: "followingUser",
         memberImageUrl:
@@ -172,6 +179,8 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
         postUploadDate: "2022-01-03T13:33:00",
     },
     {
+        followLoading: false,
+        isFollowing: true,
         postId: 12,
         followingMemberUsernameLikedPost: null,
         memberImageUrl:
@@ -254,6 +263,8 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
         postUploadDate: "2022-01-03T13:33:00",
     },
     {
+        followLoading: false,
+        isFollowing: true,
         postId: 13,
         followingMemberUsernameLikedPost: null,
         memberImageUrl:
@@ -336,6 +347,8 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
         postUploadDate: "2022-01-03T13:33:00",
     },
     {
+        followLoading: false,
+        isFollowing: true,
         postId: 14,
         followingMemberUsernameLikedPost: null,
         memberImageUrl:
@@ -418,6 +431,8 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
         postUploadDate: "2022-01-03T13:33:00",
     },
     {
+        followLoading: false,
+        isFollowing: true,
         postId: 15,
         followingMemberUsernameLikedPost: null,
         memberImageUrl:
@@ -501,104 +516,15 @@ const DUMMY_ARTICLES: HomeType.ArticleProps[] = [
     },
 ];
 
-const EXTRA_ARTICLES: HomeType.ArticleProps = {
-    postId: 102,
-    followingMemberUsernameLikedPost: null,
-    memberImageUrl:
-        "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-    memberNickname: "spursofficial",
-    memberUsername: "Tottenham Hotspur",
-    postBookmarkFlag: false,
-    postCommentsCount: 0,
-    postContent: `이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
-이 영역은 토트넘 핫스퍼 공식 계정 글입니다.
-이 영역은 토트넘 핫스퍼 공식 계정 글입니다.`,
-    postImageDTOs: [
-        {
-            id: 12,
-            postImageUrl:
-                "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-
-            postTagDTOs: [
-                {
-                    id: 12,
-                    tag: {
-                        username: "dummyUsername",
-                        x: 30,
-                        y: 40,
-                    },
-                },
-                {
-                    id: 13,
-                    tag: {
-                        username: "dummyUsername",
-                        x: 60,
-                        y: 60,
-                    },
-                },
-            ],
-        },
-        {
-            id: 13,
-            postImageUrl:
-                "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-
-            postTagDTOs: [
-                {
-                    id: 12,
-                    tag: {
-                        username: "dummyUsername",
-                        x: 60,
-                        y: 70,
-                    },
-                },
-            ],
-        },
-        {
-            id: 14,
-            postImageUrl:
-                "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-            postTagDTOs: [
-                {
-                    id: 12,
-                    tag: {
-                        username: "dummyUsername",
-                        x: 30,
-                        y: 40,
-                    },
-                },
-                {
-                    id: 13,
-                    tag: {
-                        username: "dummyUsername",
-                        x: 60,
-                        y: 60,
-                    },
-                },
-            ],
-        },
-    ],
-    postLikeFlag: true,
-    postLikesCount: 24,
-    postUploadDate: "2022-01-03T13:33:00",
-};
-
-// 좋아요 여부를 따로? 아니면 내가 필터링?
-// 좋아요 수를 따로? 아니면 내가 arr 길이 계산?
-
 const initialState: HomeType.homeStateProps = {
     storiesScrollPosition: "left",
     articles: [],
-    isLoading: true, /// dummy
+    isLoading: true,
     isExtraArticleLoading: false,
     extraArticlesCount: 0,
     isAsyncError: false,
     hoveredUser: null,
     isCopiedNotification: false,
-    homeModal: {
-        activatedModal: null,
-        handledObj: null,
-    },
 };
 
 const homeSlice = createSlice({
@@ -616,16 +542,6 @@ const homeSlice = createSlice({
             action: PayloadAction<HomeType.StoriesScrollPositionType>,
         ) => {
             state.storiesScrollPosition = action.payload;
-        },
-        startModal: (state, action: PayloadAction<HomeType.homeModalProps>) => {
-            state.homeModal = action.payload;
-            // 비동기적으로 데이터를 가져옴
-        },
-        resetModal: (state) => {
-            state.homeModal = {
-                activatedModal: null,
-                handledObj: null,
-            };
         },
         increaseExtraArticlesCount: (state) => {
             state.extraArticlesCount++;
@@ -657,6 +573,43 @@ const homeSlice = createSlice({
             .addCase(getExtraArticle.rejected, (state, action) => {
                 state.isExtraArticleLoading = false;
                 state.isAsyncError = true;
+            })
+            .addCase(postUnfollow.fulfilled, (state, action) => {
+                state.articles.forEach((article) => {
+                    if (article.memberUsername === action.meta.arg.username) {
+                        article.isFollowing = false;
+                    }
+                });
+            })
+            .addCase(postUnfollow.rejected, (state, action) => {
+                state.articles.forEach((article) => {
+                    if (article.memberUsername === action.meta.arg.username) {
+                        article.isFollowing = true;
+                    }
+                });
+            })
+            .addCase(postFollow.pending, (state, action) => {
+                state.articles.forEach((article) => {
+                    if (article.memberUsername === action.meta.arg.username) {
+                        article.followLoading = true;
+                    }
+                });
+            })
+            .addCase(postFollow.fulfilled, (state, action) => {
+                state.articles.forEach((article) => {
+                    if (article.memberUsername === action.meta.arg.username) {
+                        article.followLoading = false;
+                        article.isFollowing = true;
+                    }
+                });
+            })
+            .addCase(postFollow.rejected, (state, action) => {
+                state.articles.forEach((article) => {
+                    if (article.memberUsername === action.meta.arg.username) {
+                        article.followLoading = false;
+                        article.isFollowing = false;
+                    }
+                });
             })
             .addCase(postLike.pending, (state) => {
                 state.isAsyncError = false;

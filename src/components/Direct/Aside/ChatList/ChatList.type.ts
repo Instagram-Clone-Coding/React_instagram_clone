@@ -1,3 +1,3 @@
 export default interface ChatListProps {
-    chatList: Array<Direct.ChatItem>;
+    chatList?: Array<Direct.ChatItem>;
 }
