@@ -1,6 +1,7 @@
 import { authAction } from "app/store/ducks/auth/authSlice";
 import { useAppDispatch } from "app/store/Hooks";
 import Input from "components/Common/Input";
+import Loading from "components/Common/Loading";
 import SubmitButton from "components/Common/SubmitButton";
 import {
     emailFormValidator,
@@ -10,7 +11,7 @@ import {
 } from "components/Signup/validator";
 import { customAxios } from "customAxios";
 import useInput from "hooks/useInput";
-import { MouseEvent } from "react";
+import { MouseEvent, useState } from "react";
 
 export default function InputAndButton() {
     const [emailInputProps, emailIsValid, emailIsFocus] = useInput(
@@ -29,11 +30,14 @@ export default function InputAndButton() {
         "",
         passwordValidator,
     );
+    const [isLoading, setIsLoading] = useState(false);
 
     const dispatch = useAppDispatch();
 
     const signUpButtonClickHandler = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
+        setIsLoading(true);
+
         const callEmailConfirmAPI = async ({
             email,
             username,
@@ -48,6 +52,8 @@ export default function InputAndButton() {
                     email,
                     username,
                 });
+                setIsLoading(false);
+
                 if (status === 200) {
                     dispatch(authAction.changeFormState("confirmEmail"));
                     dispatch(
@@ -118,7 +124,7 @@ export default function InputAndButton() {
                 }
                 onClick={signUpButtonClickHandler}
             >
-                가입
+                {isLoading ? <Loading size={18} /> : "가입"}
             </SubmitButton>
         </>
     );

@@ -1,9 +1,10 @@
 import Input from "components/Common/Input";
 import { MouseEvent } from "react";
 import SubmitButton from "components/Common/SubmitButton";
-import { useAppDispatch } from "app/store/Hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { signIn } from "app/store/ducks/auth/authThunk";
 import useInput from "hooks/useInput";
+import Loading from "components/Common/Loading";
 
 const placeholder = {
     username: "사용자 이름",
@@ -23,6 +24,7 @@ export default function LoginFormAndButton() {
     );
 
     const dispatch = useAppDispatch();
+    const isLoading = useAppSelector((state) => state.auth.isLoading);
 
     const submitButtonClickHandler = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
@@ -58,7 +60,7 @@ export default function LoginFormAndButton() {
                 onClick={submitButtonClickHandler}
                 disabled={!(usernameIsValid && passwordIsValid)}
             >
-                로그인
+                {isLoading ? <Loading size={18} /> : "로그인"}
             </SubmitButton>
         </>
     );

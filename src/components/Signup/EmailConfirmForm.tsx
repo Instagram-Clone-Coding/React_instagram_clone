@@ -10,6 +10,7 @@ import Button from "styles/UI/Button";
 import { authAction } from "app/store/ducks/auth/authSlice";
 import { signIn } from "app/store/ducks/auth/authThunk";
 import { useState } from "react";
+import Loading from "components/Common/Loading";
 
 const Container = styled.div`
     .form-description {
@@ -73,11 +74,14 @@ export default function EmailConfirmForm() {
     const userInput = useAppSelector((state) => state.auth.signUpUserData);
     const dispatch = useAppDispatch();
     const [errorMessage, setErrorMessage] = useState("");
+    // 에러메시지
+    // - 문구수정: 인증코드 만료기간 5분 명시 -> 재발급 요청
+    const [isLoading, setIsLoading] = useState(false);
 
     const [codeInputProps, isValid, isFocus] = useInput(
         "",
         undefined,
-        (value: string) => value.length >= 6,
+        (value: string) => value.length === 6,
     );
 
     const reCallEmailConfirmHandler = () => {
@@ -105,6 +109,7 @@ export default function EmailConfirmForm() {
     };
 
     const submitButtonClickHandler = () => {
+        setIsLoading(true);
         const callSignUpAPI = async () => {
             if (!userInput) return;
             try {
@@ -114,6 +119,7 @@ export default function EmailConfirmForm() {
                     ...userInput,
                     code: codeInputProps.value,
                 });
+                setIsLoading(false);
 
                 if (status === 200 && data) {
                     dispatch(authAction.resetUserInputData());
@@ -125,6 +131,7 @@ export default function EmailConfirmForm() {
                     );
                 } else if (status === 200 && !data) {
                     setErrorMessage(message);
+                    // 인증코드가 다를 경우, 200번대가 아니라 400번대가 더 적합할 거 같음
                 }
             } catch (error) {
                 console.log(error, `call signUp api`);
@@ -162,7 +169,7 @@ export default function EmailConfirmForm() {
                     onClick={submitButtonClickHandler}
                     disabled={!isValid}
                 >
-                    다음
+                    {isLoading ? <Loading size={18} /> : "다음"}
                 </SubmitButton>
                 <Button
                     bgColor="white"
