@@ -60,7 +60,9 @@ const ChatBubbleContainer = styled.div<ChatBubbleContainerType>`
         position: absolute;
         top: calc(50% - 58px);
         z-index: ${props => props.showGuide ? 2 : -1};
-        right: calc(100% - 34px);
+        right: ${props => props.me && 'calc(100% - 34px)'};
+        left: ${props => !props.me && 'calc(100% - 34px)'};
+
 
         .guide-inner {
           opacity: ${props => props.showGuide ? 1 : 0};
@@ -78,7 +80,8 @@ const ChatBubbleContainer = styled.div<ChatBubbleContainerType>`
             position: absolute;
             width: 100%;
             bottom: -6px;
-            left: calc(50% - 20px);
+            left: ${props => props.me && 'calc(50% - 20px)'};
+            right: ${props => !props.me && 'calc(50% - 20px)'};
 
             .arrow-detail {
               border-radius: 2px;
@@ -147,7 +150,8 @@ const ChatBubbleContainer = styled.div<ChatBubbleContainerType>`
     border-radius: 50%;
     border: 2px solid #fff;
     position: absolute;
-    right: 0;
+    right: ${props => props.me && 0};
+    left : ${props => !props.me && '50px'};
     padding: 6px;
     bottom: -14px;
   }
