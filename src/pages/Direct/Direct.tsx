@@ -154,20 +154,6 @@ const Direct = () => {
         setMessage("");
     };
 
-    // 사진 보내기
-    const imageUploadHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        if (!e.target.files) return;
-        client?.current?.publish({
-            destination: "/pub/messages/image",
-            body: JSON.stringify({
-                roomId: selectedRoom?.chatRoomId,
-                senderId: userInfo?.memberId,
-                image: e.target.files[0],
-            }),
-        });
-        setMessage("");
-    };
-
     //  메세지 삭제
     const deleteMessageHandler = () => {
         client?.current?.publish({
@@ -221,7 +207,6 @@ const Direct = () => {
                             message={message}
                             setMessage={setMessage}
                             sendMessageHandler={sendMessageHandler}
-                            imageUploadHandler={imageUploadHandler}
                             deleteMessageHandler={deleteMessageHandler}
                             likeMessageHandler={likeMessageHandler}
                             unlikeMessageHandler={unlikeMessageHandler}
