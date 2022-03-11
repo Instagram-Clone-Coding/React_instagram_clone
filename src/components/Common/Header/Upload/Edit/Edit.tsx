@@ -2,7 +2,13 @@ import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { ReactComponent as LeftArrow } from "assets/Svgs/leftArrow.svg";
 import { ReactComponent as RightArrow } from "assets/Svgs/rightArrow.svg";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+    ChangeEvent,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import styled from "styled-components";
 
 const StyledEdit = styled.div`
@@ -65,12 +71,27 @@ const StyledEdit = styled.div`
                 }
             }
         }
+        & > .adjust__input {
+            padding: 0 16px;
+            & > div {
+                width: 100%;
+            }
+            & > div:first-child {
+                padding: 14px 0;
+            }
+            & > div:last-child {
+                & > input {
+                    width: 100%;
+                }
+            }
+        }
     }
 `;
 
 interface EditProps {
     currentWidth: number;
 }
+
 const MIN_WIDTH = 348;
 
 const Edit = ({ currentWidth }: EditProps) => {
@@ -223,6 +244,19 @@ const Edit = ({ currentWidth }: EditProps) => {
         imgSize.height,
     ]);
 
+    const adjustInputs: {
+        text: "밝기" | "대비" | "채도" | "흐리게";
+        value: number;
+    }[] = useMemo(
+        () => [
+            { text: "밝기", value: files[currentIndex].brightness },
+            { text: "대비", value: files[currentIndex].contrast },
+            { text: "채도", value: files[currentIndex].saturate },
+            { text: "흐리게", value: files[currentIndex].blur },
+        ],
+        [currentIndex, files],
+    );
+
     return (
         <StyledEdit>
             <div
@@ -280,6 +314,31 @@ const Edit = ({ currentWidth }: EditProps) => {
                         조정
                     </div>
                 </div>
+                {adjustInputs.map((inputObj) => (
+                    <div className="adjust__input">
+                        <div>{inputObj.text}</div>
+                        <div>
+                            <input
+                                type="range"
+                                onChange={(
+                                    event: ChangeEvent<HTMLInputElement>,
+                                ) =>
+                                    dispatch(
+                                        uploadActions.changeAdjustInput({
+                                            type: inputObj.text,
+                                            value: Number(event.target.value),
+                                        }),
+                                    )
+                                }
+                                value={inputObj.value}
+                                min="-100"
+                                max="100"
+                                step="1"
+                            />
+                            <div>{inputObj.value}</div>
+                        </div>
+                    </div>
+                ))}
             </div>
         </StyledEdit>
     );

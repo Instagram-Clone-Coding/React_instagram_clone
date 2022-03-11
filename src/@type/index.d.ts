@@ -45,9 +45,22 @@ declare module Direct {
         inviter: inviterProps; // 초대한사람
         members: memberProps[]; // 초대받은사람
     }
-    type modalType = "deleteChat" | "block" | "report" | "newChat" | "convertAccount" | "deleteAll" | "deleteChatMessage" | null;
-    type currentSectionViewType = "inbox" | "detail" | "chat" | "requests" | "requestsChat"
-    type messageType = "TEXT" | "POST"
+    type modalType =
+        | "deleteChat"
+        | "block"
+        | "report"
+        | "newChat"
+        | "convertAccount"
+        | "deleteAll"
+        | "deleteChatMessage"
+        | null;
+    type currentSectionViewType =
+        | "inbox"
+        | "detail"
+        | "chat"
+        | "requests"
+        | "requestsChat";
+    type messageType = "TEXT" | "POST";
 }
 
 declare module UI {
@@ -243,7 +256,16 @@ declare module UploadType {
         scale: number;
     }
 
-    interface FileProps extends FileDragAndDropProps, FileCutProps {}
+    interface EditType {
+        brightness: number;
+        contrast: number;
+        saturate: number;
+        // 온도
+        blur: number;
+        // backgroundBlur
+    }
+
+    interface FileProps extends FileDragAndDropProps, FileCutProps, EditType {}
     // type FileProps = FileDragAndDropProps & FileCutProps;
 
     type RatioType = "original" | "square" | "thin" | "fat";
@@ -277,46 +299,45 @@ declare module Common {
     }
 }
 
-declare module Profile{
+declare module Profile {
     interface MemberProfileProps {
-        memberUsername:string;
-        memberName:string;
-        memberWebsite:string | null,
-        memberImage : Common.ImageInfo;
-        memberIntroduce:string | null,
-        memberPostsCount:number;
-        memberFollowingsCount:number;
-        memberFollowersCount:number;
-        followingMemberFollow : null;
-        blocking:boolean;
-        following:boolean;
-        follower:boolean;
-        blocked:boolean;
-        me:boolean
+        memberUsername: string;
+        memberName: string;
+        memberWebsite: string | null;
+        memberImage: Common.ImageInfo;
+        memberIntroduce: string | null;
+        memberPostsCount: number;
+        memberFollowingsCount: number;
+        memberFollowersCount: number;
+        followingMemberFollow: null;
+        blocking: boolean;
+        following: boolean;
+        follower: boolean;
+        blocked: boolean;
+        me: boolean;
     }
 
-
-    interface PostType{
-        postId:number;
-        postImageUrl:string;
-        hasManyPosts:boolean;
-        postCommentsCount:number;
-        postLikesCount:number
+    interface PostType {
+        postId: number;
+        postImageUrl: string;
+        hasManyPosts: boolean;
+        postCommentsCount: number;
+        postLikesCount: number;
     }
 
-    interface personType{  // 팔로잉 팔로워 한명을 나타내는 타입입니다.
+    interface personType {
+        // 팔로잉 팔로워 한명을 나타내는 타입입니다.
         username: string;
         name: string;
-        image:Common.ImageInfo;
-        isFollowing:boolean;
-        isFollower:boolean;
-        hasStory:boolean;
-        isMe:boolean;
-        following:boolean;
-        follower:boolean;
-        me:boolean
+        image: Common.ImageInfo;
+        isFollowing: boolean;
+        isFollower: boolean;
+        hasStory: boolean;
+        isMe: boolean;
+        following: boolean;
+        follower: boolean;
+        me: boolean;
     }
 
-
-    type modalType = "userAction" | "setting" | "follower" | "unFollow" |  null
+    type modalType = "userAction" | "setting" | "follower" | "unFollow" | null;
 }

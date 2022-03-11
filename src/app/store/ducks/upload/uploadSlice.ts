@@ -66,6 +66,10 @@ const uploadSlice = createSlice({
                 translateY: 0,
                 scale: 0,
                 grabbedPosition: { x: 0, y: 0 },
+                brightness: 0,
+                contrast: 0,
+                saturate: 0,
+                blur: 0,
             });
         },
         startGrabbing: (state) => {
@@ -219,6 +223,31 @@ const uploadSlice = createSlice({
                 }
                 state.currentIndex = state.grabbedGalleryImgNewIndex;
                 // state.files = [...prevArr, translatedFile, ...nextArr];
+            }
+        },
+        changeAdjustInput: (
+            state,
+            action: PayloadAction<{
+                type: "밝기" | "대비" | "채도" | "흐리게";
+                value: number;
+            }>,
+        ) => {
+            switch (action.payload.type) {
+                case "밝기":
+                    state.files[state.currentIndex].brightness =
+                        action.payload.value;
+                    break;
+                case "대비":
+                    state.files[state.currentIndex].contrast =
+                        action.payload.value;
+                    break;
+                case "채도":
+                    state.files[state.currentIndex].saturate =
+                        action.payload.value;
+                    break;
+                case "흐리게":
+                    state.files[state.currentIndex].blur = action.payload.value;
+                    break;
             }
         },
     },
