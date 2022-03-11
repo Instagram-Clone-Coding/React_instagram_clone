@@ -2,7 +2,7 @@ import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { ReactComponent as LeftArrow } from "assets/Svgs/leftArrow.svg";
 import { ReactComponent as RightArrow } from "assets/Svgs/rightArrow.svg";
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
 const StyledEdit = styled.div`
@@ -44,6 +44,27 @@ const StyledEdit = styled.div`
         min-width: 340px;
         max-width: 340px;
         border-left: 1px solid ${(props) => props.theme.color.bd_gray};
+        & > .header {
+            display: flex;
+            height: 53px;
+            width: 100%;
+            & > div {
+                flex: 1;
+                text-align: center;
+                font-size: 16px;
+                line-height: 24px;
+                padding: 14px 0;
+                font-weight: ${(props) => props.theme.font.bold};
+                border-bottom: 1px solid ${(props) => props.theme.color.bd_gray};
+                color: ${(props) => props.theme.color.bd_gray};
+                cursor: pointer;
+                transition: all 0.2s;
+                &.active {
+                    border-bottom: 1px solid black;
+                    color: black;
+                }
+            }
+        }
     }
 `;
 
@@ -58,6 +79,7 @@ const Edit = ({ currentWidth }: EditProps) => {
     const currentIndex = useAppSelector((state) => state.upload.currentIndex);
     const dispatch = useAppDispatch();
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const [editMode, setEditMode] = useState<"filter" | "adjust">("filter");
 
     // window 너비에 따라 변경되는 값
     const processedCanvasLayoutWidth = useMemo(
@@ -239,7 +261,26 @@ const Edit = ({ currentWidth }: EditProps) => {
                     </button>
                 )}
             </div>
-            <div className="upload__imgEditor">필터</div>
+            <div className="upload__imgEditor">
+                <div className="header">
+                    <div
+                        className={`filter ${
+                            editMode === "filter" ? "active" : ""
+                        }`}
+                        onClick={() => setEditMode("filter")}
+                    >
+                        필터
+                    </div>
+                    <div
+                        className={`adjust ${
+                            editMode === "adjust" ? "active" : ""
+                        }`}
+                        onClick={() => setEditMode("adjust")}
+                    >
+                        조정
+                    </div>
+                </div>
+            </div>
         </StyledEdit>
     );
 };
