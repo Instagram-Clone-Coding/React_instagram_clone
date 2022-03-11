@@ -10,6 +10,8 @@ import { ReactComponent as Emoji } from "assets/Svgs/direct-emoji-icon.svg";
 import { ReactComponent as ImageUpload } from "assets/Svgs/direct-image-upload.svg";
 import { ReactComponent as Heart } from "assets/Svgs/heart.svg";
 import Picker, { IEmojiData } from "emoji-picker-react";
+import { useAppSelector } from "app/store/Hooks";
+import { authorizedCustomAxios } from "customAxios";
 
 interface ChatBarType {
     message: string;
@@ -76,6 +78,7 @@ const ChatBarContainer = styled.div<ChatBarContainerType>`
 const ChatBar = ({ message, setMessage, sendMessageHandler }: ChatBarType) => {
     const [sendButtonClicked, setSendButtonClicked] = useState<boolean>(false);
     const [showPicker, setShowPicker] = useState(false);
+    const selectedRoom = useAppSelector((state) => state.direct.selectedRoom);
 
     const onEmojiClick = (event: React.MouseEvent, emojiObject: IEmojiData) => {
         setMessage((prevInput) => prevInput + emojiObject.emoji);
@@ -108,9 +111,15 @@ const ChatBar = ({ message, setMessage, sendMessageHandler }: ChatBarType) => {
     };
 
     // 사진 보내기
-    const imageUploadHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const imageUploadHandler = async (e: ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
         console.log(e.target.files[0]);
+        let frm = new FormData();
+
+        frm.append("image", e.target.files[0]);
+        frm.append("roomId", (selectedRoom?.chatRoomId as number).toString());
+
+        await authorizedCustomAxios.post("/messages/image", frm);
     };
     return (
         <ChatBarContainer sendButtonClicked={sendButtonClicked}>

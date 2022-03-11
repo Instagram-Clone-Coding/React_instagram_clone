@@ -7,9 +7,10 @@ import {
     setSelectedMessageId,
 } from "app/store/ducks/direct/DirectSlice";
 import moment from "moment";
+import Direct from "pages/Direct";
 
 interface ChatBubbleProps {
-    content: string | Direct.PostMessageDTO;
+    content: string | Direct.PostMessageDTO | Common.ImageInfo; // DM 메세지에는 여러가지 타입이 있습니다. 순서대로 일반 메세지, 포스트 공유, 이미지 전송
     me: boolean;
     showDate: boolean;
     messageDate: string;
@@ -134,6 +135,7 @@ const ChatBubbleContainer = styled.div<ChatBubbleContainerType>`
 
             img {
                 height: 200px;
+                width: 80%;
                 min-height: 100%;
                 min-width: 100%;
             }
@@ -234,6 +236,34 @@ const ChatBubble = ({
         }
     };
 
+    const isPostImage = (object: any): object is Direct.PostMessageDTO => {
+        return "postImage" in object;
+    };
+
+    const isImage = (object: any): object is Common.ImageInfo => {
+        return "imageUrl" in object;
+    };
+
+    const renderContent = () => {
+        if (typeof content === "string") {
+            // 일반적인 채팅은 string 타입입니다.
+            return <>{content}</>;
+        } else {
+            if (isPostImage(content)) {
+                return (
+                    <img
+                        src={content.postImage.imageUrl}
+                        alt={content.postImage.imageName}
+                    />
+                );
+            }
+
+            if (isImage(content)) {
+                return <img src={content.imageUrl} alt={content.imageName} />;
+            }
+        }
+    };
+
     return (
         <ChatBubbleContainer
             me={me}
@@ -322,16 +352,7 @@ const ChatBubble = ({
                         }
                     />
                 </div>
-                <p>
-                    {typeof content === "string" ? (
-                        <> {content}</>
-                    ) : (
-                        <img
-                            src={content.postImage.imageUrl}
-                            alt={content.postImage.imageName}
-                        />
-                    )}
-                </p>
+                <p>{renderContent()}</p>
             </div>
             {/*그 메세지에 좋아요를 누른 사람중에 내가 있다면 하트를 표시해주자*/}
             {liked && (
