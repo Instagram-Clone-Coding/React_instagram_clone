@@ -167,6 +167,7 @@ const Edit = ({ currentWidth }: EditProps) => {
         const context = canvas.getContext("2d");
         const currentFile = files[currentIndex];
         if (context) {
+            context.clearRect(0, 0, canvasSize.width, canvasSize.height);
             const img = new Image(imgSize.width, imgSize.height); // url만으로 canvas에 이미지를 그릴 수 없습니다. 생성자 함수를 통해 새로운 img 객체를 만들어줍니다.
             img.src = currentFile.url;
             img.onload = () => {
