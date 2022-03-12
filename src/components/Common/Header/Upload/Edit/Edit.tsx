@@ -78,6 +78,15 @@ const StyledEdit = styled.div`
             }
             & > div:first-child {
                 padding: 14px 0;
+                display: flex;
+                justify-content: space-between;
+                & > button {
+                    color: ${(props) => props.theme.color.blue};
+                    display: none;
+                    &.entered {
+                        display: block;
+                    }
+                }
             }
             & > div:last-child {
                 & > input {
@@ -101,6 +110,8 @@ const Edit = ({ currentWidth }: EditProps) => {
     const dispatch = useAppDispatch();
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [editMode, setEditMode] = useState<"filter" | "adjust">("filter");
+    const [enteredAdjustInput, setEnteredAdjustInput] =
+        useState<null | UploadType.AdjustInputTextType>(null);
 
     // window 너비에 따라 변경되는 값
     const processedCanvasLayoutWidth = useMemo(
@@ -217,6 +228,12 @@ const Edit = ({ currentWidth }: EditProps) => {
                 // 이미지 로드가 완료되었을 떄 함수가 실행됩니다.
                 // 이미지 자체의 시작지점(sx,sy)를 조작하면 이미지 크기가 초기화되버리므로,
                 // canvas에 그리기 시작하는 좌표(dx,dy)를 조작하여 간접적으로 translate를 구현합니다.
+                context.filter = `brightness(${
+                    currentFile.brightness / 3 + 100
+                }%) contrast(${currentFile.contrast / 3 + 100}%) saturate(${
+                    currentFile.saturate + 100
+                }%)`;
+                // context.filter = `brightness(${}%) contrast(${}%) saturate(${}) blur(${})`
                 context.drawImage(
                     img,
                     -(
@@ -245,7 +262,7 @@ const Edit = ({ currentWidth }: EditProps) => {
     ]);
 
     const adjustInputs: {
-        text: "밝기" | "대비" | "채도" | "흐리게";
+        text: UploadType.AdjustInputTextType;
         value: number;
     }[] = useMemo(
         () => [
@@ -315,8 +332,34 @@ const Edit = ({ currentWidth }: EditProps) => {
                     </div>
                 </div>
                 {adjustInputs.map((inputObj) => (
-                    <div className="adjust__input">
-                        <div>{inputObj.text}</div>
+                    <div
+                        className="adjust__input"
+                        onMouseEnter={() =>
+                            setEnteredAdjustInput(inputObj.text)
+                        }
+                        onMouseLeave={() => setEnteredAdjustInput(null)}
+                    >
+                        <div>
+                            <div>{inputObj.text}</div>
+                            {inputObj.value !== 0 && (
+                                <button
+                                    className={
+                                        enteredAdjustInput === inputObj.text
+                                            ? "entered"
+                                            : ""
+                                    }
+                                    onClick={() =>
+                                        dispatch(
+                                            uploadActions.resetAdjustInput(
+                                                inputObj.text,
+                                            ),
+                                        )
+                                    }
+                                >
+                                    재설정
+                                </button>
+                            )}
+                        </div>
                         <div>
                             <input
                                 type="range"

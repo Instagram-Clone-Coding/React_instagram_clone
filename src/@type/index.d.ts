@@ -270,6 +270,7 @@ declare module UploadType {
 
     type RatioType = "original" | "square" | "thin" | "fat";
     type StepType = "dragAndDrop" | "cut" | "edit" | "content";
+    type AdjustInputTextType = "밝기" | "대비" | "채도" | "흐리게";
 
     interface UploadStateProps {
         isUploading: boolean;

@@ -228,7 +228,7 @@ const uploadSlice = createSlice({
         changeAdjustInput: (
             state,
             action: PayloadAction<{
-                type: "밝기" | "대비" | "채도" | "흐리게";
+                type: UploadType.AdjustInputTextType;
                 value: number;
             }>,
         ) => {
@@ -247,6 +247,25 @@ const uploadSlice = createSlice({
                     break;
                 case "흐리게":
                     state.files[state.currentIndex].blur = action.payload.value;
+                    break;
+            }
+        },
+        resetAdjustInput: (
+            state,
+            action: PayloadAction<UploadType.AdjustInputTextType>,
+        ) => {
+            switch (action.payload) {
+                case "밝기":
+                    state.files[state.currentIndex].brightness = 0;
+                    break;
+                case "대비":
+                    state.files[state.currentIndex].contrast = 0;
+                    break;
+                case "채도":
+                    state.files[state.currentIndex].saturate = 0;
+                    break;
+                case "흐리게":
+                    state.files[state.currentIndex].blur = 0;
                     break;
             }
         },
