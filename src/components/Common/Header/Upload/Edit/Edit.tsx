@@ -89,8 +89,15 @@ const StyledEdit = styled.div`
                 }
             }
             & > div:last-child {
+                width: 100%;
+                display: flex;
                 & > input {
-                    width: 100%;
+                    flex: 1;
+                }
+                & > div {
+                    width: 24px;
+                    margin-left: 8px;
+                    text-align: right;
                 }
             }
         }
