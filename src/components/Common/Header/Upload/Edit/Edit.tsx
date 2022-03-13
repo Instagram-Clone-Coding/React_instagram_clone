@@ -340,6 +340,7 @@ const Edit = ({ currentWidth }: EditProps) => {
                 </div>
                 {adjustInputs.map((inputObj) => (
                     <div
+                        key={inputObj.text}
                         className="adjust__input"
                         onMouseEnter={() =>
                             setEnteredAdjustInput(inputObj.text)
