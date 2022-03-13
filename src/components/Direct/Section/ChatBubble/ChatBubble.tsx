@@ -8,6 +8,7 @@ import {
 } from "app/store/ducks/direct/DirectSlice";
 import moment from "moment";
 import Direct from "pages/Direct";
+import { ReactComponent as Slide } from "assets/Svgs/slide.svg";
 
 interface ChatBubbleProps {
     content: string | Direct.PostMessageDTO | Common.ImageInfo; // DM 메세지에는 여러가지 타입이 있습니다. 순서대로 일반 메세지, 포스트 공유, 이미지 전송
@@ -27,6 +28,7 @@ interface ChatBubbleContainerType {
     onMouseEnter: (event: React.MouseEvent<HTMLDivElement>) => void;
     onMouseLeave: (event: React.MouseEvent<HTMLDivElement>) => void;
     liked: AuthType.UserInfo | undefined;
+    isString: boolean;
 }
 
 const ChatBubbleContainer = styled.div<ChatBubbleContainerType>`
@@ -119,7 +121,7 @@ const ChatBubbleContainer = styled.div<ChatBubbleContainerType>`
         }
 
         p {
-            padding: 15px;
+            padding: ${(props) => (props.isString ? "15px" : "15px 0")};
             display: inline-block;
             max-width: 234px;
             text-align: left;
@@ -138,6 +140,32 @@ const ChatBubbleContainer = styled.div<ChatBubbleContainerType>`
                 width: 80%;
                 min-height: 100%;
                 min-width: 100%;
+            }
+
+            .post-image-container {
+                .uploader-info {
+                    display: flex;
+                    align-items: center;
+                    padding: 0 10px 10px 10px;
+
+                    img {
+                        // uploader image
+                        width: 32px;
+                        height: 32px;
+                        min-width: 0%;
+                        margin-right: 5px;
+                    }
+                }
+
+                .post-image {
+                    position: relative;
+
+                    svg {
+                        position: absolute;
+                        top: 5px;
+                        right: 5px;
+                    }
+                }
             }
         }
     }
@@ -250,11 +278,24 @@ const ChatBubble = ({
             return <>{content}</>;
         } else {
             if (isPostImage(content)) {
+                console.log(content);
                 return (
-                    <img
-                        src={content.postImage.imageUrl}
-                        alt={content.postImage.imageName}
-                    />
+                    <div className="post-image-container">
+                        <div className="uploader-info">
+                            <img
+                                src={content.uploader.memberImageUrl}
+                                alt="uploader-image"
+                            />
+                            <span>{content.uploader.memberUsername}</span>
+                        </div>
+                        <div className="post-image">
+                            <img
+                                src={content.postImage.imageUrl}
+                                alt={content.postImage.imageName}
+                            />
+                            {content.postImageCount > 1 && <Slide />}
+                        </div>
+                    </div>
                 );
             }
 
@@ -279,6 +320,7 @@ const ChatBubble = ({
             showThreeDotsButton={showThreeDotsButton}
             showGuide={showGuide}
             liked={liked}
+            isString={typeof content === "string"}
         >
             {showDate && (
                 <div className={"date-section"}>
