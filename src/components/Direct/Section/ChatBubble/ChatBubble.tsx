@@ -270,6 +270,8 @@ const ChatBubble = ({
             // 흐름 6.
             document.body.removeChild(textarea);
         }
+        setShowGuide(false);
+        dispatch(setSelectedMessageId(null));
     };
 
     const isPostImage = (object: any): object is Direct.PostMessageDTO => {
