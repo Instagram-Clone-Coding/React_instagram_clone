@@ -190,6 +190,7 @@ const ChatBubbleContainer = styled.div<ChatBubbleContainerType>`
         left: ${(props) => !props.me && "50px"};
         padding: 6px;
         bottom: -14px;
+        cursor: pointer;
     }
 `;
 
@@ -212,6 +213,8 @@ const ChatBubble = ({
     const selectedMessageId = useAppSelector(
         (state) => state.direct.selectedMessageId,
     );
+
+    const modal = useAppSelector((state) => state.direct.modal);
     const userInfo = useAppSelector((state) => state.auth.userInfo);
     const dispatch = useAppDispatch();
 
@@ -227,7 +230,10 @@ const ChatBubble = ({
     });
 
     useEffect(() => {
-        setShowGuide(selectedMessageId === messageId);
+        // 내가 선택한 메세지에 가이드를 띄워줍니다. 하지만 하트를 클릭했을때는 가이드를 띄워주면 안됩니다.
+        setShowGuide(
+            selectedMessageId === messageId && modal !== "likedMember",
+        );
     }, [selectedMessageId]);
 
     const copyhandler = () => {
@@ -392,8 +398,14 @@ const ChatBubble = ({
             </div>
             {/*그 메세지에 좋아요를 누른 사람중에 내가 있다면 하트를 표시해주자*/}
             {liked && (
-                <div className={"heart"}>
-                    <div>❤️</div>
+                <div
+                    onClick={() => {
+                        dispatch(setSelectedMessageId(messageId));
+                        dispatch(openModal("likedMember"));
+                    }}
+                    className={"heart"}
+                >
+                    ❤️
                 </div>
             )}
         </ChatBubbleContainer>

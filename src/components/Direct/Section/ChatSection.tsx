@@ -4,6 +4,8 @@ import ChatBubble from "components/Direct/Section/ChatBubble/ChatBubble";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { lookUpChatMessageList } from "app/store/ducks/direct/DirectThunk";
 import {
+    closeModal,
+    openModal,
     resetChatMessageList,
     resetChatMessagePage,
     resetSubChatCount,
@@ -13,6 +15,7 @@ import moment from "moment";
 // 안써도 자동으로 한국 시간을 불러온다. 명확하게 하기 위해 import
 import "moment/locale/ko";
 import CommonDirectModal from "./Modals/CommonDirectModal";
+import LikedMemberModal from "./Modals/LikedMemberModal";
 
 const ChatSectionContainer = styled.div<{
     isRequestsChat: boolean;
@@ -196,6 +199,15 @@ const ChatSection = ({
                     }
                     actionName={"전송 취소"}
                     actionHandler={deleteMessageHandler}
+                />
+            )}
+
+            {modal === "likedMember" && (
+                <LikedMemberModal
+                    onModalOn={() => {
+                        dispatch(openModal("likedMember"));
+                    }}
+                    onModalOff={() => dispatch(closeModal())}
                 />
             )}
         </ChatSectionContainer>
