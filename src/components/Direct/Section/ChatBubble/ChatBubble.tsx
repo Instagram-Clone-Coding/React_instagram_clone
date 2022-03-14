@@ -19,6 +19,7 @@ interface ChatBubbleProps {
     likeMessageHandler: () => void;
     unlikeMessageHandler: () => void;
     likeMembers: AuthType.UserInfo[];
+    senderImage: Common.ImageInfo;
 }
 
 interface ChatBubbleContainerType {
@@ -201,6 +202,7 @@ const ChatBubble = ({
     likeMessageHandler,
     unlikeMessageHandler,
     likeMembers,
+    senderImage,
 }: ChatBubbleProps) => {
     const [showThreeDotsButton, setShowThreeDotsButton] =
         useState<boolean>(false);
@@ -278,7 +280,6 @@ const ChatBubble = ({
             return <>{content}</>;
         } else {
             if (isPostImage(content)) {
-                console.log(content);
                 return (
                     <div className="post-image-container">
                         <div className="uploader-info">
@@ -327,14 +328,7 @@ const ChatBubble = ({
                     {moment(messageDate).format("YYYY년 M월 DD일 a  h:mm")}
                 </div>
             )}
-            {!me && (
-                <img
-                    src={
-                        "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=150"
-                    }
-                    alt={"보낸사람"}
-                />
-            )}
+            {!me && <img src={senderImage.imageUrl} alt={"보낸사람"} />}
 
             <div className={"content"}>
                 <div className={"guide-part"}>
