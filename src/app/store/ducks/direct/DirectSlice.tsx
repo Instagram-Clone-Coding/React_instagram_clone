@@ -25,6 +25,7 @@ export interface InitialStateType {
     renewScroll: boolean;
     subChatCount: number; // 채팅메시지 subscribe 를 통해서 읽은 개수입니다.
     messageScrollable: boolean;
+    selectedMessageId:number | null; // 메세지 옆에 3개의 점을 클릭했을때 여러가지 action 을 처리해주기 위함입니다.
 }
 
 
@@ -43,6 +44,7 @@ const initialState: InitialStateType = {
     renewScroll: false,
     subChatCount: 0,
     messageScrollable: true,
+    selectedMessageId : null
 };
 
 const directSlice = createSlice({
@@ -69,7 +71,7 @@ const directSlice = createSlice({
         },
         resetChatMessageList: (state) => {
             state.chatMessageList = [];
-            state.chatListPage = 1;
+            state.chatMessageListPage = 1;
         },
         resetChatMessagePage: (state) => {
             state.chatMessageListPage = 1;
@@ -87,6 +89,39 @@ const directSlice = createSlice({
         resetSelectedRoom: (state) => {
             state.selectedRoom = null;
         },
+        resetChatList : (state) => {
+            state.chatList = [];
+            state.chatListPage = 1;
+        },
+        setSelectedMessageId : (state,action : PayloadAction<number | null>) => {
+            state.selectedMessageId = action.payload
+        },
+        likeChatMessageItem: (state,action:PayloadAction<{messageId:number,userInfo:AuthType.UserInfo}>) => {
+            // 내가 좋아요 누른 메세지의 likemembers 에 내 정보를 추가해준다. 그래야 바로 반영이된다.
+            state.chatMessageList.forEach(chatMessageItem => {
+                if(chatMessageItem.messageId === action.payload.messageId){
+                    chatMessageItem.likeMembers.push(action.payload.userInfo)
+                    return;
+                }
+            })
+        },
+        unLikeChatMessageItem: (state,action:PayloadAction<{messageId:number,memberId:number}>) => {
+            // 내가 좋아요 취소 누른 메세지의 likemembers 에 내 정보를 삭제해준다. 그래야 바로 반영이된다.
+            state.chatMessageList.forEach(chatMessageItem => {
+                // 내가 찾는 메세지라면
+                if(chatMessageItem.messageId === action.payload.messageId){
+                    chatMessageItem.likeMembers = chatMessageItem.likeMembers.filter(member => {
+                        return member.memberId !== action.payload.memberId
+                    })
+                    return;
+                }
+            })
+        },
+        deleteChatMessageItem:(state,action : PayloadAction<number>) => {
+            state.chatMessageList = state.chatMessageList.filter(chatMessageListItem => {
+                return chatMessageListItem.messageId !== action.payload
+            })
+        }
     },
     extraReducers: (build) => {
         build
@@ -246,6 +281,10 @@ export const {
     resetSubChatCount,
     resetChatMessagePage,
     resetSelectedRoom,
-
+    resetChatList,
+    setSelectedMessageId,
+    likeChatMessageItem,
+    unLikeChatMessageItem,
+    deleteChatMessageItem
 } = directSlice.actions;
 export const directReducer = directSlice.reducer;

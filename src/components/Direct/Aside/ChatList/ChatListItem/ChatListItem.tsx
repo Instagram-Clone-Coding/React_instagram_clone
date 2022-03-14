@@ -119,7 +119,9 @@ const ChatListItem = ({
 
                 <div className="last-info">
                     <div className="last-chat-container">
-                         {isTyping ? "입력 중..." : lastMessage.content }
+                        {
+                            lastMessage.messageType === "TEXT" ? lastMessage.content : "사진"
+                        }
                     </div>
                     <span className={"dot"}>
                     ·

@@ -1,21 +1,30 @@
 declare module Direct {
+    interface PostMessageDTO {
+        postId: number;
+        postImage: Common.ImageInfo;
+        postImageCount: number;
+        status: string;
+        uploader: AuthType.UserInfo;
+    }
 
     interface MessageDTO {
-        messageId:number;
-        content:string;
-        messageType:string;
-        messageDate:string;
-        senderId:number;
-        roomId:number;
+        messageId: number;
+        content: string | PostMessageDTO;
+        messageType: messageType;
+        messageDate: string;
+        senderId: number;
+        roomId: number;
+        senderImage: Common.ImageInfo;
+        likeMembers: AuthType.UserInfo[];
     }
 
     interface ChatItem {
-        roomId:number;
-        lastMessage:MessageDTO;
-        unreadFlag:boolean;
-        inviter:inviterProps;
-        members:memberProps[];
-        typing?:boolean
+        roomId: number;
+        lastMessage: MessageDTO;
+        unreadFlag: boolean;
+        inviter: inviterProps;
+        members: memberProps[];
+        typing?: boolean;
     }
 
     interface inviterProps {
@@ -36,53 +45,72 @@ declare module Direct {
         inviter: inviterProps; // 초대한사람
         members: memberProps[]; // 초대받은사람
     }
-
-
-    type modalType = "deleteChat" | "block" | "report" | "newChat" | "convertAccount" | "deleteAll" | null;
-    type currentSectionViewType = "inbox" | "detail" | "chat" | "requests" | "requestsChat"
-
+    type modalType =
+        | "deleteChat"
+        | "block"
+        | "report"
+        | "newChat"
+        | "convertAccount"
+        | "deleteAll"
+        | "deleteChatMessage"
+        | null;
+    type currentSectionViewType =
+        | "inbox"
+        | "detail"
+        | "chat"
+        | "requests"
+        | "requestsChat";
+    type messageType = "TEXT" | "POST";
 }
 
-declare module UI {
+declare module CommonType {
+    interface FooterTextProps {
+        text: string;
+        url?: string;
+    }
+}
+
+declare module UIType {
     interface ButtonProps {
         bgColor?: string;
         radius?: number;
         color?: string;
     }
+
+    interface ContentBoxProps {
+        padding: string;
+        margin: string;
+    }
 }
 
-declare module AuthType {
-    interface Token {
+declare module AxiosType {
+    interface ResponseType {
         status: number;
         code: number;
         message: string;
-        data?: {
+    }
+}
+
+declare module AuthType {
+    interface Token extends AxiosType.ResponseType {
+        data: {
             type: string;
             accessToken: string;
         };
     }
 
     interface UserInfo {
-        memberId:number;
-        memberImageUrl:string;
-        memberName:string;
-        memberUsername:string
-    }
-}
-
-declare module Login {
-    interface FooterTextProps {
-        text: string;
-        url?: string;
+        memberId: number;
+        memberImageUrl: string;
+        memberName: string;
+        memberUsername: string;
     }
 
-    interface InputProps {
-        inputName: "email" | "name" | "username" | "password" | "id";
-        innerText: string;
-        type: "text" | "password";
-        inputProps: useInputProps;
-        isValid?: boolean | null;
-        isFocus?: boolean;
+    interface signUpUserData {
+        email: string;
+        name: string;
+        password: string;
+        username: string;
     }
 
     interface useInputProps {
@@ -92,9 +120,14 @@ declare module Login {
         onFocus?: () => void;
     }
 
-    interface NewCardProps {
-        padding: string;
-        margin: string;
+    interface InputProps {
+        inputName: "email" | "name" | "username" | "password" | "id" | "code";
+        innerText: string;
+        type: "text" | "password";
+        inputProps: useInputProps;
+        isValid?: boolean | null;
+        isFocus?: boolean;
+        hasValidator?: (value: string) => boolean;
     }
 }
 
@@ -172,6 +205,7 @@ declare module ModalType {
         | "articleMenu"
         | "shareWith"
         | null;
+
     interface ModalPositionProps {
         top: number;
         bottom: number;
@@ -217,6 +251,42 @@ declare module ModalType {
     }
 }
 
+declare module UploadType {
+    interface GrabbedPositionProps {
+        x: number;
+        y: number;
+    }
+    interface TranslateProps {
+        translateX: number;
+        translateY: number;
+    }
+    interface FileDragAndDropProps {
+        imageRatio: number;
+        url: string;
+    }
+    interface FileCutProps extends TranslateProps {
+        grabbedPosition: GrabbedPositionProps;
+        scale: number;
+    }
+
+    interface FileProps extends FileDragAndDropProps, FileCutProps {}
+    // type FileProps = FileDragAndDropProps & FileCutProps;
+
+    type RatioType = "original" | "square" | "thin" | "fat";
+    type StepType = "dragAndDrop" | "cut" | "edit" | "content";
+
+    interface UploadStateProps {
+        isUploading: boolean;
+        isGrabbing: boolean;
+        step: StepType;
+        ratioMode: RatioType;
+        files: FileProps[];
+        currentIndex: number;
+        grabbedGalleryImgIndex: number | null;
+        grabbedGalleryImgNewIndex: number | null;
+    }
+}
+
 declare module Common {
     interface ImageProps {
         width: number;
@@ -233,46 +303,45 @@ declare module Common {
     }
 }
 
-declare module Profile{
+declare module Profile {
     interface MemberProfileProps {
-        memberUsername:string;
-        memberName:string;
-        memberWebsite:string | null,
-        memberImage : Common.ImageInfo;
-        memberIntroduce:string | null,
-        memberPostsCount:number;
-        memberFollowingsCount:number;
-        memberFollowersCount:number;
-        followingMemberFollow : null;
-        blocking:boolean;
-        following:boolean;
-        follower:boolean;
-        blocked:boolean;
-        me:boolean
+        memberUsername: string;
+        memberName: string;
+        memberWebsite: string | null;
+        memberImage: Common.ImageInfo;
+        memberIntroduce: string | null;
+        memberPostsCount: number;
+        memberFollowingsCount: number;
+        memberFollowersCount: number;
+        followingMemberFollow: null;
+        blocking: boolean;
+        following: boolean;
+        follower: boolean;
+        blocked: boolean;
+        me: boolean;
     }
 
-
-    interface PostType{
-        postId:number;
-        postImageUrl:string;
-        hasManyPosts:boolean;
-        postCommentsCount:number;
-        postLikesCount:number
+    interface PostType {
+        postId: number;
+        postImageUrl: string;
+        hasManyPosts: boolean;
+        postCommentsCount: number;
+        postLikesCount: number;
     }
 
-    interface personType{  // 팔로잉 팔로워 한명을 나타내는 타입입니다.
+    interface personType {
+        // 팔로잉 팔로워 한명을 나타내는 타입입니다.
         username: string;
         name: string;
-        image:Common.ImageInfo;
-        isFollowing:boolean;
-        isFollower:boolean;
-        hasStory:boolean;
-        isMe:boolean;
-        following:boolean;
-        follower:boolean;
-        me:boolean
+        image: Common.ImageInfo;
+        isFollowing: boolean;
+        isFollower: boolean;
+        hasStory: boolean;
+        isMe: boolean;
+        following: boolean;
+        follower: boolean;
+        me: boolean;
     }
 
-
-    type modalType = "userAction" | "setting" | "follower" | "unFollow" |  null
+    type modalType = "userAction" | "setting" | "follower" | "unFollow" | null;
 }

@@ -6,13 +6,13 @@ import { lookUpChatMessageList } from "app/store/ducks/direct/DirectThunk";
 import {
     resetChatMessageList,
     resetChatMessagePage,
-    resetSelectedRoom,
     resetSubChatCount,
 } from "app/store/ducks/direct/DirectSlice";
 import ExtraLoadingCircle from "../../Home/ExtraLoadingCircle";
 import moment from "moment";
 // 안써도 자동으로 한국 시간을 불러온다. 명확하게 하기 위해 import
 import "moment/locale/ko";
+import CommonDirectModal from "./Modals/CommonDirectModal";
 
 const ChatSectionContainer = styled.div<{ isRequestsChat: boolean, messageScrollable: boolean }>`
   height: ${props => props.isRequestsChat ? "calc(100vh - 280px)" : "calc(100vh - 250px)"};
@@ -37,7 +37,14 @@ const ChatSectionContainer = styled.div<{ isRequestsChat: boolean, messageScroll
     height: calc(100vh - 200px);
   }
 `;
-const ChatSection = () => {
+
+interface ChatSectionProps {
+    deleteMessageHandler: () => void;
+    likeMessageHandler : () => void;
+    unlikeMessageHandler : () => void;
+}
+
+const ChatSection = ({ deleteMessageHandler,likeMessageHandler,unlikeMessageHandler }: ChatSectionProps) => {
 
     const dispatch = useAppDispatch();
     const selectedRoom = useAppSelector(state => state.direct.selectedRoom);
@@ -58,13 +65,13 @@ const ChatSection = () => {
             sectionRef.current.scrollTop = sectionRef.current.scrollHeight;
         }
     }, [chatMessageList]);
+
     // 방이 바뀐거처리 해주는 useEffect 입니다.
     useEffect(() => {
 
         // 처음에 클릭하면 스크롤바 가장 아래로 보여줘야함 최신의 메시지를
 
         if (selectedRoom) {
-
             // 메세지를 불러오는 페이지도 처음엔 리셋해줘야한다
             dispatch(resetChatMessagePage());
 
@@ -82,11 +89,6 @@ const ChatSection = () => {
 
     // chatsection 에서 상단의 비행기 모양을 누르면 inbox view 로 바뀝니다. 그때 왼쪽 채팅방 리스트가 클릭되어있으면 안되기때문에
     // seletedRoom 을 null 로 바꿔줘서 아무것도 클릭 안한 상태를 만들어줘야합니다다
-    useEffect(() => {
-        return () => {
-            dispatch(resetSelectedRoom());
-        };
-    }, [dispatch]);
 
 
     const handleScroll = useCallback(async (e) => {
@@ -122,6 +124,8 @@ const ChatSection = () => {
     }, [handleScroll]);
 
     const { view } = useAppSelector(state => state.direct);
+    const modal = useAppSelector(state => state.direct.modal);
+
     return (
         <ChatSectionContainer
             ref={sectionRef}
@@ -138,13 +142,26 @@ const ChatSection = () => {
             <div className="chat-bubble-section" ref={scrollCheckRef}>
 
                 {[...chatMessageList].map((chatMessageListItem, index) => (
-                    <ChatBubble key={index} message={chatMessageListItem.content}
+                    <ChatBubble key={index}
                                 showDate={index === 0 ? true : index >= 1 && Math.abs(moment(chatMessageList[index - 1].messageDate).diff(moment(chatMessageListItem.messageDate), "minute")) > 10}
-                                messageDate={moment(chatMessageListItem.messageDate).format("YYYY년 M월 DD일 a  h:mm")}
-                                me={userInfo?.memberId === chatMessageListItem.senderId} />
+                                me={userInfo?.memberId === chatMessageListItem.senderId}
+                                {...chatMessageListItem}
+                                likeMessageHandler={likeMessageHandler}
+                                unlikeMessageHandler={unlikeMessageHandler}
+                    />
                 ))
                 }
             </div>
+
+            {/*under this point is modal section*/}
+            {
+                modal === "deleteChatMessage" && <CommonDirectModal modalType={"deleteChatMessage"}
+                                                                    title={"메시지 전송을 취소하시겠어요?"}
+                                                                    description={"메시지 보내기를 취소하면 모든 사람에게 보낸 메시지가 삭제됩니다. 사람들이 이미 메시지를 확인했을 수 있습니다."}
+                                                                    actionName={"전송 취소"}
+                                                                    actionHandler={deleteMessageHandler}
+                />
+            }
         </ChatSectionContainer>
     );
 };

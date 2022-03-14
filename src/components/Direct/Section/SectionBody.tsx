@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { ChangeEvent, Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 import ChatBar from "components/Direct/Section/ChatBar";
 import ChatSection from "components/Direct/Section/ChatSection";
@@ -9,6 +9,13 @@ import CommonDirectModal from "./Modals/CommonDirectModal";
 
 
 interface SectionBodyProps {
+    message: string;
+    setMessage: Dispatch<SetStateAction<string>>;
+    sendMessageHandler: () => void;
+    imageUploadHandler: (e: ChangeEvent<HTMLInputElement>) => void;
+    deleteMessageHandler : () => void;
+    likeMessageHandler : () => void;
+    unlikeMessageHandler : () => void;
 }
 
 const SectionBodyContainer = styled.section`
@@ -18,7 +25,7 @@ const SectionBodyContainer = styled.section`
 `;
 
 
-const SectionBody = ({}: SectionBodyProps) => {
+const SectionBody = ({ message,setMessage, sendMessageHandler, imageUploadHandler,deleteMessageHandler,likeMessageHandler,unlikeMessageHandler }: SectionBodyProps) => {
     const { view, modal } = useAppSelector((state => state.direct));
     const viewRender = () => {
         switch (view) {
@@ -26,15 +33,16 @@ const SectionBody = ({}: SectionBodyProps) => {
                 return <DetailSection />;
             case "chat":
                 return <>
-                    <ChatSection />
-                    <ChatBar />
+                    <ChatSection deleteMessageHandler={deleteMessageHandler} likeMessageHandler={likeMessageHandler} unlikeMessageHandler={unlikeMessageHandler}  />
+                    <ChatBar message={message} setMessage={setMessage} sendMessageHandler={sendMessageHandler}
+                             imageUploadHandler={imageUploadHandler} />
                 </>;
             case "requestsChat":
                 return <>
-                    <ChatSection />
+                    <ChatSection deleteMessageHandler={deleteMessageHandler} likeMessageHandler={likeMessageHandler} unlikeMessageHandler={unlikeMessageHandler} />
                     <RequestsWishContainer />
                     {
-                        modal === "deleteAll" &&   <CommonDirectModal modalType={"deleteAll"} actionName={"모두 삭제"}
+                        modal === "deleteAll" && <CommonDirectModal modalType={"deleteAll"} actionName={"모두 삭제"}
                                                                     title={"모두 삭제하시겠어요?"} description={"메시지 1개가 삭제됩니다."}
                         />
                     }

@@ -9,6 +9,7 @@ import { deleteRoom, lookUpChatList, reissueChatList } from "../../../../app/sto
 
 interface ModalButtonContentProps {
     actionName: string;
+    actionHandler?: () => void  // message 삭제에서 사용
 }
 
 const ModalButtonContentContainer = styled.div`
@@ -29,12 +30,13 @@ const ModalButtonContentContainer = styled.div`
 `;
 
 
-const ModalButtonContent = ({ actionName }: ModalButtonContentProps) => {
+const ModalButtonContent = ({ actionName,actionHandler }: ModalButtonContentProps) => {
 
 
     const dispatch = useAppDispatch();
     const selectedRoom = useAppSelector(state => state.direct.selectedRoom);
     const chatListPage = useAppSelector(state => state.direct.chatListPage);
+    const selectedMessageId = useAppSelector(state => state.direct.selectedMessageId);
 
     const deleteRoomHandler = async () => {
 
@@ -62,6 +64,13 @@ const ModalButtonContent = ({ actionName }: ModalButtonContentProps) => {
                 return <button >{actionName}</button>;
             case "모두 삭제":
                 return <button >{actionName}</button>;
+            case "전송 취소":
+                return <button onClick={() => {
+                    if (actionHandler) {
+                        actionHandler();
+                        dispatch(closeModal())
+                    }}
+                }>{actionName}</button>;
         }
     };
 

@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import ImageSprite from "components/Common/ImageSprite";
 import Button from "styles/UI/Button";
 import { useAppDispatch } from "app/store/Hooks";
-import { openModal } from "app/store/ducks/direct/DirectSlice";
+import { openModal, resetSelectedRoom } from "app/store/ducks/direct/DirectSlice";
 import sprite from "assets/Images/sprite.png";
 
 
@@ -52,6 +52,11 @@ const paperImage: Common.ImageProps = {
 
 const InboxSection = () => {
     const dispatch = useAppDispatch();
+
+    useEffect(()=>{
+        dispatch(resetSelectedRoom())
+    },[dispatch])
+
     return (
         <InboxSectionContainer>
 

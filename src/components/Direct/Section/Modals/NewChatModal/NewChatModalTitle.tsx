@@ -42,7 +42,7 @@ const NewChatModalTitle = () => {
 
     const makeRoomHandler = async () => {
         if (selectedNewChatUser) {
-            await dispatch(makeRoom({ username: selectedNewChatUser }));
+            // await dispatch(makeRoom({ username: selectedNewChatUser }));
             dispatch(closeModal())
             dispatch(selectView("chat"))
         }
