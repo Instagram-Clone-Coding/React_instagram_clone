@@ -80,6 +80,7 @@ const StyledEdit = styled.div`
                 padding: 14px 0;
                 display: flex;
                 justify-content: space-between;
+                line-height: 24px;
                 & > button {
                     color: ${(props) => props.theme.color.blue};
                     display: none;
@@ -90,9 +91,25 @@ const StyledEdit = styled.div`
             }
             & > div:last-child {
                 width: 100%;
+                height: 36px;
                 display: flex;
+                align-items: center;
                 & > input {
                     flex: 1;
+                    // range background 제거
+                    -webkit-appearance: none;
+                    background: transparent;
+                    border: none;
+                    height: 2px;
+                    &::-webkit-slider-thumb {
+                        -webkit-appearance: none; // 동그라미 제거
+                        background-color: black;
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 50%;
+                    }
+                    /* &::-moz-range-thumb {
+                    } */
                 }
                 & > div {
                     width: 24px;
@@ -385,6 +402,21 @@ const Edit = ({ currentWidth }: EditProps) => {
                                 min="-100"
                                 max="100"
                                 step="1"
+                                style={{
+                                    backgroundImage: `linear-gradient(to right, rgb(219, 219, 219) 0%, rgb(219, 219, 219) ${Math.min(
+                                        50,
+                                        inputObj.value / 2 + 50,
+                                    )}%, rgb(38, 38, 38) ${Math.min(
+                                        50,
+                                        inputObj.value / 2 + 50,
+                                    )}%, rgb(38, 38, 38)   ${Math.max(
+                                        50,
+                                        inputObj.value / 2 + 50,
+                                    )}%, rgb(219, 219, 219)  ${Math.max(
+                                        50,
+                                        inputObj.value / 2 + 50,
+                                    )}%, rgb(219, 219, 219) 100%)`,
+                                }}
                             />
                             <div>{inputObj.value}</div>
                         </div>
