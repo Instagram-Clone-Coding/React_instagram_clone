@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import StoryCircle from "components/Common/StoryCircle";
-import { Link } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { ReactComponent as SettingSvg } from "assets/Svgs/setting.svg";
 import { ReactComponent as ThreeDots } from "assets/Svgs/threeDots.svg";
 import Button from "styles/UI/Button/Button";
@@ -18,6 +18,9 @@ import ImageSprite from "../../Common/ImageSprite";
 import UnFollowModal from "../Modals/UnFollowModal";
 import { authorizedCustomAxios } from "customAxios";
 import { lookUpUserProfile } from "app/store/ducks/profile/profileThunk";
+import Loading from "components/Common/Loading";
+import { makeRoom } from "app/store/ducks/direct/DirectThunk";
+import { selectView } from "app/store/ducks/direct/DirectSlice";
 
 interface ProfileHeaderContainerProps {
     me: boolean;
@@ -68,6 +71,13 @@ const ProfileHeaderContainer = styled.header<ProfileHeaderContainerProps>`
             }
 
             .following {
+                display: flex;
+                align-items: center;
+
+                .dm-button {
+                    display: flex;
+                    align-items: center;
+                }
                 button {
                     margin-left: 10px;
                     border: 1px solid #dbdbdb;
@@ -148,9 +158,13 @@ const ProfileHeader = ({}: ProfileHeaderProps) => {
     const memberProfile = useAppSelector(
         (state) => state.profile.memberProfile as Profile.MemberProfileProps,
     );
+    const isLoading = useAppSelector((state) => state.direct.isLoading);
+    console.log(isLoading);
+
     const modal = useAppSelector((state) => state.profile.modal);
     const [isFollowerModal, setIsFollowerModal] = useState<boolean>(true); // 기본값은 팔로워 모달입니다. false 라면 팔로우 입니다
-
+    const { username } = useParams<{ username: string }>();
+    const history = useHistory();
     const followHandler = async () => {
         await authorizedCustomAxios.post(
             `/${memberProfile.memberUsername}/follow`,
@@ -160,6 +174,12 @@ const ProfileHeader = ({}: ProfileHeaderProps) => {
         await dispatch(
             lookUpUserProfile({ username: memberProfile.memberUsername }),
         );
+    };
+
+    const sendMessageHandler = async () => {
+        await dispatch(makeRoom({ usernames: [username] }));
+        dispatch(selectView("chat"));
+        history.push(`/direct`);
     };
 
     return (
@@ -191,7 +211,16 @@ const ProfileHeader = ({}: ProfileHeaderProps) => {
                         <>
                             {memberProfile?.following ? (
                                 <div className={"following"}>
-                                    <button>메세지 보내기</button>
+                                    <button
+                                        className="dm-button"
+                                        onClick={sendMessageHandler}
+                                    >
+                                        {isLoading ? (
+                                            <Loading size={18} />
+                                        ) : (
+                                            <span>메시지 보내기</span>
+                                        )}
+                                    </button>
                                     <button
                                         onClick={() => {
                                             dispatch(
