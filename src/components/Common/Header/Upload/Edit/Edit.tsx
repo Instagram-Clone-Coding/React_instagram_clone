@@ -14,9 +14,9 @@ import styled from "styled-components";
 const StyledEdit = styled.div`
     display: flex;
     width: 100%;
-    min-width: ${348 + 340 + 2}px;
+    min-width: ${348 + 340}px;
     height: 100%;
-    min-height: ${348 + 2}px;
+    min-height: ${348}px;
     & > .upload__imgCanvasLayout {
         display: flex;
         justify-content: center;
@@ -91,7 +91,6 @@ const StyledEdit = styled.div`
                 }
             }
             & > div:last-child {
-                width: 100%;
                 height: 36px;
                 display: flex;
                 align-items: center;

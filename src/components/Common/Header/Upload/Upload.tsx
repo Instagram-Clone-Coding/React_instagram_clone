@@ -69,16 +69,6 @@ const Upload = () => {
         [backDropwidth],
     );
 
-    const currentWidthLimitedByWindowHeight = useMemo(
-        () =>
-            Math.min(
-                currentWidth + BORDER_TOTAL_WIDTH + 43,
-                backDropHeight - 184,
-            ) -
-            43 +
-            (step !== "edit" ? 0 : 340),
-        [currentWidth, backDropHeight, step],
-    );
     const currentHeightLimitedByWindowHeight = useMemo(
         () =>
             Math.min(
@@ -88,6 +78,11 @@ const Upload = () => {
         [currentWidth, backDropHeight],
     );
 
+    const currentWidthLimitedByWindowHeight = useMemo(
+        () =>
+            Math.min(currentHeightLimitedByWindowHeight - 43, currentMaxWidth),
+        [currentHeightLimitedByWindowHeight, currentMaxWidth],
+    );
     useEffect(() => {
         window.addEventListener("resize", () => {
             setBackDropWidth(window.innerWidth);
@@ -119,25 +114,17 @@ const Upload = () => {
                     return <DragAndDrop />;
                 case "cut":
                     return (
-                        <Cut
-                            currentWidth={Math.min(
-                                currentHeightLimitedByWindowHeight - 43,
-                                currentMaxWidth,
-                            )}
-                        />
+                        <Cut currentWidth={currentWidthLimitedByWindowHeight} />
                     );
                 case "edit":
                     return (
                         <Edit
-                            currentWidth={Math.min(
-                                currentHeightLimitedByWindowHeight - 43,
-                                currentMaxWidth,
-                            )}
+                            currentWidth={currentWidthLimitedByWindowHeight}
                         />
                     );
             }
         },
-        [currentHeightLimitedByWindowHeight, currentMaxWidth],
+        [currentWidthLimitedByWindowHeight],
     );
 
     const checkIsGrabbingAndCancelUpload = () => {
@@ -154,7 +141,9 @@ const Upload = () => {
             onModalOn={() => dispatch(uploadActions.startUpload())}
             onModalOff={checkIsGrabbingAndCancelUpload}
             isWithCancelBtn={true}
-            width={currentWidthLimitedByWindowHeight}
+            width={
+                currentWidthLimitedByWindowHeight + (step !== "edit" ? 0 : 340)
+            }
             height={currentHeightLimitedByWindowHeight}
             maxWidth={
                 currentMaxWidth +
