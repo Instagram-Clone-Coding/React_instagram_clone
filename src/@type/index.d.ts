@@ -53,6 +53,7 @@ declare module Direct {
         | "convertAccount"
         | "deleteAll"
         | "deleteChatMessage"
+        | "likedMember"
         | null;
     type currentSectionViewType =
         | "inbox"

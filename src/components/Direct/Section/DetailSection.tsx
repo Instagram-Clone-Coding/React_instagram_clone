@@ -4,6 +4,7 @@ import ReportModal from "components/Home/Modals/ReportModal";
 import { closeModal, openModal } from "app/store/ducks/direct/DirectSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import CommonDirectModal from "components/Direct/Section/Modals/CommonDirectModal";
+import { Link } from "react-router-dom";
 
 const DetailSectionContainer = styled.div`
     height: 100%;
@@ -35,6 +36,10 @@ const DetailSectionContainer = styled.div`
         display: flex;
         flex-direction: column;
         padding: 16px 0;
+
+        a {
+            text-decoration: none;
+        }
 
         h3 {
             margin: 0 16px;
@@ -107,13 +112,17 @@ const DetailSection = () => {
             </div>
             <div className="member-container">
                 <h3>멤버</h3>
-                <div className="member-profile-container">
-                    <img src={opponent?.imageUrl} alt="맴버 사진" />
-                    <div className="member-id-name">
-                        <span className="username">{opponent?.username}</span>
-                        <span className="name">{opponent?.name}</span>
+                <Link to={`profile/${opponent?.username}`}>
+                    <div className="member-profile-container">
+                        <img src={opponent?.imageUrl} alt="맴버 사진" />
+                        <div className="member-id-name">
+                            <span className="username">
+                                {opponent?.username}
+                            </span>
+                            <span className="name">{opponent?.name}</span>
+                        </div>
                     </div>
-                </div>
+                </Link>
             </div>
             <div className="various-option-container">
                 <div

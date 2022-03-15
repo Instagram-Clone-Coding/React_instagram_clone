@@ -5,10 +5,11 @@ import {
     lookUpChatList,
     lookUpChatMessageList,
     lookUpChatRoom,
-    makeRoom, reissueChatList, reissueTyping,
+    makeRoom,
+    reissueChatList,
+    reissueTyping,
     removeTyping,
 } from "./DirectThunk";
-
 
 export interface InitialStateType {
     modal: Direct.modalType;
@@ -21,13 +22,12 @@ export interface InitialStateType {
     chatListPage: number;
     chatMessageList: Direct.MessageDTO[];
     chatMessageListPage: number;
-    typingRoomList: { roomId: number, timer: number }[];
+    typingRoomList: { roomId: number; timer: number }[];
     renewScroll: boolean;
     subChatCount: number; // 채팅메시지 subscribe 를 통해서 읽은 개수입니다.
     messageScrollable: boolean;
-    selectedMessageId:number | null; // 메세지 옆에 3개의 점을 클릭했을때 여러가지 action 을 처리해주기 위함입니다.
+    selectedMessageId: number | null; // 메세지 옆에 3개의 점을 클릭했을때 여러가지 action 을 처리해주기 위함입니다.
 }
-
 
 const initialState: InitialStateType = {
     modal: null,
@@ -44,7 +44,7 @@ const initialState: InitialStateType = {
     renewScroll: false,
     subChatCount: 0,
     messageScrollable: true,
-    selectedMessageId : null
+    selectedMessageId: null,
 };
 
 const directSlice = createSlice({
@@ -57,7 +57,10 @@ const directSlice = createSlice({
         closeModal: (state) => {
             state.modal = null;
         },
-        selectView: (state, action: PayloadAction<Direct.currentSectionViewType>) => {
+        selectView: (
+            state,
+            action: PayloadAction<Direct.currentSectionViewType>,
+        ) => {
             state.view = action.payload;
         },
         selectChatItem: (state, action: PayloadAction<number | null>) => {
@@ -89,39 +92,51 @@ const directSlice = createSlice({
         resetSelectedRoom: (state) => {
             state.selectedRoom = null;
         },
-        resetChatList : (state) => {
+        resetChatList: (state) => {
             state.chatList = [];
             state.chatListPage = 1;
         },
-        setSelectedMessageId : (state,action : PayloadAction<number | null>) => {
-            state.selectedMessageId = action.payload
+        setSelectedMessageId: (state, action: PayloadAction<number | null>) => {
+            state.selectedMessageId = action.payload;
         },
-        likeChatMessageItem: (state,action:PayloadAction<{messageId:number,userInfo:AuthType.UserInfo}>) => {
+        likeChatMessageItem: (
+            state,
+            action: PayloadAction<{
+                messageId: number;
+                userInfo: AuthType.UserInfo;
+            }>,
+        ) => {
             // 내가 좋아요 누른 메세지의 likemembers 에 내 정보를 추가해준다. 그래야 바로 반영이된다.
-            state.chatMessageList.forEach(chatMessageItem => {
-                if(chatMessageItem.messageId === action.payload.messageId){
-                    chatMessageItem.likeMembers.push(action.payload.userInfo)
+            state.chatMessageList.forEach((chatMessageItem) => {
+                if (chatMessageItem.messageId === action.payload.messageId) {
+                    chatMessageItem.likeMembers.push(action.payload.userInfo);
                     return;
                 }
-            })
+            });
         },
-        unLikeChatMessageItem: (state,action:PayloadAction<{messageId:number,memberId:number}>) => {
+        unLikeChatMessageItem: (
+            state,
+            action: PayloadAction<{ messageId: number; memberId: number }>,
+        ) => {
             // 내가 좋아요 취소 누른 메세지의 likemembers 에 내 정보를 삭제해준다. 그래야 바로 반영이된다.
-            state.chatMessageList.forEach(chatMessageItem => {
+            state.chatMessageList.forEach((chatMessageItem) => {
                 // 내가 찾는 메세지라면
-                if(chatMessageItem.messageId === action.payload.messageId){
-                    chatMessageItem.likeMembers = chatMessageItem.likeMembers.filter(member => {
-                        return member.memberId !== action.payload.memberId
-                    })
+                if (chatMessageItem.messageId === action.payload.messageId) {
+                    chatMessageItem.likeMembers =
+                        chatMessageItem.likeMembers.filter((member) => {
+                            return member.memberId !== action.payload.memberId;
+                        });
                     return;
                 }
-            })
+            });
         },
-        deleteChatMessageItem:(state,action : PayloadAction<number>) => {
-            state.chatMessageList = state.chatMessageList.filter(chatMessageListItem => {
-                return chatMessageListItem.messageId !== action.payload
-            })
-        }
+        deleteChatMessageItem: (state, action: PayloadAction<number>) => {
+            state.chatMessageList = state.chatMessageList.filter(
+                (chatMessageListItem) => {
+                    return chatMessageListItem.messageId !== action.payload;
+                },
+            );
+        },
     },
     extraReducers: (build) => {
         build
@@ -161,14 +176,12 @@ const directSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(lookUpChatList.fulfilled, (state, action) => {
-
                 // 스크롤을 아래로 하여 더받아올 경우
                 action.payload.forEach((chatListItem: any) => {
                     state.chatList.push(chatListItem);
                 });
                 state.chatListPage = state.chatListPage + 1;
                 state.isLoading = false;
-
             })
             .addCase(lookUpChatList.rejected, (state) => {
                 state.isLoading = false;
@@ -177,11 +190,9 @@ const directSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(reissueChatList.fulfilled, (state, action) => {
-
                 // 어떠한 액션이 일어나서 새로운(업데이트된) chatList 정보를 받아와야함
-                state.chatList = action.payload
+                state.chatList = action.payload;
                 state.isLoading = false;
-
             })
             .addCase(reissueChatList.rejected, (state) => {
                 state.isLoading = false;
@@ -206,17 +217,27 @@ const directSlice = createSlice({
 
                 state.renewScroll = false;
                 if (state.chatMessageListPage === 1) {
-                    action.payload.content.reverse().forEach((chatMessageListItem: Direct.MessageDTO) => {
-                        state.chatMessageList.push(chatMessageListItem);
-                    });
+                    action.payload.content
+                        .reverse()
+                        .forEach((chatMessageListItem: Direct.MessageDTO) => {
+                            state.chatMessageList.push(chatMessageListItem);
+                        });
                 } else {
-                    action.payload.content.forEach((chatMessageListItem: Direct.MessageDTO) => {
-                        state.chatMessageList.unshift(chatMessageListItem);
-                    });
+                    action.payload.content.forEach(
+                        (chatMessageListItem: Direct.MessageDTO) => {
+                            state.chatMessageList.unshift(chatMessageListItem);
+                        },
+                    );
                     // 추가로 받은 메세지 정보중에 기존의 정보가 있을 수 있다 페이지 단위로 메세지를 10개씩 받고있기 때문
                     // 중복 id 를 가진것은 제거해주자!
                     state.chatMessageList = state.chatMessageList.filter(
-                        (chatMessageListItem, index, callback) => index === callback.findIndex(t => t.messageId === chatMessageListItem.messageId),
+                        (chatMessageListItem, index, callback) =>
+                            index ===
+                            callback.findIndex(
+                                (t) =>
+                                    t.messageId ===
+                                    chatMessageListItem.messageId,
+                            ),
                     );
                 }
                 state.chatMessageListPage = state.chatMessageListPage + 1;
@@ -228,7 +249,10 @@ const directSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(addTyping.fulfilled, (state, action) => {
-                state.typingRoomList.push({ roomId: action.payload.roomId, timer: action.payload.timer });
+                state.typingRoomList.push({
+                    roomId: action.payload.roomId,
+                    timer: action.payload.timer,
+                });
             })
             .addCase(addTyping.rejected, (state) => {
                 state.isLoading = false;
@@ -237,12 +261,14 @@ const directSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(removeTyping.fulfilled, (state, action) => {
-                state.typingRoomList = state.typingRoomList.filter(typingRoom => {
-                    if (typingRoom.roomId === action.payload) {
-                        clearTimeout(typingRoom.timer);
-                    }
-                    return typingRoom.roomId !== action.payload;
-                });
+                state.typingRoomList = state.typingRoomList.filter(
+                    (typingRoom) => {
+                        if (typingRoom.roomId === action.payload) {
+                            clearTimeout(typingRoom.timer);
+                        }
+                        return typingRoom.roomId !== action.payload;
+                    },
+                );
             })
             .addCase(removeTyping.rejected, (state) => {
                 state.isLoading = false;
@@ -251,9 +277,8 @@ const directSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(reissueTyping.fulfilled, (state, action) => {
-
                 // 타이머 제거해주기
-                state.typingRoomList.forEach(typingRoom => {
+                state.typingRoomList.forEach((typingRoom) => {
                     clearTimeout(typingRoom.timer);
                 });
 
@@ -262,11 +287,8 @@ const directSlice = createSlice({
             .addCase(reissueTyping.rejected, (state) => {
                 state.isLoading = false;
             });
-
-
     },
 });
-
 
 export const {
     openModal,
@@ -285,6 +307,6 @@ export const {
     setSelectedMessageId,
     likeChatMessageItem,
     unLikeChatMessageItem,
-    deleteChatMessageItem
+    deleteChatMessageItem,
 } = directSlice.actions;
 export const directReducer = directSlice.reducer;
