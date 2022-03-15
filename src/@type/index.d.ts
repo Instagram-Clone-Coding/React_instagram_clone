@@ -346,4 +346,5 @@ declare module Profile {
     }
 
     type modalType = "userAction" | "setting" | "follower" | "unFollow" | null;
+    type currentCategoryType = "uploaded" | "tagged" | "saved";
 }

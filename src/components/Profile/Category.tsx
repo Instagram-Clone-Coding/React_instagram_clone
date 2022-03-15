@@ -57,15 +57,15 @@ const Category = () => {
     const { username } = useParams<{ username: string }>(); // 현재 프로필 주인
 
     useEffect(() => {
-        dispatch(selectCategory(""));
+        dispatch(selectCategory("uploaded"));
     }, []);
 
     return (
         <CategoryContainer>
             <div
-                className={currentCategory === "" ? "current" : ""}
+                className={currentCategory === "uploaded" ? "current" : ""}
                 onClick={() => {
-                    dispatch(selectCategory(""));
+                    dispatch(selectCategory("uploaded"));
                 }}
             >
                 <GridSvg />

@@ -64,7 +64,7 @@ function Article() {
                 />
             ))}
             {isExtraPostLoading && <Loading size={32} />}
-            {posts.length === 0 && currentCategory === "" && (
+            {posts.length === 0 && currentCategory === "uploaded" && (
                 <NoArticle imageSprite={noArticleImage} content="게시물 없음" />
             )}
             {posts.length === 0 && currentCategory === "tagged" && (

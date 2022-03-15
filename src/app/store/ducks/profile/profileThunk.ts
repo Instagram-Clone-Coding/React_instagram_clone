@@ -5,109 +5,106 @@ import { authAction } from "../auth/authSlice";
 import { RootState } from "app/store/store";
 import { increaseExtraPostPage } from "./profileSlice";
 
-export const lookUpUserProfile = createAsyncThunk<Profile.MemberProfileProps,
+export const lookUpUserProfile = createAsyncThunk<
+    Profile.MemberProfileProps,
     {
-        username: string
-    }>("profile/lookUpUserProfile", async (payload, ThunkOptions) => {
-
+        username: string;
+    }
+>("profile/lookUpUserProfile", async (payload, ThunkOptions) => {
     try {
-        const { data } = await authorizedCustomAxios.get(`/accounts/${payload.username}`);
+        const { data } = await authorizedCustomAxios.get(
+            `/accounts/${payload.username}`,
+        );
         return data.data;
     } catch (error) {
         error === FAIL_TO_REISSUE_MESSAGE &&
-        ThunkOptions.dispatch(authAction.logout());
+            ThunkOptions.dispatch(authAction.logout());
         throw ThunkOptions.rejectWithValue(error);
     }
 });
 
-export const getPosts = createAsyncThunk<Profile.PostType[],
+export const getPosts = createAsyncThunk<
+    Profile.PostType[],
     {
-        username: string
-    }, { state: RootState }>("profile/getPost", async (payload, { getState, dispatch, rejectWithValue }) => {
+        username: string;
+    },
+    { state: RootState }
+>(
+    "profile/getPost",
+    async (payload, { getState, dispatch, rejectWithValue }) => {
+        try {
+            const currentCategory = getState().profile.currentCategory;
 
-    try {
-        const currentCategory = getState().profile.currentCategory;
-        let url = `/accounts/${payload.username}/posts/recent`;
-        switch (currentCategory) {
-            case "":
-                url = `/accounts/${payload.username}/posts/recent`;
-                break;
-            case "tagged":
-                url = `/accounts/${payload.username}/posts/tagged/recent`;
-                break;
-            case "saved":
-                url = `/accounts/${payload.username}/posts/saved/recent`;
-                break;
-
+            const url = `/accounts/${payload.username}/posts/${
+                currentCategory !== "uploaded" ? currentCategory + "/" : ""
+            }recent `;
+            const { data } = await customAxios.get(url);
+            return data.data;
+        } catch (error) {
+            error === FAIL_TO_REISSUE_MESSAGE && dispatch(authAction.logout());
+            throw rejectWithValue(error);
         }
-        const { data } = await customAxios.get(url);
-        return data.data;
-    } catch (error) {
-        error === FAIL_TO_REISSUE_MESSAGE &&
-        dispatch(authAction.logout());
-        throw rejectWithValue(error);
-    }
-});
+    },
+);
 
-export const getExtraPosts = createAsyncThunk<Profile.PostType[],
+export const getExtraPosts = createAsyncThunk<
+    Profile.PostType[],
     {
-        page: number,
-        username: string
-    }, { state: RootState }>("profile/getExtraPosts", async (payload, { getState, dispatch, rejectWithValue }) => {
-    const config = {
-        params: {
-            page: payload.page,
-        },
-    };
-    try {
-        const currentCategory = getState().profile.currentCategory;
-        let url = `/accounts/${payload.username}/posts`;
-        switch (currentCategory) {
-            case "":
-                url = `/accounts/${payload.username}/posts`;
-                break;
-            case "tagged":
-                url = `/accounts/${payload.username}/posts/tagged`;
-                break;
-            case "saved":
-                url = `/accounts/${payload.username}/posts/saved`;
-                break;
-
-        }
-        const {
-            data: {
-                data: { content: data, empty },
+        page: number;
+        username: string;
+    },
+    { state: RootState }
+>(
+    "profile/getExtraPosts",
+    async (payload, { getState, dispatch, rejectWithValue }) => {
+        const config = {
+            params: {
+                page: payload.page,
             },
-        } = await customAxios.get(url, config);
+        };
+        try {
+            const currentCategory = getState().profile.currentCategory;
 
-        if (empty) {
-            throw rejectWithValue(
-                "게시물이 더 이상 존재하지 않습니다.",
-            );
+            const url = `/accounts/${payload.username}/posts/${
+                currentCategory !== "uploaded" ? currentCategory + "/" : ""
+            }`;
+            const {
+                data: {
+                    data: { content: data, empty },
+                },
+            } = await customAxios.get(url, config);
+
+            if (empty) {
+                throw rejectWithValue("게시물이 더 이상 존재하지 않습니다.");
+            }
+            dispatch(increaseExtraPostPage());
+            return data;
+        } catch (error) {
+            error === FAIL_TO_REISSUE_MESSAGE && dispatch(authAction.logout());
+            throw rejectWithValue(error);
         }
-        dispatch(increaseExtraPostPage());
-        return data;
-    } catch (error) {
-        error === FAIL_TO_REISSUE_MESSAGE &&
-        dispatch(authAction.logout());
-        throw rejectWithValue(error);
-    }
-});
+    },
+);
 
 // 굳이 thunk 에서 처리할 필요 없음
-export const follow = createAsyncThunk<Profile.PostType[],
+export const follow = createAsyncThunk<
+    Profile.PostType[],
     {
-        username: string
-    }, { state: RootState }>("profile/follow", async (payload, { getState, dispatch, rejectWithValue }) => {
-    try {
-
-        const { data } = await authorizedCustomAxios.post(`/${payload.username}/follow`);
-        console.log(data);
-        return data;
-    } catch (error) {
-        error === FAIL_TO_REISSUE_MESSAGE &&
-        dispatch(authAction.logout());
-        throw rejectWithValue(error);
-    }
-});
-
+        username: string;
+    },
+    { state: RootState }
+>(
+    "profile/follow",
+    async (payload, { getState, dispatch, rejectWithValue }) => {
+        try {
+            const { data } = await authorizedCustomAxios.post(
+                `/${payload.username}/follow`,
+            );
+            console.log(data);
+            return data;
+        } catch (error) {
+            error === FAIL_TO_REISSUE_MESSAGE && dispatch(authAction.logout());
+            throw rejectWithValue(error);
+        }
+    },
+);
