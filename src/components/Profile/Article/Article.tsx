@@ -4,7 +4,7 @@ import SingleRow from "./SingleRow";
 import { useAppSelector } from "app/store/Hooks";
 import Loading from "components/Common/Loading";
 import sprite3 from "assets/Images/sprite3.png";
-import sprite6 from "assets/Images/sprite6.png";
+import sprite2 from "assets/Images/sprite2.png";
 import NoArticle from "./NoArticle";
 
 const ArticleContainer = styled.main`
@@ -30,14 +30,14 @@ const noTagImage: Common.ImageProps = {
     width: 62,
     height: 62,
     position: `-189px -288px`,
-    url: sprite6,
+    url: sprite2,
     size: `440px 411px`,
 };
 const noSaveImage: Common.ImageProps = {
     width: 62,
     height: 62,
     position: `-126px -288px`,
-    url: sprite6,
+    url: sprite2,
     size: `440px 411px`,
 };
 
