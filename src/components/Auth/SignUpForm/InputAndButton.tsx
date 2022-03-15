@@ -1,5 +1,5 @@
 import { authAction } from "app/store/ducks/auth/authSlice";
-import { useAppDispatch } from "app/store/Hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import Input from "components/Common/Input";
 import Loading from "components/Common/Loading";
 import SubmitButton from "components/Auth/SubmitButton";
@@ -11,7 +11,7 @@ import {
 } from "components/Auth/SignUpForm/validator";
 import { customAxios } from "customAxios";
 import useInput from "hooks/useInput";
-import { MouseEvent, useState } from "react";
+import { MouseEvent } from "react";
 
 export default function InputAndButton() {
     const [emailInputProps, emailIsValid, emailIsFocus] = useInput(
@@ -30,13 +30,12 @@ export default function InputAndButton() {
         "",
         passwordValidator,
     );
-    const [isLoading, setIsLoading] = useState(false);
-
+    const isLoading = useAppSelector((state) => state.auth.isLoading.signUp);
     const dispatch = useAppDispatch();
 
     const signUpButtonClickHandler = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        setIsLoading(true);
+        dispatch(authAction.signUpButtonLoading());
 
         const callEmailConfirmAPI = async ({
             email,
@@ -52,7 +51,7 @@ export default function InputAndButton() {
                     email,
                     username,
                 });
-                setIsLoading(false);
+                dispatch(authAction.signUpButtonLoadingEnd());
 
                 if (status === 200) {
                     dispatch(authAction.changeFormState("confirmEmail"));
@@ -66,6 +65,9 @@ export default function InputAndButton() {
                     );
                 }
             } catch (error) {
+                dispatch(authAction.signUpButtonLoadingEnd());
+                // false인건 좋은데, 사용자에게 에러메시지 보여줘야할 거 같은데?
+                // 네트워크 속도가 빠를경우, 동작이 안되는 것처럼 보임
                 console.log(error, `user email confirm api error`);
             }
         };

@@ -24,7 +24,7 @@ export default function LoginFormAndButton() {
     );
 
     const dispatch = useAppDispatch();
-    const isLoading = useAppSelector((state) => state.auth.isLoading);
+    const isLoading = useAppSelector((state) => state.auth.isLoading.login);
 
     const submitButtonClickHandler = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();

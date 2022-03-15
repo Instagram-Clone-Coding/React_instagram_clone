@@ -5,7 +5,7 @@ import { getUserInfo, signIn } from "./authThunk";
 
 export interface AuthStateProps {
     isLogin: boolean;
-    isLoading: boolean;
+    isLoading: AuthType.Loading;
     isAsyncReject: boolean;
     errorMessage: string | undefined;
     // optional ? or | null, undefined -> 옵셔널도 생각해보기
@@ -17,8 +17,8 @@ export interface AuthStateProps {
 }
 
 const initialState: AuthStateProps = {
-    isLoading: false,
     isLogin: false,
+    isLoading: { login: false, signUp: false, checkEmailCode: false },
     isAsyncReject: false,
     errorMessage: "",
     hasUsername: null,
@@ -57,21 +57,33 @@ const authSlice = createSlice({
         resetUserInputData: (state) => {
             state.signUpUserData = null;
         },
+        signUpButtonLoading: (state) => {
+            state.isLoading.signUp = true;
+        },
+        signUpButtonLoadingEnd: (state) => {
+            state.isLoading.signUp = false;
+        },
+        checkEmailCodeButtonLoading: (state) => {
+            state.isLoading.checkEmailCode = true;
+        },
+        checkEmailCodeButtonLoadingEnd: (state) => {
+            state.isLoading.checkEmailCode = false;
+        },
     },
     extraReducers: (bulid) => {
         bulid
             .addCase(signIn.pending, (state) => {
-                state.isLoading = true;
+                state.isLoading.login = true;
                 state.isAsyncReject = false;
             })
             .addCase(signIn.fulfilled, (state, action) => {
-                state.isLoading = false;
+                state.isLoading.login = false;
                 state.isLogin = true;
                 saveToken(action.payload);
             })
             .addCase(signIn.rejected, (state, action) => {
                 state.isAsyncReject = true;
-                state.isLoading = false;
+                state.isLoading.login = false;
                 if (action.payload && typeof action.payload === "string") {
                     state.errorMessage = action.payload;
                 } else if (state.hasUsername) {

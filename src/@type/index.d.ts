@@ -129,6 +129,12 @@ declare module AuthType {
         isFocus?: boolean;
         hasValidator?: (value: string) => boolean;
     }
+
+    interface Loading {
+        login: boolean;
+        signUp: boolean;
+        checkEmailCode: boolean;
+    }
 }
 
 declare module HomeType {
