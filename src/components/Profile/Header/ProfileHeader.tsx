@@ -178,7 +178,6 @@ const ProfileHeader = ({}: ProfileHeaderProps) => {
 
     const sendMessageHandler = async () => {
         await dispatch(makeRoom({ usernames: [username] }));
-        dispatch(selectView("chat"));
         history.push(`/direct`);
     };
 
