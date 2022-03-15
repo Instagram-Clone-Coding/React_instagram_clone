@@ -16,6 +16,7 @@ const StyledEdit = styled.div`
     width: 100%;
     min-width: ${348 + 340 + 2}px;
     height: 100%;
+    min-height: ${348 + 2}px;
     & > .upload__imgCanvasLayout {
         display: flex;
         justify-content: center;
