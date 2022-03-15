@@ -9,32 +9,37 @@ import ContentBox from "components/Common/ContentBox";
 // -> 이메일 버튼으로 페이지이동(백엔드에서 페이지처리함)
 // -> 비밀번호 재설정
 
-const HeaderContainer = styled.nav`
-    display: flex;
-    align-items: center;
-    padding: 0 20px 0 20px;
-
-    background-color: #fff;
-    background-color: rgba(var(--d87, 255, 255, 255), 1);
-    border-bottom: 1px solid rgba(var(--b6a, 219, 219, 219), 1);
-    height: 60px;
-    position: fixed;
-    top: 0;
-
-    width: 100%;
-    z-index: 101;
-
-    .image-container {
+const Container = styled.section`
+    .header {
         display: flex;
+        align-items: center;
+        padding: 0 20px 0 20px;
+
+        background-color: #fff;
+        background-color: rgba(var(--d87, 255, 255, 255), 1);
+        border-bottom: 1px solid rgba(var(--b6a, 219, 219, 219), 1);
+        height: 60px;
+        position: fixed;
+        top: 0;
+
+        width: 100%;
+        z-index: 101;
+
+        .image-container {
+            display: flex;
+        }
     }
 
     .form-container {
-        margin: 44px 44px;
+        position: relative;
+        margin: 44px 0;
+        .form-style {
+            margin: 60px auto 0;
+        }
     }
 `;
 
 export default function ResetPasswordForm() {
-    // header
     // form
     // - 이미지
     // - 폼 & 버튼
@@ -42,8 +47,8 @@ export default function ResetPasswordForm() {
     // 새계정만들기(회원가입)
     // 로그인으로 돌아가기(로그인)
     return (
-        <>
-            <HeaderContainer>
+        <Container>
+            <nav className="header">
                 <Link to="/">
                     <div className="image-contaienr">
                         <img
@@ -53,13 +58,15 @@ export default function ResetPasswordForm() {
                         />
                     </div>
                 </Link>
-            </HeaderContainer>
-            <div className="form-container">
-                <ContentBox padding="0" margin="24px 0 0 0">
-                    <div>reset Password form</div>
-                </ContentBox>
-            </div>
+            </nav>
+            <main className="form-container">
+                <div className="form-style">
+                    <ContentBox padding="0" margin="0 0 0 0">
+                        <div>reset Password form</div>
+                    </ContentBox>
+                </div>
+            </main>
             <Footer />
-        </>
+        </Container>
     );
 }
