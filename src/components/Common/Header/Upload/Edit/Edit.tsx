@@ -256,8 +256,9 @@ const Edit = ({ currentWidth }: EditProps) => {
                     currentFile.brightness / 3 + 100
                 }%) contrast(${currentFile.contrast / 3 + 100}%) saturate(${
                     currentFile.saturate + 100
-                }%)`;
-                // context.filter = `brightness(${}%) contrast(${}%) saturate(${}) blur(${})`
+                }%) 
+                blur(${currentFile.blur / 50}px)
+                `;
                 context.drawImage(
                     img,
                     -(
@@ -273,6 +274,20 @@ const Edit = ({ currentWidth }: EditProps) => {
                     img.width,
                     img.height,
                 );
+                // 각각의 픽셀에 필터 준비
+                // const imageData = context.getImageData(
+                //     0,
+                //     0,
+                //     canvasSize.width,
+                //     canvasSize.height,
+                // );
+                // const rgbArr = imageData.data;
+                // for (let rIndex = 0; rIndex < rgbArr.length; rIndex += 4) {
+                //     rgbArr[rIndex] -= currentFile.blur;
+                //     rgbArr[rIndex + 1] -= currentFile.blur;
+                //     rgbArr[rIndex + 2] -= currentFile.blur;
+                // }
+                // context.putImageData(imageData, 0, 0);
             };
         }
     }, [
@@ -399,23 +414,28 @@ const Edit = ({ currentWidth }: EditProps) => {
                                     )
                                 }
                                 value={inputObj.value}
-                                min="-100"
+                                min={inputObj.text === "흐리게" ? 0 : -100}
                                 max="100"
                                 step="1"
                                 style={{
-                                    backgroundImage: `linear-gradient(to right, rgb(219, 219, 219) 0%, rgb(219, 219, 219) ${Math.min(
+                                    backgroundImage:
+                                        inputObj.text !== "흐리게"
+                                            ? `linear-gradient(to right, rgb(219, 219, 219) 0%, 
+                                    rgb(219, 219, 219) ${Math.min(
                                         50,
                                         inputObj.value / 2 + 50,
                                     )}%, rgb(38, 38, 38) ${Math.min(
-                                        50,
-                                        inputObj.value / 2 + 50,
-                                    )}%, rgb(38, 38, 38)   ${Math.max(
-                                        50,
-                                        inputObj.value / 2 + 50,
-                                    )}%, rgb(219, 219, 219)  ${Math.max(
-                                        50,
-                                        inputObj.value / 2 + 50,
-                                    )}%, rgb(219, 219, 219) 100%)`,
+                                                  50,
+                                                  inputObj.value / 2 + 50,
+                                              )}%,
+                                     rgb(38, 38, 38)   ${Math.max(
+                                         50,
+                                         inputObj.value / 2 + 50,
+                                     )}%, rgb(219, 219, 219)  ${Math.max(
+                                                  50,
+                                                  inputObj.value / 2 + 50,
+                                              )}%, rgb(219, 219, 219) 100%)`
+                                            : `linear-gradient(to right, rgb(38, 38, 38) 0%, rgb(38, 38, 38) ${inputObj.value}%, rgb(219, 219, 219) ${inputObj.value}%, rgb(219, 219, 219) 100%)`,
                                 }}
                             />
                             <div>{inputObj.value}</div>
