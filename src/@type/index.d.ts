@@ -293,6 +293,7 @@ declare module Common {
         height: number;
         position: string;
         url: string;
+        size?: string; // background-size for retina display
     }
 
     interface ImageInfo {
