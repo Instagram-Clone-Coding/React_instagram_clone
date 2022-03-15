@@ -152,9 +152,7 @@ declare module HomeType {
 
     interface ArticleProps {
         followingMemberUsernameLikedPost: null | string; // 내가 팔로우한 사람 중에서 이 글을 좋아한 사람 있으면 보내줌
-        memberImageUrl: string;
-        memberNickname: string;
-        memberUsername: string;
+        member: Common.memberType;
         postBookmarkFlag: boolean; // 내가 북마크 했는지
         postCommentsCount: number;
         postContent: string;
@@ -300,6 +298,14 @@ declare module Common {
         imageType: string;
         imageName: string;
         imageUUID: string;
+    }
+
+    interface memberType {
+        id: number;
+        username: string;
+        name: string;
+        image: ImageInfo;
+        hasStory: boolean;
     }
 }
 
