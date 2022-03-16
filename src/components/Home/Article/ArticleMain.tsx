@@ -108,7 +108,7 @@ const ArticleMain = ({
     }: ModalType.ModalPositionProps) => {
         await dispatch(
             getMiniProfile({
-                memberUsername,
+                memberNickname,
                 modalPosition: { top, bottom, left },
             }),
         );

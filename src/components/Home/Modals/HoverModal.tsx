@@ -118,6 +118,7 @@ const HoverModal = ({
     miniProfile,
 }: HoverModalProps) => {
     const dispatch = useAppDispatch();
+    console.log(miniProfile);
 
     const postsNumSummary = useNumberSummary(
         miniProfile ? miniProfile.memberPostsCount : 0,
@@ -158,10 +159,12 @@ const HoverModal = ({
                         </Link>
                         <div className="hoverModal-top-info">
                             <Link
-                                to={`/${miniProfile.memberName}`}
+                                to={`/profile/${miniProfile.memberName}`}
                                 className="hoverModal-top-username"
                             >
-                                <Username>{miniProfile.memberName}</Username>
+                                <Username>
+                                    {miniProfile.memberUsername}
+                                </Username>
                                 {/* {userSummary.verified && (
                                     <span className="hoverModal-top-verified">
                                         인증됨

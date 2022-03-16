@@ -45,14 +45,14 @@ interface FollowingModalProps {
 const MODAL_CIRCLE_SIZE = 90 / 64;
 
 const FollowingModal = ({ onModalOn, onModalOff }: FollowingModalProps) => {
-    const { memberNickname, memberUsername, memberImageUrl } = useAppSelector(
+    const { memberNickname, memberImageUrl } = useAppSelector(
         ({ modal }) => modal,
     );
     const dispatch = useAppDispatch();
     const unFollowHandler = () => {
         // 언팔로우
         const unFollowUser = async () => {
-            await dispatch(postUnfollow({ username: memberUsername }));
+            await dispatch(postUnfollow({ username: memberNickname }));
         };
         unFollowUser();
         onModalOff();
