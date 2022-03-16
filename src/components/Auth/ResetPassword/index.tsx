@@ -17,10 +17,9 @@ import Line from "../Line";
 // -> 비밀번호 재설정
 
 const Container = styled.section`
-    .header {
+    header {
         display: flex;
-        align-items: center;
-        padding: 0 20px 0 20px;
+        justify-content: center;
 
         background-color: #fff;
         background-color: rgba(var(--d87, 255, 255, 255), 1);
@@ -32,13 +31,33 @@ const Container = styled.section`
         width: 100%;
         z-index: 101;
 
-        .logo {
+        .header-content {
+            max-width: 975px;
+            padding: 0 20px 0 20px;
             display: flex;
+            align-items: center;
+            width: 100%;
+
+            & > div {
+                flex: 1 0 127px;
+            }
+
+            img {
+                margin-top: 7px;
+            }
+
+            .logo {
+                opacity: 1;
+                transition: opacity 0.1s ease-out;
+            }
+            .logo:active {
+                opacity: 0.3;
+            }
         }
     }
 
     .fake-header {
-        height: 60px;
+        height: 44px;
     }
 
     .form-container {
@@ -124,16 +143,21 @@ export default function ResetPasswordForm() {
 
     return (
         <Container>
-            <header className="header">
-                <Link to="/">
-                    <div className="logo">
-                        <img
-                            src={navLogo}
-                            alt="상단바 인스타 로고"
-                            srcSet={navLogo + " 2x"}
-                        />
+            <header>
+                <div className="header-content">
+                    <div className="logo-container">
+                        <Link to="/">
+                            <div className="logo">
+                                <img
+                                    src={navLogo}
+                                    alt="상단바 인스타 로고"
+                                    srcSet={navLogo + " 2x"}
+                                />
+                            </div>
+                        </Link>
                     </div>
-                </Link>
+                    <div className="empty"></div>
+                </div>
             </header>
             <div className="fake-header" />
             <main className="form-container">
