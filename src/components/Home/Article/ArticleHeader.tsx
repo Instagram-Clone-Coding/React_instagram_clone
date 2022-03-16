@@ -96,7 +96,7 @@ const ArticleHeader = ({
     }: ModalType.ModalPositionProps) => {
         await dispatch(
             getMiniProfile({
-                memberUsername,
+                memberNickname,
                 modalPosition: { top, bottom, left },
             }),
         );
@@ -169,7 +169,9 @@ const ArticleHeader = ({
                         onMouseEnter={mouseEnterHandler}
                         onMouseLeave={mouseLeaveHandler}
                     >
-                        <Link to={`/profile/${memberUsername}`}>{memberNickname}</Link>
+                        <Link to={`/profile/${memberNickname}`}>
+                            {memberNickname}
+                        </Link>
                     </Username>
                     {!isFollowing && (
                         <div className="header-followBox">
