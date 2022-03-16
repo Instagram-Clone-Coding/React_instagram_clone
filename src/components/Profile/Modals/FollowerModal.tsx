@@ -128,19 +128,22 @@ const FollowerModal = ({
                 </div>
                 <div className="content">
                     {people.map((person) => (
-                        <div className={"one-person"} key={person.username}>
+                        <div
+                            className={"one-person"}
+                            key={person.member.username}
+                        >
                             <div className="person-info">
                                 <img
-                                    src={person.image.imageUrl}
-                                    alt={person.image.imageName}
+                                    src={person.member.image.imageUrl}
+                                    alt={person.member.username}
                                 />
                                 <div className="person-name-container">
                                     <div>
                                         <span className="username">
-                                            {person.username}
+                                            {person.member.username}
                                         </span>
                                         {/*나이거나 내가 이미 팔로우했다면 팔로우 가이드를 보여주면 안된다*/}
-                                        {!person.me && !person.isFollowing && (
+                                        {!person.me && !person.following && (
                                             <>
                                                 {isFollowLoading ? (
                                                     <Loading size={18} />
@@ -149,7 +152,8 @@ const FollowerModal = ({
                                                         className="follow-guide"
                                                         onClick={async () => {
                                                             await followHandler(
-                                                                person.username,
+                                                                person.member
+                                                                    .username,
                                                             );
                                                             await getPeople();
                                                         }}
@@ -161,7 +165,9 @@ const FollowerModal = ({
                                             </>
                                         )}
                                     </div>
-                                    <span className="name">{person.name}</span>
+                                    <span className="name">
+                                        {person.member.name}
+                                    </span>
                                 </div>
                             </div>
                             {isFollowerModal ? (
