@@ -8,17 +8,24 @@ export interface AuthStateProps {
     isLoading: AuthType.Loading;
     isAsyncReject: boolean;
     errorMessage: string | undefined;
-    // optional ? or | null, undefined -> 옵셔널도 생각해보기
     hasUsername: boolean | null;
     isRefreshTokenChecking: boolean;
     currentFormState: FormState;
     signUpUserData: AuthType.signUpUserData | null;
     userInfo: AuthType.UserInfo | null;
+    resetPassword: AuthType.resetPasswordState;
+    // login, signup, resetPassword로 분류해서 상태값 관리 vs 비슷한 기능끼리 분류(isLoading, userData)
+    // 앞에꺼로 해야지, 왜냐면 상태값을 직관적으로 찾을 수 있을 거 같아서
 }
 
 const initialState: AuthStateProps = {
     isLogin: false,
-    isLoading: { login: false, signUp: false, checkEmailCode: false },
+    isLoading: {
+        login: false,
+        signUp: false,
+        checkEmailCode: false,
+        resetPasswordEmail: false,
+    },
     isAsyncReject: false,
     errorMessage: "",
     hasUsername: null,
@@ -26,6 +33,7 @@ const initialState: AuthStateProps = {
     currentFormState: "signIn",
     signUpUserData: null,
     userInfo: null,
+    resetPassword: { email: "" },
 };
 
 const authSlice = createSlice({
@@ -68,6 +76,15 @@ const authSlice = createSlice({
         },
         checkEmailCodeButtonLoadingEnd: (state) => {
             state.isLoading.checkEmailCode = false;
+        },
+        resetPasswordEmailLoading: (state, action: PayloadAction<boolean>) => {
+            state.isLoading.resetPasswordEmail = action.payload;
+        },
+        insertUserEmail: (
+            state,
+            action: PayloadAction<AuthType.resetPasswordState>,
+        ) => {
+            state.resetPassword.email = action.payload.email;
         },
     },
     extraReducers: (bulid) => {

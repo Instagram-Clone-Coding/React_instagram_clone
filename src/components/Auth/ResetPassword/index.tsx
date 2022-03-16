@@ -1,7 +1,5 @@
 import { Footer } from "components/Common/Footer/Footer";
 import styled from "styled-components";
-import navLogo from "assets/Images/nav-logo.png";
-import { Link } from "react-router-dom";
 import ContentBox from "components/Common/ContentBox";
 import ImageSprite from "components/Common/ImageSprite";
 import sprite from "assets/Images/sprite2.png";
@@ -10,6 +8,12 @@ import useInput from "hooks/useInput";
 import SubmitButton from "../SubmitButton";
 import { MouseEvent } from "react";
 import Line from "../Line";
+import HeaderBeforeLogin from "./HeaderBeforeLogin";
+import { Link } from "react-router-dom";
+import { customAxios } from "customAxios";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { authAction } from "app/store/ducks/auth/authSlice";
+import Loading from "components/Common/Loading";
 
 // flow
 // 이메일 전송 [이메일폼 화면, 이메일화면]
@@ -17,49 +21,6 @@ import Line from "../Line";
 // -> 비밀번호 재설정
 
 const Container = styled.section`
-    header {
-        display: flex;
-        justify-content: center;
-
-        background-color: #fff;
-        background-color: rgba(var(--d87, 255, 255, 255), 1);
-        border-bottom: 1px solid rgba(var(--b6a, 219, 219, 219), 1);
-        height: 60px;
-        position: fixed;
-        top: 0;
-
-        width: 100%;
-        z-index: 101;
-
-        .header-content {
-            max-width: 975px;
-            padding: 0 20px 0 20px;
-            display: flex;
-            align-items: center;
-            width: 100%;
-
-            & > div {
-                flex: 1 0 127px;
-            }
-
-            img {
-                margin-top: 7px;
-            }
-
-            .logo {
-                opacity: 1;
-                transition: opacity 0.1s ease-out;
-            }
-            .logo:active {
-                opacity: 0.3;
-            }
-        }
-    }
-
-    .fake-header {
-        height: 44px;
-    }
-
     .form-container {
         margin: 60px auto 44px;
         max-width: 388px;
@@ -136,30 +97,42 @@ export default function ResetPasswordForm() {
         (value) => value.length > 0,
     );
 
+    const dispatch = useAppDispatch();
+    const isLoading = useAppSelector(
+        (state) => state.auth.isLoading.resetPasswordEmail,
+    );
+
     const submitButtonClickHandler = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        // api 연결
+        dispatch(authAction.resetPasswordEmailLoading(true));
+        const callPasswordChangeEmailAPI = async () => {
+            try {
+                const config = {
+                    params: {
+                        username: inputProps.value,
+                    },
+                };
+                const {
+                    data: { data },
+                } = await customAxios.post(
+                    `/accounts/password/email`,
+                    null,
+                    config,
+                );
+                dispatch(authAction.insertUserEmail(data));
+                dispatch(authAction.resetPasswordEmailLoading(false));
+            } catch {
+                console.log(
+                    `error, /accounts/password/email(비밀번호 재설정메일 전송) api in resetPasswordForm Component`,
+                );
+            }
+        };
+        callPasswordChangeEmailAPI();
     };
 
     return (
         <Container>
-            <header>
-                <div className="header-content">
-                    <div className="logo-container">
-                        <Link to="/">
-                            <div className="logo">
-                                <img
-                                    src={navLogo}
-                                    alt="상단바 인스타 로고"
-                                    srcSet={navLogo + " 2x"}
-                                />
-                            </div>
-                        </Link>
-                    </div>
-                    <div className="empty"></div>
-                </div>
-            </header>
-            <div className="fake-header" />
+            <HeaderBeforeLogin />
             <main className="form-container">
                 <ContentBox padding="0" margin="0 0 0 0">
                     <div className="form-content">
@@ -186,7 +159,11 @@ export default function ResetPasswordForm() {
                             onClick={submitButtonClickHandler}
                             disabled={!isValid}
                         >
-                            로그인 링크 보내기
+                            {isLoading ? (
+                                <Loading size={18} />
+                            ) : (
+                                "로그인 링크 보내기"
+                            )}
                         </SubmitButton>
                         <Line margin="16px 44px" />
                         <div className="comeback-signup">

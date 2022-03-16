@@ -134,6 +134,12 @@ declare module AuthType {
         login: boolean;
         signUp: boolean;
         checkEmailCode: boolean;
+        resetPasswordEmail: boolean;
+    }
+
+    interface resetPasswordState {
+        email: string;
+        // loading: boolean;
     }
 }
 
