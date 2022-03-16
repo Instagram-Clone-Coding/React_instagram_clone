@@ -118,7 +118,6 @@ const HoverModal = ({
     miniProfile,
 }: HoverModalProps) => {
     const dispatch = useAppDispatch();
-    console.log(miniProfile);
 
     const postsNumSummary = useNumberSummary(
         miniProfile ? miniProfile.memberPostsCount : 0,
@@ -159,7 +158,7 @@ const HoverModal = ({
                         </Link>
                         <div className="hoverModal-top-info">
                             <Link
-                                to={`/profile/${miniProfile.memberName}`}
+                                to={`/profile/${miniProfile.memberUsername}`}
                                 className="hoverModal-top-username"
                             >
                                 <Username>
