@@ -22,10 +22,15 @@ const EditCanvasUnit = ({
         const canvas = canvasRef.current;
         const context = canvas.getContext("2d");
         if (context) {
-            context.clearRect(0, 0, currentCanvasWidth, currentCanvasHeight);
             const img = new Image(currentImageWidth, currentImageHeight); // url만으로 canvas에 이미지를 그릴 수 없습니다. 생성자 함수를 통해 새로운 img 객체를 만들어줍니다.
             img.src = currentFile.url;
             img.onload = () => {
+                context.clearRect(
+                    0,
+                    0,
+                    currentCanvasWidth,
+                    currentCanvasHeight,
+                );
                 // 이미지 로드가 완료되었을 떄 함수가 실행됩니다.
                 // 이미지 자체의 시작지점(sx,sy)를 조작하면 이미지 크기가 초기화되버리므로,
                 // canvas에 그리기 시작하는 좌표(dx,dy)를 조작하여 간접적으로 translate를 구현합니다.
