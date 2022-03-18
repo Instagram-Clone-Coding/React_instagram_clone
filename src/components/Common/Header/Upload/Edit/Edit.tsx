@@ -297,78 +297,84 @@ const Edit = ({ currentWidth }: EditProps) => {
                         조정
                     </div>
                 </div>
-                {adjustInputs.map((inputObj) => (
-                    <div
-                        key={inputObj.text}
-                        className="adjust__input"
-                        onMouseEnter={() =>
-                            setEnteredAdjustInput(inputObj.text)
-                        }
-                        onMouseLeave={() => setEnteredAdjustInput(null)}
-                    >
-                        <div>
-                            <div>{inputObj.text}</div>
-                            {inputObj.value !== 0 && (
-                                <button
-                                    className={
-                                        enteredAdjustInput === inputObj.text
-                                            ? "entered"
-                                            : ""
-                                    }
-                                    onClick={() =>
+                {editMode === "adjust" ? (
+                    adjustInputs.map((inputObj) => (
+                        <div
+                            key={inputObj.text}
+                            className="adjust__input"
+                            onMouseEnter={() =>
+                                setEnteredAdjustInput(inputObj.text)
+                            }
+                            onMouseLeave={() => setEnteredAdjustInput(null)}
+                        >
+                            <div>
+                                <div>{inputObj.text}</div>
+                                {inputObj.value !== 0 && (
+                                    <button
+                                        className={
+                                            enteredAdjustInput === inputObj.text
+                                                ? "entered"
+                                                : ""
+                                        }
+                                        onClick={() =>
+                                            dispatch(
+                                                uploadActions.resetAdjustInput(
+                                                    inputObj.text,
+                                                ),
+                                            )
+                                        }
+                                    >
+                                        재설정
+                                    </button>
+                                )}
+                            </div>
+                            <div>
+                                <input
+                                    type="range"
+                                    onChange={(
+                                        event: ChangeEvent<HTMLInputElement>,
+                                    ) =>
                                         dispatch(
-                                            uploadActions.resetAdjustInput(
-                                                inputObj.text,
-                                            ),
+                                            uploadActions.changeAdjustInput({
+                                                type: inputObj.text,
+                                                value: Number(
+                                                    event.target.value,
+                                                ),
+                                            }),
                                         )
                                     }
-                                >
-                                    재설정
-                                </button>
-                            )}
-                        </div>
-                        <div>
-                            <input
-                                type="range"
-                                onChange={(
-                                    event: ChangeEvent<HTMLInputElement>,
-                                ) =>
-                                    dispatch(
-                                        uploadActions.changeAdjustInput({
-                                            type: inputObj.text,
-                                            value: Number(event.target.value),
-                                        }),
-                                    )
-                                }
-                                value={inputObj.value}
-                                min={inputObj.text === "흐리게" ? 0 : -100}
-                                max="100"
-                                step="1"
-                                style={{
-                                    backgroundImage:
-                                        inputObj.text !== "흐리게"
-                                            ? `linear-gradient(to right, rgb(219, 219, 219) 0%, 
+                                    value={inputObj.value}
+                                    min={inputObj.text === "흐리게" ? 0 : -100}
+                                    max="100"
+                                    step="1"
+                                    style={{
+                                        backgroundImage:
+                                            inputObj.text !== "흐리게"
+                                                ? `linear-gradient(to right, rgb(219, 219, 219) 0%, 
                                     rgb(219, 219, 219) ${Math.min(
                                         50,
                                         inputObj.value / 2 + 50,
                                     )}%, rgb(38, 38, 38) ${Math.min(
-                                                  50,
-                                                  inputObj.value / 2 + 50,
-                                              )}%,
+                                                      50,
+                                                      inputObj.value / 2 + 50,
+                                                  )}%,
                                      rgb(38, 38, 38)   ${Math.max(
                                          50,
                                          inputObj.value / 2 + 50,
                                      )}%, rgb(219, 219, 219)  ${Math.max(
-                                                  50,
-                                                  inputObj.value / 2 + 50,
-                                              )}%, rgb(219, 219, 219) 100%)`
-                                            : `linear-gradient(to right, rgb(38, 38, 38) 0%, rgb(38, 38, 38) ${inputObj.value}%, rgb(219, 219, 219) ${inputObj.value}%, rgb(219, 219, 219) 100%)`,
-                                }}
-                            />
-                            <div>{inputObj.value}</div>
+                                                      50,
+                                                      inputObj.value / 2 + 50,
+                                                  )}%, rgb(219, 219, 219) 100%)`
+                                                : `linear-gradient(to right, rgb(38, 38, 38) 0%, rgb(38, 38, 38) ${inputObj.value}%, rgb(219, 219, 219) ${inputObj.value}%, rgb(219, 219, 219) 100%)`,
+                                    }}
+                                />
+                                <div>{inputObj.value}</div>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                ) : (
+                    <div>hello</div>
+                )}
             </div>
         </StyledEdit>
     );
