@@ -63,20 +63,37 @@ declare module Direct {
     type messageType = "TEXT" | "POST";
 }
 
-declare module UI {
+declare module CommonType {
+    interface FooterTextProps {
+        text: string;
+        url?: string;
+    }
+}
+
+declare module UIType {
     interface ButtonProps {
         bgColor?: string;
         radius?: number;
         color?: string;
     }
+
+    interface ContentBoxProps {
+        padding: string;
+        margin: string;
+    }
 }
 
-declare module AuthType {
-    interface Token {
+declare module AxiosType {
+    interface ResponseType {
         status: number;
         code: number;
         message: string;
-        data?: {
+    }
+}
+
+declare module AuthType {
+    interface Token extends AxiosType.ResponseType {
+        data: {
             type: string;
             accessToken: string;
         };
@@ -88,21 +105,12 @@ declare module AuthType {
         memberName: string;
         memberUsername: string;
     }
-}
 
-declare module Login {
-    interface FooterTextProps {
-        text: string;
-        url?: string;
-    }
-
-    interface InputProps {
-        inputName: "email" | "name" | "username" | "password" | "id";
-        innerText: string;
-        type: "text" | "password";
-        inputProps: useInputProps;
-        isValid?: boolean | null;
-        isFocus?: boolean;
+    interface signUpUserData {
+        email: string;
+        name: string;
+        password: string;
+        username: string;
     }
 
     interface useInputProps {
@@ -112,9 +120,14 @@ declare module Login {
         onFocus?: () => void;
     }
 
-    interface NewCardProps {
-        padding: string;
-        margin: string;
+    interface InputProps {
+        inputName: "email" | "name" | "username" | "password" | "id" | "code";
+        innerText: string;
+        type: "text" | "password";
+        inputProps: useInputProps;
+        isValid?: boolean | null;
+        isFocus?: boolean;
+        hasValidator?: (value: string) => boolean;
     }
 }
 
@@ -139,9 +152,7 @@ declare module HomeType {
 
     interface ArticleProps {
         followingMemberUsernameLikedPost: null | string; // 내가 팔로우한 사람 중에서 이 글을 좋아한 사람 있으면 보내줌
-        memberImageUrl: string;
-        memberNickname: string;
-        memberUsername: string;
+        member: Common.memberType;
         postBookmarkFlag: boolean; // 내가 북마크 했는지
         postCommentsCount: number;
         postContent: string;
@@ -297,6 +308,14 @@ declare module Common {
         imageType: string;
         imageName: string;
         imageUUID: string;
+    }
+
+    interface memberType {
+        id: number;
+        username: string;
+        name: string;
+        image: ImageInfo;
+        hasStory: boolean;
     }
 }
 

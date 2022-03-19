@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 
 const ContentStyle = styled.div`
@@ -16,7 +15,7 @@ const ContentStyle = styled.div`
     }
 `;
 
-function FooterTextPiece(props: Login.FooterTextProps) {
+function FooterTextPiece(props: CommonType.FooterTextProps) {
     return (
         <ContentStyle>
             {props.url ? (

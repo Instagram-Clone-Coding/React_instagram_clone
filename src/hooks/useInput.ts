@@ -1,12 +1,8 @@
+import { usernameValidator } from "components/Auth/SignUpForm/validator";
+import { customAxios } from "customAxios";
 import { ChangeEvent, useState } from "react";
 
-type ReturnType = [
-    Login.useInputProps,
-    boolean | null,
-    boolean,
-    () => void,
-    () => void,
-];
+type ReturnType = [AuthType.useInputProps, boolean | null, boolean, () => void];
 
 const useInput = (
     initialValue: string,
@@ -18,8 +14,9 @@ const useInput = (
     const [isFocus, setIsFocus] = useState<boolean>(false);
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setValue(event.target.value);
-        onChangeValidator && setIsValid(onChangeValidator(value));
+        const processdValue = event.target.value.trim();
+        setValue(processdValue);
+        onChangeValidator && setIsValid(onChangeValidator(processdValue));
     };
 
     const onFocus = () => {
@@ -28,23 +25,43 @@ const useInput = (
     };
 
     const resetValue = () => setValue("");
-    const resetIsValid = () => setIsValid(null);
 
     const onBlur = () => {
         setIsFocus(false);
-        onBlurValidator && setIsValid(onBlurValidator(value));
+        if (onBlurValidator) {
+            const validResult = onBlurValidator(value);
+            setIsValid(validResult);
+
+            if (onBlurValidator === usernameValidator) {
+                const usernameValidatorWithDispatch = async (
+                    username: string,
+                ) => {
+                    try {
+                        const config = {
+                            params: {
+                                username,
+                            },
+                        };
+                        const {
+                            data: { data },
+                        } = await customAxios.get(`/accounts/check`, config);
+                        setIsValid(data);
+                    } catch (error) {
+                        setIsValid(null);
+                    }
+                };
+                validResult && usernameValidatorWithDispatch(value);
+            }
+        }
     };
 
     return [
-        onBlurValidator
+        onBlurValidator || onChangeValidator
             ? { value, onChange, onBlur, onFocus }
-            : onChangeValidator
-            ? { value, onChange, onFocus }
             : { value, onChange },
         isValid,
         isFocus,
         resetValue,
-        resetIsValid,
     ];
 };
 

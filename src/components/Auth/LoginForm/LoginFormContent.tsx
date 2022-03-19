@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import ImageSprite from "components/Common/ImageSprite";
 import { Link } from "react-router-dom";
-import Line from "components/Common/Line";
-import FacebookLogin from "components/Common/FacebookLogin";
-import LoginFormAndButton from "components/Login/LoginForm/FormAndButton";
+import Line from "components/Auth/Line";
+import FacebookLogin from "components/Auth/FacebookLogin";
+import LoginFormAndButton from "components/Auth/LoginForm/FormAndButton";
 import { useAppSelector } from "app/store/Hooks";
 import sprite from "assets/Images/loginPageSprite.png";
 
@@ -56,7 +56,7 @@ const instagramImage: Common.ImageProps = {
     url: sprite,
 };
 
-export default function FormLayout() {
+export default function LoginForm() {
     const errorMessage = useAppSelector((state) => state.auth.errorMessage);
 
     return (

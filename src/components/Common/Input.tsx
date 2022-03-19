@@ -5,18 +5,20 @@ import sprite from "assets/Images/loginPageSprite.png";
 
 interface InputProps {
     isSmallInnerText: boolean;
+    isFocus: boolean | undefined;
 }
 
 const InputContainer = styled.div<InputProps>`
     margin: 0 40px 6px;
 
     .inputContent {
-        // focus -> border 조절**
         display: flex;
         font-size: 14px;
         position: relative;
         width: 100%;
-        border: 1px solid ${(props) => props.theme.color.bd_gray};
+        border: 1px solid
+            ${(props) =>
+                props.isFocus ? "#a8a8a8" : props.theme.color.bd_gray};
         background-color: ${(props) => props.theme.color.bg_gray};
         border-radius: 3px;
         align-items: center;
@@ -92,7 +94,7 @@ const InvalidFlag: Common.ImageProps = {
     url: sprite,
 };
 
-const Input = (props: Login.InputProps) => {
+const Input = (props: AuthType.InputProps) => {
     const { innerText, type, inputName } = props;
     const [isSmallInnerText, setInnerTextSize] = useState(false);
     const [inputType, setInputType] = useState(type);
@@ -102,7 +104,7 @@ const Input = (props: Login.InputProps) => {
     >("비밀번호 표시");
 
     const textChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        const hasValue = event.target.value.length ? true : false;
+        const hasValue = event.target.value.trim().length ? true : false;
         setInnerTextSize(hasValue);
         setShowPassword(inputName === "password" && hasValue);
     };
@@ -116,7 +118,10 @@ const Input = (props: Login.InputProps) => {
     };
 
     return (
-        <InputContainer isSmallInnerText={isSmallInnerText}>
+        <InputContainer
+            isSmallInnerText={isSmallInnerText}
+            isFocus={props.isFocus}
+        >
             <div className="inputContent">
                 <label className="placeholder">
                     <span className="innerText">{innerText}</span>
@@ -132,12 +137,19 @@ const Input = (props: Login.InputProps) => {
                     />
                 </label>
                 <div className="inputState">
-                    {!props.inputProps.onBlur ? null : props.isValid ===
-                      null ? null : !props.isValid && !props.isFocus ? (
-                        <ImageSprite {...InvalidFlag} className="stateStyle" />
-                    ) : !props.isValid && props.isFocus ? null : (
-                        <ImageSprite {...ValidFlag} className="stateStyle" />
-                    )}
+                    {props.hasValidator &&
+                        (!props.inputProps.onBlur ? null : props.isValid ===
+                          null ? null : !props.isValid && !props.isFocus ? (
+                            <ImageSprite
+                                {...InvalidFlag}
+                                className="stateStyle"
+                            />
+                        ) : !props.isValid && props.isFocus ? null : (
+                            <ImageSprite
+                                {...ValidFlag}
+                                className="stateStyle"
+                            />
+                        ))}
                     {isShowPassword && (
                         <button
                             className="showPassword stateStyle"

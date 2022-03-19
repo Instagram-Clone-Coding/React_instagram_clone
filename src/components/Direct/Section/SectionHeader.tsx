@@ -6,54 +6,53 @@ import { ReactComponent as DetailInfoActive } from "assets/Svgs/direct-detail-in
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { selectView } from "app/store/ducks/direct/DirectSlice";
 
-
 interface SectionHeaderContainerType {
     view: string;
 }
 
-
 const SectionHeaderContainer = styled.section<SectionHeaderContainerType>`
-  height: 60px;
-  padding: 0 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid ${theme.color.bd_gray};
-
-  .dummy-container {
-    display: ${(props) => !(props.view === "detail") && "none"};
-  }
-
-  .user-profile-container {
-    height: 50%;
+    height: 60px;
+    padding: 0 30px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid ${theme.color.bd_gray};
 
-    img {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      margin-right: 12px;
+    .dummy-container {
+        display: ${(props) => !(props.view === "detail") && "none"};
     }
 
-    h3 {
-      font-size: 1rem;
-      font-weight: 600;
-    }
-  }
+    .user-profile-container {
+        height: 50%;
+        display: flex;
+        align-items: center;
 
-  .detail-info-container {
-    display: flex;
-    cursor: pointer;
-  }
+        img {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+    }
+
+    .detail-info-container {
+        display: flex;
+        cursor: pointer;
+    }
 `;
-
 
 const SectionHeader = () => {
     const dispatch = useAppDispatch();
-    const { view,selectedRoom } = useAppSelector((state => state.direct));
-    const username = useAppSelector(state => state.auth.username);
-    const [opponent,setOpponent] = useState<Direct.memberProps>()
+    const { view, selectedRoom } = useAppSelector((state) => state.direct);
+    const username = useAppSelector(
+        (state) => state.auth.userInfo?.memberUsername,
+    );
+    const [opponent, setOpponent] = useState<Direct.memberProps>();
     const viewConvertHandler = () => {
         switch (view) {
             case "detail":
@@ -70,29 +69,32 @@ const SectionHeader = () => {
         }
     };
 
-    useEffect(()=>{
-        setOpponent(selectedRoom?.members.filter(member => {
-            return member.username !== username;
-        })[0])
-    },[selectedRoom])
+    useEffect(() => {
+        setOpponent(
+            selectedRoom?.members.filter((member) => {
+                return member.username !== username;
+            })[0],
+        );
+    }, [selectedRoom]);
 
     return (
         <SectionHeaderContainer view={view}>
-            <div className="dummy-container">
-
-            </div>
+            <div className="dummy-container"></div>
             <div className="user-profile-container">
-                {view === "detail" ? <h3>상세 정보</h3> :
+                {view === "detail" ? (
+                    <h3>상세 정보</h3>
+                ) : (
                     <>
-                        <img src={opponent?.imageUrl} alt="selected-user-image" />
+                        <img
+                            src={opponent?.imageUrl}
+                            alt="selected-user-image"
+                        />
                         <h3>{opponent?.username}</h3>
                     </>
-                }
+                )}
             </div>
             <div className="detail-info-container" onClick={viewConvertHandler}>
-                {
-                    view === "detail" ? <DetailInfoActive /> : <DetailInfo />
-                }
+                {view === "detail" ? <DetailInfoActive /> : <DetailInfo />}
             </div>
         </SectionHeaderContainer>
     );
