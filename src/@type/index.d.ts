@@ -129,17 +129,8 @@ declare module AuthType {
         isFocus?: boolean;
         hasValidator?: (value: string) => boolean;
     }
-
-    interface Loading {
-        login: boolean;
-        signUp: boolean;
-        checkEmailCode: boolean;
-        resetPasswordEmail: boolean;
-    }
-
     interface resetPasswordState {
         email: string;
-        // loading: boolean;
     }
 }
 

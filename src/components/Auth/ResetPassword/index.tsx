@@ -98,13 +98,11 @@ export default function ResetPasswordForm() {
     );
 
     const dispatch = useAppDispatch();
-    const isLoading = useAppSelector(
-        (state) => state.auth.isLoading.resetPasswordEmail,
-    );
+    const isLoading = useAppSelector((state) => state.auth.isLoading);
 
     const submitButtonClickHandler = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        dispatch(authAction.resetPasswordEmailLoading(true));
+        dispatch(authAction.changeButtonLoadingState(true));
         const callPasswordChangeEmailAPI = async () => {
             try {
                 const config = {
@@ -120,7 +118,7 @@ export default function ResetPasswordForm() {
                     config,
                 );
                 dispatch(authAction.insertUserEmail(data));
-                dispatch(authAction.resetPasswordEmailLoading(false));
+                dispatch(authAction.changeButtonLoadingState(false));
             } catch {
                 console.log(
                     `error, /accounts/password/email(비밀번호 재설정메일 전송) api in resetPasswordForm Component`,
@@ -160,7 +158,7 @@ export default function ResetPasswordForm() {
                             disabled={!isValid}
                         >
                             {isLoading ? (
-                                <Loading size={18} />
+                                <Loading size={18} isInButton={true} />
                             ) : (
                                 "로그인 링크 보내기"
                             )}

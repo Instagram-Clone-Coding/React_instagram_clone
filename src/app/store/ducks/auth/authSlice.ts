@@ -5,7 +5,7 @@ import { getUserInfo, signIn } from "./authThunk";
 
 export interface AuthStateProps {
     isLogin: boolean;
-    isLoading: AuthType.Loading;
+    isLoading: boolean;
     isAsyncReject: boolean;
     errorMessage: string | undefined;
     hasUsername: boolean | null;
@@ -14,18 +14,11 @@ export interface AuthStateProps {
     signUpUserData: AuthType.signUpUserData | null;
     userInfo: AuthType.UserInfo | null;
     resetPassword: AuthType.resetPasswordState;
-    // login, signup, resetPassword로 분류해서 상태값 관리 vs 비슷한 기능끼리 분류(isLoading, userData)
-    // 앞에꺼로 해야지, 왜냐면 상태값을 직관적으로 찾을 수 있을 거 같아서
 }
 
 const initialState: AuthStateProps = {
     isLogin: false,
-    isLoading: {
-        login: false,
-        signUp: false,
-        checkEmailCode: false,
-        resetPasswordEmail: false,
-    },
+    isLoading: false,
     isAsyncReject: false,
     errorMessage: "",
     hasUsername: null,
@@ -65,20 +58,8 @@ const authSlice = createSlice({
         resetUserInputData: (state) => {
             state.signUpUserData = null;
         },
-        signUpButtonLoading: (state) => {
-            state.isLoading.signUp = true;
-        },
-        signUpButtonLoadingEnd: (state) => {
-            state.isLoading.signUp = false;
-        },
-        checkEmailCodeButtonLoading: (state) => {
-            state.isLoading.checkEmailCode = true;
-        },
-        checkEmailCodeButtonLoadingEnd: (state) => {
-            state.isLoading.checkEmailCode = false;
-        },
-        resetPasswordEmailLoading: (state, action: PayloadAction<boolean>) => {
-            state.isLoading.resetPasswordEmail = action.payload;
+        changeButtonLoadingState: (state, action: PayloadAction<boolean>) => {
+            state.isLoading = action.payload;
         },
         insertUserEmail: (
             state,
@@ -90,17 +71,17 @@ const authSlice = createSlice({
     extraReducers: (bulid) => {
         bulid
             .addCase(signIn.pending, (state) => {
-                state.isLoading.login = true;
+                state.isLoading = true;
                 state.isAsyncReject = false;
             })
             .addCase(signIn.fulfilled, (state, action) => {
-                state.isLoading.login = false;
+                state.isLoading = false;
                 state.isLogin = true;
                 saveToken(action.payload);
             })
             .addCase(signIn.rejected, (state, action) => {
                 state.isAsyncReject = true;
-                state.isLoading.login = false;
+                state.isLoading = false;
                 if (action.payload && typeof action.payload === "string") {
                     state.errorMessage = action.payload;
                 } else if (state.hasUsername) {

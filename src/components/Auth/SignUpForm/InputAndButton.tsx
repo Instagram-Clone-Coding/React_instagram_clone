@@ -30,12 +30,12 @@ export default function InputAndButton() {
         "",
         passwordValidator,
     );
-    const isLoading = useAppSelector((state) => state.auth.isLoading.signUp);
+    const isLoading = useAppSelector((state) => state.auth.isLoading);
     const dispatch = useAppDispatch();
 
     const signUpButtonClickHandler = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        dispatch(authAction.signUpButtonLoading());
+        dispatch(authAction.changeButtonLoadingState(true));
 
         const callEmailConfirmAPI = async ({
             email,
@@ -51,7 +51,7 @@ export default function InputAndButton() {
                     email,
                     username,
                 });
-                dispatch(authAction.signUpButtonLoadingEnd());
+                dispatch(authAction.changeButtonLoadingState(false));
 
                 if (status === 200) {
                     dispatch(authAction.changeFormState("confirmEmail"));
@@ -65,7 +65,7 @@ export default function InputAndButton() {
                     );
                 }
             } catch (error) {
-                dispatch(authAction.signUpButtonLoadingEnd());
+                dispatch(authAction.changeButtonLoadingState(false));
                 // false인건 좋은데, 사용자에게 에러메시지 보여줘야할 거 같은데?
                 // 네트워크 속도가 빠를경우, 동작이 안되는 것처럼 보임
                 console.log(error, `user email confirm api error`);
@@ -126,7 +126,7 @@ export default function InputAndButton() {
                 }
                 onClick={signUpButtonClickHandler}
             >
-                {isLoading ? <Loading size={18} /> : "가입"}
+                {isLoading ? <Loading size={18} isInButton={true} /> : "가입"}
             </SubmitButton>
         </>
     );

@@ -76,9 +76,7 @@ export default function EmailConfirmForm() {
     const [errorMessage, setErrorMessage] = useState("");
     // 에러메시지
     // - 문구수정: 인증코드 만료기간 5분 명시 -> 재발급 요청
-    const isLoading = useAppSelector(
-        (state) => state.auth.isLoading.checkEmailCode,
-    );
+    const isLoading = useAppSelector((state) => state.auth.isLoading);
 
     const [codeInputProps, isValid, isFocus] = useInput(
         "",
@@ -111,7 +109,7 @@ export default function EmailConfirmForm() {
     };
 
     const submitButtonClickHandler = () => {
-        dispatch(authAction.checkEmailCodeButtonLoading());
+        dispatch(authAction.changeButtonLoadingState(true));
 
         const callSignUpAPI = async () => {
             if (!userInput) return;
@@ -122,7 +120,7 @@ export default function EmailConfirmForm() {
                     ...userInput,
                     code: codeInputProps.value,
                 });
-                dispatch(authAction.checkEmailCodeButtonLoadingEnd());
+                dispatch(authAction.changeButtonLoadingState(false));
 
                 if (status === 200 && data) {
                     dispatch(authAction.resetUserInputData());
@@ -172,7 +170,11 @@ export default function EmailConfirmForm() {
                     onClick={submitButtonClickHandler}
                     disabled={!isValid}
                 >
-                    {isLoading ? <Loading size={18} /> : "다음"}
+                    {isLoading ? (
+                        <Loading size={18} isInButton={true} />
+                    ) : (
+                        "다음"
+                    )}
                 </SubmitButton>
                 <Button
                     bgColor="white"
