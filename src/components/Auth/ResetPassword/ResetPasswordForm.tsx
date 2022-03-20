@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { authAction } from "app/store/ducks/auth/authSlice";
 import Loading from "components/Common/Loading";
 import styled from "styled-components";
+import Notification from "styles/UI/Notification";
 
 const Container = styled.section`
     height: 92%;
@@ -99,7 +100,9 @@ export default function ResetPasswordForm() {
     );
 
     const dispatch = useAppDispatch();
-    const isLoading = useAppSelector((state) => state.auth.isLoading);
+    const { isLoading, hasNotification } = useAppSelector(
+        (state) => state.auth,
+    );
 
     const submitButtonClickHandler = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
@@ -118,13 +121,15 @@ export default function ResetPasswordForm() {
                     null,
                     config,
                 );
-
                 dispatch(authAction.insertUserEmail({ email: data }));
-                dispatch(authAction.changeButtonLoadingState(false));
             } catch {
+                dispatch(authAction.showNotification());
+                setTimeout(() => dispatch(authAction.closeNotification), 5000);
                 console.log(
                     `error, /accounts/password/email(비밀번호 재설정메일 전송) api in resetPasswordForm Component`,
                 );
+            } finally {
+                dispatch(authAction.changeButtonLoadingState(false));
             }
         };
         callPasswordChangeEmailAPI();
@@ -182,6 +187,9 @@ export default function ResetPasswordForm() {
                     </ContentBox>
                 </main>
             </div>
+            {hasNotification && (
+                <Notification text="사용자를 찾을 수 없습니다." />
+            )}
             <Footer />
         </Container>
     );

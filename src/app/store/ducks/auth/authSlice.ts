@@ -13,6 +13,7 @@ export interface AuthStateProps {
     currentFormState: FormState;
     signUpUserData: AuthType.signUpUserData | null;
     userInfo: AuthType.UserInfo | null;
+    hasNotification: boolean;
     resetPassword: AuthType.resetPasswordState;
 }
 
@@ -26,6 +27,7 @@ const initialState: AuthStateProps = {
     currentFormState: "signIn",
     signUpUserData: null,
     userInfo: null,
+    hasNotification: false,
     resetPassword: { email: undefined },
 };
 
@@ -69,6 +71,12 @@ const authSlice = createSlice({
         },
         resetUserEmail: (state) => {
             state.resetPassword.email = undefined;
+        },
+        showNotification: (state) => {
+            state.hasNotification = true;
+        },
+        closeNotification: (state) => {
+            state.hasNotification = false;
         },
     },
     extraReducers: (bulid) => {
