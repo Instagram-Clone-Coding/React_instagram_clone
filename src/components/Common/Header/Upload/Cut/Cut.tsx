@@ -698,13 +698,16 @@ const Cut = ({ currentWidth }: CutProps) => {
         ],
     );
 
-    const excuteBeforeNextStep = () => {
-        // 전체 이미지의 translate 요소 수정
-    };
-
     return (
         <>
-            <UploadHeader excuteBeforeNextStep={excuteBeforeNextStep} />
+            <UploadHeader
+                excuteBeforePrevStep={() =>
+                    fixOverTranformedImage(files[currentIndex].scale)
+                }
+                excuteBeforeNextStep={() =>
+                    fixOverTranformedImage(files[currentIndex].scale)
+                }
+            />
             <StyledCut
                 url={files[currentIndex].url}
                 processedCurrentWidth={processedCurrentWidth}
