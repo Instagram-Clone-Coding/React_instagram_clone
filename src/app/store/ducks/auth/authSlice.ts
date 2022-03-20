@@ -26,7 +26,7 @@ const initialState: AuthStateProps = {
     currentFormState: "signIn",
     signUpUserData: null,
     userInfo: null,
-    resetPassword: { email: "" },
+    resetPassword: { email: undefined },
 };
 
 const authSlice = createSlice({
@@ -66,6 +66,9 @@ const authSlice = createSlice({
             action: PayloadAction<AuthType.resetPasswordState>,
         ) => {
             state.resetPassword.email = action.payload.email;
+        },
+        resetUserEmail: (state) => {
+            state.resetPassword.email = undefined;
         },
     },
     extraReducers: (bulid) => {

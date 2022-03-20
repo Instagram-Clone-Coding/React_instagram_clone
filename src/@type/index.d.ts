@@ -130,7 +130,7 @@ declare module AuthType {
         hasValidator?: (value: string) => boolean;
     }
     interface resetPasswordState {
-        email: string;
+        email?: string;
     }
 }
 
