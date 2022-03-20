@@ -3,7 +3,6 @@ import ModalCard from "styles/UI/ModalCard";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { uploadActions } from "app/store/ducks/upload/uploadSlice";
-import { ReactComponent as BackIcon } from "assets/Svgs/back.svg";
 import DragAndDrop from "components/Common/Header/Upload/DragAndDrop";
 import Cut from "components/Common/Header/Upload/Cut";
 import Edit from "components/Common/Header/Upload/Edit";
@@ -25,31 +24,6 @@ const StyledUploadModalInner = styled.div<ModalInnerProps>`
     align-items: center;
     overflow: hidden;
     border-radius: 12px;
-    & > .upload__header {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        height: 42px;
-        min-height: 42px;
-        border-bottom: 1px solid ${(props) => props.theme.color.bd_gray};
-        & > h1 {
-            font-weight: ${(props) => props.theme.font.bold};
-            flex-grow: 1;
-            text-align: center;
-            font-size: 16px;
-        }
-        & > div {
-            flex: 0 0 48px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 20px;
-            & > .upload__next {
-                color: ${(props) => props.theme.color.blue};
-                font-weight: ${(props) => props.theme.font.bold};
-            }
-        }
-    }
 `;
 
 const BORDER_TOTAL_WIDTH = 2;
@@ -94,17 +68,6 @@ const Upload = () => {
                 setBackDropHeight(window.innerHeight);
             });
         };
-    }, []);
-
-    const currentHeading = useCallback((step: UploadType.StepType) => {
-        switch (step) {
-            case "dragAndDrop":
-                return "새 게시물 만들기";
-            case "cut":
-                return "자르기";
-            case "edit":
-                return "편집";
-        }
     }, []);
 
     const currentComponent = useCallback(
@@ -158,21 +121,6 @@ const Upload = () => {
                 backdropWidth={backDropwidth}
                 onMouseUp={() => dispatch(uploadActions.stopGrabbing())}
             >
-                <div className="upload__header">
-                    {step !== "dragAndDrop" && (
-                        <div onClick={() => dispatch(uploadActions.prevStep())}>
-                            <button>
-                                <BackIcon />
-                            </button>
-                        </div>
-                    )}
-                    <h1>{currentHeading(step)}</h1>
-                    {step !== "dragAndDrop" && (
-                        <div onClick={() => dispatch(uploadActions.nextStep())}>
-                            <button className="upload__next">다음</button>
-                        </div>
-                    )}
-                </div>
                 {currentComponent(step)}
             </StyledUploadModalInner>
         </ModalCard>

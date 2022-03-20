@@ -24,6 +24,7 @@ import { ReactComponent as PlusIcon } from "assets/Svgs/plus.svg";
 import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import CutImgUnit from "components/Common/Header/Upload/Cut/CutImgUnit";
 import sprite from "assets/Images/sprite.png";
+import UploadHeader from "components/Common/Header/Upload/UploadHeader";
 
 type HandlingType = "ratio" | "resize" | "gallery" | null | "first";
 
@@ -697,349 +698,384 @@ const Cut = ({ currentWidth }: CutProps) => {
         ],
     );
 
+    const excuteBeforeNextStep = () => {
+        // 전체 이미지의 translate 요소 수정
+    };
+
     return (
-        <StyledCut
-            url={files[currentIndex].url}
-            processedCurrentWidth={processedCurrentWidth}
-            ratioType={ratioMode}
-            counts={files.length}
-        >
-            <div className="upload__handleMenu">
-                {HANDLE_MENUS.map((menuObj) => (
-                    <div
-                        key={menuObj.type}
-                        className={`${menuObj.type} ${
-                            handlingMode === menuObj.type
-                                ? "active"
-                                : handlingMode === "first" ||
-                                  handlingMode === null
-                                ? ""
-                                : "inactive"
-                        }`}
-                        onClick={() => {
-                            setHandlingMode((prev) => {
-                                return prev === menuObj.type
-                                    ? null
-                                    : menuObj.type;
-                            });
-                            toggleInputState(menuObj.type);
-                        }}
-                    >
-                        <button>
-                            {menuObj.isColorContained ? (
-                                <menuObj.svgComponent
-                                    fill={
-                                        handlingMode === menuObj.type
-                                            ? theme.font.default_black
-                                            : theme.color.bg_white
-                                    }
-                                    color={
-                                        handlingMode === menuObj.type
-                                            ? theme.font.default_black
-                                            : theme.color.bg_white
-                                    }
-                                />
-                            ) : (
-                                <menuObj.svgComponent
-                                    fill={
-                                        handlingMode === menuObj.type
-                                            ? theme.font.default_black
-                                            : theme.color.bg_white
-                                    }
-                                />
-                            )}
-                        </button>
-                    </div>
-                ))}
-            </div>
-            <div className="upload__handleInput">
-                <div
-                    className={`ratio ${
-                        ratioState ? "on" : ratioState === null ? "" : "off"
-                    }`}
-                >
-                    {RATIO_MENUS.map((ratioMenu, index) => (
-                        <Fragment key={ratioMenu.type}>
-                            <button
-                                className={
-                                    ratioMode === ratioMenu.type ? "active" : ""
-                                }
-                                onClick={() =>
-                                    dispatch(
-                                        uploadActions.changeRatioMode(
-                                            ratioMenu.type,
-                                        ),
-                                    )
-                                }
-                            >
-                                <div>
-                                    <div>{ratioMenu.text}</div>
-                                </div>
-                                <div>
-                                    <ratioMenu.svgComponent
+        <>
+            <UploadHeader excuteBeforeNextStep={excuteBeforeNextStep} />
+            <StyledCut
+                url={files[currentIndex].url}
+                processedCurrentWidth={processedCurrentWidth}
+                ratioType={ratioMode}
+                counts={files.length}
+            >
+                <div className="upload__handleMenu">
+                    {HANDLE_MENUS.map((menuObj) => (
+                        <div
+                            key={menuObj.type}
+                            className={`${menuObj.type} ${
+                                handlingMode === menuObj.type
+                                    ? "active"
+                                    : handlingMode === "first" ||
+                                      handlingMode === null
+                                    ? ""
+                                    : "inactive"
+                            }`}
+                            onClick={() => {
+                                setHandlingMode((prev) => {
+                                    return prev === menuObj.type
+                                        ? null
+                                        : menuObj.type;
+                                });
+                                toggleInputState(menuObj.type);
+                            }}
+                        >
+                            <button>
+                                {menuObj.isColorContained ? (
+                                    <menuObj.svgComponent
                                         fill={
-                                            ratioMode === ratioMenu.type
-                                                ? "white"
-                                                : theme.font.gray
+                                            handlingMode === menuObj.type
+                                                ? theme.font.default_black
+                                                : theme.color.bg_white
                                         }
                                         color={
-                                            ratioMode === ratioMenu.type
-                                                ? "white"
-                                                : theme.font.gray
+                                            handlingMode === menuObj.type
+                                                ? theme.font.default_black
+                                                : theme.color.bg_white
                                         }
                                     />
-                                </div>
+                                ) : (
+                                    <menuObj.svgComponent
+                                        fill={
+                                            handlingMode === menuObj.type
+                                                ? theme.font.default_black
+                                                : theme.color.bg_white
+                                        }
+                                    />
+                                )}
                             </button>
-                            {index < RATIO_MENUS.length - 1 && <hr />}
-                        </Fragment>
+                        </div>
                     ))}
                 </div>
-                <div
-                    className={`resize ${
-                        resizeState ? "on" : resizeState === null ? "" : "off"
-                    }`}
-                >
-                    <div className="upload__progressClickable">
-                        <input
-                            className="upload__progress"
-                            max="100"
-                            min="0"
-                            type="range"
-                            value={files[currentIndex].scale}
-                            onChange={scaleChangeHandler}
-                            onMouseUp={() =>
-                                fixOverTranformedImage(
-                                    files[currentIndex].scale,
-                                )
-                            }
-                            style={{
-                                background:
-                                    files[currentIndex].scale >= 50
-                                        ? `linear-gradient(to right, white ${
-                                              files[currentIndex].scale
-                                          }%, black ${
-                                              100 - files[currentIndex].scale
-                                          }%)`
-                                        : `linear-gradient(to left, black ${
-                                              100 - files[currentIndex].scale
-                                          }%, white ${
-                                              files[currentIndex].scale
-                                          }%)`,
-                            }}
-                        ></input>
-                    </div>
-                </div>
-                <div
-                    className={`gallery ${
-                        galleryState ? "on" : galleryState === null ? "" : "off"
-                    }`}
-                >
-                    <div className="upload__galleryImgsWrapper">
-                        <div
-                            className="upload__galleryImgs"
-                            ref={gallerySliderRef}
-                            onScroll={galleryScrollHandler}
-                        >
-                            {files.map((file, index) => (
-                                <div
-                                    className="upload__galleryImgWrapper"
-                                    key={file.url}
+                <div className="upload__handleInput">
+                    <div
+                        className={`ratio ${
+                            ratioState ? "on" : ratioState === null ? "" : "off"
+                        }`}
+                    >
+                        {RATIO_MENUS.map((ratioMenu, index) => (
+                            <Fragment key={ratioMenu.type}>
+                                <button
+                                    className={
+                                        ratioMode === ratioMenu.type
+                                            ? "active"
+                                            : ""
+                                    }
                                     onClick={() =>
                                         dispatch(
-                                            uploadActions.changeIndex(index),
+                                            uploadActions.changeRatioMode(
+                                                ratioMenu.type,
+                                            ),
                                         )
                                     }
-                                    onMouseDown={(
-                                        event: MouseEvent<HTMLDivElement>,
-                                    ) => galleryGrabHandler(event, index)}
-                                    onMouseMove={grabbedGalleryTranslateHandler}
-                                    onMouseUp={stopGalleryGrabbingHandler}
-                                    onMouseLeave={stopGalleryGrabbingHandler}
-                                    style={{
-                                        position: "absolute",
-                                        zIndex:
-                                            grabbedGalleryImgIndex !== null &&
-                                            grabbedGalleryImgIndex === index
-                                                ? 1
-                                                : 0,
-                                        transform: `translate3d(${calculatedGalleryImgTranslateX(
-                                            index,
-                                        )}px,0px,0px) scale(${
-                                            grabbedGalleryImgIndex === index
-                                                ? 1.2
-                                                : 1
-                                        })`,
-                                        transition:
-                                            grabbedGalleryImgIndex === index
-                                                ? "none"
-                                                : "transform 0.4s",
-                                        opacity:
-                                            grabbedGalleryImgIndex === index
-                                                ? 0.9
-                                                : 1,
-                                    }}
                                 >
-                                    <div
-                                        className="upload__galleryImg"
-                                        style={{
-                                            minWidth: `${
-                                                94 * file.imageRatio
-                                            }px`,
-                                            backgroundImage: `
-                                            linear-gradient(rgba(0, 0, 0, ${
-                                                currentIndex === index ? 0 : 0.5
-                                            }), rgba(0, 0, 0, ${
-                                                currentIndex === index ? 0 : 0.5
-                                            })),
-                                         url(${file.url})`,
-                                            backgroundPosition: "center center",
-                                            backgroundRepeat: "no-repeat",
-                                            backgroundSize: "cover",
-                                            overflow: "hidden",
-                                            transform:
-                                                file.translateX === 0 &&
-                                                file.translateY === 0 &&
-                                                file.scale === 0
-                                                    ? "none"
-                                                    : `translate3d(${
-                                                          imageRef.current
-                                                              ? (file.translateX /
-                                                                    imageRef
-                                                                        .current
-                                                                        .offsetWidth) *
-                                                                100
-                                                              : 0
-                                                      }%,${
-                                                          imageRef.current
-                                                              ? (file.translateY /
-                                                                    imageRef
-                                                                        .current
-                                                                        .offsetHeight) *
-                                                                100
-                                                              : 0
-                                                      }%,0) scale(${
-                                                          file.scale / 100 + 1
-                                                      })`,
-                                        }}
-                                    ></div>
-                                    {currentIndex === index && (
-                                        <button
-                                            className="uplaod__galleryDeleteBtn"
-                                            onClick={() => {
-                                                setHandlingMode(null);
-                                                toggleInputState("gallery");
-                                                dispatch(
-                                                    uploadActions.deleteFile(),
-                                                );
-                                            }}
-                                        >
-                                            <Delete />
-                                        </button>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                        {isGalleryScrollInLeft !== null &&
-                            !isGalleryScrollInLeft && (
-                                <button
-                                    className="upload__galleryImgs-leftArrow"
-                                    onClick={galleryLeftScrollHandler}
-                                >
-                                    <div></div>
+                                    <div>
+                                        <div>{ratioMenu.text}</div>
+                                    </div>
+                                    <div>
+                                        <ratioMenu.svgComponent
+                                            fill={
+                                                ratioMode === ratioMenu.type
+                                                    ? "white"
+                                                    : theme.font.gray
+                                            }
+                                            color={
+                                                ratioMode === ratioMenu.type
+                                                    ? "white"
+                                                    : theme.font.gray
+                                            }
+                                        />
+                                    </div>
                                 </button>
-                            )}
-                        {isGalleryScrollInRight !== null &&
-                            !isGalleryScrollInRight && (
-                                <button
-                                    className="upload__galleryImgs-rightArrow"
-                                    onClick={galleryRightScrollHandler}
-                                >
-                                    <div></div>
-                                </button>
-                            )}
-                    </div>
-
-                    <div className="upload__addBtnLayout">
-                        <button onClick={buttonClickHandler}>
-                            <PlusIcon />
-                        </button>
-                        <form
-                            encType="multipart/form-data"
-                            method="POST"
-                            role="presentation"
-                        >
-                            <input
-                                accept="image/jpeg,image/png,image/heic,image/heif"
-                                multiple={true}
-                                type="file"
-                                ref={inputRef}
-                                onChange={fileInputChangeHandler}
-                            />
-                        </form>
-                    </div>
-                    <div></div>
-                </div>
-            </div>
-            {files.length > 1 && (
-                <>
-                    {currentIndex > 0 && (
-                        <button
-                            className="upload__leftArrow"
-                            onClick={() => {
-                                setHandlingMode((prev) => {
-                                    return prev !== "first" ? null : "first";
-                                });
-                                toggleInputState(handlingMode);
-                                fixOverTranformedImage(
-                                    files[currentIndex].scale,
-                                );
-                                dispatch(uploadActions.prevIndex());
-                            }}
-                        >
-                            <LeftArrow />
-                        </button>
-                    )}
-                    {currentIndex < files.length - 1 && (
-                        <button
-                            className="upload__rightArrow"
-                            onClick={() => {
-                                setHandlingMode((prev) => {
-                                    return prev !== "first" ? null : "first";
-                                });
-                                toggleInputState(handlingMode);
-                                fixOverTranformedImage(
-                                    files[currentIndex].scale,
-                                );
-                                dispatch(uploadActions.nextIndex());
-                            }}
-                        >
-                            <RightArrow />
-                        </button>
-                    )}
-                    <div className="upload__imgDots">
-                        {files.map((file, index) => (
-                            <div
-                                key={file.url}
-                                className={`${
-                                    currentIndex === index ? "current" : ""
-                                }`}
-                            ></div>
+                                {index < RATIO_MENUS.length - 1 && <hr />}
+                            </Fragment>
                         ))}
                     </div>
-                </>
-            )}
-            <CutImgUnit
-                currentFile={files[currentIndex]}
-                ratioMode={ratioMode}
-                processedCurrentWidth={processedCurrentWidth}
-                onGrabStart={() => {
-                    setHandlingMode(null);
-                    toggleInputState(handlingMode);
-                }}
-                onFixTransform={fixOverTranformedImage}
-                ref={imageRef}
-            />
-        </StyledCut>
+                    <div
+                        className={`resize ${
+                            resizeState
+                                ? "on"
+                                : resizeState === null
+                                ? ""
+                                : "off"
+                        }`}
+                    >
+                        <div className="upload__progressClickable">
+                            <input
+                                className="upload__progress"
+                                max="100"
+                                min="0"
+                                type="range"
+                                value={files[currentIndex].scale}
+                                onChange={scaleChangeHandler}
+                                onMouseUp={() =>
+                                    fixOverTranformedImage(
+                                        files[currentIndex].scale,
+                                    )
+                                }
+                                style={{
+                                    background:
+                                        files[currentIndex].scale >= 50
+                                            ? `linear-gradient(to right, white ${
+                                                  files[currentIndex].scale
+                                              }%, black ${
+                                                  100 -
+                                                  files[currentIndex].scale
+                                              }%)`
+                                            : `linear-gradient(to left, black ${
+                                                  100 -
+                                                  files[currentIndex].scale
+                                              }%, white ${
+                                                  files[currentIndex].scale
+                                              }%)`,
+                                }}
+                            ></input>
+                        </div>
+                    </div>
+                    <div
+                        className={`gallery ${
+                            galleryState
+                                ? "on"
+                                : galleryState === null
+                                ? ""
+                                : "off"
+                        }`}
+                    >
+                        <div className="upload__galleryImgsWrapper">
+                            <div
+                                className="upload__galleryImgs"
+                                ref={gallerySliderRef}
+                                onScroll={galleryScrollHandler}
+                            >
+                                {files.map((file, index) => (
+                                    <div
+                                        className="upload__galleryImgWrapper"
+                                        key={file.url}
+                                        onClick={() =>
+                                            dispatch(
+                                                uploadActions.changeIndex(
+                                                    index,
+                                                ),
+                                            )
+                                        }
+                                        onMouseDown={(
+                                            event: MouseEvent<HTMLDivElement>,
+                                        ) => galleryGrabHandler(event, index)}
+                                        onMouseMove={
+                                            grabbedGalleryTranslateHandler
+                                        }
+                                        onMouseUp={stopGalleryGrabbingHandler}
+                                        onMouseLeave={
+                                            stopGalleryGrabbingHandler
+                                        }
+                                        style={{
+                                            position: "absolute",
+                                            zIndex:
+                                                grabbedGalleryImgIndex !==
+                                                    null &&
+                                                grabbedGalleryImgIndex === index
+                                                    ? 1
+                                                    : 0,
+                                            transform: `translate3d(${calculatedGalleryImgTranslateX(
+                                                index,
+                                            )}px,0px,0px) scale(${
+                                                grabbedGalleryImgIndex === index
+                                                    ? 1.2
+                                                    : 1
+                                            })`,
+                                            transition:
+                                                grabbedGalleryImgIndex === index
+                                                    ? "none"
+                                                    : "transform 0.4s",
+                                            opacity:
+                                                grabbedGalleryImgIndex === index
+                                                    ? 0.9
+                                                    : 1,
+                                        }}
+                                    >
+                                        <div
+                                            className="upload__galleryImg"
+                                            style={{
+                                                minWidth: `${
+                                                    94 * file.imageRatio
+                                                }px`,
+                                                backgroundImage: `
+                                                linear-gradient(rgba(0, 0, 0, ${
+                                                    currentIndex === index
+                                                        ? 0
+                                                        : 0.5
+                                                }), rgba(0, 0, 0, ${
+                                                    currentIndex === index
+                                                        ? 0
+                                                        : 0.5
+                                                })),
+                                             url(${file.url})`,
+                                                backgroundPosition:
+                                                    "center center",
+                                                backgroundRepeat: "no-repeat",
+                                                backgroundSize: "cover",
+                                                overflow: "hidden",
+                                                transform:
+                                                    file.translateX === 0 &&
+                                                    file.translateY === 0 &&
+                                                    file.scale === 0
+                                                        ? "none"
+                                                        : `translate3d(${
+                                                              imageRef.current
+                                                                  ? (file.translateX /
+                                                                        imageRef
+                                                                            .current
+                                                                            .offsetWidth) *
+                                                                    100
+                                                                  : 0
+                                                          }%,${
+                                                              imageRef.current
+                                                                  ? (file.translateY /
+                                                                        imageRef
+                                                                            .current
+                                                                            .offsetHeight) *
+                                                                    100
+                                                                  : 0
+                                                          }%,0) scale(${
+                                                              file.scale / 100 +
+                                                              1
+                                                          })`,
+                                            }}
+                                        ></div>
+                                        {currentIndex === index && (
+                                            <button
+                                                className="uplaod__galleryDeleteBtn"
+                                                onClick={() => {
+                                                    setHandlingMode(null);
+                                                    toggleInputState("gallery");
+                                                    dispatch(
+                                                        uploadActions.deleteFile(),
+                                                    );
+                                                }}
+                                            >
+                                                <Delete />
+                                            </button>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                            {isGalleryScrollInLeft !== null &&
+                                !isGalleryScrollInLeft && (
+                                    <button
+                                        className="upload__galleryImgs-leftArrow"
+                                        onClick={galleryLeftScrollHandler}
+                                    >
+                                        <div></div>
+                                    </button>
+                                )}
+                            {isGalleryScrollInRight !== null &&
+                                !isGalleryScrollInRight && (
+                                    <button
+                                        className="upload__galleryImgs-rightArrow"
+                                        onClick={galleryRightScrollHandler}
+                                    >
+                                        <div></div>
+                                    </button>
+                                )}
+                        </div>
+                        <div className="upload__addBtnLayout">
+                            <button onClick={buttonClickHandler}>
+                                <PlusIcon />
+                            </button>
+                            <form
+                                encType="multipart/form-data"
+                                method="POST"
+                                role="presentation"
+                            >
+                                <input
+                                    accept="image/jpeg,image/png,image/heic,image/heif"
+                                    multiple={true}
+                                    type="file"
+                                    ref={inputRef}
+                                    onChange={fileInputChangeHandler}
+                                />
+                            </form>
+                        </div>
+                        <div></div>
+                    </div>
+                </div>
+                {files.length > 1 && (
+                    <>
+                        {currentIndex > 0 && (
+                            <button
+                                className="upload__leftArrow"
+                                onClick={() => {
+                                    setHandlingMode((prev) => {
+                                        return prev !== "first"
+                                            ? null
+                                            : "first";
+                                    });
+                                    toggleInputState(handlingMode);
+                                    fixOverTranformedImage(
+                                        files[currentIndex].scale,
+                                    );
+                                    dispatch(uploadActions.prevIndex());
+                                }}
+                            >
+                                <LeftArrow />
+                            </button>
+                        )}
+                        {currentIndex < files.length - 1 && (
+                            <button
+                                className="upload__rightArrow"
+                                onClick={() => {
+                                    setHandlingMode((prev) => {
+                                        return prev !== "first"
+                                            ? null
+                                            : "first";
+                                    });
+                                    toggleInputState(handlingMode);
+                                    fixOverTranformedImage(
+                                        files[currentIndex].scale,
+                                    );
+                                    dispatch(uploadActions.nextIndex());
+                                }}
+                            >
+                                <RightArrow />
+                            </button>
+                        )}
+                        <div className="upload__imgDots">
+                            {files.map((file, index) => (
+                                <div
+                                    key={file.url}
+                                    className={`${
+                                        currentIndex === index ? "current" : ""
+                                    }`}
+                                ></div>
+                            ))}
+                        </div>
+                    </>
+                )}
+                <CutImgUnit
+                    currentFile={files[currentIndex]}
+                    ratioMode={ratioMode}
+                    processedCurrentWidth={processedCurrentWidth}
+                    onGrabStart={() => {
+                        setHandlingMode(null);
+                        toggleInputState(handlingMode);
+                    }}
+                    onFixTransform={fixOverTranformedImage}
+                    ref={imageRef}
+                />
+            </StyledCut>
+        </>
     );
 };
 

@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { ReactComponent as LeftArrow } from "assets/Svgs/leftArrow.svg";
 import { ReactComponent as RightArrow } from "assets/Svgs/rightArrow.svg";
 import EditCanvasUnit from "components/Common/Header/Upload/Edit/EditCanvasUnit";
+import UploadHeader from "components/Common/Header/Upload/UploadHeader";
 import React, { ChangeEvent, useMemo, useState } from "react";
 import styled from "styled-components";
 
@@ -244,139 +245,155 @@ const Edit = ({ currentWidth }: EditProps) => {
         [currentIndex, files],
     );
 
+    const excuteBeforeNextStep = () => {
+        // canvas 각 요소를 이미지로 변환
+    };
+
     return (
-        <StyledEdit>
-            <div
-                className="upload__imgCanvasLayout"
-                style={{
-                    width: processedCanvasLayoutWidth + "px",
-                    minWidth: processedCanvasLayoutWidth + "px",
-                    minHeight: processedCanvasLayoutWidth + "px",
-                }}
-            >
-                <EditCanvasUnit
-                    currentCanvasWidth={canvasSize.width}
-                    currentCanvasHeight={canvasSize.height}
-                    currentImageWidth={imgSize.width}
-                    currentImageHeight={imgSize.height}
-                    currentFile={files[currentIndex]}
-                />
-                {currentIndex > 0 && (
-                    <button
-                        className="left"
-                        onClick={() => dispatch(uploadActions.prevIndex())}
-                    >
-                        <LeftArrow />
-                    </button>
-                )}
-                {currentIndex < files.length - 1 && (
-                    <button
-                        className="right"
-                        onClick={() => dispatch(uploadActions.nextIndex())}
-                    >
-                        <RightArrow />
-                    </button>
-                )}
-            </div>
-            <div className="upload__imgEditor">
-                <div className="header">
-                    <div
-                        className={`filter ${
-                            editMode === "filter" ? "active" : ""
-                        }`}
-                        onClick={() => setEditMode("filter")}
-                    >
-                        필터
-                    </div>
-                    <div
-                        className={`adjust ${
-                            editMode === "adjust" ? "active" : ""
-                        }`}
-                        onClick={() => setEditMode("adjust")}
-                    >
-                        조정
-                    </div>
-                </div>
-                {editMode === "adjust" ? (
-                    adjustInputs.map((inputObj) => (
-                        <div
-                            key={inputObj.text}
-                            className="adjust__input"
-                            onMouseEnter={() =>
-                                setEnteredAdjustInput(inputObj.text)
-                            }
-                            onMouseLeave={() => setEnteredAdjustInput(null)}
+        <>
+            <UploadHeader excuteBeforeNextStep={excuteBeforeNextStep} />
+            <StyledEdit>
+                <div
+                    className="upload__imgCanvasLayout"
+                    style={{
+                        width: processedCanvasLayoutWidth + "px",
+                        minWidth: processedCanvasLayoutWidth + "px",
+                        minHeight: processedCanvasLayoutWidth + "px",
+                    }}
+                >
+                    <EditCanvasUnit
+                        currentCanvasWidth={canvasSize.width}
+                        currentCanvasHeight={canvasSize.height}
+                        currentImageWidth={imgSize.width}
+                        currentImageHeight={imgSize.height}
+                        currentFile={files[currentIndex]}
+                    />
+                    {currentIndex > 0 && (
+                        <button
+                            className="left"
+                            onClick={() => dispatch(uploadActions.prevIndex())}
                         >
-                            <div>
-                                <div>{inputObj.text}</div>
-                                {inputObj.value !== 0 && (
-                                    <button
-                                        className={
-                                            enteredAdjustInput === inputObj.text
-                                                ? "entered"
-                                                : ""
-                                        }
-                                        onClick={() =>
+                            <LeftArrow />
+                        </button>
+                    )}
+                    {currentIndex < files.length - 1 && (
+                        <button
+                            className="right"
+                            onClick={() => dispatch(uploadActions.nextIndex())}
+                        >
+                            <RightArrow />
+                        </button>
+                    )}
+                </div>
+                <div className="upload__imgEditor">
+                    <div className="header">
+                        <div
+                            className={`filter ${
+                                editMode === "filter" ? "active" : ""
+                            }`}
+                            onClick={() => setEditMode("filter")}
+                        >
+                            필터
+                        </div>
+                        <div
+                            className={`adjust ${
+                                editMode === "adjust" ? "active" : ""
+                            }`}
+                            onClick={() => setEditMode("adjust")}
+                        >
+                            조정
+                        </div>
+                    </div>
+                    {editMode === "adjust" ? (
+                        adjustInputs.map((inputObj) => (
+                            <div
+                                key={inputObj.text}
+                                className="adjust__input"
+                                onMouseEnter={() =>
+                                    setEnteredAdjustInput(inputObj.text)
+                                }
+                                onMouseLeave={() => setEnteredAdjustInput(null)}
+                            >
+                                <div>
+                                    <div>{inputObj.text}</div>
+                                    {inputObj.value !== 0 && (
+                                        <button
+                                            className={
+                                                enteredAdjustInput ===
+                                                inputObj.text
+                                                    ? "entered"
+                                                    : ""
+                                            }
+                                            onClick={() =>
+                                                dispatch(
+                                                    uploadActions.resetAdjustInput(
+                                                        inputObj.text,
+                                                    ),
+                                                )
+                                            }
+                                        >
+                                            재설정
+                                        </button>
+                                    )}
+                                </div>
+                                <div>
+                                    <input
+                                        type="range"
+                                        onChange={(
+                                            event: ChangeEvent<HTMLInputElement>,
+                                        ) =>
                                             dispatch(
-                                                uploadActions.resetAdjustInput(
-                                                    inputObj.text,
+                                                uploadActions.changeAdjustInput(
+                                                    {
+                                                        type: inputObj.text,
+                                                        value: Number(
+                                                            event.target.value,
+                                                        ),
+                                                    },
                                                 ),
                                             )
                                         }
-                                    >
-                                        재설정
-                                    </button>
-                                )}
-                            </div>
-                            <div>
-                                <input
-                                    type="range"
-                                    onChange={(
-                                        event: ChangeEvent<HTMLInputElement>,
-                                    ) =>
-                                        dispatch(
-                                            uploadActions.changeAdjustInput({
-                                                type: inputObj.text,
-                                                value: Number(
-                                                    event.target.value,
-                                                ),
-                                            }),
-                                        )
-                                    }
-                                    value={inputObj.value}
-                                    min={inputObj.text === "흐리게" ? 0 : -100}
-                                    max="100"
-                                    step="1"
-                                    style={{
-                                        backgroundImage:
-                                            inputObj.text !== "흐리게"
-                                                ? `linear-gradient(to right, rgb(219, 219, 219) 0%, 
+                                        value={inputObj.value}
+                                        min={
+                                            inputObj.text === "흐리게"
+                                                ? 0
+                                                : -100
+                                        }
+                                        max="100"
+                                        step="1"
+                                        style={{
+                                            backgroundImage:
+                                                inputObj.text !== "흐리게"
+                                                    ? `linear-gradient(to right, rgb(219, 219, 219) 0%, 
                                     rgb(219, 219, 219) ${Math.min(
                                         50,
                                         inputObj.value / 2 + 50,
                                     )}%, rgb(38, 38, 38) ${Math.min(
-                                                      50,
-                                                      inputObj.value / 2 + 50,
-                                                  )}%,
+                                                          50,
+                                                          inputObj.value / 2 +
+                                                              50,
+                                                      )}%,
                                      rgb(38, 38, 38)   ${Math.max(
                                          50,
                                          inputObj.value / 2 + 50,
                                      )}%, rgb(219, 219, 219)  ${Math.max(
-                                                      50,
-                                                      inputObj.value / 2 + 50,
-                                                  )}%, rgb(219, 219, 219) 100%)`
-                                                : `linear-gradient(to right, rgb(38, 38, 38) 0%, rgb(38, 38, 38) ${inputObj.value}%, rgb(219, 219, 219) ${inputObj.value}%, rgb(219, 219, 219) 100%)`,
-                                    }}
-                                />
-                                <div>{inputObj.value}</div>
+                                                          50,
+                                                          inputObj.value / 2 +
+                                                              50,
+                                                      )}%, rgb(219, 219, 219) 100%)`
+                                                    : `linear-gradient(to right, rgb(38, 38, 38) 0%, rgb(38, 38, 38) ${inputObj.value}%, rgb(219, 219, 219) ${inputObj.value}%, rgb(219, 219, 219) 100%)`,
+                                        }}
+                                    />
+                                    <div>{inputObj.value}</div>
+                                </div>
                             </div>
-                        </div>
-                    ))
-                ) : (
-                    <div>hello</div>
-                )}
-            </div>
-        </StyledEdit>
+                        ))
+                    ) : (
+                        <div>hello</div>
+                    )}
+                </div>
+            </StyledEdit>
+        </>
     );
 };
 
