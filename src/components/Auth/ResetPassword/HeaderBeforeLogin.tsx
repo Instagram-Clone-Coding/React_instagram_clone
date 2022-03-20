@@ -1,6 +1,7 @@
 import navLogo from "assets/Images/nav-logo.png";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import Button from "styles/UI/Button";
 
 const Container = styled.div`
     header {
@@ -33,6 +34,8 @@ const Container = styled.div`
             }
 
             .logo {
+                display: flex;
+                justify-content: flex-start;
                 opacity: 1;
                 transition: opacity 0.1s ease-out;
             }
@@ -42,12 +45,31 @@ const Container = styled.div`
         }
     }
 
+    .other-account-login {
+        display: flex;
+        justify-content: flex-end;
+        button {
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 24px;
+        }
+    }
+
+    .login-signup {
+        display: flex;
+        justify-content: flex-end;
+    }
+
     .fake-header {
         height: 44px;
     }
 `;
 
-export default function HeaderBeforeLogin() {
+export default function HeaderBeforeLogin({
+    currentPage,
+}: {
+    currentPage?: "sentResetPasswordEmail" | "resetPassword";
+}) {
     return (
         <Container>
             <header>
@@ -63,7 +85,33 @@ export default function HeaderBeforeLogin() {
                             </div>
                         </Link>
                     </div>
-                    <div className="empty"></div>
+                    <div className="navigator-menu">
+                        {currentPage === "sentResetPasswordEmail" && (
+                            <div className="other-account-login">
+                                <Link to="/accounts/login">
+                                    <button>다른 계정으로 로그인</button>
+                                </Link>
+                            </div>
+                        )}
+                        {currentPage === "resetPassword" && (
+                            <>
+                                <div className="search-bar"></div>
+                                <div className="login-signup">
+                                    <Link to="/accounts/login">
+                                        <Button>로그인</Button>
+                                    </Link>
+                                    <Link to="/accounts/emailsignup">
+                                        <Button
+                                            bgColor="#ffffff"
+                                            color="#0095F6"
+                                        >
+                                            회원가입
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </>
+                        )}
+                    </div>
                 </div>
             </header>
             <div className="fake-header" />
