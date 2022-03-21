@@ -56,7 +56,7 @@ const getProcessedUserEmail = (userEmail: string): string => {
     return userData + "@" + emailAddress;
 };
 
-export default function InformSendingEmail() {
+export default function InformSentEmail() {
     const userEmail = useAppSelector((state) => state.auth.resetPassword.email);
     const processedUserEmail = userEmail && getProcessedUserEmail(userEmail);
     const dispatch = useAppDispatch();

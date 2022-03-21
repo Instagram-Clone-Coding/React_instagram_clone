@@ -92,7 +92,7 @@ const image: Common.ImageProps = {
     url: sprite,
 };
 
-export default function ResetPasswordForm() {
+export default function ResetPasswordEmailRequestForm() {
     const [inputProps, isValid, isFocus] = useInput(
         "",
         undefined,

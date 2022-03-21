@@ -1,8 +1,8 @@
 import { useAppSelector } from "app/store/Hooks";
 import styled from "styled-components";
 import HeaderBeforeLogin from "./HeaderBeforeLogin";
-import InformSendingEmail from "./InformSendingEmail";
-import ResetPasswordForm from "./ResetPasswordForm";
+import InformSentEmail from "./InformSentEmail";
+import ResetPasswordEmailRequestForm from "./ResetPasswordEmailRequestForm";
 
 const Container = styled.div`
     height: 100vh;
@@ -16,12 +16,12 @@ export default function ResetPassword() {
             {sentEmail ? (
                 <>
                     <HeaderBeforeLogin currentPage="sentResetPasswordEmail" />
-                    <InformSendingEmail />
+                    <InformSentEmail />
                 </>
             ) : (
                 <>
                     <HeaderBeforeLogin />
-                    <ResetPasswordForm />
+                    <ResetPasswordEmailRequestForm />
                 </>
             )}
         </Container>
