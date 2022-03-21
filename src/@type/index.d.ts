@@ -260,6 +260,8 @@ declare module UploadType {
     }
     interface FileDragAndDropProps {
         imageRatio: number;
+        width: number;
+        height: number;
         url: string;
     }
     interface FileCutProps extends TranslateProps {

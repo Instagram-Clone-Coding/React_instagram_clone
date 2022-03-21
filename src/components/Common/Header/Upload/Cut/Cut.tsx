@@ -561,6 +561,8 @@ const Cut = ({ currentWidth }: CutProps) => {
                     dispatch(
                         uploadActions.addFile({
                             url: img.src,
+                            width: img.width,
+                            height: img.height,
                             imageRatio: img.width / img.height,
                         }),
                     );

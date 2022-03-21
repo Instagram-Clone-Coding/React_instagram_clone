@@ -121,6 +121,71 @@ interface EditProps {
 
 const MIN_WIDTH = 348;
 
+const getCanvasSize = (
+    ratioMode: UploadType.RatioType,
+    processedCanvasLayoutWidth: number,
+) => {
+    switch (ratioMode) {
+        case "square":
+            return {
+                width: processedCanvasLayoutWidth,
+                height: processedCanvasLayoutWidth,
+            };
+        case "original":
+            return {
+                width: processedCanvasLayoutWidth,
+                height: processedCanvasLayoutWidth / 1.93,
+            };
+        case "thin":
+            return {
+                width: processedCanvasLayoutWidth * 0.8,
+                height: processedCanvasLayoutWidth,
+            };
+        case "fat":
+            return {
+                width: processedCanvasLayoutWidth,
+                height: (processedCanvasLayoutWidth * 9) / 16,
+            };
+    }
+};
+
+// 기존 함수를 제거하고, Canvas에서 이미지를 뽑아내었을 때 원본 이미지의 해상도를 유지하기 위해 Canvas width, height를 정밀하게 정하는 함수를 작성했습니다.
+export const getNewImageSizeBasedOnOriginal = (
+    ratioMode: UploadType.RatioType,
+    currentFile: UploadType.FileProps,
+) => {
+    const { width, height, imageRatio } = currentFile;
+    const scaledWidth = width / (currentFile.scale / 100 + 1);
+    const scaledHeight = height / (currentFile.scale / 100 + 1);
+    switch (ratioMode) {
+        case "thin":
+            if (imageRatio > 1) {
+                return getCanvasSize(ratioMode, scaledHeight);
+            } else {
+                return {
+                    width: scaledWidth,
+                    height: (scaledWidth * 5) / 4,
+                };
+            }
+        case "original":
+            return { width: scaledWidth, height: scaledWidth / 1.93 };
+        case "fat":
+            return { width: scaledWidth, height: (scaledWidth * 9) / 16 };
+        case "square":
+            if (imageRatio > 1) {
+                return {
+                    width: scaledHeight,
+                    height: scaledHeight,
+                };
+            } else {
+                return {
+                    width: scaledWidth,
+                    height: scaledWidth,
+                };
+            }
+    }
+};
+
 const Edit = ({ currentWidth }: EditProps) => {
     const files = useAppSelector((state) => state.upload.files);
     const ratioMode = useAppSelector((state) => state.upload.ratioMode);
@@ -135,102 +200,10 @@ const Edit = ({ currentWidth }: EditProps) => {
         () => (currentWidth <= MIN_WIDTH ? MIN_WIDTH : currentWidth),
         [currentWidth],
     );
-    const canvasSize = useMemo(() => {
-        switch (ratioMode) {
-            case "square":
-                return {
-                    width: processedCanvasLayoutWidth,
-                    height: processedCanvasLayoutWidth,
-                };
-            case "original":
-                return {
-                    width: processedCanvasLayoutWidth,
-                    height: processedCanvasLayoutWidth / 1.93,
-                };
-            case "thin":
-                return {
-                    width: processedCanvasLayoutWidth * 0.8,
-                    height: processedCanvasLayoutWidth,
-                };
-            case "fat":
-                return {
-                    width: processedCanvasLayoutWidth,
-                    height: (processedCanvasLayoutWidth * 9) / 16,
-                };
-        }
-    }, [processedCanvasLayoutWidth, ratioMode]);
-
-    const imgSize = useMemo(() => {
-        const currentFile = files[currentIndex];
-        if (ratioMode !== "square") {
-            switch (ratioMode) {
-                case "thin":
-                    if (currentFile.imageRatio > 1) {
-                        return {
-                            width:
-                                processedCanvasLayoutWidth *
-                                currentFile.imageRatio *
-                                (currentFile.scale / 100 + 1),
-                            height:
-                                processedCanvasLayoutWidth *
-                                (currentFile.scale / 100 + 1),
-                        };
-                    } else {
-                        return {
-                            width:
-                                processedCanvasLayoutWidth *
-                                0.8 *
-                                (currentFile.scale / 100 + 1),
-                            height:
-                                ((processedCanvasLayoutWidth * 0.8) /
-                                    currentFile.imageRatio) *
-                                (currentFile.scale / 100 + 1),
-                        };
-                    }
-                case "original":
-                    return {
-                        width:
-                            processedCanvasLayoutWidth *
-                            (currentFile.scale / 100 + 1),
-                        height:
-                            (processedCanvasLayoutWidth /
-                                currentFile.imageRatio) *
-                            (currentFile.scale / 100 + 1),
-                    };
-                case "fat":
-                    return {
-                        width:
-                            processedCanvasLayoutWidth *
-                            (currentFile.scale / 100 + 1),
-                        height:
-                            (processedCanvasLayoutWidth /
-                                currentFile.imageRatio) *
-                            (currentFile.scale / 100 + 1),
-                    };
-            }
-        } else {
-            if (currentFile.imageRatio > 1) {
-                return {
-                    width:
-                        processedCanvasLayoutWidth *
-                        currentFile.imageRatio *
-                        (currentFile.scale / 100 + 1),
-                    height:
-                        processedCanvasLayoutWidth *
-                        (currentFile.scale / 100 + 1),
-                };
-            } else {
-                return {
-                    width:
-                        processedCanvasLayoutWidth *
-                        (currentFile.scale / 100 + 1),
-                    height:
-                        (processedCanvasLayoutWidth / currentFile.imageRatio) *
-                        (currentFile.scale / 100 + 1),
-                };
-            }
-        }
-    }, [processedCanvasLayoutWidth, currentIndex, files, ratioMode]);
+    const canvasSize = useMemo(
+        () => getCanvasSize(ratioMode, processedCanvasLayoutWidth),
+        [processedCanvasLayoutWidth, ratioMode],
+    );
 
     const adjustInputs: {
         text: UploadType.AdjustInputTextType;
@@ -247,6 +220,64 @@ const Edit = ({ currentWidth }: EditProps) => {
 
     const excuteBeforeNextStep = () => {
         // canvas 각 요소를 이미지로 변환
+        files.forEach((file) => {
+            const blobImageSize = getNewImageSizeBasedOnOriginal(
+                ratioMode,
+                file,
+            );
+            const virtualCanvas = document.createElement("canvas");
+            virtualCanvas.width = blobImageSize.width;
+            virtualCanvas.height = blobImageSize.height;
+            const ctx = virtualCanvas.getContext("2d");
+            if (ctx) {
+                const img = new Image(
+                    blobImageSize.width,
+                    blobImageSize.height,
+                ); // url만으로 canvas에 이미지를 그릴 수 없습니다. 생성자 함수를 통해 새로운 img 객체를 만들어줍니다.
+                img.src = file.url;
+                img.onload = () => {
+                    ctx.clearRect(
+                        0,
+                        0,
+                        virtualCanvas.width,
+                        virtualCanvas.height,
+                    );
+                    ctx.filter = `brightness(${
+                        file.brightness / 3 + 100
+                    }%) contrast(${file.contrast / 3 + 100}%) saturate(${
+                        file.saturate + 100
+                    }%)
+                blur(${file.blur / 50}px)
+                `;
+                    ctx.drawImage(
+                        img,
+                        -(
+                            blobImageSize.width / 2 -
+                            virtualCanvas.width / 2 -
+                            file.translateX
+                        ),
+                        -(
+                            blobImageSize.height / 2 -
+                            virtualCanvas.height / 2 -
+                            file.translateY
+                        ),
+                        img.width,
+                        img.height,
+                    );
+                    virtualCanvas.toBlob(function (blob) {
+                        var newImg = document.createElement("img"),
+                            url = URL.createObjectURL(blob);
+                        newImg.onload = function () {
+                            console.log(url);
+                            // no longer need to read the blob so it's revoked
+                            // URL.revokeObjectURL(url);
+                        };
+                        newImg.src = url;
+                        document.body.appendChild(newImg);
+                    });
+                };
+            }
+        });
     };
 
     return (
@@ -264,8 +295,6 @@ const Edit = ({ currentWidth }: EditProps) => {
                     <EditCanvasUnit
                         currentCanvasWidth={canvasSize.width}
                         currentCanvasHeight={canvasSize.height}
-                        currentImageWidth={imgSize.width}
-                        currentImageHeight={imgSize.height}
                         currentFile={files[currentIndex]}
                     />
                     {currentIndex > 0 && (
