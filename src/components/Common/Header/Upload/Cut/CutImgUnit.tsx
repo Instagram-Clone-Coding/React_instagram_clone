@@ -131,6 +131,9 @@ const CutImgUnit = forwardRef<HTMLDivElement, CutImgUnitProps>(
                     currentFile.imageRatio,
                     ratioMode,
                 );
+                const scaledMinWidth = minWidth * (currentFile.scale / 100 + 1);
+                const scaledMinHeight =
+                    minHeight * (currentFile.scale / 100 + 1);
                 const gapX = screenX - currentFile.grabbedPosition.x;
                 const gapY = screenY - currentFile.grabbedPosition.y;
                 // setTransformX(gapX + transformX);
@@ -138,11 +141,11 @@ const CutImgUnit = forwardRef<HTMLDivElement, CutImgUnitProps>(
                 dispatch(
                     uploadActions.startTranslate({
                         translateX:
-                            (gapX + currentFile.translateX * minWidth) /
-                            minWidth,
+                            (gapX + currentFile.translateX * scaledMinWidth) /
+                            scaledMinWidth,
                         translateY:
-                            (gapY + currentFile.translateY * minHeight) /
-                            minHeight,
+                            (gapY + currentFile.translateY * scaledMinHeight) /
+                            scaledMinHeight,
                     }),
                 );
             },
@@ -154,6 +157,7 @@ const CutImgUnit = forwardRef<HTMLDivElement, CutImgUnitProps>(
                 processedCurrentWidth,
                 currentFile.imageRatio,
                 ratioMode,
+                currentFile.scale,
             ], // 여기서 transform을 deps로 넣으면 엄청 중첩되서 빠르게 움직여버림
         );
 

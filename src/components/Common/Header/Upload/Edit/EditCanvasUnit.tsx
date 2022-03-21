@@ -23,10 +23,7 @@ const EditCanvasUnit = ({
         const canvas = canvasRef.current;
         const context = canvas.getContext("2d");
         if (context) {
-            const img = new Image(
-                currentFile.width * (currentFile.scale / 100 + 1),
-                currentFile.height * (currentFile.scale / 100 + 1),
-            ); // url만으로 canvas에 이미지를 그릴 수 없습니다. 생성자 함수를 통해 새로운 img 객체를 만들어줍니다.
+            const img = new Image(currentFile.width, currentFile.height); // url만으로 canvas에 이미지를 그릴 수 없습니다. 생성자 함수를 통해 새로운 img 객체를 만들어줍니다.
             img.src = currentFile.url;
             img.onload = () => {
                 context.clearRect(0, 0, canvas.width, canvas.height);
@@ -40,37 +37,21 @@ const EditCanvasUnit = ({
                 }%)
                 blur(${currentFile.blur / 50}px)
                 `;
-                // context.drawImage(
-                //     img,
-                //     -(
-                //         currentImageWidth / 2 -
-                //         currentCanvasWidth / 2 -
-                //         currentFile.translateX
-                //     ),
-                //     -(
-                //         currentImageHeight / 2 -
-                //         currentCanvasHeight / 2 -
-                //         currentFile.translateY
-                //     ),
-                //     img.width,
-                //     img.height,
-                // );
+                console.log(img.height, canvas.height);
                 context.drawImage(
                     img,
+                    (img.width - canvas.width) / 2 -
+                        (img.width * currentFile.translateX) / // Cut step에서 scale 값 때문에 발생한 translate 오차
+                            (currentFile.scale / 100 + 1),
+                    (img.height - canvas.height) / 2 -
+                        (img.height * currentFile.translateY) / // Cut step에서 scale 값 때문에 발생한 translate 오차
+                            (currentFile.scale / 100 + 1),
+                    canvas.width,
+                    canvas.height,
                     0,
                     0,
-                    // -(
-                    //     currentImageWidth / 2 -
-                    //     currentCanvasWidth / 2 -
-                    //     currentFile.translateX
-                    // ),
-                    // -(
-                    //     currentImageHeight / 2 -
-                    //     currentCanvasHeight / 2 -
-                    //     currentFile.translateY
-                    // ),
-                    img.width,
-                    img.height,
+                    canvas.width,
+                    canvas.height,
                 );
                 // 각각의 픽셀에 필터 준비
                 // const imageData = context.getImageData(
@@ -91,8 +72,8 @@ const EditCanvasUnit = ({
     }, [
         currentCanvasWidth,
         currentCanvasHeight,
-        // currentFile.translateX,
-        // currentFile.translateY,
+        currentFile.translateX,
+        currentFile.translateY,
         currentFile.scale,
         currentFile.url,
         currentFile.blur,
