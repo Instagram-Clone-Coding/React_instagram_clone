@@ -14,12 +14,25 @@ function App() {
     useEffect(() => {
         const reIssueToken = async () => {
             try {
-                const { data, message }: AuthType.Token =
-                    await customAxios.post(`/reissue`);
+                const {
+                    data: { data, message },
+                }: {
+                    data: AuthType.Token;
+                } = await customAxios.post(`/reissue`);
+                console.log(`토큰 재발급 응답값: ${data}`);
+
                 if (data) {
                     authorizedCustomAxios.defaults.headers.common[
                         `Authorization`
                     ] = `${data.type} ${data.accessToken}`;
+                    console.log(
+                        `defaults headers로 accessToken 저장한 후, 
+                        저장된 값:${
+                            authorizedCustomAxios.defaults.headers.common[
+                                `Authorization`
+                            ]
+                        }`,
+                    );
                     dispatch(authAction.login());
                 } else if (
                     message === INVALID_TOKEN_MESSAGE ||
