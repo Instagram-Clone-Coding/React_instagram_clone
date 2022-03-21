@@ -84,6 +84,55 @@ const getRatioCalculatedBoxHeight = (
             return currentWidth;
     }
 };
+
+export const getProcessedMinSize = (
+    processedCurrentWidth: number,
+    imageRatio: number,
+    ratioMode: UploadType.RatioType,
+): {
+    minWidth: number;
+    minHeight: number;
+} => {
+    // const imageRatio = currentFile.imageRatio;
+    if (ratioMode !== "square") {
+        switch (ratioMode) {
+            case "thin":
+                if (imageRatio > 1) {
+                    return {
+                        minWidth: processedCurrentWidth * imageRatio,
+                        minHeight: processedCurrentWidth,
+                    };
+                } else {
+                    return {
+                        minWidth: processedCurrentWidth * 0.8,
+                        minHeight: (processedCurrentWidth * 0.8) / imageRatio,
+                    };
+                }
+            case "original":
+                return {
+                    minWidth: processedCurrentWidth,
+                    minHeight: processedCurrentWidth / imageRatio,
+                };
+            case "fat":
+                return {
+                    minWidth: processedCurrentWidth,
+                    minHeight: processedCurrentWidth / imageRatio,
+                };
+        }
+    } else {
+        if (imageRatio > 1) {
+            return {
+                minWidth: processedCurrentWidth * imageRatio,
+                minHeight: processedCurrentWidth,
+            };
+        } else {
+            return {
+                minWidth: processedCurrentWidth,
+                minHeight: processedCurrentWidth / imageRatio,
+            };
+        }
+    }
+};
 interface StyledCutProps {
     url: string;
     processedCurrentWidth: number;
@@ -491,25 +540,35 @@ const Cut = ({ currentWidth }: CutProps) => {
     const fixOverTranformedImage = useCallback(
         (scale: number) => {
             if (!imageRef.current) return;
-            const widthGap =
+            const { minWidth, minHeight } = getProcessedMinSize(
+                processedCurrentWidth,
+                files[currentIndex].imageRatio,
+                ratioMode,
+            );
+            const widthGapRatio =
                 (imageRef.current.offsetWidth * (scale / 100 + 1) -
                     getRatioCalculatedBoxWidth(
                         ratioMode,
                         processedCurrentWidth,
                     )) /
-                2;
-            const heightGap =
+                2 /
+                minWidth;
+            const heightGapRatio =
                 (imageRef.current.offsetHeight * (scale / 100 + 1) -
                     getRatioCalculatedBoxHeight(
                         ratioMode,
                         processedCurrentWidth,
                     )) /
-                2;
+                2 /
+                minHeight;
             dispatch(
-                uploadActions.fixOverTranslatedImg({ widthGap, heightGap }),
+                uploadActions.fixOverTranslatedImg({
+                    widthGapRatio,
+                    heightGapRatio,
+                }),
             );
         },
-        [processedCurrentWidth, ratioMode, dispatch],
+        [processedCurrentWidth, ratioMode, dispatch, currentIndex, files],
     );
 
     const toggleInputState = useCallback((type: HandlingType) => {

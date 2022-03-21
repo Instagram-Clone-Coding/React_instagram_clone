@@ -105,27 +105,30 @@ const uploadSlice = createSlice({
         },
         fixOverTranslatedImg: (
             state,
-            action: PayloadAction<{ widthGap: number; heightGap: number }>,
+            action: PayloadAction<{
+                widthGapRatio: number;
+                heightGapRatio: number;
+            }>,
         ) => {
             // 객체 형태로 하면 최신 "값"을 가져오지 못함
-            const { widthGap, heightGap } = action.payload;
+            const { widthGapRatio, heightGapRatio } = action.payload;
             const currentFile = state.files[state.currentIndex];
-            if (widthGap === 0) {
+            if (widthGapRatio === 0) {
                 currentFile.translateX = 0;
             } else {
-                if (currentFile.translateX > widthGap) {
-                    currentFile.translateX = widthGap;
-                } else if (currentFile.translateX < -widthGap) {
-                    currentFile.translateX = -widthGap;
+                if (currentFile.translateX > widthGapRatio) {
+                    currentFile.translateX = widthGapRatio;
+                } else if (currentFile.translateX < -widthGapRatio) {
+                    currentFile.translateX = -widthGapRatio;
                 }
             }
-            if (heightGap === 0) {
+            if (heightGapRatio === 0) {
                 currentFile.translateY = 0;
             } else {
-                if (currentFile.translateY > heightGap) {
-                    currentFile.translateY = heightGap;
-                } else if (currentFile.translateY < -heightGap) {
-                    currentFile.translateY = -heightGap;
+                if (currentFile.translateY > heightGapRatio) {
+                    currentFile.translateY = heightGapRatio;
+                } else if (currentFile.translateY < -heightGapRatio) {
+                    currentFile.translateY = -heightGapRatio;
                 }
             }
         },

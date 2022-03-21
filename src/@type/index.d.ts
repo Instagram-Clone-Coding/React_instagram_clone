@@ -254,6 +254,8 @@ declare module UploadType {
         x: number;
         y: number;
     }
+
+    // 퍼센트 값으로 변경
     interface TranslateProps {
         translateX: number;
         translateY: number;
