@@ -351,6 +351,7 @@ declare module Profile {
         | "follower"
         | "unFollow"
         | "cut"
+        | "block"
         | null;
     type currentCategoryType = "uploaded" | "tagged" | "saved";
 }

@@ -1,3 +1,5 @@
+import { selectModal } from "app/store/ducks/profile/profileSlice";
+import { useAppDispatch } from "app/store/Hooks";
 import React from "react";
 import styled from "styled-components";
 import ModalCard from "styles/UI/ModalCard";
@@ -31,6 +33,7 @@ interface UserActionModalProps {
 }
 
 const UserActionModal = ({ onModalOn, onModalOff }: UserActionModalProps) => {
+    const dispatch = useAppDispatch();
     return (
         <ModalCard
             modalType="withBackDrop"
@@ -41,7 +44,7 @@ const UserActionModal = ({ onModalOn, onModalOff }: UserActionModalProps) => {
                 <div
                     className="articleMenuModal-report"
                     onClick={() => {
-                        console.log("차단");
+                        dispatch(selectModal("block"));
                     }}
                 >
                     차단

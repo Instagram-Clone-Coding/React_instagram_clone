@@ -1,26 +1,26 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import StoryCircle from "components/Common/StoryCircle";
-import { Link, useHistory, useParams } from "react-router-dom";
-import { ReactComponent as SettingSvg } from "assets/Svgs/setting.svg";
-import { ReactComponent as ThreeDots } from "assets/Svgs/threeDots.svg";
-import Button from "styles/UI/Button/Button";
-import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { makeRoom } from "app/store/ducks/direct/DirectThunk";
 import {
     selectModal,
     setUnFollowSelectedUser,
 } from "app/store/ducks/profile/profileSlice";
-import UserActionModal from "../Modals/UserActionModal";
-import SettingModal from "../Modals/SettingModal";
-import FollowerModal from "../Modals/FollowerModal";
-import sprite from "assets/Images/sprite5.png";
-import ImageSprite from "../../Common/ImageSprite";
-import UnFollowModal from "../Modals/UnFollowModal";
-import { authorizedCustomAxios } from "customAxios";
 import { lookUpUserProfile } from "app/store/ducks/profile/profileThunk";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import sprite from "assets/Images/sprite5.png";
+import { ReactComponent as SettingSvg } from "assets/Svgs/setting.svg";
+import { ReactComponent as ThreeDots } from "assets/Svgs/threeDots.svg";
 import Loading from "components/Common/Loading";
-import { makeRoom } from "app/store/ducks/direct/DirectThunk";
-import { selectView } from "app/store/ducks/direct/DirectSlice";
+import BlockModal from "components/Common/Modal/BlockModal";
+import StoryCircle from "components/Common/StoryCircle";
+import { authorizedCustomAxios } from "customAxios";
+import React, { useState } from "react";
+import { Link, useHistory, useParams } from "react-router-dom";
+import styled from "styled-components";
+import Button from "styles/UI/Button/Button";
+import ImageSprite from "../../Common/ImageSprite";
+import FollowerModal from "../Modals/FollowerModal";
+import SettingModal from "../Modals/SettingModal";
+import UnFollowModal from "../Modals/UnFollowModal";
+import UserActionModal from "../Modals/UserActionModal";
 
 interface ProfileHeaderContainerProps {
     me: boolean;
@@ -323,6 +323,18 @@ const ProfileHeader = ({}: ProfileHeaderProps) => {
                         dispatch(selectModal(null));
                     }}
                     cut={false}
+                />
+            )}
+
+            {modal === "block" && (
+                <BlockModal
+                    onModalOn={() => {
+                        dispatch(selectModal("block"));
+                    }}
+                    onModalOff={() => {
+                        dispatch(selectModal(null));
+                    }}
+                    blockMemberUsername={username}
                 />
             )}
         </ProfileHeaderContainer>
