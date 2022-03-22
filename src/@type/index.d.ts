@@ -92,11 +92,13 @@ declare module AxiosType {
 }
 
 declare module AuthType {
-    interface Token extends AxiosType.ResponseType {
-        data: {
-            type: string;
-            accessToken: string;
-        };
+    interface Token {
+        type: string;
+        accessToken: string;
+    }
+
+    interface TokenResponse extends AxiosType.ResponseType {
+        data: AuthType.Token;
     }
 
     interface UserInfo {

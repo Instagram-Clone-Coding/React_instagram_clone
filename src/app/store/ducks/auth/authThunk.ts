@@ -9,11 +9,13 @@ export const signIn = createAsyncThunk<AuthType.Token, SignInRequestType>(
     "auth/signIn",
     async (payload, ThunkOptions) => {
         try {
-            const response = await customAxios.post(`/login`, {
+            const {
+                data: { data },
+            } = await customAxios.post(`/login`, {
                 password: payload.password,
                 username: payload.username,
             });
-            return response.data;
+            return data;
         } catch (error) {
             if (!window.navigator.onLine) {
                 throw ThunkOptions.rejectWithValue(`네트워크 연결 확인하세요`);

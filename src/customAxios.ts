@@ -26,18 +26,16 @@ export const checkToken = async (config: AxiosRequestConfig) => {
     const decode = jwt.decode(accessToken);
     const nowDate = new Date().getTime() / 1000;
 
-    console.log(accessToken);
-
     // 토큰 만료시간이 지났다면 !authorizedCustomAxios.defaults.headers
     if (decode.exp < nowDate) {
         try {
-            const { data, message }: AuthType.Token = await customAxios.post(
-                `/reissue`,
-            );
+            const {
+                data: { data, message },
+            }: {
+                data: AuthType.TokenResponse;
+            } = await customAxios.post(`/reissue`);
             if (data) {
-                authorizedCustomAxios.defaults.headers.common[
-                    `Authorization`
-                ] = `${data.type} ${data.accessToken}`;
+                setAccessTokenInAxiosHeaders(data);
                 if (config.headers) {
                     config.headers[
                         `Authorization`
@@ -56,13 +54,10 @@ export const checkToken = async (config: AxiosRequestConfig) => {
     return config; // 이거 실패 시, isLogin = false로 해서 화면 로그인으로
 };
 
-//  다른사람들은 어디 두는지 알아보기 **
-export const saveToken = (token: AuthType.Token) => {
-    const { type, accessToken } = token.data;
-
+export const setAccessTokenInAxiosHeaders = (token: AuthType.Token) => {
     authorizedCustomAxios.defaults.headers.common[
         `Authorization`
-    ] = `${type} ${accessToken}`;
+    ] = `${token.type} ${token.accessToken}`;
 };
 
 authorizedCustomAxios.interceptors.request.use(checkToken);

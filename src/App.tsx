@@ -1,6 +1,6 @@
 import { authAction } from "app/store/ducks/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import { authorizedCustomAxios, customAxios } from "customAxios";
+import { customAxios, setAccessTokenInAxiosHeaders } from "customAxios";
 import InstagramLoading from "InstagramLoading";
 import { useEffect } from "react";
 import Routes from "Routes";
@@ -14,12 +14,13 @@ function App() {
     useEffect(() => {
         const reIssueToken = async () => {
             try {
-                const { data, message }: AuthType.Token =
-                    await customAxios.post(`/reissue`);
+                const {
+                    data: { data, message },
+                }: {
+                    data: AuthType.TokenResponse;
+                } = await customAxios.post(`/reissue`);
                 if (data) {
-                    authorizedCustomAxios.defaults.headers.common[
-                        `Authorization`
-                    ] = `${data.type} ${data.accessToken}`;
+                    setAccessTokenInAxiosHeaders(data);
                     dispatch(authAction.login());
                 } else if (
                     message === INVALID_TOKEN_MESSAGE ||
@@ -33,7 +34,7 @@ function App() {
             }
         };
         reIssueToken().then(() => {
-            dispatch(authAction.finishRefreshTokenChecking());
+            dispatch(authAction.finishRefreshTokenChecking()); // finally로 빼기
         });
         // return () => {};
     }, [dispatch]);

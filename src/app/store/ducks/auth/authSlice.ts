@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { saveToken } from "customAxios";
 import { FormState } from "./authThunk.type";
 import { getUserInfo, signIn } from "./authThunk";
+import { setAccessTokenInAxiosHeaders } from "customAxios";
 
 export interface AuthStateProps {
     isLogin: boolean;
@@ -88,7 +88,7 @@ const authSlice = createSlice({
             .addCase(signIn.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isLogin = true;
-                saveToken(action.payload);
+                setAccessTokenInAxiosHeaders(action.payload);
             })
             .addCase(signIn.rejected, (state, action) => {
                 state.isAsyncReject = true;
