@@ -159,7 +159,6 @@ const ProfileHeader = ({}: ProfileHeaderProps) => {
         (state) => state.profile.memberProfile as Profile.MemberProfileProps,
     );
     const isLoading = useAppSelector((state) => state.direct.isLoading);
-    console.log(isLoading);
 
     const modal = useAppSelector((state) => state.profile.modal);
     const [isFollowerModal, setIsFollowerModal] = useState<boolean>(true); // 기본값은 팔로워 모달입니다. false 라면 팔로우 입니다
@@ -323,6 +322,7 @@ const ProfileHeader = ({}: ProfileHeaderProps) => {
                     onModalOff={() => {
                         dispatch(selectModal(null));
                     }}
+                    cut={false}
                 />
             )}
         </ProfileHeaderContainer>

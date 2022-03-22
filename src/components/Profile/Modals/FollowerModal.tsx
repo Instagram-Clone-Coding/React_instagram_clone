@@ -4,7 +4,13 @@ import ModalCard from "styles/UI/ModalCard";
 import CloseSVG from "assets/Svgs/CloseSVG";
 import { authorizedCustomAxios } from "customAxios";
 import { useParams } from "react-router-dom";
-import Loading from "../../Common/Loading";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import UnFollowModal from "./UnFollowModal";
+import {
+    selectModal,
+    setUnFollowSelectedUser,
+} from "app/store/ducks/profile/profileSlice";
+import Loading from "components/Common/Loading";
 
 const FollowerModalInner = styled.div`
     padding-top: 30px;
@@ -91,10 +97,12 @@ const FollowerModal = ({
     onModalOff,
     isFollowerModal,
 }: FollowerModalProps) => {
-    const { username } = useParams<{ username: string }>();
+    const dispatch = useAppDispatch();
+    const { username } = useParams<{ username: string }>(); // 현재 프로필 페이지의 주인
+    const userInfo = useAppSelector((state) => state.auth.userInfo); // 로그인한사람의 정보
     const [people, setPeople] = useState<Profile.personType[]>([]);
     const [isFollowLoading, setIsFollowLoading] = useState<boolean>(false);
-
+    const [openCutModal, setOpenCutModal] = useState<boolean>(false);
     const getPeople = async () => {
         const { data } = await authorizedCustomAxios.get(
             `/${username}/${isFollowerModal ? "followers" : "following"}`,
@@ -110,6 +118,90 @@ const FollowerModal = ({
         await authorizedCustomAxios.post(`/${username}/follow`);
         setIsFollowLoading(false);
     };
+
+    // 팔로워 모달 / 팔로우 모달 모두 오른쪽의 버튼에 어떤 액션이 나올지
+    const renderRightButton = (person: Profile.personType) => {
+        // 나의 프로필 페이지일 경우
+        if (userInfo?.memberUsername === username) {
+            // 팔로워 모달일 경우
+            if (isFollowerModal) {
+                return (
+                    <button
+                        className="action-button"
+                        onClick={() => {
+                            dispatch(
+                                setUnFollowSelectedUser({
+                                    imageUrl: person.member.image.imageUrl,
+                                    username: person.member.username,
+                                }),
+                            );
+                            setOpenCutModal(true);
+                        }}
+                    >
+                        삭제
+                    </button>
+                );
+            } else {
+                // 팔로우 모달일 경우 내가 팔로우 한 사람들만 나온다.
+                return (
+                    <button
+                        className="action-button"
+                        onClick={() => {
+                            dispatch(
+                                setUnFollowSelectedUser({
+                                    imageUrl: person.member.image.imageUrl,
+                                    username: person.member.username,
+                                }),
+                            );
+                            dispatch(selectModal("unFollow"));
+                        }}
+                    >
+                        팔로잉
+                    </button>
+                );
+            }
+        } else {
+            // 내가 아닌사람의 프로필 페이지일 경우
+            // 팔로워 모달 팔로우 모달 동일합니다.
+            // 내가 팔로우 이미했다면
+
+            if (person.me) return; // 나라면 아무버튼 안보여주기
+
+            if (person.following) {
+                return (
+                    <button
+                        className="action-button"
+                        onClick={() => {
+                            dispatch(
+                                setUnFollowSelectedUser({
+                                    imageUrl: person.member.image.imageUrl,
+                                    username: person.member.username,
+                                }),
+                            );
+                            dispatch(selectModal("unFollow"));
+                        }}
+                    >
+                        팔로잉
+                    </button>
+                );
+            } else {
+                // 내가 팔로우 안한사람이라면
+
+                return (
+                    <button
+                        className="action-button"
+                        onClick={async () => {
+                            await followHandler(person.member.username);
+                            await getPeople();
+                        }}
+                    >
+                        팔로잉
+                    </button>
+                );
+            }
+        }
+    };
+
     return (
         <ModalCard
             modalType="withBackDrop"
@@ -170,17 +262,22 @@ const FollowerModal = ({
                                     </span>
                                 </div>
                             </div>
-                            {isFollowerModal ? (
-                                <button className="action-button">삭제</button>
-                            ) : (
-                                <button className={"action-button"}>
-                                    팔로잉
-                                </button>
-                            )}
+                            {renderRightButton(person)}
                         </div>
                     ))}
                 </div>
             </FollowerModalInner>
+            {openCutModal && (
+                <UnFollowModal
+                    onModalOn={() => {
+                        setOpenCutModal(true);
+                    }}
+                    onModalOff={() => {
+                        setOpenCutModal(false);
+                    }}
+                    cut={true}
+                />
+            )}
         </ModalCard>
     );
 };
