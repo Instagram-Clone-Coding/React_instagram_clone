@@ -6,6 +6,7 @@ import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import DragAndDrop from "components/Common/Header/Upload/DragAndDrop";
 import Cut from "components/Common/Header/Upload/Cut";
 import Edit from "components/Common/Header/Upload/Edit";
+import Content from "components/Common/Header/Upload/Content";
 
 interface ModalInnerProps {
     backdropWidth: number;
@@ -85,6 +86,12 @@ const Upload = () => {
                             currentWidth={currentWidthLimitedByWindowHeight}
                         />
                     );
+                case "content":
+                    return (
+                        <Content
+                            currentWidth={currentWidthLimitedByWindowHeight}
+                        />
+                    );
             }
         },
         [currentWidthLimitedByWindowHeight],
@@ -105,16 +112,21 @@ const Upload = () => {
             onModalOff={checkIsGrabbingAndCancelUpload}
             isWithCancelBtn={true}
             width={
-                currentWidthLimitedByWindowHeight + (step !== "edit" ? 0 : 340)
+                currentWidthLimitedByWindowHeight +
+                (step !== "edit" && step !== "content" ? 0 : 340)
             }
             height={currentHeightLimitedByWindowHeight}
             maxWidth={
                 currentMaxWidth +
                 BORDER_TOTAL_WIDTH +
-                (step !== "edit" ? 0 : 340)
+                (step !== "edit" && step !== "content" ? 0 : 340)
             }
             maxHeight={currentMaxWidth + BORDER_TOTAL_WIDTH + 43}
-            minWidth={348 + BORDER_TOTAL_WIDTH + (step !== "edit" ? 0 : 340)}
+            minWidth={
+                348 +
+                BORDER_TOTAL_WIDTH +
+                (step !== "edit" && step !== "content" ? 0 : 340)
+            }
             minHeight={391 + BORDER_TOTAL_WIDTH}
         >
             <StyledUploadModalInner
