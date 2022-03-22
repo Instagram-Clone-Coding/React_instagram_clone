@@ -39,6 +39,7 @@ const BlockModal = ({
                 <ModalButtonContent
                     actionName={"차단"}
                     actionHandler={blockHandler}
+                    onModalOff={onModalOff}
                 />
             </BlockModalInner>
         </ModalCard>

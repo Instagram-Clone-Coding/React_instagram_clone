@@ -1,18 +1,16 @@
+import { closeModal } from "app/store/ducks/direct/DirectSlice";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import React from "react";
 import styled from "styled-components";
-import { closeModal, selectView } from "app/store/ducks/direct/DirectSlice";
-import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import axios from "axios";
 import {
     deleteRoom,
-    lookUpChatList,
     reissueChatList,
-} from "../../../../app/store/ducks/direct/DirectThunk";
-import { authorizedCustomAxios } from "customAxios";
+} from "app/store/ducks/direct/DirectThunk";
 
 interface ModalButtonContentProps {
     actionName: string;
     actionHandler?: () => void; // message 삭제에서 사용
+    onModalOff?: () => void;
 }
 
 const ModalButtonContentContainer = styled.div`
@@ -35,13 +33,11 @@ const ModalButtonContentContainer = styled.div`
 const ModalButtonContent = ({
     actionName,
     actionHandler,
+    onModalOff,
 }: ModalButtonContentProps) => {
     const dispatch = useAppDispatch();
     const selectedRoom = useAppSelector((state) => state.direct.selectedRoom);
     const chatListPage = useAppSelector((state) => state.direct.chatListPage);
-    const selectedMessageId = useAppSelector(
-        (state) => state.direct.selectedMessageId,
-    );
 
     const deleteRoomHandler = async () => {
         if (selectedRoom) {
@@ -90,6 +86,9 @@ const ModalButtonContent = ({
             {buttonRender()}
             <button
                 onClick={() => {
+                    if (onModalOff) {
+                        onModalOff();
+                    }
                     dispatch(closeModal());
                 }}
             >
