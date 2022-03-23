@@ -18,11 +18,15 @@ const StyledUploadHeader = styled.header`
         font-size: 16px;
     }
     & > div {
-        flex: 0 0 48px;
+        flex: 0 0 auto;
         display: flex;
         justify-content: center;
         align-items: center;
         height: 20px;
+        & > button {
+            text-align: center;
+            padding: 16px;
+        }
         & > .upload__next {
             color: ${(props) => props.theme.color.blue};
             font-weight: ${(props) => props.theme.font.bold};
@@ -78,7 +82,9 @@ const UploadHeader = ({
             <h1>{currentHeading(step)}</h1>
             {step !== "dragAndDrop" && (
                 <div onClick={nextStepClickHandler}>
-                    <button className="upload__next">다음</button>
+                    <button className="upload__next">
+                        {step === "content" ? "공유하기" : "다음"}
+                    </button>
                 </div>
             )}
         </StyledUploadHeader>
