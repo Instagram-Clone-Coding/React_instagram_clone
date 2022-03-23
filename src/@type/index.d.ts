@@ -292,6 +292,7 @@ declare module Common {
         height: number;
         position: string;
         url: string;
+        size?: string; // background-size for retina display
     }
 
     interface ImageInfo {
@@ -338,17 +339,19 @@ declare module Profile {
 
     interface personType {
         // 팔로잉 팔로워 한명을 나타내는 타입입니다.
-        username: string;
-        name: string;
-        image: Common.ImageInfo;
-        isFollowing: boolean;
-        isFollower: boolean;
-        hasStory: boolean;
-        isMe: boolean;
+        member: Common.memberType;
         following: boolean;
         follower: boolean;
         me: boolean;
     }
 
-    type modalType = "userAction" | "setting" | "follower" | "unFollow" | null;
+    type modalType =
+        | "userAction"
+        | "setting"
+        | "follower"
+        | "unFollow"
+        | "cut"
+        | "block"
+        | null;
+    type currentCategoryType = "uploaded" | "tagged" | "saved";
 }

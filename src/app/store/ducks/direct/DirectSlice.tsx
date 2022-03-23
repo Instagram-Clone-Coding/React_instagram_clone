@@ -146,6 +146,7 @@ const directSlice = createSlice({
             .addCase(makeRoom.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.selectedRoom = action.payload;
+                state.view = "chat";
             })
             .addCase(makeRoom.rejected, (state) => {
                 state.isLoading = false;

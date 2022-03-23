@@ -83,7 +83,7 @@ const ChatListItem = ({
     isObserving,
     isTyping,
 }: ChatListItemProps) => {
-    const calculatedTime = useGapText(lastMessage.messageDate);
+    const calculatedTime = useGapText(lastMessage?.messageDate);
     const chatListItemRef = useRef<HTMLDivElement>(null);
     const isVisible = useOnView(chatListItemRef);
     const dispatch = useAppDispatch();
@@ -119,8 +119,8 @@ const ChatListItem = ({
 
                 <div className="last-info">
                     <div className="last-chat-container">
-                        {lastMessage.messageType === "TEXT"
-                            ? lastMessage.content
+                        {lastMessage?.messageType === "TEXT"
+                            ? lastMessage?.content
                             : "사진"}
                     </div>
                     <span className={"dot"}>·</span>
