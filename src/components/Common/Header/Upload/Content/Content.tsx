@@ -93,7 +93,7 @@ const Content = ({ currentWidth }: ContentProps) => {
                 {currentFile.newUrl !== "" && (
                     <img
                         src={currentFile.newUrl}
-                        alt={"이미지가 유호하지 않습니다."}
+                        alt={"태그할 수 있는 사진"}
                         style={{ width: currentWidth }}
                     />
                 )}
