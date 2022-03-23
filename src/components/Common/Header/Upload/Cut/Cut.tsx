@@ -540,11 +540,6 @@ const Cut = ({ currentWidth }: CutProps) => {
     const fixOverTranformedImage = useCallback(
         (scale: number) => {
             if (!imageRef.current) return;
-            const { minWidth, minHeight } = getProcessedMinSize(
-                processedCurrentWidth,
-                files[currentIndex].imageRatio,
-                ratioMode,
-            );
             const widthGapRatio =
                 (imageRef.current.offsetWidth * (scale / 100 + 1) -
                     getRatioCalculatedBoxWidth(
@@ -552,7 +547,7 @@ const Cut = ({ currentWidth }: CutProps) => {
                         processedCurrentWidth,
                     )) /
                 2 /
-                minWidth;
+                files[currentIndex].width;
             const heightGapRatio =
                 (imageRef.current.offsetHeight * (scale / 100 + 1) -
                     getRatioCalculatedBoxHeight(
@@ -560,7 +555,7 @@ const Cut = ({ currentWidth }: CutProps) => {
                         processedCurrentWidth,
                     )) /
                 2 /
-                minHeight;
+                files[currentIndex].width;
             dispatch(
                 uploadActions.fixOverTranslatedImg({
                     widthGapRatio,

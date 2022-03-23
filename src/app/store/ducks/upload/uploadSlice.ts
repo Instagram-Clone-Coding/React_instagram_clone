@@ -70,6 +70,7 @@ const uploadSlice = createSlice({
                 contrast: 0,
                 saturate: 0,
                 blur: 0,
+                newUrl: "",
             });
         },
         startGrabbing: (state) => {
@@ -271,6 +272,17 @@ const uploadSlice = createSlice({
                     state.files[state.currentIndex].blur = 0;
                     break;
             }
+        },
+        addNewFileUrl: (
+            state,
+            action: PayloadAction<{ url: string; index: number }>,
+        ) => {
+            state.files[action.payload.index].newUrl = action.payload.url;
+        },
+        resetNewFileUrl: (state) => {
+            state.files.forEach((file) => {
+                file.newUrl = "";
+            });
         },
     },
 });

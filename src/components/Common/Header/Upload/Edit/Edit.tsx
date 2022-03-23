@@ -218,71 +218,13 @@ const Edit = ({ currentWidth }: EditProps) => {
         [currentIndex, files],
     );
 
-    const excuteBeforeNextStep = () => {
-        // canvas 각 요소를 이미지로 변환
-        files.forEach((file) => {
-            const blobImageSize = getNewImageSizeBasedOnOriginal(
-                ratioMode,
-                file,
-            );
-            const virtualCanvas = document.createElement("canvas");
-            virtualCanvas.width = blobImageSize.width;
-            virtualCanvas.height = blobImageSize.height;
-            const ctx = virtualCanvas.getContext("2d");
-            if (ctx) {
-                const img = new Image(
-                    blobImageSize.width,
-                    blobImageSize.height,
-                ); // url만으로 canvas에 이미지를 그릴 수 없습니다. 생성자 함수를 통해 새로운 img 객체를 만들어줍니다.
-                img.src = file.url;
-                img.onload = () => {
-                    ctx.clearRect(
-                        0,
-                        0,
-                        virtualCanvas.width,
-                        virtualCanvas.height,
-                    );
-                    ctx.filter = `brightness(${
-                        file.brightness / 3 + 100
-                    }%) contrast(${file.contrast / 3 + 100}%) saturate(${
-                        file.saturate + 100
-                    }%)
-                blur(${file.blur / 50}px)
-                `;
-                    ctx.drawImage(
-                        img,
-                        -(
-                            blobImageSize.width / 2 -
-                            virtualCanvas.width / 2 -
-                            file.translateX
-                        ),
-                        -(
-                            blobImageSize.height / 2 -
-                            virtualCanvas.height / 2 -
-                            file.translateY
-                        ),
-                        img.width,
-                        img.height,
-                    );
-                    virtualCanvas.toBlob(function (blob) {
-                        var newImg = document.createElement("img"),
-                            url = URL.createObjectURL(blob);
-                        newImg.onload = function () {
-                            console.log(url);
-                            // no longer need to read the blob so it's revoked
-                            // URL.revokeObjectURL(url);
-                        };
-                        newImg.src = url;
-                        document.body.appendChild(newImg);
-                    });
-                };
-            }
-        });
-    };
-
     return (
         <>
-            <UploadHeader excuteBeforeNextStep={excuteBeforeNextStep} />
+            <UploadHeader
+                excuteBeforeNextStep={() =>
+                    dispatch(uploadActions.resetNewFileUrl())
+                }
+            />
             <StyledEdit>
                 <div
                     className="upload__imgCanvasLayout"

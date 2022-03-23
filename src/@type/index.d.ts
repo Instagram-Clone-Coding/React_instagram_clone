@@ -280,7 +280,16 @@ declare module UploadType {
         // backgroundBlur
     }
 
-    interface FileProps extends FileDragAndDropProps, FileCutProps, EditType {}
+    interface ContentType {
+        newUrl: string;
+        // 예정
+    }
+
+    interface FileProps
+        extends FileDragAndDropProps,
+            FileCutProps,
+            EditType,
+            ContentType {}
     // type FileProps = FileDragAndDropProps & FileCutProps;
 
     type RatioType = "original" | "square" | "thin" | "fat";

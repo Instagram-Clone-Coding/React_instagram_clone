@@ -37,7 +37,6 @@ const EditCanvasUnit = ({
                 }%)
                 blur(${currentFile.blur / 50}px)
                 `;
-                console.log(img.height, canvas.height);
                 context.drawImage(
                     img,
                     (img.width - canvas.width) / 2 -
