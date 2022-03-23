@@ -10,7 +10,7 @@ const initialState: InitialStateType = {
     editItem: {
         memberUsername: "",
         memberImageUrl: "",
-        memberName: "strin",
+        memberName: "",
         memberWebsite: null,
         memberIntroduce: null,
         memberEmail: null,

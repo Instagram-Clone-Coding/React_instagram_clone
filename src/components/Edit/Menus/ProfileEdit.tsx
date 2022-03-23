@@ -1,6 +1,7 @@
 import { getEditItem } from "app/store/ducks/edit/editThunk";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import React, { useEffect } from "react";
+import useInput from "hooks/useInput";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import EditItemInput from "../Section/EditItemInput";
 
@@ -86,6 +87,7 @@ const Profile = () => {
                     />
                 ))}
             </div>
+            <button>제출하기</button>
         </Container>
     );
 };
