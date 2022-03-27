@@ -359,14 +359,22 @@ declare module Profile {
 declare module EditType {
     interface editItemType {
         memberUsername: string;
-        memberImageUrl: string;
         memberName: string;
         memberWebsite: string | null;
         memberIntroduce: string | null;
         memberEmail: string | null;
         memberPhone: string | null;
-        memberGender: "MALE" | "FEMALE" | "PRIVATE";
+        memberGender: string;
     }
+
+    type editItemKeyType =
+        | "memberUsername"
+        | "memberName"
+        | "memberWebsite"
+        | "memberIntroduce"
+        | "memberEmail"
+        | "memberPhone"
+        | "memberGender";
 
     type menuType =
         | "프로필 편집"

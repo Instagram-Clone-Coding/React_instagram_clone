@@ -9,13 +9,12 @@ const initialState: InitialStateType = {
     currentMenu: "프로필 편집",
     editItem: {
         memberUsername: "",
-        memberImageUrl: "",
         memberName: "",
         memberWebsite: null,
         memberIntroduce: null,
         memberEmail: null,
         memberPhone: null,
-        memberGender: "PRIVATE",
+        memberGender: "비공개",
     },
 };
 
@@ -26,6 +25,17 @@ const editSlice = createSlice({
         selectMenu: (state, action: PayloadAction<EditType.menuType>) => {
             state.currentMenu = action.payload;
         },
+        changeEditItem: (
+            state,
+            action: PayloadAction<{
+                name: EditType.editItemKeyType;
+                value: string;
+            }>,
+        ) => {
+            const { name, value } = action.payload;
+
+            state.editItem = { ...state.editItem, [name]: value };
+        },
     },
     extraReducers: (build) => {
         build.addCase(getEditItem.fulfilled, (state, action) => {
@@ -34,5 +44,5 @@ const editSlice = createSlice({
     },
 });
 
-export const { selectMenu } = editSlice.actions;
+export const { selectMenu, changeEditItem } = editSlice.actions;
 export const editReducer = editSlice.reducer;
