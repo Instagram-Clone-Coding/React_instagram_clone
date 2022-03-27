@@ -387,4 +387,6 @@ declare module EditType {
         | "로그인 활동"
         | "Instagram에서 보낸 이메일"
         | "도움말";
+
+    type modalType = "image" | null;
 }

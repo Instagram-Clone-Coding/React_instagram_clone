@@ -1,9 +1,11 @@
+import { selectModal } from "app/store/ducks/edit/editSlice";
 import { edit, getEditItem } from "app/store/ducks/edit/editThunk";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Button from "styles/UI/Button";
 import Notification from "styles/UI/Notification";
+import ProfileImageModal from "../Modal/ProfileImageModal";
 import EditItemInput from "../Section/EditItemInput";
 
 const guide = {
@@ -59,7 +61,10 @@ const Container = styled.div`
 const Profile = () => {
     const dispatch = useAppDispatch();
     const editItem = useAppSelector((state) => state.edit.editItem);
+    const modal = useAppSelector(({ edit }) => edit.modal);
+    const userInfo = useAppSelector(({ auth }) => auth.userInfo);
     const [errMsg, setErrMsg] = useState<string>("");
+
     useEffect(() => {
         dispatch(getEditItem());
     }, [dispatch]);
@@ -85,18 +90,24 @@ const Profile = () => {
         }
     };
 
+    const openImageModalHandler = () => {
+        dispatch(selectModal("image"));
+    };
+
     return (
         <Container>
             {errMsg.length > 0 && <Notification text={errMsg} />}
             <div className="profile">
                 <img
-                    src={"https://picsum.photos/200/300"}
+                    src={userInfo?.memberImageUrl}
                     alt="user"
                     className="user-image"
                 />
                 <div className="name-guide">
                     <span className="username">{editItem.memberUsername}</span>
-                    <span className="guide">프로필 사진 바꾸기</span>
+                    <span className="guide" onClick={openImageModalHandler}>
+                        프로필 사진 바꾸기
+                    </span>
                 </div>
             </div>
             <div className="input-wrapper">
@@ -119,6 +130,14 @@ const Profile = () => {
                     제출{" "}
                 </Button>
             </div>
+            {modal === "image" && (
+                <ProfileImageModal
+                    onModalOn={openImageModalHandler}
+                    onModalOff={() => {
+                        dispatch(selectModal(null));
+                    }}
+                />
+            )}
         </Container>
     );
 };

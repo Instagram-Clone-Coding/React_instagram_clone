@@ -3,6 +3,7 @@ import { getEditItem } from "./editThunk";
 export interface InitialStateType {
     currentMenu: EditType.menuType;
     editItem: EditType.editItemType;
+    modal: EditType.modalType;
 }
 
 const initialState: InitialStateType = {
@@ -16,6 +17,7 @@ const initialState: InitialStateType = {
         memberPhone: null,
         memberGender: "비공개",
     },
+    modal: null,
 };
 
 const editSlice = createSlice({
@@ -36,6 +38,9 @@ const editSlice = createSlice({
 
             state.editItem = { ...state.editItem, [name]: value };
         },
+        selectModal: (state, action: PayloadAction<EditType.modalType>) => {
+            state.modal = action.payload;
+        },
     },
     extraReducers: (build) => {
         build.addCase(getEditItem.fulfilled, (state, action) => {
@@ -44,5 +49,5 @@ const editSlice = createSlice({
     },
 });
 
-export const { selectMenu, changeEditItem } = editSlice.actions;
+export const { selectMenu, changeEditItem, selectModal } = editSlice.actions;
 export const editReducer = editSlice.reducer;

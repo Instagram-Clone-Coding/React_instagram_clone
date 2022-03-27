@@ -4,8 +4,8 @@ import SearchBar from "./SearchBar";
 import NavItems from "./NavItems";
 import { NavLink } from "react-router-dom";
 import { useEffect } from "react";
-import { useAppDispatch } from "../../../app/store/Hooks";
-import { getUserInfo } from "../../../app/store/ducks/auth/authThunk";
+import { useAppDispatch } from "app/store/Hooks";
+import { getUserInfo } from "app/store/ducks/auth/authThunk";
 
 const HeaderContainer = styled.nav`
     display: flex;
@@ -46,9 +46,9 @@ const FakeHeader = styled.div`
 
 const Header = () => {
     const dispatch = useAppDispatch();
-    useEffect(()=>{
-        dispatch(getUserInfo())
-    },[])
+    useEffect(() => {
+        dispatch(getUserInfo());
+    }, []);
     return (
         <>
             <HeaderContainer>
