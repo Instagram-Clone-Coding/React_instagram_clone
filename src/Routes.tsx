@@ -8,6 +8,7 @@ import { useAppSelector } from "app/store/Hooks";
 import Landing from "pages/Landing";
 import AuthPage from "pages/Auth";
 import ResetPassword from "components/Auth/ResetPassword";
+import ResetPasswordForm from "components/Auth/ResetPassword/ResetPasswordForm";
 
 const Routes = () => {
     const isLogin = useAppSelector((state) => state.auth.isLogin);
@@ -40,10 +41,15 @@ const Routes = () => {
                                 <AuthPage router="signIn" />
                             </Route>
                             <Route
+                                exact
                                 path="/accounts/password/reset/"
                                 component={ResetPassword}
                             />
-                            <Redirect to="/" />
+                            <Route
+                                path="/accounts/password/reset/confirm"
+                                component={ResetPasswordForm}
+                            />
+                            {/* <Redirect to="/" /> */}
                         </>
                     )}
                 </Switch>
