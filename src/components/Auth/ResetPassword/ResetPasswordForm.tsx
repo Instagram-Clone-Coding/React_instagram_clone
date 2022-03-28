@@ -3,8 +3,8 @@ import queryString from "query-string";
 import HeaderBeforeLogin from "./HeaderBeforeLogin";
 import ContentBox from "components/Common/ContentBox";
 import styled from "styled-components";
-import { useState } from "react";
 import SubmitButton from "../SubmitButton";
+import useInput from "hooks/useInput";
 
 const Container = styled.section`
     background-color: #fff;
@@ -49,6 +49,7 @@ const Container = styled.section`
                 font-size: 12px;
                 line-height: 1.3;
                 color: rgb(142, 142, 142);
+                text-align: start;
             }
 
             button {
@@ -62,7 +63,21 @@ const Container = styled.section`
 export default function ResetPasswordForm() {
     const { search } = useLocation();
     const { username, code } = queryString.parse(search);
-    const [isSame, setIsSame] = useState(true);
+
+    const [newPasswordInputProps, newPasswordIsValid] = useInput(
+        "",
+        undefined,
+        (value) => value.length >= 6,
+    );
+
+    const [reEnterPasswordInputProps, reEnterPasswordIsValid] = useInput(
+        "",
+        undefined,
+        (value) => newPasswordInputProps.value === value,
+    );
+
+    // submit api 연결
+    // 들어오자마자, code유효한지 체크 -> 그 전까지, loding (using useEffect)
 
     return (
         <Container>
@@ -76,17 +91,41 @@ export default function ResetPasswordForm() {
                             </div>
                             <div className="form-description">
                                 비밀번호는 6글자 이상이어야 하고, <br />
-                                영문, 숫자를 포함해야 합니다.
+                                영문, 숫자를 포함해야 합니다. <br />
+                                공백은 포함할 수 없습니다.
                             </div>
+                            <span className="password-message">
+                                {!newPasswordIsValid &&
+                                    newPasswordInputProps.value.length !== 0 &&
+                                    "비밀번호는 6자 이상이어야 합니다."}
+                            </span>
                             <input
                                 className="new-password-input"
                                 placeholder="새 비밀번호"
+                                type="password"
+                                {...newPasswordInputProps}
                             ></input>
                             <span className="password-message">
-                                {!isSame && "비밀번호가 일치하지 않습니다."}
+                                {!reEnterPasswordIsValid &&
+                                    reEnterPasswordInputProps.value.length !==
+                                        0 &&
+                                    "비밀번호가 일치하지 않습니다."}
                             </span>
-                            <input placeholder="새 비밀번호 다시 입력"></input>
-                            <SubmitButton>비밀번호 재설정</SubmitButton>
+                            <input
+                                placeholder="새 비밀번호 다시 입력"
+                                type="password"
+                                {...reEnterPasswordInputProps}
+                            ></input>
+                            <SubmitButton
+                                disabled={
+                                    !(
+                                        newPasswordIsValid &&
+                                        reEnterPasswordIsValid
+                                    )
+                                }
+                            >
+                                비밀번호 재설정
+                            </SubmitButton>
                         </form>
                     </ContentBox>
                 </div>
