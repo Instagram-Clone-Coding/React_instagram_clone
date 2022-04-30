@@ -1,10 +1,11 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { selectView } from "app/store/ducks/direct/DirectSlice";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { ReactComponent as DetailInfoActive } from "assets/Svgs/direct-detail-info-active.svg";
+import { ReactComponent as DetailInfo } from "assets/Svgs/direct-detail-info.svg";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import theme from "styles/theme";
-import { ReactComponent as DetailInfo } from "assets/Svgs/direct-detail-info.svg";
-import { ReactComponent as DetailInfoActive } from "assets/Svgs/direct-detail-info-active.svg";
-import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import { selectView } from "app/store/ducks/direct/DirectSlice";
 
 interface SectionHeaderContainerType {
     view: string;
@@ -23,20 +24,22 @@ const SectionHeaderContainer = styled.section<SectionHeaderContainerType>`
     }
 
     .user-profile-container {
-        height: 50%;
-        display: flex;
-        align-items: center;
+        a {
+            height: 50%;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            img {
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                margin-right: 12px;
+            }
 
-        img {
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            margin-right: 12px;
-        }
-
-        h3 {
-            font-size: 1rem;
-            font-weight: 600;
+            h3 {
+                font-size: 1rem;
+                font-weight: 600;
+            }
         }
     }
 
@@ -84,13 +87,13 @@ const SectionHeader = () => {
                 {view === "detail" ? (
                     <h3>상세 정보</h3>
                 ) : (
-                    <>
+                    <Link to={`/profile/${opponent?.username}`}>
                         <img
                             src={opponent?.imageUrl}
                             alt="selected-user-image"
                         />
                         <h3>{opponent?.username}</h3>
-                    </>
+                    </Link>
                 )}
             </div>
             <div className="detail-info-container" onClick={viewConvertHandler}>
