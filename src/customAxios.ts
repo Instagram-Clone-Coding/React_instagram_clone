@@ -18,17 +18,14 @@ export const authorizedCustomAxios: AxiosInstance = axios.create({
 });
 
 export const checkToken = async (config: AxiosRequestConfig) => {
-    console.log(authorizedCustomAxios.defaults.headers.common);
-    console.log(authorizedCustomAxios.defaults.headers.common.Authorization);
     const accessToken =
         authorizedCustomAxios.defaults.headers.common.Authorization.split(
             " ",
         )[1]; // Bearer accessToken
+    console.log(accessToken);
 
     const decode = jwt.decode(accessToken);
     const nowDate = new Date().getTime() / 1000;
-
-    console.log(accessToken);
 
     // 토큰 만료시간이 지났다면 !authorizedCustomAxios.defaults.headers
     if (decode.exp < nowDate) {
