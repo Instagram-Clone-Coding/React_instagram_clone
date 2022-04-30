@@ -1,8 +1,9 @@
+import { changeSearchUser } from "app/store/ducks/common/commonSlice";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import React from "react";
 import styled from "styled-components";
-import { useAppSelector } from "app/store/Hooks";
 import NewChatInviteButton from "./NewChatInviteButton";
-
+import { searchUser } from "app/store/ducks/common/commonThunk";
 const NewChatSearchBarContainer = styled.div`
     padding: 8px 16px;
 
@@ -33,14 +34,24 @@ const NewChatSearchBarContainer = styled.div`
 `;
 
 const NewChatSearchBar = () => {
+    const dispatch = useAppDispatch();
     const { selectedNewChatUser } = useAppSelector((state) => state.direct);
+    const { searchUserKeyword } = useAppSelector((state) => state.common);
 
     return (
         <NewChatSearchBarContainer>
             <h4>받는 사람:</h4>
             <div className="input-container">
                 {selectedNewChatUser && <NewChatInviteButton />}
-                <input type="text" placeholder={"검색..."} />
+                <input
+                    type="text"
+                    placeholder={"검색..."}
+                    value={searchUserKeyword}
+                    onChange={async (e) => {
+                        dispatch(changeSearchUser(e.target.value));
+                        await dispatch(searchUser({ keyword: e.target.value }));
+                    }}
+                />
             </div>
         </NewChatSearchBarContainer>
     );

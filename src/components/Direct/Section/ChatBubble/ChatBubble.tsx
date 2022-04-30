@@ -1,15 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import { ReactComponent as ThreeDots } from "assets/Svgs/threeDots.svg";
 import {
     openModal,
     setSelectedMessageId,
 } from "app/store/ducks/direct/DirectSlice";
-import moment from "moment";
-import Direct from "pages/Direct";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { ReactComponent as Slide } from "assets/Svgs/slide.svg";
-import useOutsideClick from "hooks/useOutsideClick";
+import { ReactComponent as ThreeDots } from "assets/Svgs/threeDots.svg";
+import moment from "moment";
+import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 interface ChatBubbleProps {
     content: string | Direct.PostMessageDTO | Common.ImageInfo; // DM 메세지에는 여러가지 타입이 있습니다. 순서대로 일반 메세지, 포스트 공유, 이미지 전송
@@ -172,7 +171,7 @@ const ChatBubbleContainer = styled.div<ChatBubbleContainerType>`
         }
     }
 
-    & > img {
+    & > a > img {
         position: absolute;
         bottom: 0;
         left: 20px;
@@ -358,7 +357,11 @@ const ChatBubble = ({
                     {moment(messageDate).format("YYYY년 M월 DD일 a  h:mm")}
                 </div>
             )}
-            {!me && <img src={senderImage.imageUrl} alt={"보낸사람"} />}
+            {!me && (
+                <Link to={`/profile/dlwlrma1`}>
+                    <img src={senderImage.imageUrl} alt={"보낸사람"} />
+                </Link>
+            )}
 
             <div className={"content"} ref={guideRef}>
                 <div className={"guide-part"}>

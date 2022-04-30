@@ -20,7 +20,7 @@ const NewChatModal = () => {
 
     useEffect(() => {
         dispatch(selectNewChatUser(null));
-    }, []);
+    }, [dispatch]);
 
     return (
         <ModalCard
