@@ -9,6 +9,7 @@ import {
 import moment from "moment";
 import Direct from "pages/Direct";
 import { ReactComponent as Slide } from "assets/Svgs/slide.svg";
+import useOutsideClick from "hooks/useOutsideClick";
 
 interface ChatBubbleProps {
     content: string | Direct.PostMessageDTO | Common.ImageInfo; // DM 메세지에는 여러가지 타입이 있습니다. 순서대로 일반 메세지, 포스트 공유, 이미지 전송
@@ -209,6 +210,7 @@ const ChatBubble = ({
         useState<boolean>(false);
     const [showGuide, setShowGuide] = useState<boolean>(false);
     const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
+    const guideRef: React.RefObject<HTMLDivElement> = useRef(null);
     const renewScroll = useAppSelector((state) => state.direct.renewScroll);
     const selectedMessageId = useAppSelector(
         (state) => state.direct.selectedMessageId,
@@ -222,7 +224,7 @@ const ChatBubble = ({
         if (renewScroll) {
             scrollRef.current?.scrollIntoView();
         }
-    }, [content]);
+    }, [content, renewScroll]);
 
     // 내가 좋아요 했는지 판단하는 상수
     const liked = likeMembers.find((member) => {
@@ -234,7 +236,7 @@ const ChatBubble = ({
         setShowGuide(
             selectedMessageId === messageId && modal !== "likedMember",
         );
-    }, [selectedMessageId]);
+    }, [messageId, modal, selectedMessageId]);
 
     const copyhandler = () => {
         // 흐음 1.
@@ -314,6 +316,26 @@ const ChatBubble = ({
         }
     };
 
+    // 포커싱이 풀리면 해당 박스가 사라지는 기능을 추가해 주세요.
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                guideRef.current &&
+                !guideRef.current.contains(event.target as Node)
+            ) {
+                setTimeout(() => {
+                    setShowGuide(false);
+                    dispatch(setSelectedMessageId(null));
+                }, 0);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [dispatch]);
+
     return (
         <ChatBubbleContainer
             me={me}
@@ -338,7 +360,7 @@ const ChatBubble = ({
             )}
             {!me && <img src={senderImage.imageUrl} alt={"보낸사람"} />}
 
-            <div className={"content"}>
+            <div className={"content"} ref={guideRef}>
                 <div className={"guide-part"}>
                     <div className="guide-container">
                         <div className="guide-inner">
