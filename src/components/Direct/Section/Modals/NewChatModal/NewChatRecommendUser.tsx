@@ -7,6 +7,7 @@ import {
     selectNewChatUser,
     unSelectNewChatUser,
 } from "app/store/ducks/direct/DirectSlice";
+import { changeSearchUser } from "app/store/ducks/common/commonSlice";
 
 const NewChatRecommendUserContainer = styled.div`
     padding: 8px 16px;
@@ -40,44 +41,36 @@ const NewChatRecommendUserContainer = styled.div`
     }
 `;
 
-interface NewChatRecommendUserProps extends Direct.ChatItem {
-    opponent: Direct.memberProps;
-}
-
-const NewChatRecommendUser = ({
-    roomId,
-    members,
-    opponent,
-}: NewChatRecommendUserProps) => {
-    const { selectedNewChatUser } = useAppSelector((state) => state.direct);
+const NewChatRecommendUser = ({ memberDTO }: Common.searchUserType) => {
+    const { selectedNewChatUsers } = useAppSelector((state) => state.direct);
     const dispatch = useAppDispatch();
 
     const selectNewChatUserHandler = () => {
-        if (!selectedNewChatUser) {
-            dispatch(selectNewChatUser(opponent.username));
-        } else if (selectedNewChatUser === opponent.username) {
-            dispatch(unSelectNewChatUser());
+        // 이미 선택했다면 제거해줍니다.
+        if (selectedNewChatUsers.includes(memberDTO.username)) {
+            dispatch(unSelectNewChatUser(memberDTO.username));
         } else {
-            dispatch(selectNewChatUser(opponent.username));
+            dispatch(selectNewChatUser(memberDTO.username));
+            dispatch(changeSearchUser(""));
         }
     };
     return (
         <NewChatRecommendUserContainer onClick={selectNewChatUserHandler}>
             <div className="user-info">
                 <img
-                    src={opponent.imageUrl}
+                    src={memberDTO.image.imageUrl}
                     alt="avatarImg"
                     className="user-image"
                 />
                 <div className="user-name-container">
                     <span className="user-memberUsername">
-                        {opponent.username}
+                        {memberDTO.username}
                     </span>
-                    <span className="user-memberName">{opponent.name}</span>
+                    <span className="user-memberName">{memberDTO.name}</span>
                 </div>
             </div>
             <div className="circle-svg">
-                {selectedNewChatUser === opponent.username ? (
+                {selectedNewChatUsers.includes(memberDTO.username) ? (
                     <CheckedCircle />
                 ) : (
                     <Circle />

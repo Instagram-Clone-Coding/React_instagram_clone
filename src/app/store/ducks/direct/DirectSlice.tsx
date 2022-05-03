@@ -15,7 +15,7 @@ export interface InitialStateType {
     modal: Direct.modalType;
     view: Direct.currentSectionViewType;
     selectedChatItem: number | null;
-    selectedNewChatUser: string | null;
+    selectedNewChatUsers: string[];
     selectedRoom: Direct.RoomsProps | null;
     isLoading: boolean;
     chatList: Direct.ChatItem[];
@@ -33,7 +33,7 @@ const initialState: InitialStateType = {
     modal: null,
     view: "inbox",
     selectedChatItem: null,
-    selectedNewChatUser: null,
+    selectedNewChatUsers: [],
     selectedRoom: null,
     isLoading: false,
     chatList: [],
@@ -66,11 +66,19 @@ const directSlice = createSlice({
         selectChatItem: (state, action: PayloadAction<number | null>) => {
             state.selectedChatItem = action.payload;
         },
-        selectNewChatUser: (state, action: PayloadAction<string | null>) => {
-            state.selectedNewChatUser = action.payload;
+        // DM 추천 클릭하면 사람 이름 추가
+        selectNewChatUser: (state, action: PayloadAction<string>) => {
+            state.selectedNewChatUsers?.push(action.payload);
         },
-        unSelectNewChatUser: (state) => {
-            state.selectedNewChatUser = null;
+        // DM 추천된사람 클릭하면 사람 이름 제거
+        unSelectNewChatUser: (state, action: PayloadAction<string>) => {
+            state.selectedNewChatUsers = state.selectedNewChatUsers.filter(
+                (username) => username !== action.payload,
+            );
+        },
+        // DM 추천된사람 목록 모달창 remount 시 빈배열로
+        resetSelectNewChatUser: (state) => {
+            state.selectedNewChatUsers = [];
         },
         resetChatMessageList: (state) => {
             state.chatMessageList = [];
@@ -309,5 +317,6 @@ export const {
     likeChatMessageItem,
     unLikeChatMessageItem,
     deleteChatMessageItem,
+    resetSelectNewChatUser,
 } = directSlice.actions;
 export const directReducer = directSlice.reducer;

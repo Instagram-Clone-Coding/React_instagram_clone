@@ -16,7 +16,14 @@ const NewChatSearchBarContainer = styled.div`
 
     .input-container {
         display: flex;
-        align-items: center;
+        flex-direction: column;
+
+        .button-container {
+            display: flex;
+            width: 100%;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
         input {
             background: 0 0;
             border: none;
@@ -35,14 +42,19 @@ const NewChatSearchBarContainer = styled.div`
 
 const NewChatSearchBar = () => {
     const dispatch = useAppDispatch();
-    const { selectedNewChatUser } = useAppSelector((state) => state.direct);
+    const { selectedNewChatUsers } = useAppSelector((state) => state.direct);
     const { searchUserKeyword } = useAppSelector((state) => state.common);
 
     return (
         <NewChatSearchBarContainer>
             <h4>받는 사람:</h4>
             <div className="input-container">
-                {selectedNewChatUser && <NewChatInviteButton />}
+                <div className="button-container">
+                    {selectedNewChatUsers.map((username) => (
+                        <NewChatInviteButton username={username} />
+                    ))}
+                </div>
+
                 <input
                     type="text"
                     placeholder={"검색..."}

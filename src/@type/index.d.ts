@@ -309,6 +309,14 @@ declare module Common {
         image: ImageInfo;
         hasStory: boolean;
     }
+
+    interface searchUserType {
+        dtype: "MEMBER";
+        follwer: boolean;
+        following: boolean;
+        followingMemberFollow: { memberUsername: string }[];
+        memberDTO: memberType;
+    }
 }
 
 declare module Profile {

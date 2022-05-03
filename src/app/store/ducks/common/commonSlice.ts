@@ -3,11 +3,13 @@ import { searchUser } from "./commonThunk";
 
 export interface InitialStateType {
     searchUserKeyword: string;
+    searchUsers: Common.searchUserType[];
     isLoading: boolean;
 }
 
 const initialState: InitialStateType = {
     searchUserKeyword: "",
+    searchUsers: [],
     isLoading: false,
 };
 
@@ -18,6 +20,10 @@ const commontSlice = createSlice({
         changeSearchUser: (state, action: PayloadAction<string>) => {
             state.searchUserKeyword = action.payload;
         },
+        resetSearch: (state) => {
+            state.searchUserKeyword = "";
+            state.searchUsers = [];
+        },
     },
     extraReducers: (build) => {
         build
@@ -26,7 +32,7 @@ const commontSlice = createSlice({
             })
             .addCase(searchUser.fulfilled, (state, action) => {
                 state.isLoading = false;
-                console.log(action);
+                state.searchUsers = action.payload;
             })
             .addCase(searchUser.rejected, (state) => {
                 state.isLoading = false;
