@@ -12,7 +12,7 @@ declare module Direct {
         content: string | PostMessageDTO;
         messageType: messageType;
         messageDate: string;
-        senderId: number;
+        sender: Common.memberType;
         roomId: number;
         senderImage: Common.ImageInfo;
         likeMembers: AuthType.UserInfo[];

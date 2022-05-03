@@ -20,6 +20,7 @@ interface ChatBubbleProps {
     unlikeMessageHandler: () => void;
     likeMembers: AuthType.UserInfo[];
     senderImage: Common.ImageInfo;
+    sender: Common.memberType;
 }
 
 interface ChatBubbleContainerType {
@@ -204,6 +205,7 @@ const ChatBubble = ({
     unlikeMessageHandler,
     likeMembers,
     senderImage,
+    sender,
 }: ChatBubbleProps) => {
     const [showThreeDotsButton, setShowThreeDotsButton] =
         useState<boolean>(false);
@@ -358,7 +360,7 @@ const ChatBubble = ({
                 </div>
             )}
             {!me && (
-                <Link to={`/profile/dlwlrma1`}>
+                <Link to={`/profile/${sender.username}`}>
                     <img src={senderImage.imageUrl} alt={"보낸사람"} />
                 </Link>
             )}
