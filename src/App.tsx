@@ -23,10 +23,6 @@ function App() {
                     dispatch(authAction.login());
                 }
                 // - refresh token: 없음 | 만료됨 -> 401에러 -> catch로 넘어감
-            } catch (error) {
-                console.log(
-                    `최상단 컴포넌트에서 토큰 재발급 실패, refresh token 없거나 만료됨`,
-                );
             } finally {
                 dispatch(authAction.finishRefreshTokenChecking());
             }
