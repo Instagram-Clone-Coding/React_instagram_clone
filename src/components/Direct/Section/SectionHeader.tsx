@@ -2,7 +2,7 @@ import { selectView } from "app/store/ducks/direct/DirectSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { ReactComponent as DetailInfoActive } from "assets/Svgs/direct-detail-info-active.svg";
 import { ReactComponent as DetailInfo } from "assets/Svgs/direct-detail-info.svg";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import theme from "styles/theme";
@@ -24,7 +24,39 @@ const SectionHeaderContainer = styled.section<SectionHeaderContainerType>`
     }
 
     .user-profile-container {
-        a {
+        img {
+            border-radius: 50%;
+        }
+
+        .group-user-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            .image-container {
+                position: relative;
+                margin-right: 20px;
+                width: 40px;
+                height: 40px;
+                img {
+                    position: absolute;
+                    width: 22px;
+                    height: 22px;
+                }
+                .first {
+                    top: 4px;
+                    left: 4px;
+                }
+                .second {
+                    bottom: 4px;
+                    right: 4px;
+                }
+            }
+        }
+        h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .single-user-container {
             height: 50%;
             display: flex;
             align-items: center;
@@ -34,11 +66,6 @@ const SectionHeaderContainer = styled.section<SectionHeaderContainerType>`
                 height: 22px;
                 border-radius: 50%;
                 margin-right: 12px;
-            }
-
-            h3 {
-                font-size: 1rem;
-                font-weight: 600;
             }
         }
     }
@@ -55,7 +82,7 @@ const SectionHeader = () => {
     const username = useAppSelector(
         (state) => state.auth.userInfo?.memberUsername,
     );
-    const [opponent, setOpponent] = useState<Direct.memberProps>();
+    const [opponents, setOpponents] = useState<Direct.memberProps[]>();
     const viewConvertHandler = () => {
         switch (view) {
             case "detail":
@@ -73,12 +100,17 @@ const SectionHeader = () => {
     };
 
     useEffect(() => {
-        setOpponent(
+        setOpponents(
             selectedRoom?.members.filter((member) => {
                 return member.username !== username;
-            })[0],
+            }),
         );
-    }, [selectedRoom]);
+    }, [selectedRoom, username]);
+    const isGroupChat = useMemo(() => {
+        if (opponents) {
+            return opponents.length > 1;
+        }
+    }, [opponents]);
 
     return (
         <SectionHeaderContainer view={view}>
@@ -87,13 +119,49 @@ const SectionHeader = () => {
                 {view === "detail" ? (
                     <h3>상세 정보</h3>
                 ) : (
-                    <Link to={`/profile/${opponent?.username}`}>
-                        <img
-                            src={opponent?.imageUrl}
-                            alt="selected-user-image"
-                        />
-                        <h3>{opponent?.username}</h3>
-                    </Link>
+                    opponents && (
+                        <>
+                            {isGroupChat ? (
+                                <div
+                                    className="group-user-container"
+                                    onClick={() => {
+                                        dispatch(selectView("detail"));
+                                    }}
+                                >
+                                    <div className="image-container">
+                                        <img
+                                            src={opponents[0].imageUrl}
+                                            alt="avatarImg"
+                                            className="first"
+                                        />
+                                        <img
+                                            src={opponents[1].imageUrl}
+                                            alt="avatarImg"
+                                            className="second"
+                                        />
+                                    </div>
+                                    <h3>
+                                        {opponents
+                                            .map(
+                                                (opponent) => opponent.username,
+                                            )
+                                            .join(",")}
+                                    </h3>
+                                </div>
+                            ) : (
+                                <Link
+                                    to={`/profile/${opponents[0]?.username}`}
+                                    className="single-user-container"
+                                >
+                                    <img
+                                        src={opponents[0].imageUrl}
+                                        alt="selected-group-user-name"
+                                    />
+                                    <h3>{opponents[0].username}</h3>
+                                </Link>
+                            )}
+                        </>
+                    )
                 )}
             </div>
             <div className="detail-info-container" onClick={viewConvertHandler}>
