@@ -12,18 +12,31 @@ import {
 const StyledContent = styled.div`
     display: flex;
     & > .upload__contentImg {
+        width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
-        /* & > img {
-            width: 100%;
-            height: 100%;
-        } */
     }
     & > .upload__contentInputs {
         width: 340px;
         min-width: 340px;
         max-width: 340px;
+        & > .textareaBox {
+            & > .textarea__header {
+                margin: 18px 16px 14px 16px;
+                display: flex;
+                align-items: center;
+                img {
+                    width: 28px;
+                    height: 28px;
+                    margin-right: 12px;
+                }
+                div {
+                    font-weight: ${(props) => props.theme.font.bold};
+                    font-size: 16px;
+                }
+            }
+        }
     }
 `;
 
@@ -35,6 +48,7 @@ const Content = ({ currentWidth }: ContentProps) => {
     const { files, currentIndex, ratioMode } = useAppSelector(
         (state) => state.upload,
     );
+    const { userInfo } = useAppSelector((state) => state.auth);
     const currentFile = useMemo(
         () => files[currentIndex],
         [files, currentIndex],
@@ -135,7 +149,14 @@ const Content = ({ currentWidth }: ContentProps) => {
                     )}
                 </div>
                 <div className="upload__contentInputs">
-                    <div className="upload__contentInput textarea">
+                    <div className="upload__contentInput textareaBox">
+                        <div className="textarea__header">
+                            <img
+                                src={userInfo?.memberImageUrl}
+                                alt={"유효하지 않은 url입니다."}
+                            />
+                            <div>{userInfo?.memberUsername}</div>
+                        </div>
                         <textarea></textarea>
                     </div>
                     <div className="upload__contentInput location"></div>
