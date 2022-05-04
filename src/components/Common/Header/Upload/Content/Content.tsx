@@ -4,8 +4,28 @@ import { getNewImageSizeBasedOnOriginal } from "components/Common/Header/Upload/
 import UploadHeader from "components/Common/Header/Upload/UploadHeader";
 import React, { useEffect, useMemo } from "react";
 import styled from "styled-components";
+import {
+    getRatioCalculatedBoxWidth,
+    getRatioCalculatedBoxHeight,
+} from "components/Common/Header/Upload/Cut/CutImgUnit";
 
-const StyledContent = styled.div``;
+const StyledContent = styled.div`
+    display: flex;
+    & > .upload__contentImg {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* & > img {
+            width: 100%;
+            height: 100%;
+        } */
+    }
+    & > .upload__contentInputs {
+        width: 340px;
+        min-width: 340px;
+        max-width: 340px;
+    }
+`;
 
 interface ContentProps {
     currentWidth: number;
@@ -90,13 +110,38 @@ const Content = ({ currentWidth }: ContentProps) => {
                 }
             />
             <StyledContent>
-                {currentFile.newUrl !== "" && (
-                    <img
-                        src={currentFile.newUrl}
-                        alt={"태그할 수 있는 사진"}
-                        style={{ width: currentWidth }}
-                    />
-                )}
+                <div
+                    className="upload__contentImg"
+                    style={{
+                        width: currentWidth,
+                        height: currentWidth,
+                        minWidth: currentWidth,
+                        minHeight: currentWidth,
+                    }}
+                >
+                    {currentFile.newUrl !== "" && (
+                        <img
+                            src={currentFile.newUrl}
+                            alt={"태그할 수 있는 사진"}
+                            width={getRatioCalculatedBoxWidth(
+                                ratioMode,
+                                currentWidth,
+                            )}
+                            height={getRatioCalculatedBoxHeight(
+                                ratioMode,
+                                currentWidth,
+                            )}
+                        />
+                    )}
+                </div>
+                <div className="upload__contentInputs">
+                    <div className="upload__contentInput textarea">
+                        <textarea></textarea>
+                    </div>
+                    <div className="upload__contentInput location"></div>
+                    <div className="upload__contentInput accessibility"></div>
+                    <div className="upload__contentInput advanced"></div>
+                </div>
             </StyledContent>
         </>
     );

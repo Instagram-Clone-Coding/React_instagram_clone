@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import styled from "styled-components";
 
-const getRatioCalculatedBoxWidth = (
+export const getRatioCalculatedBoxWidth = (
     ratioType: UploadType.RatioType,
     currentWidth: number,
 ) => {
@@ -22,7 +22,7 @@ const getRatioCalculatedBoxWidth = (
     }
 };
 
-const getRatioCalculatedBoxHeight = (
+export const getRatioCalculatedBoxHeight = (
     ratioType: UploadType.RatioType,
     currentWidth: number,
 ) => {
