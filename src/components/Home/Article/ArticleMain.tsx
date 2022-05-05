@@ -5,6 +5,7 @@ import Username from "../../Common/Username";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
+import { loadavg } from "os";
 
 const StyledMain = styled.div`
     padding: 0 16px;
@@ -108,7 +109,7 @@ const ArticleMain = ({
     }: ModalType.ModalPositionProps) => {
         await dispatch(
             getMiniProfile({
-                memberUsername,
+                memberNickname,
                 modalPosition: { top, bottom, left },
             }),
         );
@@ -136,6 +137,7 @@ const ArticleMain = ({
                 // memberImageUrl:comments.imageUrl,
             }),
         );
+
         fetchMiniProfile({
             top,
             bottom,
@@ -173,8 +175,9 @@ const ArticleMain = ({
                     onMouseLeave={mouseLeaveHandler}
                     className="article-text-username"
                 >
-                    {memberNickname}&nbsp;
+                    {memberNickname}
                 </Username>
+                &nbsp;
                 <span className="article-text">
                     <>
                         {textSpan}

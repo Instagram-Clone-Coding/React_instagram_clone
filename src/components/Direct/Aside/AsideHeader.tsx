@@ -49,7 +49,7 @@ const Rotate = styled.span`
 const AsideHeader = () => {
     const dispatch = useAppDispatch();
     const { modal } = useAppSelector((state) => state.direct);
-    const userInfo = useAppSelector(state => state.auth.userInfo)
+    const userInfo = useAppSelector((state) => state.auth.userInfo);
     // styled-components => sass
     return (
         <Container>

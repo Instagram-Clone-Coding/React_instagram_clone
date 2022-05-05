@@ -5,22 +5,22 @@ import NewChatSearchBar from "./NewChatSearchBar";
 import NewChatFriendList from "./NewChatFriendList";
 import ModalCard from "styles/UI/ModalCard";
 import { useAppDispatch } from "app/store/Hooks";
-import { closeModal, openModal, selectNewChatUser } from "app/store/ducks/direct/DirectSlice";
-
+import {
+    closeModal,
+    openModal,
+    selectNewChatUser,
+} from "app/store/ducks/direct/DirectSlice";
 
 const NewChatModalContainer = styled.div`
-  padding-top: 30px;
-
+    padding-top: 30px;
 `;
-
 
 const NewChatModal = () => {
     const dispatch = useAppDispatch();
 
-    useEffect(()=>{
-            dispatch(selectNewChatUser(null))
-    },[])
-
+    useEffect(() => {
+        dispatch(selectNewChatUser(null));
+    }, []);
 
     return (
         <ModalCard
