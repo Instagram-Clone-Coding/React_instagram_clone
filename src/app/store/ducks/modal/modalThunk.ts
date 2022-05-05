@@ -6,7 +6,7 @@ import { FAIL_TO_REISSUE_MESSAGE } from "utils/constant";
 export const getMiniProfile = createAsyncThunk<
     ModalType.MiniProfileStateProps,
     {
-        memberUsername: string;
+        memberNickname: string;
         modalPosition: ModalType.ModalPositionProps;
     }
 >("modal/getMiniProfile", async (payload, ThunkOptions) => {
@@ -14,7 +14,7 @@ export const getMiniProfile = createAsyncThunk<
         const {
             data: { data },
         } = await authorizedCustomAxios.get(
-            `/accounts/${payload.memberUsername}/mini`,
+            `/accounts/${payload.memberNickname}/mini`,
         );
         return {
             ...data,
