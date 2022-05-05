@@ -4,18 +4,18 @@ import { getExtraPosts, getPosts, lookUpUserProfile } from "./profileThunk";
 export interface InitialStateType {
     isLoading: boolean;
     memberProfile: Profile.MemberProfileProps | null;
-    currentCategory: Profile.currentCategoryType;
+    currentCategory: "" | "tagged" | "saved";
     posts: Profile.PostType[];
     isExtraPostLoading: boolean;
     extraPostPage: number;
     modal: Profile.modalType;
-    unFollowSelectedUser: { imageUrl: string; username: string };
+    unFollowSelectedUser: { imageUrl: string, username: string };
 }
 
 const initialState: InitialStateType = {
     isLoading: false,
     memberProfile: null,
-    currentCategory: "uploaded",
+    currentCategory: "",
     posts: [],
     isExtraPostLoading: false,
     extraPostPage: 0,
@@ -23,14 +23,12 @@ const initialState: InitialStateType = {
     unFollowSelectedUser: { imageUrl: "", username: "" },
 };
 
+
 const profileSlice = createSlice({
     name: "profile",
     initialState,
     reducers: {
-        selectCategory: (
-            state,
-            action: PayloadAction<Profile.currentCategoryType>,
-        ) => {
+        selectCategory: (state, action: PayloadAction<"" | "tagged" | "saved">) => {
             state.currentCategory = action.payload;
         },
         increaseExtraPostPage: (state) => {
@@ -42,10 +40,7 @@ const profileSlice = createSlice({
         selectModal: (state, action: PayloadAction<Profile.modalType>) => {
             state.modal = action.payload;
         },
-        setUnFollowSelectedUser: (
-            state,
-            action: PayloadAction<{ imageUrl: string; username: string }>,
-        ) => {
+        setUnFollowSelectedUser: (state, action: PayloadAction<{ imageUrl: string, username: string }>) => {
             state.unFollowSelectedUser = action.payload;
         },
     },
@@ -81,6 +76,7 @@ const profileSlice = createSlice({
             .addCase(getExtraPosts.rejected, (state) => {
                 state.isExtraPostLoading = false;
             });
+
     },
 });
 export const {
@@ -88,6 +84,6 @@ export const {
     increaseExtraPostPage,
     resetExtraPostPage,
     selectModal,
-    setUnFollowSelectedUser,
+    setUnFollowSelectedUser
 } = profileSlice.actions;
 export const profileReducer = profileSlice.reducer;

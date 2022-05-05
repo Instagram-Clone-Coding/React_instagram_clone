@@ -3,22 +3,22 @@ import ModalCard from "styles/UI/ModalCard";
 import styled from "styled-components";
 
 const SettingModalInner = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-    & > div {
-        width: 100%;
-        flex: 1;
-        height: 48px;
-        line-height: 48px;
-        text-align: center;
-        cursor: pointer;
-    }
+  & > div {
+    width: 100%;
+    flex: 1;
+    height: 48px;
+    line-height: 48px;
+    text-align: center;
+    cursor: pointer;
+  }
 
-    & > div:not(:first-child) {
-        border-top: ${(props) => props.theme.color.bd_gray} 1px solid;
-    }
+  & > div:not(:first-child) {
+    border-top: ${(props) => props.theme.color.bd_gray} 1px solid;
+  }
 `;
 
 interface SettingModalProps {
@@ -28,11 +28,9 @@ interface SettingModalProps {
 
 const SettingModal = ({ onModalOn, onModalOff }: SettingModalProps) => {
     return (
-        <ModalCard
-            modalType="withBackDrop"
-            onModalOn={onModalOn}
-            onModalOff={onModalOff}
-        >
+        <ModalCard modalType="withBackDrop"
+                   onModalOn={onModalOn}
+                   onModalOff={onModalOff}>
             <SettingModalInner>
                 <div>비밀번호 변경</div>
                 <div>네임 태그</div>

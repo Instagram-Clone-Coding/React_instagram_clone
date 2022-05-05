@@ -80,11 +80,9 @@ export const postUnfollow = createAsyncThunk<
     }
 >("home/postUnfollow", async (payload, ThunkOptions) => {
     try {
-        console.log(`/${payload.username}/follow`); // dlwlrma1
         const {
             data: { data },
         } = await authorizedCustomAxios.delete(`/${payload.username}/follow`);
-
         return data;
     } catch (error) {
         error === FAIL_TO_REISSUE_MESSAGE &&

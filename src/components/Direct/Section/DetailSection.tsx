@@ -4,8 +4,6 @@ import ReportModal from "components/Home/Modals/ReportModal";
 import { closeModal, openModal } from "app/store/ducks/direct/DirectSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import CommonDirectModal from "components/Direct/Section/Modals/CommonDirectModal";
-import { Link } from "react-router-dom";
-import BlockModal from "components/Common/Modal/BlockModal";
 
 const DetailSectionContainer = styled.div`
     height: 100%;
@@ -37,10 +35,6 @@ const DetailSectionContainer = styled.div`
         display: flex;
         flex-direction: column;
         padding: 16px 0;
-
-        a {
-            text-decoration: none;
-        }
 
         h3 {
             margin: 0 16px;
@@ -113,17 +107,13 @@ const DetailSection = () => {
             </div>
             <div className="member-container">
                 <h3>멤버</h3>
-                <Link to={`profile/${opponent?.username}`}>
-                    <div className="member-profile-container">
-                        <img src={opponent?.imageUrl} alt="맴버 사진" />
-                        <div className="member-id-name">
-                            <span className="username">
-                                {opponent?.username}
-                            </span>
-                            <span className="name">{opponent?.name}</span>
-                        </div>
+                <div className="member-profile-container">
+                    <img src={opponent?.imageUrl} alt="맴버 사진" />
+                    <div className="member-id-name">
+                        <span className="username">{opponent?.username}</span>
+                        <span className="name">{opponent?.name}</span>
                     </div>
-                </Link>
+                </div>
             </div>
             <div className="various-option-container">
                 <div
@@ -161,15 +151,12 @@ const DetailSection = () => {
                 />
             )}
             {modal === "block" && (
-                <BlockModal
-                    onModalOn={() => {
-                        dispatch(openModal("block"));
-                    }}
-                    onModalOff={() => {
-                        closeModal();
-                    }}
-                    blockMemberUsername={
-                        selectedRoom?.members[0].username as string
+                <CommonDirectModal
+                    modalType={"block"}
+                    actionName={"차단"}
+                    title={`${selectedRoom?.members[0].username}님을 차단하시겠어요?`}
+                    description={
+                        "상대방은 Instagram에서 회원님의 프로필, 게시물 또는 스토리를 찾을 수 없습니다. Instagram은 회원님이 차단한 사실을 상대방에게 알리지 않습니다."
                     }
                 />
             )}

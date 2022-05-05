@@ -158,12 +158,10 @@ const HoverModal = ({
                         </Link>
                         <div className="hoverModal-top-info">
                             <Link
-                                to={`/profile/${miniProfile.memberUsername}`}
+                                to={`/${miniProfile.memberName}`}
                                 className="hoverModal-top-username"
                             >
-                                <Username>
-                                    {miniProfile.memberUsername}
-                                </Username>
+                                <Username>{miniProfile.memberName}</Username>
                                 {/* {userSummary.verified && (
                                     <span className="hoverModal-top-verified">
                                         인증됨

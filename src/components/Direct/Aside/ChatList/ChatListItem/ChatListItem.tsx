@@ -6,63 +6,66 @@ import useOnView from "hooks/useOnView";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { lookUpChatList } from "app/store/ducks/direct/DirectThunk";
 
+
 interface ChatListItemContainerType {
     unreadFlag: boolean;
     isSelected: boolean;
 }
 
 const ChatListItemContainer = styled.div<ChatListItemContainerType>`
-    display: flex;
-    padding: 8px 20px;
-    align-items: center;
-    cursor: pointer;
-    background-color: ${(props) =>
-        props.isSelected ? "rgb(239,239,239)" : "transparent"};
+  display: flex;
+  padding: 8px 20px;
+  align-items: center;
+  cursor: pointer;
+  background-color: ${props => props.isSelected ? "rgb(239,239,239)" : "transparent"};
 
-    .user-image {
-        width: 56px;
-        border-radius: 50%;
-        margin-right: 12px;
+
+  .user-image {
+    width: 56px;
+    border-radius: 50%;
+    margin-right: 12px;
+  }
+
+  .right-section-container {
+    flex: 1;
+
+    .user-nickName {
+      font-weight: ${props => props.unreadFlag ? 600 : 400};
+
     }
 
-    .right-section-container {
-        flex: 1;
+    .last-info {
+      display: flex;
+      font-size: 14px;
+      color: ${props => props.unreadFlag ? "#000" : "#8e8e8e"};
 
-        .user-nickName {
-            font-weight: ${(props) => (props.unreadFlag ? 600 : 400)};
+      .last-chat-container {
+        white-space: nowrap;
+        margin-right: 2px;
+        max-width: 150px;
+        display: inline;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: ${props => props.unreadFlag ? 600 : 400};
+        @media (max-width: 936px) {
+          max-width: 120px;
         }
+      }
 
-        .last-info {
-            display: flex;
-            font-size: 14px;
-            color: ${(props) => (props.unreadFlag ? "#000" : "#8e8e8e")};
-
-            .last-chat-container {
-                white-space: nowrap;
-                margin-right: 2px;
-                max-width: 150px;
-                display: inline;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                font-weight: ${(props) => (props.unreadFlag ? 600 : 400)};
-                @media (max-width: 936px) {
-                    max-width: 120px;
-                }
-            }
-
-            .last-date-container {
-                margin-left: 2px;
-                color: #8e8e8e;
-            }
-        }
+      .last-date-container {
+        margin-left: 2px;
+        color: #8e8e8e;
+      }
     }
+  }
 
-    .blue-dot {
-        width: 8px;
-        height: 8px;
-        background-color: #0095f6;
-        border-radius: 50%;
-    }
+  .blue-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #0095f6;
+    border-radius: 50%; 
+  }
+
 `;
 
 interface ChatListItemProps extends Direct.ChatItem {
@@ -70,29 +73,31 @@ interface ChatListItemProps extends Direct.ChatItem {
     opponent: Direct.memberProps;
     chatListClickHandler: (chatRoomId: number, username: string) => void;
     isObserving: boolean;
-    isTyping: boolean;
+    isTyping : boolean
 }
 
 const ChatListItem = ({
-    roomId,
-    lastMessage,
-    unreadFlag,
-    isSelected,
-    chatListClickHandler,
-    opponent,
-    isObserving,
-    isTyping,
-}: ChatListItemProps) => {
-    const calculatedTime = useGapText(lastMessage?.messageDate);
+                          roomId,
+                          lastMessage,
+                          unreadFlag,
+                          isSelected,
+                          chatListClickHandler,
+                          opponent,
+                          isObserving,
+                          isTyping
+                      }: ChatListItemProps) => {
+    const calculatedTime = useGapText(lastMessage.messageDate);
     const chatListItemRef = useRef<HTMLDivElement>(null);
     const isVisible = useOnView(chatListItemRef);
     const dispatch = useAppDispatch();
-    const chatListPage = useAppSelector((state) => state.direct.chatListPage);
+    const chatListPage = useAppSelector(state => state.direct.chatListPage);
 
     useEffect(() => {
         const dispatchExtraChatList = async () => {
             try {
-                await dispatch(lookUpChatList(chatListPage));
+                await dispatch(
+                    lookUpChatList(chatListPage),
+                );
             } catch (error) {
                 console.log(error);
             }
@@ -101,33 +106,38 @@ const ChatListItem = ({
     }, [isObserving, isVisible, dispatch]);
 
     return (
-        <ChatListItemContainer
-            ref={chatListItemRef}
-            unreadFlag={unreadFlag}
-            isSelected={isSelected}
-            onClick={() => {
-                chatListClickHandler(roomId, opponent.username);
-            }}
-        >
-            <img
-                src={opponent.imageUrl}
-                alt="avatarImg"
-                className="user-image"
-            />
+        <ChatListItemContainer ref={chatListItemRef} unreadFlag={unreadFlag} isSelected={isSelected}
+                               onClick={() => {
+                                   chatListClickHandler(roomId, opponent.username);
+                               }}>
+            <img src={opponent.imageUrl} alt="avatarImg" className="user-image" />
             <div className="right-section-container">
-                <div className="user-nickName">{opponent.username}님</div>
+
+                <div className="user-nickName">
+                    {opponent.username}님
+                </div>
 
                 <div className="last-info">
                     <div className="last-chat-container">
-                        {lastMessage?.messageType === "TEXT"
-                            ? lastMessage?.content
-                            : "사진"}
+                        {
+                            lastMessage.messageType === "TEXT" ? lastMessage.content : "사진"
+                        }
                     </div>
-                    <span className={"dot"}>·</span>
-                    <div className="last-date-container">{calculatedTime}</div>
+                    <span className={"dot"}>
+                    ·
+                    </span>
+                    <div className="last-date-container">
+                        {calculatedTime}
+                    </div>
+
                 </div>
             </div>
-            {unreadFlag && <div className="blue-dot"></div>}
+            {
+                unreadFlag &&
+                <div className="blue-dot">
+                </div>
+
+            }
         </ChatListItemContainer>
     );
 };

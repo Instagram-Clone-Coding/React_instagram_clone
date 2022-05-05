@@ -9,7 +9,6 @@ import Landing from "pages/Landing";
 import AuthPage from "pages/Auth";
 import ResetPassword from "components/Auth/ResetPassword";
 import ResetPasswordForm from "components/Auth/ResetPassword/ResetPasswordForm";
-import Edit from "pages/Edit";
 
 const Routes = () => {
     const isLogin = useAppSelector((state) => state.auth.isLogin);
@@ -64,7 +63,6 @@ const AuthedContainer = () => {
         <>
             <Header />
             <Route path="/profile/:username" component={Profile} />
-            <Route path="/accounts/edit" component={Edit} />
 
             <Route exact path="/" component={Home} />
             {/* Direct */}

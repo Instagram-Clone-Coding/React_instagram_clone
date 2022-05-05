@@ -115,9 +115,9 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
     return (
         <ArticleCard as="article" ref={articleRef}>
             <ArticleHeader
-                memberImageUrl={article.member.image.imageUrl}
-                memberUsername={article.member.name} // 이지금
-                memberNickname={article.member.username} // dlwlram
+                memberImageUrl={article.memberImageUrl}
+                memberUsername={article.memberUsername}
+                memberNickname={article.memberNickname}
                 postId={article.postId}
                 isFollowing={article.isFollowing}
                 followLoading={article.followLoading}
@@ -135,9 +135,9 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
             <ArticleMain
                 followingUserWhoLikesArticle={followingUserWhoLikesArticle}
                 likesCount={likesCount}
-                memberImageUrl={article.member.image.imageUrl}
-                memberUsername={article.member.name} // 이지금
-                memberNickname={article.member.username} // dlwlram
+                memberUsername={article.memberUsername}
+                memberImageUrl={article.memberImageUrl}
+                memberNickname={article.memberNickname}
                 content={article.postContent}
                 commentsCount={article.postCommentsCount}
                 // comments={article.comments}

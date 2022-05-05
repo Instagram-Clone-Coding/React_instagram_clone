@@ -4,59 +4,60 @@ import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { openModal, selectView } from "app/store/ducks/direct/DirectSlice";
 
+
 const AsideBodyContainer = styled.section`
-    height: calc(100% - 60px);
-    overflow-y: auto;
-    min-width: 350px;
+  height: calc(100% - 60px);
+  overflow-y: auto;
+  min-width: 350px;
 
-    .no-follower-message {
-        display: flex;
-        margin: 8px 20px;
-        justify-content: space-between;
-        align-items: center;
+  .no-follower-message {
+    display: flex;
+    margin: 8px 20px;
+    justify-content: space-between;
+    align-items: center;
 
-        h4 {
-            font-weight: 600;
-            font-size: 16px;
-            line-height: 24px;
-        }
-
-        h5 {
-            font-weight: 600;
-            font-size: 14px;
-            line-height: 18px;
-            color: #0095f6;
-            cursor: pointer;
-        }
+    h4 {
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
     }
 
-    .no-follower-guide {
-        padding: 20px 16px;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 16px;
-        color: #8e8e8e;
-        background-color: #fafafa;
+    h5 {
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 18px;
+      color: #0095f6;
+      cursor: pointer;
     }
+  }
 
-    .delete-all-button {
-        position: absolute;
-        width: 100%;
-        background-color: white;
-        bottom: 0;
-        right: 0;
-        padding: 16px 0;
-        border-top: 1px solid #dbdbdb;
-        text-align: center;
-        color: #ed4956;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-    }
+  .no-follower-guide {
+    padding: 20px 16px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #8e8e8e;
+    background-color: #fafafa;
+  }
 
-    @media (max-width: 936px) {
-        min-width: 300px;
-    }
+  .delete-all-button {
+    position: absolute;
+    width: 100%;
+    background-color: white;
+    bottom: 0;
+    right: 0;
+    padding: 16px 0;
+    border-top: 1px solid #dbdbdb;
+    text-align: center;
+    color: #ed4956;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  @media (max-width: 936px) {
+    min-width: 300px;
+  }
 `;
 
 const AsideBody = () => {
@@ -82,7 +83,7 @@ const AsideBody = () => {
                     </h5>
                 </div>
             )}
-            <ChatList />
+            <ChatList  />
             {(view === "requests" || view === "requestsChat") && (
                 <div
                     className={"delete-all-button"}

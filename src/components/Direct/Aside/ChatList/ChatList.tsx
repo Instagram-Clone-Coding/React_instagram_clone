@@ -38,6 +38,7 @@ const ChatList = ({}: ChatListProps) => {
             if (view === "requests" || view === "requestsChat") {
                 dispatch(selectView("requestsChat"));
             } else {
+                dispatch(selectView("chat"));
                 // 채팅방 클릭시 채팅방 생성 이 경우에는 기존에 목록에 있는 채팅방을 클릭하므로 실제 생성되진 않고, 기존의 Room 이 return 된다.
                 await dispatch(makeRoom({ usernames: [username] }));
 

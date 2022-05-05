@@ -5,61 +5,62 @@ import sprite from "assets/Images/sprite4.png";
 import ImageSprite from "components/Common/ImageSprite";
 
 const SingleContentContainer = styled.div`
-    margin-right: 30px;
-    position: relative;
-    cursor: pointer;
+  margin-right: 30px;
+  position: relative;
+  cursor: pointer;
 
-    svg {
-        position: absolute;
-        right: 0;
-        top: 0;
-        margin: 7px;
+  svg {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 7px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    ul {
+      display: flex;
+
+      li {
+        margin: 30px;
+        display: flex;
+        span{
+          margin-left: 6px;
+          font-weight: 600;
+          color: white;
+        }
+      }
+    }
+  }
+
+  @media (min-width: 736px) {
+    margin-right: 30px;
+
+    &:last-child {
+      margin-right: 0px;
     }
 
     img {
-        width: 100%;
-        height: 100%;
+
     }
 
-    .hover {
-        position: absolute;
-        top: 0;
-        left: 0;
-        background-color: rgba(0, 0, 0, 0.3);
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        ul {
-            display: flex;
-
-            li {
-                margin: 30px;
-                display: flex;
-                span {
-                    margin-left: 6px;
-                    font-weight: 600;
-                    color: white;
-                }
-            }
-        }
+    img:last-child {
     }
-
-    @media (min-width: 736px) {
-        margin-right: 30px;
-
-        &:last-child {
-            margin-right: 0px;
-        }
-
-        img {
-        }
-
-        img:last-child {
-        }
-    }
+  }
 `;
 
 interface SingleContentContainer {
@@ -92,26 +93,23 @@ const SingleContent = ({ post }: SingleContentContainer) => {
                 setHoverd(false);
             }}
         >
-            {post.hasManyPosts && <Slide />}
+            {
+                post.hasManyPosts && <Slide />
+            }
             <img
                 src={post.postImageUrl}
-                alt="content"
-                className="single-content"
-            />
-            {hoverd && (
-                <div className={hoverd ? "hover" : ""}>
-                    <ul>
-                        <li>
-                            <ImageSprite {...heartImage} />
-                            <span>{post.postLikesCount}</span>
-                        </li>
-                        <li>
-                            <ImageSprite {...commentImage} />
-                            <span>{post.postCommentsCount}</span>
-                        </li>
-                    </ul>
-                </div>
-            )}
+                alt="content" className="single-content" />
+            {hoverd && <div className={hoverd ? "hover" : ""}>
+                <ul>
+                    <li>
+                        <ImageSprite {...heartImage} />
+                        <span>{post.postLikesCount}</span>
+                    </li>
+                    <li>
+                        <ImageSprite {...commentImage} />
+                        <span>{post.postCommentsCount}</span></li>
+                </ul>
+            </div>}
         </SingleContentContainer>
     );
 };
