@@ -204,9 +204,7 @@ const Content = ({ currentWidth }: ContentProps) => {
                         ></textarea>
                         <div className="textarea__bottom">
                             <SmileFace />
-                            <button>{`${
-                                textareaValue.trim().length
-                            }/2,200`}</button>
+                            <button>{`${textareaValue.length}/2,200`}</button>
                         </div>
                     </div>
                     <div className="upload__contentInput location"></div>
