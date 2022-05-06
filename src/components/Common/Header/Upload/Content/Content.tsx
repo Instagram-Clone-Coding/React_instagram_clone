@@ -54,7 +54,7 @@ const StyledContent = styled.div`
             & > .textarea__bottom {
                 display: flex;
                 justify-content: space-between;
-                padding: 0 16px 0 4px;
+                padding: 0 16px 0 8px;
                 & > button {
                     color: #c7c7c7;
                     font-size: 12px;
