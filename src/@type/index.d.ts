@@ -305,6 +305,7 @@ declare module UploadType {
         currentIndex: number;
         grabbedGalleryImgIndex: number | null;
         grabbedGalleryImgNewIndex: number | null;
+        textareaValue: string;
     }
 }
 

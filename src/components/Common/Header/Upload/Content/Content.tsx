@@ -8,6 +8,7 @@ import {
     getRatioCalculatedBoxWidth,
     getRatioCalculatedBoxHeight,
 } from "components/Common/Header/Upload/Cut/CutImgUnit";
+import { ReactComponent as SmileFace } from "assets/Svgs/smileFace.svg";
 
 const StyledContent = styled.div`
     display: flex;
@@ -36,6 +37,37 @@ const StyledContent = styled.div`
                     font-size: 16px;
                 }
             }
+            & > textarea {
+                border: none;
+                overflow: auto;
+                outline: none;
+                -webkit-box-shadow: none;
+                -moz-box-shadow: none;
+                box-shadow: none;
+                resize: none; /*remove the resize handle on the bottom right*/
+                width: 100%;
+                height: 168px;
+                padding: 0 16px;
+                font-size: 16px;
+                background: transparent;
+            }
+            & > .textarea__bottom {
+                display: flex;
+                justify-content: space-between;
+                padding: 0 16px 0 4px;
+                & > button {
+                    color: #c7c7c7;
+                    font-size: 12px;
+                    font-weight: normal;
+                    &:hover {
+                        color: black;
+                    }
+                }
+                & > svg {
+                    color: ${(props) => props.theme.font.gray};
+                    cursor: pointer;
+                }
+            }
         }
     }
 `;
@@ -45,10 +77,11 @@ interface ContentProps {
 }
 
 const Content = ({ currentWidth }: ContentProps) => {
-    const { files, currentIndex, ratioMode } = useAppSelector(
+    const { files, currentIndex, ratioMode, textareaValue } = useAppSelector(
         (state) => state.upload,
     );
     const { userInfo } = useAppSelector((state) => state.auth);
+
     const currentFile = useMemo(
         () => files[currentIndex],
         [files, currentIndex],
@@ -157,7 +190,24 @@ const Content = ({ currentWidth }: ContentProps) => {
                             />
                             <div>{userInfo?.memberUsername}</div>
                         </div>
-                        <textarea></textarea>
+                        <textarea
+                            placeholder="문구 입력..."
+                            value={textareaValue}
+                            onChange={(event) =>
+                                dispatch(
+                                    uploadActions.setTextareaValue(
+                                        event.target.value,
+                                    ),
+                                )
+                            }
+                            maxLength={2200}
+                        ></textarea>
+                        <div className="textarea__bottom">
+                            <SmileFace />
+                            <button>{`${
+                                textareaValue.trim().length
+                            }/2,200`}</button>
+                        </div>
                     </div>
                     <div className="upload__contentInput location"></div>
                     <div className="upload__contentInput accessibility"></div>
