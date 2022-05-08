@@ -76,7 +76,8 @@ const Container = styled.section`
                         justify-content: center;
                         align-items: center;
                         height: 44px;
-                        background-color: #fafafa;
+                        background-color: ${(props) =>
+                            props.theme.color.bg_gray};
                         border: 1px solid #dbdbdb;
                     }
                 }

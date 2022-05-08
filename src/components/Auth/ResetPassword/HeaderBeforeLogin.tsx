@@ -9,7 +9,7 @@ const Container = styled.div`
         display: flex;
         justify-content: center;
 
-        background-color: #fff;
+        background-color: ${(props) => props.theme.color.bg_white};
         background-color: rgba(var(--d87, 255, 255, 255), 1);
         border-bottom: 1px solid rgba(var(--b6a, 219, 219, 219), 1);
         height: 60px;
@@ -36,7 +36,6 @@ const Container = styled.div`
 
             .logo {
                 display: flex;
-                justify-content: flex-start;
                 opacity: 1;
                 transition: opacity 0.1s ease-out;
             }

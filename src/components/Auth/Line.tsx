@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const LineStyle = styled.div<{ margin?: string }>`
-    margin: ${(props) => (props.margin ? props.margin : "10px 40px 18px")};
+    margin: ${(props) => props.margin || "10px 40px 18px"};
     display: flex;
 
     & > span {
