@@ -5,6 +5,9 @@ import ContentBox from "components/Common/ContentBox";
 import styled from "styled-components";
 import SubmitButton from "../SubmitButton";
 import useInput from "hooks/useInput";
+import { useEffect, MouseEvent } from "react";
+import { useAppDispatch } from "app/store/Hooks";
+import { checkCurrentURL, resetPassword } from "app/store/ducks/auth/authThunk";
 
 const Container = styled.section`
     background-color: #fff;
@@ -63,6 +66,7 @@ const Container = styled.section`
 export default function ResetPasswordForm() {
     const { search } = useLocation();
     const { username, code } = queryString.parse(search);
+    const dispatch = useAppDispatch();
 
     const [newPasswordInputProps, newPasswordIsValid] = useInput(
         "",
@@ -76,8 +80,31 @@ export default function ResetPasswordForm() {
         (value) => newPasswordInputProps.value === value,
     );
 
-    // submit api 연결
-    // 들어오자마자, code유효한지 체크 -> 그 전까지, loding (using useEffect)
+    useEffect(() => {
+        if (typeof code === "string" && typeof username === "string") {
+            // 타입 체크하는 함수를 만들어야하나?
+            // false면 어떻게 처리할건데?
+            dispatch(checkCurrentURL({ code, username }));
+        }
+        // const stringCode = code as string;
+        // const stringUsername = username as string;
+        // queryString으로 parse할 때, string | (string | null)[] | null일 수도 있음 -> as로 타입 추론하는 코드가 최선인가?
+    }, []);
+
+    const resetPasswordClickHandler = (
+        event: MouseEvent<HTMLButtonElement>,
+    ) => {
+        event.preventDefault();
+        if (typeof code === "string" && typeof username === "string") {
+            dispatch(
+                resetPassword({
+                    code,
+                    username,
+                    newPassword: newPasswordInputProps.value,
+                }),
+            );
+        }
+    };
 
     return (
         <Container>
@@ -123,6 +150,7 @@ export default function ResetPasswordForm() {
                                         reEnterPasswordIsValid
                                     )
                                 }
+                                onClick={resetPasswordClickHandler}
                             >
                                 비밀번호 재설정
                             </SubmitButton>
