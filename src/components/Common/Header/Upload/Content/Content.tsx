@@ -2,13 +2,14 @@ import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { getNewImageSizeBasedOnOriginal } from "components/Common/Header/Upload/Edit/Edit";
 import UploadHeader from "components/Common/Header/Upload/UploadHeader";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import {
     getRatioCalculatedBoxWidth,
     getRatioCalculatedBoxHeight,
 } from "components/Common/Header/Upload/Cut/CutImgUnit";
 import { ReactComponent as SmileFace } from "assets/Svgs/smileFace.svg";
+import Picker, { IEmojiData } from "emoji-picker-react";
 
 const StyledContent = styled.div`
     display: flex;
@@ -55,6 +56,18 @@ const StyledContent = styled.div`
                 display: flex;
                 justify-content: space-between;
                 padding: 0 16px 0 8px;
+                position: relative;
+                .emoji-picker-react {
+                    position: absolute;
+                    left: -300px;
+                    top: -200px;
+                    width: 300px !important;
+                    height: 400px;
+                    @media (max-width: 800px) {
+                        top: -100px;
+                        height: 200px;
+                    }
+                }
                 & > button {
                     color: #c7c7c7;
                     font-size: 12px;
@@ -77,17 +90,22 @@ interface ContentProps {
 }
 
 const Content = ({ currentWidth }: ContentProps) => {
+    const dispatch = useAppDispatch();
     const { files, currentIndex, ratioMode, textareaValue } = useAppSelector(
         (state) => state.upload,
     );
     const { userInfo } = useAppSelector((state) => state.auth);
+    const [isEmojiModalOn, setIsEmojiModalOn] = useState(false);
+
+    const onEmojiClick = (event: React.MouseEvent, emojiObject: IEmojiData) => {
+        dispatch(uploadActions.addEmojiOnTextarea(emojiObject.emoji));
+        setIsEmojiModalOn(false);
+    };
 
     const currentFile = useMemo(
         () => files[currentIndex],
         [files, currentIndex],
     );
-
-    const dispatch = useAppDispatch();
 
     useEffect(() => {
         files.forEach((file, index) => {
@@ -203,8 +221,16 @@ const Content = ({ currentWidth }: ContentProps) => {
                             }
                             maxLength={2200}
                         ></textarea>
-                        <div className="textarea__bottom">
-                            <SmileFace />
+                        <div
+                            className="textarea__bottom"
+                            onBlur={() => setIsEmojiModalOn(false)}
+                        >
+                            {isEmojiModalOn && (
+                                <Picker onEmojiClick={onEmojiClick} />
+                            )}
+                            <SmileFace
+                                onClick={() => setIsEmojiModalOn(true)}
+                            />
                             <button>{`${textareaValue.length}/2,200`}</button>
                         </div>
                     </div>

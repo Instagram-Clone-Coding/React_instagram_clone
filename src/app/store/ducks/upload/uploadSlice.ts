@@ -288,6 +288,9 @@ const uploadSlice = createSlice({
         setTextareaValue: (state, action: PayloadAction<string>) => {
             state.textareaValue = action.payload;
         },
+        addEmojiOnTextarea: (state, action: PayloadAction<string>) => {
+            state.textareaValue += action.payload;
+        },
     },
 });
 
