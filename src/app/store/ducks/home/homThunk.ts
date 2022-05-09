@@ -26,8 +26,8 @@ export const getHomeArticles = createAsyncThunk<HomeType.ArticleStateProps[]>(
             );
             return articlesState;
         } catch (error) {
-            error === FAIL_TO_REISSUE_MESSAGE &&
-                ThunkOptions.dispatch(authAction.logout());
+            // error === FAIL_TO_REISSUE_MESSAGE &&
+            //     ThunkOptions.dispatch(authAction.logout());
             throw ThunkOptions.rejectWithValue(error);
         }
     },

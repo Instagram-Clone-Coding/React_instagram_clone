@@ -53,6 +53,7 @@ declare module Direct {
         | "convertAccount"
         | "deleteAll"
         | "deleteChatMessage"
+        | "likedMember"
         | null;
     type currentSectionViewType =
         | "inbox"
@@ -92,11 +93,13 @@ declare module AxiosType {
 }
 
 declare module AuthType {
-    interface Token extends AxiosType.ResponseType {
-        data: {
-            type: string;
-            accessToken: string;
-        };
+    interface Token {
+        type: string;
+        accessToken: string;
+    }
+
+    interface TokenResponse extends AxiosType.ResponseType {
+        data: AuthType.Token;
     }
 
     interface UserInfo {
@@ -128,6 +131,9 @@ declare module AuthType {
         isValid?: boolean | null;
         isFocus?: boolean;
         hasValidator?: (value: string) => boolean;
+    }
+    interface resetPasswordState {
+        email?: string;
     }
 }
 
@@ -315,6 +321,7 @@ declare module Common {
         height: number;
         position: string;
         url: string;
+        size?: string; // background-size for retina display
     }
 
     interface ImageInfo {
@@ -361,17 +368,44 @@ declare module Profile {
 
     interface personType {
         // 팔로잉 팔로워 한명을 나타내는 타입입니다.
-        username: string;
-        name: string;
-        image: Common.ImageInfo;
-        isFollowing: boolean;
-        isFollower: boolean;
-        hasStory: boolean;
-        isMe: boolean;
+        member: Common.memberType;
         following: boolean;
         follower: boolean;
         me: boolean;
     }
 
-    type modalType = "userAction" | "setting" | "follower" | "unFollow" | null;
+    type modalType =
+        | "userAction"
+        | "setting"
+        | "follower"
+        | "unFollow"
+        | "cut"
+        | "block"
+        | null;
+    type currentCategoryType = "uploaded" | "tagged" | "saved";
+}
+
+declare module EditType {
+    interface editItemType {
+        memberUsername: string;
+        memberImageUrl: string;
+        memberName: string;
+        memberWebsite: string | null;
+        memberIntroduce: string | null;
+        memberEmail: string | null;
+        memberPhone: string | null;
+        memberGender: "MALE" | "FEMALE" | "PRIVATE";
+    }
+
+    type menuType =
+        | "프로필 편집"
+        | "비밀번호 변경"
+        | "앱 및 웹사이트"
+        | "이메일 및 SMS"
+        | "푸시 알림"
+        | "연락처 관리"
+        | "개인정보 및 보안"
+        | "로그인 활동"
+        | "Instagram에서 보낸 이메일"
+        | "도움말";
 }
