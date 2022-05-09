@@ -32,6 +32,7 @@ const profileSlice = createSlice({
             action: PayloadAction<Profile.currentCategoryType>,
         ) => {
             state.currentCategory = action.payload;
+            state.posts = [];
         },
         increaseExtraPostPage: (state) => {
             state.extraPostPage++;
