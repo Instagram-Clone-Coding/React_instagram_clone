@@ -19,6 +19,9 @@ const commontSlice = createSlice({
     reducers: {
         changeSearchUser: (state, action: PayloadAction<string>) => {
             state.searchUserKeyword = action.payload;
+            if (state.searchUserKeyword === "") {
+                state.searchUsers = [];
+            }
         },
         resetSearch: (state) => {
             state.searchUserKeyword = "";
