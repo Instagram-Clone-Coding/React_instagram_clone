@@ -7,12 +7,11 @@ import { useParams } from "react-router-dom";
 import useOnView from "hooks/useOnView";
 
 const SingleRowContainer = styled.div`
+    display: flex;
 
-  display: flex;
-
-  @media (min-width: 736px) {
-    margin-bottom: 28px;
-  }
+    @media (min-width: 736px) {
+        margin-bottom: 28px;
+    }
 `;
 
 interface SingleRowProps {
@@ -22,7 +21,9 @@ interface SingleRowProps {
 
 const SingleRow = ({ posts, isObserving }: SingleRowProps) => {
     const dispatch = useAppDispatch();
-    const extraPostPage = useAppSelector(state => state.profile.extraPostPage);
+    const extraPostPage = useAppSelector(
+        (state) => state.profile.extraPostPage,
+    );
     const { username } = useParams<{ username: string }>();
     const postRef = useRef<HTMLDivElement>(null);
 
@@ -46,14 +47,11 @@ const SingleRow = ({ posts, isObserving }: SingleRowProps) => {
         // isLast && isVisible && dispatchExtraArticle();
     }, [isObserving, isVisible, dispatch]);
 
-
     return (
         <SingleRowContainer ref={postRef}>
-            {
-                posts.map(post => (
-                    <SingleContent key={post.postId} post={post} />
-                ))
-            }
+            {posts.map((post) => (
+                <SingleContent key={post.postId} post={post} />
+            ))}
         </SingleRowContainer>
     );
 };

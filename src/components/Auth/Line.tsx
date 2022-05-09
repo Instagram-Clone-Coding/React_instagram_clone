@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-const LineStyle = styled.div`
-    margin: 10px 40px 18px;
+const LineStyle = styled.div<{ margin?: string }>`
+    margin: ${(props) => props.margin || "10px 40px 18px"};
     display: flex;
 
     & > span {
@@ -22,9 +22,9 @@ const LineStyle = styled.div`
     }
 `;
 
-export default function Line() {
+export default function Line(props: { margin?: string }) {
     return (
-        <LineStyle>
+        <LineStyle margin={props.margin}>
             <div />
             <span>또는</span>
             <div />
