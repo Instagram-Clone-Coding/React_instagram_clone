@@ -132,6 +132,7 @@ const Content = ({ currentWidth }: ContentProps) => {
                         virtualCanvas.height,
                     );
                     virtualCanvas.toBlob(function (blob) {
+                        if (!blob) return;
                         var newImg = document.createElement("img"),
                             url = URL.createObjectURL(blob);
                         newImg.onload = function () {
