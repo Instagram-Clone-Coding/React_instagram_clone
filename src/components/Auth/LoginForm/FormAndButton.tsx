@@ -60,7 +60,7 @@ export default function LoginFormAndButton() {
                 onClick={submitButtonClickHandler}
                 disabled={!(usernameIsValid && passwordIsValid)}
             >
-                {isLoading ? <Loading size={18} /> : "로그인"}
+                {isLoading ? <Loading size={18} isInButton={true} /> : "로그인"}
             </SubmitButton>
         </>
     );
