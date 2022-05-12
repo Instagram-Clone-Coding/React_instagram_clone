@@ -15,10 +15,6 @@ const StyledContent = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
-        /* & > img {
-            width: 100%;
-            height: 100%;
-        } */
     }
     & > .upload__contentInputs {
         width: 340px;
@@ -85,6 +81,7 @@ const Content = ({ currentWidth }: ContentProps) => {
                         virtualCanvas.height,
                     );
                     virtualCanvas.toBlob(function (blob) {
+                        if (!blob) return;
                         var newImg = document.createElement("img"),
                             url = URL.createObjectURL(blob);
                         newImg.onload = function () {
