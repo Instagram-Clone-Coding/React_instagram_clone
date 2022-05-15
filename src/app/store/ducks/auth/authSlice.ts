@@ -109,6 +109,9 @@ const authSlice = createSlice({
             .addCase(getUserInfo.pending, (state) => {})
             .addCase(getUserInfo.fulfilled, (state, action) => {
                 state.userInfo = action.payload;
+            })
+            .addCase(resetPassword.rejected, (state) => {
+                state.errorMessage = `전에 사용한 적 없는 새로운 비밀번호를 만드세요.`;
             });
     },
 });

@@ -6,7 +6,7 @@ import styled from "styled-components";
 import SubmitButton from "../SubmitButton";
 import useInput from "hooks/useInput";
 import { useEffect, MouseEvent } from "react";
-import { useAppDispatch } from "app/store/Hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { checkCurrentURL, resetPassword } from "app/store/ducks/auth/authThunk";
 
 const Container = styled.section`
@@ -59,6 +59,14 @@ const Container = styled.section`
                 margin: 20px 52px 60px 52px;
                 height: 44px;
             }
+
+            .error-message {
+                color: #ed4956;
+                font-size: 14px;
+                line-height: 18px;
+                text-align: center;
+                margin: 10px 40px;
+            }
         }
     }
 `;
@@ -67,6 +75,7 @@ export default function ResetPasswordForm() {
     const { search } = useLocation();
     const { username, code } = queryString.parse(search);
     const dispatch = useAppDispatch();
+    const { errorMessage } = useAppSelector((state) => state.auth);
 
     const [newPasswordInputProps, newPasswordIsValid] = useInput(
         "",
@@ -154,6 +163,11 @@ export default function ResetPasswordForm() {
                             >
                                 비밀번호 재설정
                             </SubmitButton>
+                            {errorMessage && (
+                                <div className="error-message">
+                                    <p>{errorMessage}</p>
+                                </div>
+                            )}
                         </form>
                     </ContentBox>
                 </div>
