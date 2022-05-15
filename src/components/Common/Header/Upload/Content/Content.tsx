@@ -55,7 +55,8 @@ const StyledContent = styled.div`
             & > .textarea__bottom {
                 display: flex;
                 justify-content: space-between;
-                padding: 0 16px 0 8px;
+                height: 30px;
+                padding: 4px 16px 4px 8px;
                 position: relative;
                 .emoji-picker-react {
                     position: absolute;
