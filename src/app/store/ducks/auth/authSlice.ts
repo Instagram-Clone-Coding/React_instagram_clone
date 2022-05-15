@@ -1,6 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FormState } from "./authThunk.type";
-import { getUserInfo, signIn, resetPassword } from "./authThunk";
+import {
+    getUserInfo,
+    signIn,
+    resetPassword,
+    checkCurrentURL,
+    signInUseCode,
+} from "./authThunk";
 import { setAccessTokenInAxiosHeaders } from "customAxios";
 
 export interface AuthStateProps {
@@ -95,6 +101,11 @@ const authSlice = createSlice({
                 state.isLogin = true;
                 setAccessTokenInAxiosHeaders(action.payload);
             })
+            .addCase(signInUseCode.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isLogin = true;
+                setAccessTokenInAxiosHeaders(action.payload);
+            })
             .addCase(signIn.rejected, (state, action) => {
                 state.isAsyncReject = true;
                 state.isLoading = false;
@@ -112,6 +123,9 @@ const authSlice = createSlice({
             })
             .addCase(resetPassword.rejected, (state) => {
                 state.errorMessage = `전에 사용한 적 없는 새로운 비밀번호를 만드세요.`;
+            })
+            .addCase(checkCurrentURL.rejected, (state) => {
+                // 유효하지 않은 url **
             });
     },
 });
