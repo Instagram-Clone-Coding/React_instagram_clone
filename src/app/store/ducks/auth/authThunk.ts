@@ -48,7 +48,9 @@ export const getUserInfo = createAsyncThunk<AuthType.UserInfo>(
     "auth/userInfo",
     async (payload, ThunkOptions) => {
         try {
-            const response = await authorizedCustomAxios.get("/menu/profile");
+            const response = await authorizedCustomAxios.get(
+                "/accounts/profile",
+            );
             return response.data.data;
         } catch (error) {
             // error === FAIL_TO_REISSUE_MESSAGE &&
