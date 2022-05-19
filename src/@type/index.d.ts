@@ -135,6 +135,11 @@ declare module AuthType {
     interface resetPasswordState {
         email?: string;
     }
+
+    type resetPasswordQuery = {
+        username: string;
+        code: string;
+    };
 }
 
 declare module HomeType {
