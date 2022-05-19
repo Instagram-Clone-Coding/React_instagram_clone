@@ -23,13 +23,12 @@ const Section = styled.section`
 export default function AuthPage(props: { router: "signIn" | "signUp" }) {
     const dispatch = useAppDispatch();
     const { search } = useLocation();
-    const { username, code } = queryString.parse(search);
+    const { username, code } = queryString.parse(
+        search,
+    ) as AuthType.resetPasswordQuery;
+
     useEffect(() => {
-        if (
-            props.router === "signIn" &&
-            typeof username === "string" &&
-            typeof code === "string"
-        ) {
+        if (props.router === "signIn") {
             dispatch(signInUseCode({ username, code }));
         }
         dispatch(authAction.changeFormState(props.router));
