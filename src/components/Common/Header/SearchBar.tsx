@@ -106,7 +106,7 @@ const SearchBar = () => {
                         {searchUsers.length > 0 ? (
                             searchUsers.map((user) => (
                                 <SearchListItem
-                                    key={user.memberDTO.id}
+                                    key={user.member.id}
                                     {...user}
                                     setIsFocused={setIsFocused}
                                 />

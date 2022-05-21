@@ -313,7 +313,7 @@ declare module Common {
         follwer: boolean;
         following: boolean;
         followingMemberFollow: { memberUsername: string }[];
-        memberDTO: memberType;
+        member: memberType;
     }
     interface PostImageDTOProps {
         id: number;

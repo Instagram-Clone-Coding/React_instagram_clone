@@ -34,7 +34,7 @@ const NewChatFriendList = () => {
 
             <div className="new-chat-recommend-container">
                 {searchUsers.map((user) => (
-                    <NewChatRecommendUser key={user.memberDTO.id} {...user} />
+                    <NewChatRecommendUser key={user.member.id} {...user} />
                 ))}
             </div>
         </NewChatFriendListContainer>

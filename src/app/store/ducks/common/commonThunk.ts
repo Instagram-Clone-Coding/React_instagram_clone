@@ -27,7 +27,7 @@ export const searchUser = createAsyncThunk<
             // 검색해서 나온 결과중에 자기 자신을 제외해줍니다.
             return data.data.filter(
                 (user: Common.searchUserType) =>
-                    user.memberDTO.username !== myUsername,
+                    user.member.username !== myUsername,
             );
         } catch (error) {
             error === FAIL_TO_REISSUE_MESSAGE && dispatch(authAction.logout());

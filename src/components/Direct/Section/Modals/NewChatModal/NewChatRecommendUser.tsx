@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { ReactComponent as Circle } from "assets/Svgs/circle.svg";
-import { ReactComponent as CheckedCircle } from "assets/Svgs/checkedCircle.svg";
-import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { changeSearchUser } from "app/store/ducks/common/commonSlice";
 import {
     selectNewChatUser,
     unSelectNewChatUser,
 } from "app/store/ducks/direct/DirectSlice";
-import { changeSearchUser } from "app/store/ducks/common/commonSlice";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { ReactComponent as CheckedCircle } from "assets/Svgs/checkedCircle.svg";
+import { ReactComponent as Circle } from "assets/Svgs/circle.svg";
+import React from "react";
+import styled from "styled-components";
 
 const NewChatRecommendUserContainer = styled.div`
     padding: 8px 16px;
@@ -41,16 +41,16 @@ const NewChatRecommendUserContainer = styled.div`
     }
 `;
 
-const NewChatRecommendUser = ({ memberDTO }: Common.searchUserType) => {
+const NewChatRecommendUser = ({ member }: Common.searchUserType) => {
     const { selectedNewChatUsers } = useAppSelector((state) => state.direct);
     const dispatch = useAppDispatch();
 
     const selectNewChatUserHandler = () => {
         // 이미 선택했다면 제거해줍니다.
-        if (selectedNewChatUsers.includes(memberDTO.username)) {
-            dispatch(unSelectNewChatUser(memberDTO.username));
+        if (selectedNewChatUsers.includes(member.username)) {
+            dispatch(unSelectNewChatUser(member.username));
         } else {
-            dispatch(selectNewChatUser(memberDTO.username));
+            dispatch(selectNewChatUser(member.username));
             dispatch(changeSearchUser(""));
         }
     };
@@ -58,19 +58,19 @@ const NewChatRecommendUser = ({ memberDTO }: Common.searchUserType) => {
         <NewChatRecommendUserContainer onClick={selectNewChatUserHandler}>
             <div className="user-info">
                 <img
-                    src={memberDTO.image.imageUrl}
+                    src={member.image.imageUrl}
                     alt="avatarImg"
                     className="user-image"
                 />
                 <div className="user-name-container">
                     <span className="user-memberUsername">
-                        {memberDTO.username}
+                        {member.username}
                     </span>
-                    <span className="user-memberName">{memberDTO.name}</span>
+                    <span className="user-memberName">{member.name}</span>
                 </div>
             </div>
             <div className="circle-svg">
-                {selectedNewChatUsers.includes(memberDTO.username) ? (
+                {selectedNewChatUsers.includes(member.username) ? (
                     <CheckedCircle />
                 ) : (
                     <Circle />

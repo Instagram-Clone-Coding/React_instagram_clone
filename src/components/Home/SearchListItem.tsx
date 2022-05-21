@@ -42,26 +42,26 @@ interface SearchListItemProps extends Common.searchUserType {
 }
 
 const SearchListItem = ({
-    memberDTO,
+    member,
     followingMemberFollow,
     setIsFocused,
 }: SearchListItemProps) => {
     return (
         <Container
-            to={`/profile/${memberDTO.username}`}
+            to={`/profile/${member.username}`}
             onClick={() => {
                 setIsFocused(false);
             }}
         >
             <img
-                src={memberDTO.image.imageUrl}
+                src={member.image.imageUrl}
                 alt="member"
                 className="profile-image"
             />
             <div className="profile-contents">
-                <span className="username">{memberDTO.username}</span>
+                <span className="username">{member.username}</span>
                 <div className="name-container">
-                    <span className="name">{memberDTO.name}</span>
+                    <span className="name">{member.name}</span>
                     {followingMemberFollow && (
                         <span className="follow-info">
                             •{followingMemberFollow[0].memberUsername} 외{" "}
