@@ -15,7 +15,6 @@ export const lookUpUserProfile = createAsyncThunk<
         const { data } = await authorizedCustomAxios.get(
             `/accounts/${payload.username}`,
         );
-        console.log(data);
 
         return data.data;
     } catch (error) {
@@ -37,10 +36,20 @@ export const getPosts = createAsyncThunk<
         try {
             const currentCategory = getState().profile.currentCategory;
 
-            const url = `/accounts/${payload.username}/posts/${
-                currentCategory !== "uploaded" ? currentCategory + "/" : ""
-            }recent `;
-            const { data } = await customAxios.get(url);
+            let url = "";
+            switch (currentCategory) {
+                case "uploaded":
+                    url = `/accounts/${payload.username}/posts/recent`;
+                    break;
+                case "tagged":
+                    url = `/accounts/${payload.username}/posts/tagged/recent`;
+                    break;
+                case "saved":
+                    url = `/accounts/posts/saved/recent`;
+                    break;
+            }
+
+            const { data } = await authorizedCustomAxios.get(url);
             return data.data;
         } catch (error) {
             error === FAIL_TO_REISSUE_MESSAGE && dispatch(authAction.logout());
@@ -67,9 +76,18 @@ export const getExtraPosts = createAsyncThunk<
         try {
             const currentCategory = getState().profile.currentCategory;
 
-            const url = `/accounts/${payload.username}/posts/${
-                currentCategory !== "uploaded" ? currentCategory + "/" : ""
-            }`;
+            let url = "";
+            switch (currentCategory) {
+                case "uploaded":
+                    url = `/accounts/${payload.username}/posts`;
+                    break;
+                case "tagged":
+                    url = `/accounts/${payload.username}/posts/tagged`;
+                    break;
+                case "saved":
+                    url = `/accounts/posts/saved`;
+                    break;
+            }
             const {
                 data: {
                     data: { content: data, empty },
