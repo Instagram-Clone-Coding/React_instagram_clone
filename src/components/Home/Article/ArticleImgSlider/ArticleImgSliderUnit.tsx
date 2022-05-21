@@ -71,17 +71,17 @@ const ArticleImgSliderUnit = ({
         <StyledArticleImgSliderUnit
             onClick={differentiateClickEvents}
             onDoubleClick={imgDoubleClickHandler}
-            className={imageDTO.postTagDTOs ? "containImgHashTags" : ""}
+            className={imageDTO.postTags ? "containImgHashTags" : ""}
         >
             <div className="avatar">
-                {imageDTO.postTagDTOs && isAvatarOn && <ImgHashTagAvatar />}
+                {imageDTO.postTags && isAvatarOn && <ImgHashTagAvatar />}
             </div>
-            {imageDTO.postTagDTOs &&
+            {imageDTO.postTags &&
                 isAvatarOn &&
-                imageDTO.postTagDTOs.map((postTagDTO) => (
+                imageDTO.postTags.map((postTag) => (
                     <ImgHashTagUsername
-                        key={postTagDTO.id}
-                        postTagDTO={postTagDTO}
+                        key={postTag.id}
+                        postTagDTO={postTag}
                         isImgHashTagsOn={isImgHashTagsOn}
                     />
                 ))}

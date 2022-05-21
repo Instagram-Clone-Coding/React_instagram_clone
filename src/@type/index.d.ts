@@ -152,7 +152,7 @@ declare module HomeType {
     interface PostImageDTOProps {
         id: number;
         postImageUrl: string;
-        postTagDTOs: PostImgTagDTOProps[];
+        postTags: PostImgTagDTOProps[];
         // 받아온 후 처리
     }
 
@@ -163,7 +163,7 @@ declare module HomeType {
         postCommentsCount: number;
         postContent: string;
         postId: number;
-        postImageDTOs: PostImageDTOProps[];
+        postImages: PostImageDTOProps[];
         postLikeFlag: boolean; // 내가 좋아요 했는지
         postLikesCount: number;
         postUploadDate: string;
