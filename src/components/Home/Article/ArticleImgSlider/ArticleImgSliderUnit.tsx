@@ -32,7 +32,7 @@ const StyledArticleImgSliderUnit = styled.div`
 const ArticleImgSliderUnit = ({
     imageDTO,
 }: {
-    imageDTO: HomeType.PostImageDTOProps;
+    imageDTO: Common.PostImageDTOProps;
 }) => {
     const [isAvatarOn, setIsAvatarOn] = useState(false);
     const [isImgHashTagsOn, setIsImgHashTagOn] = useState<boolean | null>(null);

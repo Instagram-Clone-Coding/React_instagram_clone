@@ -15,6 +15,8 @@ export const lookUpUserProfile = createAsyncThunk<
         const { data } = await authorizedCustomAxios.get(
             `/accounts/${payload.username}`,
         );
+        console.log(data);
+
         return data.data;
     } catch (error) {
         error === FAIL_TO_REISSUE_MESSAGE &&
