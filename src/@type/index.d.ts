@@ -394,14 +394,22 @@ declare module Profile {
 declare module EditType {
     interface editItemType {
         memberUsername: string;
-        memberImageUrl: string;
         memberName: string;
         memberWebsite: string | null;
         memberIntroduce: string | null;
         memberEmail: string | null;
         memberPhone: string | null;
-        memberGender: "MALE" | "FEMALE" | "PRIVATE";
+        memberGender: string;
     }
+
+    type editItemKeyType =
+        | "memberUsername"
+        | "memberName"
+        | "memberWebsite"
+        | "memberIntroduce"
+        | "memberEmail"
+        | "memberPhone"
+        | "memberGender";
 
     type menuType =
         | "프로필 편집"
@@ -414,4 +422,6 @@ declare module EditType {
         | "로그인 활동"
         | "Instagram에서 보낸 이메일"
         | "도움말";
+
+    type modalType = "image" | null;
 }
