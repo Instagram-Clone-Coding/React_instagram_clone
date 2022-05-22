@@ -253,12 +253,16 @@ declare module UploadType {
         x: number;
         y: number;
     }
+
+    // 퍼센트 값으로 변경
     interface TranslateProps {
         translateX: number;
         translateY: number;
     }
     interface FileDragAndDropProps {
         imageRatio: number;
+        width: number;
+        height: number;
         url: string;
     }
     interface FileCutProps extends TranslateProps {
@@ -266,11 +270,30 @@ declare module UploadType {
         scale: number;
     }
 
-    interface FileProps extends FileDragAndDropProps, FileCutProps {}
+    interface EditType {
+        brightness: number;
+        contrast: number;
+        saturate: number;
+        // 온도
+        blur: number;
+        // backgroundBlur
+    }
+
+    interface ContentType {
+        newUrl: string;
+        // 예정
+    }
+
+    interface FileProps
+        extends FileDragAndDropProps,
+            FileCutProps,
+            EditType,
+            ContentType {}
     // type FileProps = FileDragAndDropProps & FileCutProps;
 
     type RatioType = "original" | "square" | "thin" | "fat";
     type StepType = "dragAndDrop" | "cut" | "edit" | "content";
+    type AdjustInputTextType = "밝기" | "대비" | "채도" | "흐리게";
 
     interface UploadStateProps {
         isUploading: boolean;
@@ -281,6 +304,7 @@ declare module UploadType {
         currentIndex: number;
         grabbedGalleryImgIndex: number | null;
         grabbedGalleryImgNewIndex: number | null;
+        textareaValue: string;
     }
 }
 
