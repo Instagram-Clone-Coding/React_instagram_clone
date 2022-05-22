@@ -94,8 +94,8 @@ const SingleContent = ({ post }: SingleContentContainer) => {
         >
             {post.hasManyPosts && <Slide />}
             <img
-                src={post.postImageUrl}
-                alt="content"
+                src={post.postImages.postImageUrl}
+                alt={post.postImages.altText}
                 className="single-content"
             />
             {hoverd && (

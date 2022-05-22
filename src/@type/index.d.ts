@@ -93,11 +93,13 @@ declare module AxiosType {
 }
 
 declare module AuthType {
-    interface Token extends AxiosType.ResponseType {
-        data: {
-            type: string;
-            accessToken: string;
-        };
+    interface Token {
+        type: string;
+        accessToken: string;
+    }
+
+    interface TokenResponse extends AxiosType.ResponseType {
+        data: AuthType.Token;
     }
 
     interface UserInfo {
@@ -130,6 +132,9 @@ declare module AuthType {
         isFocus?: boolean;
         hasValidator?: (value: string) => boolean;
     }
+    interface resetPasswordState {
+        email?: string;
+    }
 }
 
 declare module HomeType {
@@ -144,13 +149,6 @@ declare module HomeType {
         };
     }
 
-    interface PostImageDTOProps {
-        id: number;
-        postImageUrl: string;
-        postTagDTOs: PostImgTagDTOProps[];
-        // 받아온 후 처리
-    }
-
     interface ArticleProps {
         followingMemberUsernameLikedPost: null | string; // 내가 팔로우한 사람 중에서 이 글을 좋아한 사람 있으면 보내줌
         member: Common.memberType;
@@ -158,7 +156,7 @@ declare module HomeType {
         postCommentsCount: number;
         postContent: string;
         postId: number;
-        postImageDTOs: PostImageDTOProps[];
+        postImages: Common.PostImageDTOProps[];
         postLikeFlag: boolean; // 내가 좋아요 했는지
         postLikesCount: number;
         postUploadDate: string;
@@ -309,6 +307,14 @@ declare module Common {
         image: ImageInfo;
         hasStory: boolean;
     }
+
+    interface PostImageDTOProps {
+        id: number;
+        postImageUrl: string;
+        postTags: PostImgTagDTOProps[];
+        altText: string;
+        // 받아온 후 처리
+    }
 }
 
 declare module Profile {
@@ -331,7 +337,7 @@ declare module Profile {
 
     interface PostType {
         postId: number;
-        postImageUrl: string;
+        postImages: Common.PostImageDTOProps;
         hasManyPosts: boolean;
         postCommentsCount: number;
         postLikesCount: number;

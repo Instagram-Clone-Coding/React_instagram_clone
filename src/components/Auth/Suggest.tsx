@@ -6,6 +6,8 @@ const SentenceContainer = styled.div`
     font-size: 14px;
     line-height: 18px;
     margin: -3px 0 -4px;
+    text-align: center;
+
     p {
         margin: 15px;
         a {

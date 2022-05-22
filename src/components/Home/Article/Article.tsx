@@ -123,7 +123,7 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
                 followLoading={article.followLoading}
             />
             <ArticleImgSlider
-                imageDTOs={article.postImageDTOs}
+                imageDTOs={article.postImages}
                 onLike={changeToLikeHandler}
             />
             <ArticleMainIcons

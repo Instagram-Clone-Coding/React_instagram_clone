@@ -1,9 +1,4 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-import {
-    EXPIRED_TOKEN_MESSAGE,
-    FAIL_TO_REISSUE_MESSAGE,
-    INVALID_TOKEN_MESSAGE,
-} from "utils/constant";
 
 var jwt = require(`jsonwebtoken`);
 
@@ -21,49 +16,37 @@ export const checkToken = async (config: AxiosRequestConfig) => {
     const accessToken =
         authorizedCustomAxios.defaults.headers.common.Authorization.split(
             " ",
-        )[1]; // Bearer accessToken
-    console.log(accessToken);
-
+        )[1];
     const decode = jwt.decode(accessToken);
     const nowDate = new Date().getTime() / 1000;
 
-    // 토큰 만료시간이 지났다면 !authorizedCustomAxios.defaults.headers
     if (decode.exp < nowDate) {
         try {
             const {
-                data: { data, message },
+                data: { data },
             }: {
-                data: AuthType.Token;
+                data: AuthType.TokenResponse;
             } = await customAxios.post(`/reissue`);
             if (data) {
-                authorizedCustomAxios.defaults.headers.common[
-                    `Authorization`
-                ] = `${data.type} ${data.accessToken}`;
+                setAccessTokenInAxiosHeaders(data);
                 if (config.headers) {
                     config.headers[
                         `Authorization`
                     ] = `${data.type} ${data.accessToken}`;
                 }
-            } else if (
-                message === INVALID_TOKEN_MESSAGE ||
-                message === EXPIRED_TOKEN_MESSAGE
-            ) {
-                return Promise.reject(FAIL_TO_REISSUE_MESSAGE);
             }
         } catch (error) {
-            return Promise.reject(FAIL_TO_REISSUE_MESSAGE);
+            // 토큰재발급 실패한 경우(refresh token만료)
+            window.location.replace("/");
         }
     }
-    return config; // 이거 실패 시, isLogin = false로 해서 화면 로그인으로
+    return config;
 };
 
-//  다른사람들은 어디 두는지 알아보기 **
-export const saveToken = (token: AuthType.Token) => {
-    const { type, accessToken } = token.data;
-
+export const setAccessTokenInAxiosHeaders = (token: AuthType.Token) => {
     authorizedCustomAxios.defaults.headers.common[
         `Authorization`
-    ] = `${type} ${accessToken}`;
+    ] = `${token.type} ${token.accessToken}`;
 };
 
 authorizedCustomAxios.interceptors.request.use(checkToken);

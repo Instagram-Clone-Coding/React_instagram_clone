@@ -76,7 +76,7 @@ export default function EmailConfirmForm() {
     const [errorMessage, setErrorMessage] = useState("");
     // 에러메시지
     // - 문구수정: 인증코드 만료기간 5분 명시 -> 재발급 요청
-    const [isLoading, setIsLoading] = useState(false);
+    const isLoading = useAppSelector((state) => state.auth.isLoading);
 
     const [codeInputProps, isValid, isFocus] = useInput(
         "",
@@ -109,7 +109,8 @@ export default function EmailConfirmForm() {
     };
 
     const submitButtonClickHandler = () => {
-        setIsLoading(true);
+        dispatch(authAction.changeButtonLoadingState(true));
+
         const callSignUpAPI = async () => {
             if (!userInput) return;
             try {
@@ -119,7 +120,7 @@ export default function EmailConfirmForm() {
                     ...userInput,
                     code: codeInputProps.value,
                 });
-                setIsLoading(false);
+                dispatch(authAction.changeButtonLoadingState(false));
 
                 if (status === 200 && data) {
                     dispatch(authAction.resetUserInputData());
@@ -131,7 +132,7 @@ export default function EmailConfirmForm() {
                     );
                 } else if (status === 200 && !data) {
                     setErrorMessage(message);
-                    // 인증코드가 다를 경우, 200번대가 아니라 400번대가 더 적합할 거 같음
+                    // 인증코드가 다를 경우, 200번대가 아니라 400번대가 더 적합할 거 같음(사용자 입력에러니까)
                 }
             } catch (error) {
                 console.log(error, `call signUp api`);
@@ -169,7 +170,11 @@ export default function EmailConfirmForm() {
                     onClick={submitButtonClickHandler}
                     disabled={!isValid}
                 >
-                    {isLoading ? <Loading size={18} /> : "다음"}
+                    {isLoading ? (
+                        <Loading size={18} isInButton={true} />
+                    ) : (
+                        "다음"
+                    )}
                 </SubmitButton>
                 <Button
                     bgColor="white"
