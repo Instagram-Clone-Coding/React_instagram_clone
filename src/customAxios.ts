@@ -13,6 +13,7 @@ export const authorizedCustomAxios: AxiosInstance = axios.create({
 });
 
 export const checkToken = async (config: AxiosRequestConfig) => {
+
     const accessToken =
         authorizedCustomAxios.defaults.headers.common.Authorization.split(
             " ",

@@ -6,6 +6,7 @@ import { directReducer } from "app/store/ducks/direct/DirectSlice";
 import { uploadReducer } from "app/store/ducks/upload/uploadSlice";
 import { profileReducer } from "app/store/ducks/profile/profileSlice";
 import { editReducer } from "./ducks/edit/editSlice";
+import { commonReducer } from "./ducks/common/commonSlice";
 
 export const store = configureStore({
     reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
         upload: uploadReducer,
         profile: profileReducer,
         edit: editReducer,
+        common: commonReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

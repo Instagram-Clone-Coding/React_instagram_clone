@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 // import { dummyChatList } from "components/Direct/Aside/AsideBody";
 import NewChatRecommendUser from "./NewChatRecommendUser";
@@ -26,26 +26,15 @@ const NewChatFriendListContainer = styled.div`
 `;
 
 const NewChatFriendList = () => {
-    const chatList = useAppSelector((state) => state.direct.chatList);
-    const username = useAppSelector(
-        (state) => state.auth.userInfo?.memberUsername,
-    );
+    const searchUsers = useAppSelector((state) => state.common.searchUsers);
 
     return (
         <NewChatFriendListContainer>
             <span>추천</span>
 
             <div className="new-chat-recommend-container">
-                {chatList.map((chatListItem) => (
-                    <NewChatRecommendUser
-                        key={chatListItem.roomId}
-                        {...chatListItem}
-                        opponent={
-                            chatListItem.members.filter((member) => {
-                                return member.username !== username;
-                            })[0]
-                        }
-                    />
+                {searchUsers.map((user) => (
+                    <NewChatRecommendUser key={user.member.id} {...user} />
                 ))}
             </div>
         </NewChatFriendListContainer>

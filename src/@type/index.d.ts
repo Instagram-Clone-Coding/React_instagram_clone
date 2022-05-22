@@ -12,7 +12,7 @@ declare module Direct {
         content: string | PostMessageDTO;
         messageType: messageType;
         messageDate: string;
-        senderId: number;
+        sender: Common.memberType;
         roomId: number;
         senderImage: Common.ImageInfo;
         likeMembers: AuthType.UserInfo[];
@@ -337,6 +337,13 @@ declare module Common {
         hasStory: boolean;
     }
 
+    interface searchUserType {
+        dtype: "MEMBER";
+        follwer: boolean;
+        following: boolean;
+        followingMemberFollow: { memberUsername: string }[];
+        member: memberType;
+    }
     interface PostImageDTOProps {
         id: number;
         postImageUrl: string;

@@ -181,7 +181,9 @@ const ChatSection = ({
                                       ),
                                   ) > 10
                         }
-                        me={userInfo?.memberId === chatMessageListItem.senderId}
+                        me={
+                            userInfo?.memberId === chatMessageListItem.sender.id
+                        }
                         {...chatMessageListItem}
                         likeMessageHandler={likeMessageHandler}
                         unlikeMessageHandler={unlikeMessageHandler}
