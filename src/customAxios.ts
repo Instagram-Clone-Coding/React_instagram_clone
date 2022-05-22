@@ -19,7 +19,6 @@ export const checkToken = async (config: AxiosRequestConfig) => {
         )[1];
     const decode = jwt.decode(accessToken);
     const nowDate = new Date().getTime() / 1000;
-
     if (decode.exp < nowDate) {
         try {
             const {
