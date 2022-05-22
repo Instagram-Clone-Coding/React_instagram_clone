@@ -1,8 +1,11 @@
-import { getEditItem } from "app/store/ducks/edit/editThunk";
+import { selectModal } from "app/store/ducks/edit/editSlice";
+import { edit, getEditItem } from "app/store/ducks/edit/editThunk";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import useInput from "hooks/useInput";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import Button from "styles/UI/Button";
+import Notification from "styles/UI/Notification";
+import ProfileImageModal from "../Modal/ProfileImageModal";
 import EditItemInput from "../Section/EditItemInput";
 
 const guide = {
@@ -49,33 +52,68 @@ const Container = styled.div`
 
     .input-wrapper {
     }
+
+    .button-wrapper {
+        margin: 0 auto;
+    }
 `;
 
 const Profile = () => {
     const dispatch = useAppDispatch();
     const editItem = useAppSelector((state) => state.edit.editItem);
+    const modal = useAppSelector(({ edit }) => edit.modal);
+    const userInfo = useAppSelector(({ auth }) => auth.userInfo);
+    const [errMsg, setErrMsg] = useState<string>("");
 
     useEffect(() => {
         dispatch(getEditItem());
     }, [dispatch]);
 
+    const editHandler = async () => {
+        try {
+            setErrMsg("");
+            const data = await dispatch(edit(editItem)).unwrap();
+
+            if (data.status === 400) {
+                data.errors.map(
+                    (error: { field: string; reason: string; value: string }) =>
+                        setErrMsg((errMsg) => `${errMsg} ${error.reason}`),
+                );
+            }
+
+            if (data.status === 400 && data.errors.length === 0) {
+                // 사용자 이름 중복 인경우 여기로 들어옵니다.
+                setErrMsg(() => data.message);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const openImageModalHandler = () => {
+        dispatch(selectModal("image"));
+    };
+
     return (
         <Container>
+            {errMsg.length > 0 && <Notification text={errMsg} />}
             <div className="profile">
                 <img
-                    src={editItem.memberImageUrl}
-                    alt="user"
+                    src={userInfo?.memberImageUrl}
+                    alt={userInfo?.memberUsername}
                     className="user-image"
                 />
                 <div className="name-guide">
                     <span className="username">{editItem.memberUsername}</span>
-                    <span className="guide">프로필 사진 바꾸기</span>
+                    <span className="guide" onClick={openImageModalHandler}>
+                        프로필 사진 바꾸기
+                    </span>
                 </div>
             </div>
             <div className="input-wrapper">
-                {Object.entries(editItem).map((item) => (
+                {Object.entries(editItem).map((item: string[]) => (
                     <EditItemInput
-                        item={item}
+                        item={item as [EditType.editItemKeyType, string | null]}
                         guide={
                             guide[
                                 item[0] as
@@ -87,7 +125,19 @@ const Profile = () => {
                     />
                 ))}
             </div>
-            <button>제출하기</button>
+            <div className="button-wrapper">
+                <Button bgColor="#0095f6" color="#fff" onClick={editHandler}>
+                    제출{" "}
+                </Button>
+            </div>
+            {modal === "image" && (
+                <ProfileImageModal
+                    onModalOn={openImageModalHandler}
+                    onModalOff={() => {
+                        dispatch(selectModal(null));
+                    }}
+                />
+            )}
         </Container>
     );
 };

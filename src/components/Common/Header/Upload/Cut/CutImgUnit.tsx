@@ -1,5 +1,6 @@
 import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { getProcessedMinSize } from "components/Common/Header/Upload/Cut/Cut";
 import React, {
     forwardRef,
     memo,
@@ -9,7 +10,7 @@ import React, {
 } from "react";
 import styled from "styled-components";
 
-const getRatioCalculatedBoxWidth = (
+export const getRatioCalculatedBoxWidth = (
     ratioType: UploadType.RatioType,
     currentWidth: number,
 ) => {
@@ -21,7 +22,7 @@ const getRatioCalculatedBoxWidth = (
     }
 };
 
-const getRatioCalculatedBoxHeight = (
+export const getRatioCalculatedBoxHeight = (
     ratioType: UploadType.RatioType,
     currentWidth: number,
 ) => {
@@ -125,14 +126,26 @@ const CutImgUnit = forwardRef<HTMLDivElement, CutImgUnitProps>(
                 event.stopPropagation();
                 if (!isGrabbing) return;
                 const { screenX, screenY } = event;
+                const { minWidth, minHeight } = getProcessedMinSize(
+                    processedCurrentWidth,
+                    currentFile.imageRatio,
+                    ratioMode,
+                );
+                const scaledMinWidth = minWidth * (currentFile.scale / 100 + 1);
+                const scaledMinHeight =
+                    minHeight * (currentFile.scale / 100 + 1);
                 const gapX = screenX - currentFile.grabbedPosition.x;
                 const gapY = screenY - currentFile.grabbedPosition.y;
                 // setTransformX(gapX + transformX);
                 // setTransformY(gapY + transformY);
                 dispatch(
                     uploadActions.startTranslate({
-                        translateX: gapX + currentFile.translateX,
-                        translateY: gapY + currentFile.translateY,
+                        translateX:
+                            (gapX + currentFile.translateX * scaledMinWidth) /
+                            scaledMinWidth,
+                        translateY:
+                            (gapY + currentFile.translateY * scaledMinHeight) /
+                            scaledMinHeight,
                     }),
                 );
             },
@@ -141,6 +154,10 @@ const CutImgUnit = forwardRef<HTMLDivElement, CutImgUnitProps>(
                 dispatch,
                 currentFile.grabbedPosition.x,
                 currentFile.grabbedPosition.y,
+                processedCurrentWidth,
+                currentFile.imageRatio,
+                ratioMode,
+                currentFile.scale,
             ], // 여기서 transform을 deps로 넣으면 엄청 중첩되서 빠르게 움직여버림
         );
 
@@ -154,51 +171,6 @@ const CutImgUnit = forwardRef<HTMLDivElement, CutImgUnitProps>(
             },
             [onFixTransform, isGrabbing, currentFile.scale],
         );
-        const processedMinSize: {
-            minWidth: number;
-            minHeight: number;
-        } = useMemo(() => {
-            const imageRatio = currentFile.imageRatio;
-            if (ratioMode !== "square") {
-                switch (ratioMode) {
-                    case "thin":
-                        if (imageRatio > 1) {
-                            return {
-                                minWidth: processedCurrentWidth * imageRatio,
-                                minHeight: processedCurrentWidth,
-                            };
-                        } else {
-                            return {
-                                minWidth: processedCurrentWidth * 0.8,
-                                minHeight:
-                                    (processedCurrentWidth * 0.8) / imageRatio,
-                            };
-                        }
-                    case "original":
-                        return {
-                            minWidth: processedCurrentWidth,
-                            minHeight: processedCurrentWidth / imageRatio,
-                        };
-                    case "fat":
-                        return {
-                            minWidth: processedCurrentWidth,
-                            minHeight: processedCurrentWidth / imageRatio,
-                        };
-                }
-            } else {
-                if (imageRatio > 1) {
-                    return {
-                        minWidth: processedCurrentWidth * imageRatio,
-                        minHeight: processedCurrentWidth,
-                    };
-                } else {
-                    return {
-                        minWidth: processedCurrentWidth,
-                        minHeight: processedCurrentWidth / imageRatio,
-                    };
-                }
-            }
-        }, [currentFile.imageRatio, processedCurrentWidth, ratioMode]);
 
         return (
             <StyledCutImgUnit
@@ -219,10 +191,16 @@ const CutImgUnit = forwardRef<HTMLDivElement, CutImgUnitProps>(
                             currentFile.translateY === 0 &&
                             currentFile.scale === 0
                                 ? "none"
-                                : `translate3d(${currentFile.translateX}px,${
-                                      currentFile.translateY
-                                  }px,0) scale(${currentFile.scale / 100 + 1})`,
-                        ...processedMinSize,
+                                : `translate3d(${
+                                      currentFile.translateX * 100
+                                  }%,${
+                                      currentFile.translateY * 100
+                                  }%,0) scale(${currentFile.scale / 100 + 1})`,
+                        ...getProcessedMinSize(
+                            processedCurrentWidth,
+                            currentFile.imageRatio,
+                            ratioMode,
+                        ),
                     }}
                 ></div>
             </StyledCutImgUnit>

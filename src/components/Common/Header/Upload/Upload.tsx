@@ -3,10 +3,10 @@ import ModalCard from "styles/UI/ModalCard";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { uploadActions } from "app/store/ducks/upload/uploadSlice";
-import { ReactComponent as BackIcon } from "assets/Svgs/back.svg";
 import DragAndDrop from "components/Common/Header/Upload/DragAndDrop";
 import Cut from "components/Common/Header/Upload/Cut";
 import Edit from "components/Common/Header/Upload/Edit";
+import Content from "components/Common/Header/Upload/Content";
 
 interface ModalInnerProps {
     backdropWidth: number;
@@ -25,31 +25,6 @@ const StyledUploadModalInner = styled.div<ModalInnerProps>`
     align-items: center;
     overflow: hidden;
     border-radius: 12px;
-    & > .upload__header {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        height: 42px;
-        min-height: 42px;
-        border-bottom: 1px solid ${(props) => props.theme.color.bd_gray};
-        & > h1 {
-            font-weight: ${(props) => props.theme.font.bold};
-            flex-grow: 1;
-            text-align: center;
-            font-size: 16px;
-        }
-        & > div {
-            flex: 0 0 48px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 20px;
-            & > .upload__next {
-                color: ${(props) => props.theme.color.blue};
-                font-weight: ${(props) => props.theme.font.bold};
-            }
-        }
-    }
 `;
 
 const BORDER_TOTAL_WIDTH = 2;
@@ -69,16 +44,6 @@ const Upload = () => {
         [backDropwidth],
     );
 
-    const currentWidthLimitedByWindowHeight = useMemo(
-        () =>
-            Math.min(
-                currentWidth + BORDER_TOTAL_WIDTH + 43,
-                backDropHeight - 184,
-            ) -
-            43 +
-            (step !== "edit" ? 0 : 340),
-        [currentWidth, backDropHeight, step],
-    );
     const currentHeightLimitedByWindowHeight = useMemo(
         () =>
             Math.min(
@@ -88,6 +53,11 @@ const Upload = () => {
         [currentWidth, backDropHeight],
     );
 
+    const currentWidthLimitedByWindowHeight = useMemo(
+        () =>
+            Math.min(currentHeightLimitedByWindowHeight - 43, currentMaxWidth),
+        [currentHeightLimitedByWindowHeight, currentMaxWidth],
+    );
     useEffect(() => {
         window.addEventListener("resize", () => {
             setBackDropWidth(window.innerWidth);
@@ -101,17 +71,6 @@ const Upload = () => {
         };
     }, []);
 
-    const currentHeading = useCallback((step: UploadType.StepType) => {
-        switch (step) {
-            case "dragAndDrop":
-                return "새 게시물 만들기";
-            case "cut":
-                return "자르기";
-            case "edit":
-                return "편집";
-        }
-    }, []);
-
     const currentComponent = useCallback(
         (step: UploadType.StepType) => {
             switch (step) {
@@ -119,25 +78,23 @@ const Upload = () => {
                     return <DragAndDrop />;
                 case "cut":
                     return (
-                        <Cut
-                            currentWidth={Math.min(
-                                currentHeightLimitedByWindowHeight - 43,
-                                currentMaxWidth,
-                            )}
-                        />
+                        <Cut currentWidth={currentWidthLimitedByWindowHeight} />
                     );
                 case "edit":
                     return (
                         <Edit
-                            currentWidth={Math.min(
-                                currentHeightLimitedByWindowHeight - 43,
-                                currentMaxWidth,
-                            )}
+                            currentWidth={currentWidthLimitedByWindowHeight}
+                        />
+                    );
+                case "content":
+                    return (
+                        <Content
+                            currentWidth={currentWidthLimitedByWindowHeight}
                         />
                     );
             }
         },
-        [currentHeightLimitedByWindowHeight, currentMaxWidth],
+        [currentWidthLimitedByWindowHeight],
     );
 
     const checkIsGrabbingAndCancelUpload = () => {
@@ -154,36 +111,28 @@ const Upload = () => {
             onModalOn={() => dispatch(uploadActions.startUpload())}
             onModalOff={checkIsGrabbingAndCancelUpload}
             isWithCancelBtn={true}
-            width={currentWidthLimitedByWindowHeight}
+            width={
+                currentWidthLimitedByWindowHeight +
+                (step !== "edit" && step !== "content" ? 0 : 340)
+            }
             height={currentHeightLimitedByWindowHeight}
             maxWidth={
                 currentMaxWidth +
                 BORDER_TOTAL_WIDTH +
-                (step !== "edit" ? 0 : 340)
+                (step !== "edit" && step !== "content" ? 0 : 340)
             }
             maxHeight={currentMaxWidth + BORDER_TOTAL_WIDTH + 43}
-            minWidth={348 + BORDER_TOTAL_WIDTH + (step !== "edit" ? 0 : 340)}
+            minWidth={
+                348 +
+                BORDER_TOTAL_WIDTH +
+                (step !== "edit" && step !== "content" ? 0 : 340)
+            }
             minHeight={391 + BORDER_TOTAL_WIDTH}
         >
             <StyledUploadModalInner
                 backdropWidth={backDropwidth}
                 onMouseUp={() => dispatch(uploadActions.stopGrabbing())}
             >
-                <div className="upload__header">
-                    {step !== "dragAndDrop" && (
-                        <div onClick={() => dispatch(uploadActions.prevStep())}>
-                            <button>
-                                <BackIcon />
-                            </button>
-                        </div>
-                    )}
-                    <h1>{currentHeading(step)}</h1>
-                    {step !== "dragAndDrop" && (
-                        <div onClick={() => dispatch(uploadActions.nextStep())}>
-                            <button className="upload__next">다음</button>
-                        </div>
-                    )}
-                </div>
                 {currentComponent(step)}
             </StyledUploadModalInner>
         </ModalCard>

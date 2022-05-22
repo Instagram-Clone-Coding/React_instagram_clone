@@ -135,6 +135,11 @@ declare module AuthType {
     interface resetPasswordState {
         email?: string;
     }
+
+    type resetPasswordQuery = {
+        username: string;
+        code: string;
+    };
 }
 
 declare module HomeType {
@@ -253,12 +258,16 @@ declare module UploadType {
         x: number;
         y: number;
     }
+
+    // 퍼센트 값으로 변경
     interface TranslateProps {
         translateX: number;
         translateY: number;
     }
     interface FileDragAndDropProps {
         imageRatio: number;
+        width: number;
+        height: number;
         url: string;
     }
     interface FileCutProps extends TranslateProps {
@@ -266,11 +275,30 @@ declare module UploadType {
         scale: number;
     }
 
-    interface FileProps extends FileDragAndDropProps, FileCutProps {}
+    interface EditType {
+        brightness: number;
+        contrast: number;
+        saturate: number;
+        // 온도
+        blur: number;
+        // backgroundBlur
+    }
+
+    interface ContentType {
+        newUrl: string;
+        // 예정
+    }
+
+    interface FileProps
+        extends FileDragAndDropProps,
+            FileCutProps,
+            EditType,
+            ContentType {}
     // type FileProps = FileDragAndDropProps & FileCutProps;
 
     type RatioType = "original" | "square" | "thin" | "fat";
     type StepType = "dragAndDrop" | "cut" | "edit" | "content";
+    type AdjustInputTextType = "밝기" | "대비" | "채도" | "흐리게";
 
     interface UploadStateProps {
         isUploading: boolean;
@@ -281,6 +309,7 @@ declare module UploadType {
         currentIndex: number;
         grabbedGalleryImgIndex: number | null;
         grabbedGalleryImgNewIndex: number | null;
+        textareaValue: string;
     }
 }
 
@@ -372,14 +401,22 @@ declare module Profile {
 declare module EditType {
     interface editItemType {
         memberUsername: string;
-        memberImageUrl: string;
         memberName: string;
         memberWebsite: string | null;
         memberIntroduce: string | null;
         memberEmail: string | null;
         memberPhone: string | null;
-        memberGender: "MALE" | "FEMALE" | "PRIVATE";
+        memberGender: string;
     }
+
+    type editItemKeyType =
+        | "memberUsername"
+        | "memberName"
+        | "memberWebsite"
+        | "memberIntroduce"
+        | "memberEmail"
+        | "memberPhone"
+        | "memberGender";
 
     type menuType =
         | "프로필 편집"
@@ -392,4 +429,6 @@ declare module EditType {
         | "로그인 활동"
         | "Instagram에서 보낸 이메일"
         | "도움말";
+
+    type modalType = "image" | null;
 }
