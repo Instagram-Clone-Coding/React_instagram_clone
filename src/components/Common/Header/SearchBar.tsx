@@ -1,8 +1,16 @@
-import { changeSearchUser } from "app/store/ducks/common/commonSlice";
-import { searchUser } from "app/store/ducks/common/commonThunk";
+import {
+    changeSearchUser,
+    resetRecordedUsers,
+} from "app/store/ducks/common/commonSlice";
+import {
+    getSearchRecord,
+    searchUser,
+} from "app/store/ducks/common/commonThunk";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import sprite from "assets/Images/sprite.png";
+import axios from "axios";
 import SearchListItem from "components/Home/SearchListItem";
+import { authorizedCustomAxios } from "customAxios";
 import useOutsideClick from "hooks/useOutsideClick";
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
@@ -44,6 +52,29 @@ const SearchBarContainer = styled.div`
         padding-top: 12px;
         overflow-y: scroll;
         border-radius: 10px;
+
+        /* 최근 검색 항목 */
+
+        .recent-container {
+            display: flex;
+            flex-direction: column;
+            .header {
+                padding: 8px 16px;
+                display: flex;
+                justify-content: space-between;
+
+                .search-text {
+                    font-size: 16px;
+                    font-weight: 700;
+                }
+
+                .remove-text {
+                    color: ${theme.color.blue};
+                    font-weight: 700;
+                }
+            }
+        }
+
         .no-data-alert {
             display: flex;
             justify-content: center;
@@ -69,16 +100,28 @@ const SearchBar = () => {
     const inputRef: React.RefObject<HTMLInputElement> = useRef(null);
 
     const [isFocused, setIsFocused] = useState(false);
-    const { searchUserKeyword } = useAppSelector((state) => state.common);
+    const searchUserKeyword = useAppSelector(
+        (state) => state.common.searchUserKeyword,
+    );
     const searchUsers = useAppSelector((state) => state.common.searchUsers);
+    const recordedUsers = useAppSelector((state) => state.common.recordedUsers);
     useOutsideClick(ref, setIsFocused);
     const dispatch = useAppDispatch();
+
+    const removeAllRecordHandler = async () => {
+        const result = await authorizedCustomAxios.delete(
+            "/topsearch/recent/all",
+        );
+        dispatch(resetRecordedUsers());
+        alert(result.data.message);
+    };
 
     return (
         <SearchBarContainer
             ref={ref}
             onClick={() => {
                 setIsFocused(true);
+                dispatch(getSearchRecord());
             }}
         >
             <label htmlFor="search">
@@ -103,15 +146,42 @@ const SearchBar = () => {
                     <div className="arrow" />
 
                     <div className="search-list">
-                        {searchUsers.length > 0 ? (
+                        {/* 최근 검색 항목 */}
+                        {searchUserKeyword === "" && (
+                            <div className="recent-container">
+                                <div className="header">
+                                    <span className="search-text">
+                                        최근 검색 항목
+                                    </span>
+                                    <button
+                                        className="remove-text"
+                                        onClick={removeAllRecordHandler}
+                                    >
+                                        모두 지우기
+                                    </button>
+                                </div>
+                                {recordedUsers.map((user) => (
+                                    <SearchListItem
+                                        key={user.member.id}
+                                        {...user}
+                                        setIsFocused={setIsFocused}
+                                        button
+                                    />
+                                ))}
+                            </div>
+                        )}
+
+                        {/* 실제 검색시에 나오게 되는 화면 */}
+                        {searchUsers.length > 0 &&
                             searchUsers.map((user) => (
                                 <SearchListItem
                                     key={user.member.id}
                                     {...user}
                                     setIsFocused={setIsFocused}
                                 />
-                            ))
-                        ) : (
+                            ))}
+
+                        {searchUserKeyword !== "" && searchUsers.length === 0 && (
                             <div className="no-data-alert">
                                 <span>검색 결과가 없습니다.</span>
                             </div>

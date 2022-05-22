@@ -35,3 +35,28 @@ export const searchUser = createAsyncThunk<
         }
     },
 );
+
+export const getSearchRecord = createAsyncThunk<
+    Common.searchUserType[],
+    void,
+    { state: RootState }
+>(
+    "common/getSearchRecord",
+    async (payload, { getState, dispatch, rejectWithValue }) => {
+        try {
+            const myUsername = getState().auth.userInfo?.memberUsername;
+
+            const { data } = await authorizedCustomAxios.get(
+                "/topsearch/recent/top",
+            );
+
+            return data.data.content.filter(
+                (user: Common.searchUserType) =>
+                    user.member.username !== myUsername,
+            );
+        } catch (error) {
+            error === FAIL_TO_REISSUE_MESSAGE && dispatch(authAction.logout());
+            throw rejectWithValue(error);
+        }
+    },
+);

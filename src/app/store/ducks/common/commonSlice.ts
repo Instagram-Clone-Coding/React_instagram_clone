@@ -1,16 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { searchUser } from "./commonThunk";
+import { getSearchRecord, searchUser } from "./commonThunk";
 
 export interface InitialStateType {
+    isLoading: boolean;
     searchUserKeyword: string;
     searchUsers: Common.searchUserType[];
-    isLoading: boolean;
+    recordedUsers: Common.searchUserType[];
 }
 
 const initialState: InitialStateType = {
+    isLoading: false,
     searchUserKeyword: "",
     searchUsers: [],
-    isLoading: false,
+    recordedUsers: [],
 };
 
 const commontSlice = createSlice({
@@ -27,6 +29,9 @@ const commontSlice = createSlice({
             state.searchUserKeyword = "";
             state.searchUsers = [];
         },
+        resetRecordedUsers: (state) => {
+            state.recordedUsers = [];
+        },
     },
     extraReducers: (build) => {
         build
@@ -39,10 +44,20 @@ const commontSlice = createSlice({
             })
             .addCase(searchUser.rejected, (state) => {
                 state.isLoading = false;
+            })
+            .addCase(getSearchRecord.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getSearchRecord.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.recordedUsers = action.payload;
+            })
+            .addCase(getSearchRecord.rejected, (state) => {
+                state.isLoading = false;
             });
     },
 });
 
-export const { changeSearchUser } = commontSlice.actions;
+export const { changeSearchUser, resetRecordedUsers } = commontSlice.actions;
 
 export const commonReducer = commontSlice.reducer;
