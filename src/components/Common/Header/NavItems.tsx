@@ -138,7 +138,6 @@ const NavItems = () => {
                         className="my-profile"
                         ref={triggerRef}
                         onClick={() => {
-                            console.log(`on click ${isClickedProfile}`);
                             setIsClickedProfile(!isClickedProfile);
                         }}
                     >
