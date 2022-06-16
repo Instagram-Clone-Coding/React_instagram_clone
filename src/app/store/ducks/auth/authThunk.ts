@@ -116,7 +116,7 @@ export const logout = createAsyncThunk<void, void>(
     "auth/logout",
     async (payload, ThunkOptions) => {
         try {
-            await authorizedCustomAxios.post(`/logout`).then(() => {});
+            await authorizedCustomAxios.post(`/logout`);
         } catch (error) {
             ThunkOptions.rejectWithValue(error);
         }
