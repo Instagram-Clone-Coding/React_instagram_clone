@@ -98,7 +98,7 @@ export default function SubNav({
                     </div>
                     <span>저장됨</span>
                 </div>
-                <Link to={`account/edit`}>
+                <Link to={`/accounts/edit`}>
                     <div className="option">
                         <div className="svg">
                             <Setting />
