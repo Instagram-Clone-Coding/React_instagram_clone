@@ -335,11 +335,11 @@ const Content = ({ currentWidth }: ContentProps) => {
                             </span>
                         </div>
                     </div>
-                    <div
-                        className="upload__contentOption accessibility"
-                        onClick={() => setIsAccessOptionOn((prev) => !prev)}
-                    >
-                        <div className="header">
+                    <div className="upload__contentOption accessibility">
+                        <div
+                            className="header"
+                            onClick={() => setIsAccessOptionOn((prev) => !prev)}
+                        >
                             <span className={isAccessOptionOn ? "bold" : ""}>
                                 접근성
                             </span>
@@ -371,11 +371,13 @@ const Content = ({ currentWidth }: ContentProps) => {
                             </div>
                         )}
                     </div>
-                    <div
-                        className="upload__contentOption advanced"
-                        onClick={() => setIsAdvancedOptionOn((prev) => !prev)}
-                    >
-                        <div className="header">
+                    <div className="upload__contentOption advanced">
+                        <div
+                            className="header"
+                            onClick={() =>
+                                setIsAdvancedOptionOn((prev) => !prev)
+                            }
+                        >
                             <span className={isAdvancedOptionOn ? "bold" : ""}>
                                 고급 설정
                             </span>
