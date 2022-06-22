@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import styled from "styled-components";
 import { useAppDispatch } from "app/store/Hooks";
 import { logout } from "app/store/ducks/auth/authThunk";
@@ -66,6 +66,12 @@ const Container = styled.div`
     }
 `;
 
+type optionType = {
+    linkTo?: string;
+    text: string;
+    svg: JSX.Element;
+}; // 여기에만 쓰면, 컴포넌트에 타입 선언?
+
 export default function SubNav({
     username,
     containerRef,
@@ -80,38 +86,36 @@ export default function SubNav({
         dispatch(logout());
     };
 
+    const optionData: optionType[] = [
+        { linkTo: `/profile/${username}`, text: `프로필`, svg: <Profile /> },
+        { text: `저장됨`, svg: <Store /> },
+        { linkTo: `/accounts/edit`, text: `설정`, svg: <Setting /> },
+        { text: `계정전환`, svg: <Change /> },
+    ]; // unique key 만드는 함수, utils에 만들어놓고 이용하는거 어때요? -> 어떤식으로 만들까요?
+
     return (
         <Container>
             <div className="pointer"></div>
             <div className="settings" ref={containerRef}>
-                <Link to={`/profile/${username}`}>
-                    <div className="option">
-                        <div className="svg">
-                            <Profile />
-                        </div>
-                        <span>프로필</span>
-                    </div>
-                </Link>
-                <div className="option">
-                    <div className="svg">
-                        <Store />
-                    </div>
-                    <span>저장됨</span>
-                </div>
-                <Link to={`/accounts/edit`}>
-                    <div className="option">
-                        <div className="svg">
-                            <Setting />
-                        </div>
-                        <span>설정</span>
-                    </div>
-                </Link>
-                <div className="option">
-                    <div className="svg">
-                        <Change />
-                    </div>
-                    <span>계정전환</span>
-                </div>
+                {optionData.map(({ linkTo, text, svg }) => {
+                    return (
+                        <>
+                            {linkTo ? (
+                                <Link to={linkTo}>
+                                    <div className="option">
+                                        <div className="svg">{svg}</div>
+                                        <span>{text}</span>
+                                    </div>
+                                </Link>
+                            ) : (
+                                <div className="option">
+                                    <div className="svg">{svg}</div>
+                                    <span>{text}</span>
+                                </div>
+                            )}
+                        </>
+                    );
+                })}
                 <hr />
                 <span className="option" onClick={logoutClickHandler}>
                     로그아웃
