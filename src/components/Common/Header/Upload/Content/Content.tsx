@@ -151,6 +151,9 @@ const StyledContent = styled.div`
                     & > .imageWrapper,
                     & > input {
                         height: 44px;
+                        &:focus {
+                            border: 1px solid #a8a8a8;
+                        }
                     }
                     & > .imageWrapper {
                         width: 44px;
