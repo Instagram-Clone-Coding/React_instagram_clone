@@ -92,29 +92,35 @@ const StyledContent = styled.div`
             padding: 14px 16px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             height: 44px;
             cursor: pointer;
-            & > * {
+            & * {
                 font-size: 16px;
             }
-            & > span {
+            & > .header {
+                width: 100%;
                 display: flex;
-                justify-content: center;
                 align-items: center;
-                & > svg {
-                    transform: rotate(180deg);
-                    width: 16px;
-                    height: 16px;
-                }
-                &.bold {
-                    font-weight: ${(props) => props.theme.font.bold};
-                }
-                &.reverse {
-                    transform: rotate(180deg);
+                justify-content: space-between;
+                & > span {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    & > svg {
+                        transform: rotate(180deg);
+                        width: 16px;
+                        height: 16px;
+                    }
+                    &.bold {
+                        font-weight: ${(props) => props.theme.font.bold};
+                    }
+                    &.reverse {
+                        transform: rotate(180deg);
+                    }
                 }
             }
-            &.location {
+            &.location > .header {
                 & > input {
                     border: none;
                     background-color: transparent;
@@ -288,35 +294,43 @@ const Content = ({ currentWidth }: ContentProps) => {
                         </div>
                     </div>
                     <div className="upload__contentOption location">
-                        <input
-                            // disabled={true}
-                            placeholder="위치 추가(개발 준비중)"
-                        />
-                        <span>
-                            <LocationIcon />
-                        </span>
+                        <div className="header">
+                            <input
+                                // disabled={true}
+                                placeholder="위치 추가(개발 준비중)"
+                            />
+                            <span>
+                                <LocationIcon />
+                            </span>
+                        </div>
                     </div>
                     <div
                         className="upload__contentOption accessibility"
                         onClick={() => setIsAccessOptionOn((prev) => !prev)}
                     >
-                        <span className={isAccessOptionOn ? "bold" : ""}>
-                            접근성
-                        </span>
-                        <span className={isAccessOptionOn ? "reverse" : ""}>
-                            <DownV />
-                        </span>
+                        <div className="header">
+                            <span className={isAccessOptionOn ? "bold" : ""}>
+                                접근성
+                            </span>
+                            <span className={isAccessOptionOn ? "reverse" : ""}>
+                                <DownV />
+                            </span>
+                        </div>
                     </div>
                     <div
                         className="upload__contentOption advanced"
                         onClick={() => setIsAdvancedOptionOn((prev) => !prev)}
                     >
-                        <span className={isAdvancedOptionOn ? "bold" : ""}>
-                            고급 설정
-                        </span>
-                        <span className={isAdvancedOptionOn ? "reverse" : ""}>
-                            <DownV />
-                        </span>
+                        <div className="header">
+                            <span className={isAdvancedOptionOn ? "bold" : ""}>
+                                고급 설정
+                            </span>
+                            <span
+                                className={isAdvancedOptionOn ? "reverse" : ""}
+                            >
+                                <DownV />
+                            </span>
+                        </div>
                     </div>
                     <hr />
                 </div>
