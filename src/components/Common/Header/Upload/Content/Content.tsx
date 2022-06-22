@@ -154,6 +154,9 @@ const StyledContent = styled.div`
                         &:focus {
                             border: 1px solid #a8a8a8;
                         }
+                        &::placeholder {
+                            color: #c7c7c7;
+                        }
                     }
                     & > .imageWrapper {
                         width: 44px;
@@ -360,13 +363,11 @@ const Content = ({ currentWidth }: ContentProps) => {
                         {isAccessOptionOn && (
                             <div className="activated">
                                 <div className="smallFont">
-                                    대체 텍스트는 시각적으로 사진을 보기 어려운
-                                    사람들에게 사진 내용을 설명하는
-                                    텍스트입니다. 대체 텍스트는 회원님의 사진에
-                                    대해 자동으로 생성되며, 직접 입력할 수도
-                                    있습니다.
+                                    {`대체 텍스트는 시각적으로 사진을 보기 어려운 사람들에게 사진
+                                    내용을 설명하는 텍스트입니다. 대체 텍스트는 회원님의 사진에
+                                    대해 자동으로 생성되며, 직접 입력할 수도 있습니다.`}
                                 </div>
-                                {files.map((file) => (
+                                {files.map((file, index) => (
                                     <div key={file.newUrl}>
                                         <div className="imageWrapper">
                                             <img
@@ -382,6 +383,18 @@ const Content = ({ currentWidth }: ContentProps) => {
                                         <input
                                             type="text"
                                             placeholder="대체 텍스트 입력..."
+                                            value={file.alternativeText}
+                                            onChange={(event) =>
+                                                dispatch(
+                                                    uploadActions.setAlternativeValue(
+                                                        {
+                                                            value: event.target
+                                                                .value,
+                                                            index,
+                                                        },
+                                                    ),
+                                                )
+                                            }
                                         />
                                     </div>
                                 ))}

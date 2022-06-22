@@ -72,6 +72,7 @@ const uploadSlice = createSlice({
                 saturate: 0,
                 blur: 0,
                 newUrl: "",
+                alternativeText: "",
             });
         },
         startGrabbing: (state) => {
@@ -290,6 +291,13 @@ const uploadSlice = createSlice({
         },
         addEmojiOnTextarea: (state, action: PayloadAction<string>) => {
             state.textareaValue += action.payload;
+        },
+        setAlternativeValue: (
+            state,
+            action: PayloadAction<{ value: string; index: number }>,
+        ) => {
+            state.files[action.payload.index].alternativeText =
+                action.payload.value;
         },
     },
 });

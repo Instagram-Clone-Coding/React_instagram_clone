@@ -286,9 +286,8 @@ declare module UploadType {
 
     interface ContentType {
         newUrl: string;
-        // 예정
+        alternativeText: string;
     }
-
     interface FileProps
         extends FileDragAndDropProps,
             FileCutProps,
