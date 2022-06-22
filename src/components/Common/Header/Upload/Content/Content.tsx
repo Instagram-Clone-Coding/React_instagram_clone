@@ -89,17 +89,22 @@ const StyledContent = styled.div`
         & > .upload__contentOption {
             width: 100%;
             border-top: 1px solid ${(props) => props.theme.color.bd_gray};
-            padding: 14px 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 44px;
+            flex-direction: column;
+            min-height: 44px;
             cursor: pointer;
             & * {
                 font-size: 16px;
             }
-            & > .header {
+            & > .header,
+            & > .activated {
                 width: 100%;
+                padding: 14px 16px;
+            }
+            & > .header {
+                padding: 14px 16px;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
@@ -128,6 +133,32 @@ const StyledContent = styled.div`
                 & > span {
                     & > svg {
                         transform: none;
+                    }
+                }
+            }
+            & > .activated {
+                padding-top: 0;
+                & .smallFont {
+                    font-size: 12px;
+                    color: ${(props) => props.theme.font.gray};
+                }
+                & > div {
+                    height: 44px;
+                    margin: 12px 0 16px 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    & > img,
+                    & > input {
+                        height: 44px;
+                    }
+                    & > input {
+                        margin-left: 8px;
+                        width: 255px;
+                        background-color: transparent;
+                        border-radius: 6px;
+                        font-size: 14px;
+                        padding: 4px 12px;
                     }
                 }
             }
@@ -316,6 +347,29 @@ const Content = ({ currentWidth }: ContentProps) => {
                                 <DownV />
                             </span>
                         </div>
+                        {isAccessOptionOn && (
+                            <div className="activated">
+                                <div className="smallFont">
+                                    대체 텍스트는 시각적으로 사진을 보기 어려운
+                                    사람들에게 사진 내용을 설명하는
+                                    텍스트입니다. 대체 텍스트는 회원님의 사진에
+                                    대해 자동으로 생성되며, 직접 입력할 수도
+                                    있습니다.
+                                </div>
+                                {files.map((file) => (
+                                    <div key={file.newUrl}>
+                                        <img
+                                            src={file.newUrl}
+                                            alt={"유효하지 않은 url입니다."}
+                                        ></img>
+                                        <input
+                                            type="text"
+                                            placeholder="대체 텍스트 입력..."
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                     <div
                         className="upload__contentOption advanced"
@@ -331,6 +385,9 @@ const Content = ({ currentWidth }: ContentProps) => {
                                 <DownV />
                             </span>
                         </div>
+                        {isAdvancedOptionOn && (
+                            <div className="activated">hello</div>
+                        )}
                     </div>
                     <hr />
                 </div>
