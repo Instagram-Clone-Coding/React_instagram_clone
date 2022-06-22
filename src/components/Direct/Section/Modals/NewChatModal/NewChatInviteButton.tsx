@@ -24,12 +24,14 @@ const NewChatInviteButtonContainer = styled.div`
     }
 `;
 
-const NewChatInviteButton = () => {
-    const { selectedNewChatUser } = useAppSelector((state) => state.direct);
+interface NewChatInviteButtonProps {
+    username: string;
+}
 
+const NewChatInviteButton = ({ username }: NewChatInviteButtonProps) => {
     return (
         <NewChatInviteButtonContainer>
-            <button>{selectedNewChatUser}</button>
+            <button>{username}</button>
             <button>
                 <CloseSVG color={"#0095f6"} size={"12"} />
             </button>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import ReportModal from "components/Home/Modals/ReportModal";
 import { closeModal, openModal } from "app/store/ducks/direct/DirectSlice";
@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import CommonDirectModal from "components/Direct/Section/Modals/CommonDirectModal";
 import { Link } from "react-router-dom";
 import BlockModal from "components/Common/Modal/BlockModal";
+import theme from "styles/theme";
 
 const DetailSectionContainer = styled.div`
     height: 100%;
@@ -15,6 +16,25 @@ const DetailSectionContainer = styled.div`
 
     & > div {
         border-bottom: 1px solid rgba(var(--b6a, 219, 219, 219), 1);
+    }
+
+    .group-name {
+        padding: 15px 16px 0px;
+        border-bottom: none;
+        display: flex;
+        input {
+            border: none;
+            background-color: transparent;
+            padding-left: 5px;
+            &::placeholder {
+                color: gray;
+            }
+        }
+
+        .complete-button {
+            margin-left: auto;
+            color: ${theme.color.blue};
+        }
     }
 
     .direct-notification-check {
@@ -84,9 +104,16 @@ const DetailSectionContainer = styled.div`
         flex-direction: column;
 
         div {
+            display: flex;
+            flex-direction: column;
             margin: 12px 16px;
             color: #ed4956;
             cursor: pointer;
+
+            span {
+                margin-top: 10px;
+                color: ${theme.font.gray};
+            }
         }
     }
 `;
@@ -94,38 +121,69 @@ const DetailSectionContainer = styled.div`
 const DetailSection = () => {
     const dispatch = useAppDispatch();
     const { modal, selectedRoom } = useAppSelector((state) => state.direct);
-    const [opponent, setOpponent] = useState<Direct.memberProps>();
+    const [opponents, setOpponents] = useState<Direct.memberProps[]>();
     const username = useAppSelector(
         (state) => state.auth.userInfo?.memberUsername,
     );
-
     useEffect(() => {
-        setOpponent(
+        setOpponents(
             selectedRoom?.members.filter((member) => {
                 return member.username !== username;
-            })[0],
+            }),
         );
-    }, [selectedRoom]);
+    }, [selectedRoom, username]);
+    const isGroupChat = useMemo(() => {
+        if (opponents) {
+            return opponents.length > 1;
+        }
+    }, [opponents]);
+
     return (
         <DetailSectionContainer>
+            {isGroupChat && (
+                <div className="group-name">
+                    <label htmlFor="group-name">그룹 이름:</label>
+                    <input
+                        type="text"
+                        id="group-name"
+                        placeholder="이름을 추가하세요"
+                    />
+                    <button className="complete-button">완료</button>
+                </div>
+            )}
             <div className="direct-notification-check">
                 <input type={"checkbox"} /> <span>메시지 알림 해제</span>
             </div>
             <div className="member-container">
                 <h3>멤버</h3>
-                <Link to={`profile/${opponent?.username}`}>
-                    <div className="member-profile-container">
-                        <img src={opponent?.imageUrl} alt="맴버 사진" />
-                        <div className="member-id-name">
-                            <span className="username">
-                                {opponent?.username}
-                            </span>
-                            <span className="name">{opponent?.name}</span>
+                {opponents?.map((opponent) => (
+                    <Link to={`profile/${opponent?.username}`}>
+                        <div className="member-profile-container">
+                            <img src={opponent?.imageUrl} alt="맴버 사진" />
+                            <div className="member-id-name">
+                                <span className="username">
+                                    {opponent?.username}
+                                </span>
+                                <span className="name">{opponent?.name}</span>
+                            </div>
                         </div>
-                    </div>
-                </Link>
+                    </Link>
+                ))}
             </div>
             <div className="various-option-container">
+                {isGroupChat && (
+                    <div
+                        onClick={() => {
+                            console.log("채팅 나가기");
+                        }}
+                    >
+                        채팅 나가기
+                        <span>
+                            다른 사람이 이 채팅에 회원님을 다시 추가하지 않는 한
+                            이 그룹의 메시지를 받지 않습니다.
+                        </span>
+                    </div>
+                )}
                 <div
                     onClick={() => {
                         dispatch(openModal("deleteChat"));
@@ -133,20 +191,25 @@ const DetailSection = () => {
                 >
                     채팅 삭제
                 </div>
-                <div
-                    onClick={() => {
-                        dispatch(openModal("block"));
-                    }}
-                >
-                    차단
-                </div>
-                <div
-                    onClick={() => {
-                        dispatch(openModal("report"));
-                    }}
-                >
-                    신고
-                </div>
+                {/* 개인 채팅일 경우에만 보여줍니다. */}
+                {!isGroupChat && (
+                    <>
+                        <div
+                            onClick={() => {
+                                dispatch(openModal("block"));
+                            }}
+                        >
+                            차단
+                        </div>
+                        <div
+                            onClick={() => {
+                                dispatch(openModal("report"));
+                            }}
+                        >
+                            신고
+                        </div>
+                    </>
+                )}
             </div>
 
             {/*under this point is modal section*/}

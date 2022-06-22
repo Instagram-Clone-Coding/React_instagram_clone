@@ -12,7 +12,7 @@ declare module Direct {
         content: string | PostMessageDTO;
         messageType: messageType;
         messageDate: string;
-        senderId: number;
+        sender: Common.memberType;
         roomId: number;
         senderImage: Common.ImageInfo;
         likeMembers: AuthType.UserInfo[];
@@ -135,6 +135,11 @@ declare module AuthType {
     interface resetPasswordState {
         email?: string;
     }
+
+    type resetPasswordQuery = {
+        username: string;
+        code: string;
+    };
 }
 
 declare module HomeType {
@@ -149,13 +154,6 @@ declare module HomeType {
         };
     }
 
-    interface PostImageDTOProps {
-        id: number;
-        postImageUrl: string;
-        postTagDTOs: PostImgTagDTOProps[];
-        // 받아온 후 처리
-    }
-
     interface ArticleProps {
         followingMemberUsernameLikedPost: null | string; // 내가 팔로우한 사람 중에서 이 글을 좋아한 사람 있으면 보내줌
         member: Common.memberType;
@@ -163,7 +161,7 @@ declare module HomeType {
         postCommentsCount: number;
         postContent: string;
         postId: number;
-        postImageDTOs: PostImageDTOProps[];
+        postImages: Common.PostImageDTOProps[];
         postLikeFlag: boolean; // 내가 좋아요 했는지
         postLikesCount: number;
         postUploadDate: string;
@@ -311,6 +309,7 @@ declare module UploadType {
         currentIndex: number;
         grabbedGalleryImgIndex: number | null;
         grabbedGalleryImgNewIndex: number | null;
+        textareaValue: string;
     }
 }
 
@@ -337,6 +336,21 @@ declare module Common {
         image: ImageInfo;
         hasStory: boolean;
     }
+
+    interface searchUserType {
+        dtype: "MEMBER";
+        follwer: boolean;
+        following: boolean;
+        followingMemberFollow: { memberUsername: string }[];
+        member: memberType;
+    }
+    interface PostImageDTOProps {
+        id: number;
+        postImageUrl: string;
+        postTags: PostImgTagDTOProps[];
+        altText: string;
+        // 받아온 후 처리
+    }
 }
 
 declare module Profile {
@@ -359,7 +373,7 @@ declare module Profile {
 
     interface PostType {
         postId: number;
-        postImageUrl: string;
+        postImages: Common.PostImageDTOProps;
         hasManyPosts: boolean;
         postCommentsCount: number;
         postLikesCount: number;
@@ -387,14 +401,22 @@ declare module Profile {
 declare module EditType {
     interface editItemType {
         memberUsername: string;
-        memberImageUrl: string;
         memberName: string;
         memberWebsite: string | null;
         memberIntroduce: string | null;
         memberEmail: string | null;
         memberPhone: string | null;
-        memberGender: "MALE" | "FEMALE" | "PRIVATE";
+        memberGender: string;
     }
+
+    type editItemKeyType =
+        | "memberUsername"
+        | "memberName"
+        | "memberWebsite"
+        | "memberIntroduce"
+        | "memberEmail"
+        | "memberPhone"
+        | "memberGender";
 
     type menuType =
         | "프로필 편집"
@@ -407,4 +429,6 @@ declare module EditType {
         | "로그인 활동"
         | "Instagram에서 보낸 이메일"
         | "도움말";
+
+    type modalType = "image" | null;
 }

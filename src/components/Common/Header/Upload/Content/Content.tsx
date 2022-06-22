@@ -2,12 +2,16 @@ import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { getNewImageSizeBasedOnOriginal } from "components/Common/Header/Upload/Edit/Edit";
 import UploadHeader from "components/Common/Header/Upload/UploadHeader";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import {
     getRatioCalculatedBoxWidth,
     getRatioCalculatedBoxHeight,
 } from "components/Common/Header/Upload/Cut/CutImgUnit";
+import { ReactComponent as SmileFace } from "assets/Svgs/smileFace.svg";
+import { ReactComponent as DownV } from "assets/Svgs/downV.svg";
+import { ReactComponent as LocationIcon } from "assets/Svgs/location.svg";
+import Picker, { IEmojiData } from "emoji-picker-react";
 
 const StyledContent = styled.div`
     display: flex;
@@ -17,10 +21,11 @@ const StyledContent = styled.div`
         justify-content: center;
         align-items: center;
     }
-    & > .upload__contentInputs {
+    & > .upload__contents {
         width: 340px;
         min-width: 340px;
         max-width: 340px;
+
         & > .textareaBox {
             & > .textarea__header {
                 margin: 18px 16px 14px 16px;
@@ -36,6 +41,97 @@ const StyledContent = styled.div`
                     font-size: 16px;
                 }
             }
+            & > textarea {
+                border: none;
+                overflow: auto;
+                outline: none;
+                -webkit-box-shadow: none;
+                -moz-box-shadow: none;
+                box-shadow: none;
+                resize: none; /*remove the resize handle on the bottom right*/
+                width: 100%;
+                height: 168px;
+                padding: 0 16px;
+                font-size: 16px;
+                background: transparent;
+            }
+            & > .textarea__bottom {
+                display: flex;
+                justify-content: space-between;
+                height: 30px;
+                padding: 4px 16px 4px 8px;
+                position: relative;
+                .emoji-picker-react {
+                    position: absolute;
+                    left: -300px;
+                    top: -200px;
+                    width: 300px !important;
+                    height: 400px;
+                    @media (max-width: 800px) {
+                        top: -100px;
+                        height: 200px;
+                    }
+                }
+                & > button {
+                    color: #c7c7c7;
+                    font-size: 12px;
+                    font-weight: normal;
+                    &:hover {
+                        color: black;
+                    }
+                }
+                & > svg {
+                    color: ${(props) => props.theme.font.gray};
+                    cursor: pointer;
+                }
+            }
+        }
+        & > .upload__contentOption {
+            width: 100%;
+            border-top: 1px solid ${(props) => props.theme.color.bd_gray};
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 44px;
+            cursor: pointer;
+            & > * {
+                font-size: 16px;
+            }
+            & > span {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                & > svg {
+                    transform: rotate(180deg);
+                    width: 16px;
+                    height: 16px;
+                }
+                &.bold {
+                    font-weight: ${(props) => props.theme.font.bold};
+                }
+                &.reverse {
+                    transform: rotate(180deg);
+                }
+            }
+            &.location {
+                & > input {
+                    border: none;
+                    background-color: transparent;
+                }
+                & > span {
+                    & > svg {
+                        transform: none;
+                    }
+                }
+            }
+        }
+        & > hr {
+            width: 100%;
+            margin: 0;
+            border: 0;
+            background-color: ${(props) => props.theme.color.bd_gray};
+            height: 1px;
         }
     }
 `;
@@ -45,16 +141,24 @@ interface ContentProps {
 }
 
 const Content = ({ currentWidth }: ContentProps) => {
-    const { files, currentIndex, ratioMode } = useAppSelector(
+    const dispatch = useAppDispatch();
+    const { files, currentIndex, ratioMode, textareaValue } = useAppSelector(
         (state) => state.upload,
     );
     const { userInfo } = useAppSelector((state) => state.auth);
+    const [isEmojiModalOn, setIsEmojiModalOn] = useState(false);
+    const [isAccessOptionOn, setIsAccessOptionOn] = useState(false);
+    const [isAdvancedOptionOn, setIsAdvancedOptionOn] = useState(false);
+
+    const onEmojiClick = (event: React.MouseEvent, emojiObject: IEmojiData) => {
+        dispatch(uploadActions.addEmojiOnTextarea(emojiObject.emoji));
+        setIsEmojiModalOn(false);
+    };
+
     const currentFile = useMemo(
         () => files[currentIndex],
         [files, currentIndex],
     );
-
-    const dispatch = useAppDispatch();
 
     useEffect(() => {
         files.forEach((file, index) => {
@@ -149,7 +253,7 @@ const Content = ({ currentWidth }: ContentProps) => {
                         />
                     )}
                 </div>
-                <div className="upload__contentInputs">
+                <div className="upload__contents">
                     <div className="upload__contentInput textareaBox">
                         <div className="textarea__header">
                             <img
@@ -158,11 +262,63 @@ const Content = ({ currentWidth }: ContentProps) => {
                             />
                             <div>{userInfo?.memberUsername}</div>
                         </div>
-                        <textarea></textarea>
+                        <textarea
+                            placeholder="문구 입력..."
+                            value={textareaValue}
+                            onChange={(event) =>
+                                dispatch(
+                                    uploadActions.setTextareaValue(
+                                        event.target.value,
+                                    ),
+                                )
+                            }
+                            maxLength={2200}
+                        ></textarea>
+                        <div
+                            className="textarea__bottom"
+                            onBlur={() => setIsEmojiModalOn(false)}
+                        >
+                            {isEmojiModalOn && (
+                                <Picker onEmojiClick={onEmojiClick} />
+                            )}
+                            <SmileFace
+                                onClick={() => setIsEmojiModalOn(true)}
+                            />
+                            <button>{`${textareaValue.length}/2,200`}</button>
+                        </div>
                     </div>
-                    <div className="upload__contentInput location"></div>
-                    <div className="upload__contentInput accessibility"></div>
-                    <div className="upload__contentInput advanced"></div>
+                    <div className="upload__contentOption location">
+                        <input
+                            // disabled={true}
+                            placeholder="위치 추가(개발 준비중)"
+                        />
+                        <span>
+                            <LocationIcon />
+                        </span>
+                    </div>
+                    <div
+                        className="upload__contentOption accessibility"
+                        onClick={() => setIsAccessOptionOn((prev) => !prev)}
+                    >
+                        <span className={isAccessOptionOn ? "bold" : ""}>
+                            접근성
+                        </span>
+                        <span className={isAccessOptionOn ? "reverse" : ""}>
+                            <DownV />
+                        </span>
+                    </div>
+                    <div
+                        className="upload__contentOption advanced"
+                        onClick={() => setIsAdvancedOptionOn((prev) => !prev)}
+                    >
+                        <span className={isAdvancedOptionOn ? "bold" : ""}>
+                            고급 설정
+                        </span>
+                        <span className={isAdvancedOptionOn ? "reverse" : ""}>
+                            <DownV />
+                        </span>
+                    </div>
+                    <hr />
                 </div>
             </StyledContent>
         </>

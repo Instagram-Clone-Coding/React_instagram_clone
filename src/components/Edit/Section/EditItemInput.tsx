@@ -1,23 +1,17 @@
-import useInput from "hooks/useInput";
-import React from "react";
+import { Dispatch } from "@reduxjs/toolkit";
+import { changeEditItem } from "app/store/ducks/edit/editSlice";
+import { useAppDispatch } from "app/store/Hooks";
+import React, { SetStateAction } from "react";
 import styled from "styled-components";
-const en2kr = (english: string) => {
-    switch (english) {
-        case "memberUsername":
-            return "사용자 이름";
-        case "memberName":
-            return "이름";
-        case "memberWebsite":
-            return "웹사이트";
-        case "memberIntroduce":
-            return "소개";
-        case "memberEmail":
-            return "이메일";
-        case "memberPhone":
-            return "전화번호";
-        case "memberGender":
-            return "성별";
-    }
+
+const en2kr = {
+    memberUsername: "사용자 이름",
+    memberName: "이름",
+    memberWebsite: "웹사이트",
+    memberIntroduce: "소개",
+    memberEmail: "이메일",
+    memberPhone: "전화번호",
+    memberGender: "성별",
 };
 
 const Container = styled.div`
@@ -54,18 +48,33 @@ const Container = styled.div`
 `;
 
 interface EditItemProps {
-    item: any;
+    item: [EditType.editItemKeyType, string | null];
     guide?: string;
 }
 
 const EditItemInput = ({ item, guide }: EditItemProps) => {
+    const dispatch = useAppDispatch();
+
     return (
         <Container>
             <aside>
-                <label htmlFor={item[0]}>{en2kr(item[0])}</label>
+                <label htmlFor={item[0]}>{en2kr[item[0]]}</label>
             </aside>
             <div className="input-wrapper">
-                <input type="text" id={item[0]} placeholder={en2kr(item[0])} />
+                <input
+                    type="text"
+                    id={item[0]}
+                    placeholder={en2kr[item[0]]}
+                    value={item[1] ? item[1] : ""}
+                    onChange={(e) => {
+                        dispatch(
+                            changeEditItem({
+                                name: item[0],
+                                value: e.target.value,
+                            }),
+                        );
+                    }}
+                />
                 <div className="guide">{guide}</div>
             </div>
         </Container>
