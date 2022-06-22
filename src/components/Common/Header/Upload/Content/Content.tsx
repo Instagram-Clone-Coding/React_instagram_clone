@@ -418,7 +418,29 @@ const Content = ({ currentWidth }: ContentProps) => {
                             </span>
                         </div>
                         {isAdvancedOptionOn && (
-                            <div className="activated">hello</div>
+                            <div className="activated">
+                                <div>
+                                    <div>
+                                        이 게시물의 좋아요 수 및 조회수 숨기기
+                                    </div>
+                                    <div></div>
+                                </div>
+                                <div className="smallFont">
+                                    이 게시물의 총 좋아요 및 조회수는 회원님만
+                                    볼 수 있습니다. 나중에 게시물 상단에 있는
+                                    ··· 메뉴에서 이 설정을 변경할 수 있습니다.
+                                    다른 사람의 게시물에서 좋아요 수를 숨기려면
+                                    계정 설정으로 이동하세요.
+                                </div>
+                                <div>
+                                    <div>댓글 기능 해제</div>
+                                    <div></div>
+                                </div>
+                                <div className="smallFont">
+                                    나중에 게시물 상단의 메뉴(···)에서 이 설정을
+                                    변경할 수 있습니다.
+                                </div>
+                            </div>
                         )}
                     </div>
                     <hr />
