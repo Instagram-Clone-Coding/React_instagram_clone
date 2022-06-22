@@ -138,19 +138,26 @@ const StyledContent = styled.div`
             }
             & > .activated {
                 padding-top: 0;
-                & .smallFont {
+                & > .smallFont {
                     font-size: 12px;
                     color: ${(props) => props.theme.font.gray};
                 }
+
                 & > div {
                     height: 44px;
                     margin: 12px 0 16px 0;
                     display: flex;
                     align-items: center;
-                    justify-content: space-between;
-                    & > img,
+                    & > .imageWrapper,
                     & > input {
                         height: 44px;
+                    }
+                    & > .imageWrapper {
+                        width: 44px;
+                        height: 44px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
                     }
                     & > input {
                         margin-left: 8px;
@@ -358,10 +365,17 @@ const Content = ({ currentWidth }: ContentProps) => {
                                 </div>
                                 {files.map((file) => (
                                     <div key={file.newUrl}>
-                                        <img
-                                            src={file.newUrl}
-                                            alt={"유효하지 않은 url입니다."}
-                                        ></img>
+                                        <div className="imageWrapper">
+                                            <img
+                                                src={file.newUrl}
+                                                alt={"유효하지 않은 url입니다."}
+                                                width={
+                                                    ratioMode !== "thin"
+                                                        ? 44
+                                                        : 44 * 0.8
+                                                }
+                                            ></img>
+                                        </div>
                                         <input
                                             type="text"
                                             placeholder="대체 텍스트 입력..."
