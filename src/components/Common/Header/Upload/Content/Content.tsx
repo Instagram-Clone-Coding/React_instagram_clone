@@ -12,6 +12,7 @@ import { ReactComponent as SmileFace } from "assets/Svgs/smileFace.svg";
 import { ReactComponent as DownV } from "assets/Svgs/downV.svg";
 import { ReactComponent as LocationIcon } from "assets/Svgs/location.svg";
 import Picker, { IEmojiData } from "emoji-picker-react";
+import UploadImgArrowAndDots from "components/Common/Header/UploadImgArrowAndDots";
 
 const StyledContent = styled.div`
     display: flex;
@@ -20,6 +21,7 @@ const StyledContent = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
+        position: relative;
     }
     & > .upload__contents {
         width: 340px;
@@ -226,7 +228,6 @@ interface ContentProps {
     currentWidth: number;
 }
 const Content = ({ currentWidth }: ContentProps) => {
-    console.log("rerendered");
     const dispatch = useAppDispatch();
     const {
         files,
@@ -341,6 +342,12 @@ const Content = ({ currentWidth }: ContentProps) => {
                                 ratioMode,
                                 currentWidth,
                             )}
+                        />
+                    )}
+                    {files.length > 1 && (
+                        <UploadImgArrowAndDots
+                            currentIndex={currentIndex}
+                            files={files}
                         />
                     )}
                 </div>
