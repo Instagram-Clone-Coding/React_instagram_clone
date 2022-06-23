@@ -309,6 +309,8 @@ declare module UploadType {
         grabbedGalleryImgIndex: number | null;
         grabbedGalleryImgNewIndex: number | null;
         textareaValue: string;
+        isLikesAndViewsHidden: boolean;
+        isCommentBlocked: boolean;
     }
 }
 

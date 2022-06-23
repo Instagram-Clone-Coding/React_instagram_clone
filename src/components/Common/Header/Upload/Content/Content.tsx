@@ -143,7 +143,7 @@ const StyledContent = styled.div`
                     color: ${(props) => props.theme.font.gray};
                 }
 
-                & > div {
+                &.accessOption > div {
                     height: 44px;
                     margin: 12px 0 16px 0;
                     display: flex;
@@ -174,6 +174,42 @@ const StyledContent = styled.div`
                         padding: 4px 12px;
                     }
                 }
+                &.advanced > div {
+                    &.toggleArea {
+                        height: 28px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        & > .toggle {
+                            width: 44px;
+                            height: 100%;
+                            background-color: ${(props) =>
+                                props.theme.font.gray};
+                            border-radius: 14px;
+                            display: flex;
+                            align-items: center;
+                            padding: 0 3px;
+                            transition: background-color 0.5s;
+                            & > div {
+                                transition: transform 0.5s;
+                                width: 22px;
+                                height: 22px;
+                                background-color: white;
+                                border-radius: 50%;
+                            }
+                            &.on {
+                                background-color: ${(props) =>
+                                    props.theme.color.blue};
+                                & > div {
+                                    transform: translateX(15px);
+                                }
+                            }
+                        }
+                    }
+                    &.smallFont {
+                        padding: 12px 0;
+                    }
+                }
             }
         }
         & > hr {
@@ -189,12 +225,17 @@ const StyledContent = styled.div`
 interface ContentProps {
     currentWidth: number;
 }
-
 const Content = ({ currentWidth }: ContentProps) => {
+    console.log("rerendered");
     const dispatch = useAppDispatch();
-    const { files, currentIndex, ratioMode, textareaValue } = useAppSelector(
-        (state) => state.upload,
-    );
+    const {
+        files,
+        currentIndex,
+        ratioMode,
+        textareaValue,
+        isLikesAndViewsHidden,
+        isCommentBlocked,
+    } = useAppSelector((state) => state.upload);
     const { userInfo } = useAppSelector((state) => state.auth);
     const [isEmojiModalOn, setIsEmojiModalOn] = useState(false);
     const [isAccessOptionOn, setIsAccessOptionOn] = useState(false);
@@ -361,7 +402,7 @@ const Content = ({ currentWidth }: ContentProps) => {
                             </span>
                         </div>
                         {isAccessOptionOn && (
-                            <div className="activated">
+                            <div className="activated accessOption">
                                 <div className="smallFont">
                                     {`대체 텍스트는 시각적으로 사진을 보기 어려운 사람들에게 사진
                                     내용을 설명하는 텍스트입니다. 대체 텍스트는 회원님의 사진에
@@ -418,12 +459,23 @@ const Content = ({ currentWidth }: ContentProps) => {
                             </span>
                         </div>
                         {isAdvancedOptionOn && (
-                            <div className="activated">
-                                <div>
+                            <div className="activated advanced">
+                                <div className="toggleArea">
                                     <div>
                                         이 게시물의 좋아요 수 및 조회수 숨기기
                                     </div>
-                                    <div></div>
+                                    <div
+                                        onClick={() =>
+                                            dispatch(
+                                                uploadActions.toggleIsLikesAndViewsHidden(),
+                                            )
+                                        }
+                                        className={`toggle ${
+                                            isLikesAndViewsHidden && "on"
+                                        }`}
+                                    >
+                                        <div></div>
+                                    </div>
                                 </div>
                                 <div className="smallFont">
                                     이 게시물의 총 좋아요 및 조회수는 회원님만
@@ -432,9 +484,20 @@ const Content = ({ currentWidth }: ContentProps) => {
                                     다른 사람의 게시물에서 좋아요 수를 숨기려면
                                     계정 설정으로 이동하세요.
                                 </div>
-                                <div>
+                                <div className="toggleArea">
                                     <div>댓글 기능 해제</div>
-                                    <div></div>
+                                    <div
+                                        onClick={() =>
+                                            dispatch(
+                                                uploadActions.toggleIsCommentBlocked(),
+                                            )
+                                        }
+                                        className={`toggle ${
+                                            isCommentBlocked && "on"
+                                        }`}
+                                    >
+                                        <div></div>
+                                    </div>
                                 </div>
                                 <div className="smallFont">
                                     나중에 게시물 상단의 메뉴(···)에서 이 설정을

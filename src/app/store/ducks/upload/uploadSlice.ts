@@ -10,6 +10,8 @@ const initialState: UploadType.UploadStateProps = {
     grabbedGalleryImgIndex: null,
     grabbedGalleryImgNewIndex: null,
     textareaValue: "",
+    isLikesAndViewsHidden: false,
+    isCommentBlocked: false,
 };
 
 const uploadSlice = createSlice({
@@ -298,6 +300,12 @@ const uploadSlice = createSlice({
         ) => {
             state.files[action.payload.index].alternativeText =
                 action.payload.value;
+        },
+        toggleIsLikesAndViewsHidden: (state) => {
+            state.isLikesAndViewsHidden = !state.isLikesAndViewsHidden;
+        },
+        toggleIsCommentBlocked: (state) => {
+            state.isCommentBlocked = !state.isCommentBlocked;
         },
     },
 });
