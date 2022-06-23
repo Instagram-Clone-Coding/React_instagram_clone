@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useAppDispatch } from "app/store/Hooks";
 import { logout } from "app/store/ducks/auth/authThunk";
@@ -9,12 +9,15 @@ import { ReactComponent as Change } from "assets/Svgs/header-nav-bar/change.svg"
 import { Link } from "react-router-dom";
 
 const Container = styled.div`
+    position: relative;
+    height: 1px;
+
     .pointer {
         background: #fff;
         border: 1px solid #fff;
-        box-shadow: 0 0 5px 1px rgb(0 0 0 / 10%);
         height: 14px;
         transform: rotate(45deg);
+        box-shadow: rgba(0, 0, 0, 0.098) 0px 0px 5px 1px;
         width: 14px;
         position: relative;
         top: 5px;
@@ -44,10 +47,10 @@ const Container = styled.div`
         flex-direction: column;
         width: 14.375rem;
         z-index: 200;
-        position: relative;
-        right: 130px;
-        top: -3px;
-        box-shadow: 0 0 5px 1px rgb(0 0 0 / 10%);
+        position: absolute;
+        right: -26px;
+        top: 8px;
+        box-shadow: rgba(0, 0, 0, 0.098) 0px 0px 5px 1px;
 
         .option {
             display: flex;
@@ -70,7 +73,7 @@ type optionType = {
     linkTo?: string;
     text: string;
     svg: JSX.Element;
-}; // 여기에만 쓰면, 컴포넌트에 타입 선언?
+};
 
 export default function SubNav({
     username,
@@ -91,7 +94,7 @@ export default function SubNav({
         { text: `저장됨`, svg: <Store /> },
         { linkTo: `/accounts/edit`, text: `설정`, svg: <Setting /> },
         { text: `계정전환`, svg: <Change /> },
-    ]; // unique key 만드는 함수, utils에 만들어놓고 이용하는거 어때요? -> 어떤식으로 만들까요?
+    ];
 
     return (
         <Container>
@@ -99,7 +102,7 @@ export default function SubNav({
             <div className="settings" ref={containerRef}>
                 {optionData.map(({ linkTo, text, svg }) => {
                     return (
-                        <>
+                        <React.Fragment key={text}>
                             {linkTo ? (
                                 <Link to={linkTo}>
                                     <div className="option">
@@ -113,7 +116,7 @@ export default function SubNav({
                                     <span>{text}</span>
                                 </div>
                             )}
-                        </>
+                        </React.Fragment>
                     );
                 })}
                 <hr />

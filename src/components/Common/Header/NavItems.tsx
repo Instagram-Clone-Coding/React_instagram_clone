@@ -43,14 +43,16 @@ const NavItemWrapper = styled.div`
     }
 `;
 
-const AvatarWrapper = styled(NavItemWrapper)<{ isClickedProfile: boolean }>`
-    .my-profile {
+const AvatarWrapper = styled(NavItemWrapper)<{ isSubnavModalOn: boolean }>`
+    .img-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: 28px;
         height: 28px;
         border: ${(props) =>
-            props.isClickedProfile ? `1px solid #262626` : `none`};
+            props.isSubnavModalOn ? `1px solid #262626` : `none`};
         border-radius: 50%;
-        text-align: center;
 
         img {
             border-radius: 50%;
@@ -61,14 +63,14 @@ const AvatarWrapper = styled(NavItemWrapper)<{ isClickedProfile: boolean }>`
 `;
 
 const NavItems = () => {
-    const [isClickedProfile, setIsClickedProfile] = useState(false);
+    const [isSubnavModalOn, setIsSubnavMoalOn] = useState(false);
     const dispatch = useAppDispatch();
     const isUploading = useAppSelector(({ upload }) => upload.isUploading);
     const userInfo = useAppSelector((state) => state.auth.userInfo);
 
     const navContainerRef = useRef<HTMLDivElement | null>(null);
-    const triggerRef = useRef<HTMLDivElement | null>(null);
-    useOutsideClick(navContainerRef, setIsClickedProfile, triggerRef);
+    const subModalControllerRef = useRef<HTMLDivElement | null>(null);
+    useOutsideClick(navContainerRef, setIsSubnavMoalOn, subModalControllerRef);
 
     const navItems = [
         {
@@ -133,21 +135,22 @@ const NavItems = () => {
                     </NavItemWrapper>
                 ))}
 
-                <AvatarWrapper isClickedProfile={isClickedProfile}>
+                <AvatarWrapper isSubnavModalOn={isSubnavModalOn}>
                     <div
-                        className="my-profile"
-                        ref={triggerRef}
+                        ref={subModalControllerRef}
                         onClick={() => {
-                            setIsClickedProfile(!isClickedProfile);
+                            setIsSubnavMoalOn(!isSubnavModalOn);
                         }}
                     >
-                        <img
-                            alt="minsoo_web님의 프로필 사진"
-                            data-testid="user-avatar"
-                            draggable="false"
-                            src={userInfo?.memberImageUrl}
-                        />
-                        {isClickedProfile && (
+                        <div className="img-container">
+                            <img
+                                alt="minsoo_web님의 프로필 사진"
+                                data-testid="user-avatar"
+                                draggable="false"
+                                src={userInfo?.memberImageUrl}
+                            />
+                        </div>
+                        {isSubnavModalOn && (
                             <SubNav
                                 username={userInfo?.memberUsername}
                                 containerRef={navContainerRef}
