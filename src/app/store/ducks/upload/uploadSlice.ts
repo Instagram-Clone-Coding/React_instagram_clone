@@ -9,6 +9,7 @@ const initialState: UploadType.UploadStateProps = {
     currentIndex: 0,
     grabbedGalleryImgIndex: null,
     grabbedGalleryImgNewIndex: null,
+    textareaValue: "",
 };
 
 const uploadSlice = createSlice({
@@ -283,6 +284,12 @@ const uploadSlice = createSlice({
             state.files.forEach((file) => {
                 file.newUrl = "";
             });
+        },
+        setTextareaValue: (state, action: PayloadAction<string>) => {
+            state.textareaValue = action.payload;
+        },
+        addEmojiOnTextarea: (state, action: PayloadAction<string>) => {
+            state.textareaValue += action.payload;
         },
     },
 });

@@ -38,20 +38,22 @@ const NewChatModalTitleContainer = styled.div<NewChatModalTitleContainerType>`
 
 const NewChatModalTitle = () => {
     const dispatch = useAppDispatch();
-    const { selectedNewChatUser, isLoading } = useAppSelector(
+    const { selectedNewChatUsers, isLoading } = useAppSelector(
         (state) => state.direct,
     );
 
     const makeRoomHandler = async () => {
-        if (selectedNewChatUser) {
-            // await dispatch(makeRoom({ username: selectedNewChatUser }));
+        if (selectedNewChatUsers.length > 0) {
+            await dispatch(makeRoom({ usernames: selectedNewChatUsers }));
             dispatch(closeModal());
             dispatch(selectView("chat"));
         }
     };
 
     return (
-        <NewChatModalTitleContainer isSelected={selectedNewChatUser !== null}>
+        <NewChatModalTitleContainer
+            isSelected={selectedNewChatUsers.length > 0}
+        >
             <CloseSVG
                 color={"#262626"}
                 size={"18"}

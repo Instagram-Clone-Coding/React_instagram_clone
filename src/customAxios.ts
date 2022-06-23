@@ -13,15 +13,13 @@ export const authorizedCustomAxios: AxiosInstance = axios.create({
 });
 
 export const checkToken = async (config: AxiosRequestConfig) => {
-    console.log(authorizedCustomAxios.defaults.headers.common);
-    console.log(authorizedCustomAxios.defaults.headers.common.Authorization);
+
     const accessToken =
         authorizedCustomAxios.defaults.headers.common.Authorization.split(
             " ",
         )[1];
     const decode = jwt.decode(accessToken);
     const nowDate = new Date().getTime() / 1000;
-
     if (decode.exp < nowDate) {
         try {
             const {

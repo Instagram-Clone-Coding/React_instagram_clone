@@ -5,6 +5,9 @@ import ContentBox from "components/Common/ContentBox";
 import styled from "styled-components";
 import SubmitButton from "../SubmitButton";
 import useInput from "hooks/useInput";
+import { useEffect, MouseEvent } from "react";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { checkCurrentURL, resetPassword } from "app/store/ducks/auth/authThunk";
 
 const Container = styled.section`
     background-color: #fff;
@@ -56,13 +59,25 @@ const Container = styled.section`
                 margin: 20px 52px 60px 52px;
                 height: 44px;
             }
+
+            .error-message {
+                color: #ed4956;
+                font-size: 14px;
+                line-height: 18px;
+                text-align: center;
+                margin: 10px 40px;
+            }
         }
     }
 `;
 
 export default function ResetPasswordForm() {
     const { search } = useLocation();
-    const { username, code } = queryString.parse(search);
+    const { username, code } = queryString.parse(
+        search,
+    ) as AuthType.resetPasswordQuery;
+    const dispatch = useAppDispatch();
+    const { errorMessage } = useAppSelector((state) => state.auth);
 
     const [newPasswordInputProps, newPasswordIsValid] = useInput(
         "",
@@ -76,8 +91,22 @@ export default function ResetPasswordForm() {
         (value) => newPasswordInputProps.value === value,
     );
 
-    // submit api 연결
-    // 들어오자마자, code유효한지 체크 -> 그 전까지, loding (using useEffect)
+    useEffect(() => {
+        dispatch(checkCurrentURL({ code, username }));
+    }, []);
+
+    const resetPasswordClickHandler = (
+        event: MouseEvent<HTMLButtonElement>,
+    ) => {
+        event.preventDefault();
+        dispatch(
+            resetPassword({
+                code,
+                username,
+                newPassword: newPasswordInputProps.value,
+            }),
+        );
+    };
 
     return (
         <Container>
@@ -123,9 +152,15 @@ export default function ResetPasswordForm() {
                                         reEnterPasswordIsValid
                                     )
                                 }
+                                onClick={resetPasswordClickHandler}
                             >
                                 비밀번호 재설정
                             </SubmitButton>
+                            {errorMessage && (
+                                <div className="error-message">
+                                    <p>{errorMessage}</p>
+                                </div>
+                            )}
                         </form>
                     </ContentBox>
                 </div>

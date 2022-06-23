@@ -52,7 +52,7 @@ function Article() {
 
     return (
         <ArticleContainer>
-            {[...Array(posts.length / 3)].map((a, index) => (
+            {[...Array(Math.ceil(posts.length / 3))].map((a, index) => (
                 <SingleRow
                     key={index}
                     posts={[

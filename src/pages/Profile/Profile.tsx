@@ -47,7 +47,7 @@ const Profile = () => {
     // mount 가 되면 받은 username 으로 이 유저의 모든 프로필 정보를 호출합니다.
     useEffect(() => {
         dispatch(lookUpUserProfile({ username }));
-    }, [dispatch]);
+    }, [dispatch, username]);
 
     // 게시글들을 가져와 줍니다.
     useEffect(() => {
@@ -56,7 +56,7 @@ const Profile = () => {
         };
         dispatch(resetExtraPostPage());
         getPost();
-    }, [currentCategory]);
+    }, [currentCategory, dispatch, username]);
 
     return (
         <Layout>
