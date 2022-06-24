@@ -75,6 +75,7 @@ const uploadSlice = createSlice({
                 blur: 0,
                 newUrl: "",
                 alternativeText: "",
+                hashtags: [],
             });
         },
         startGrabbing: (state) => {
@@ -306,6 +307,9 @@ const uploadSlice = createSlice({
         },
         toggleIsCommentBlocked: (state) => {
             state.isCommentBlocked = !state.isCommentBlocked;
+        },
+        addHashtags: (state, action: PayloadAction<UploadType.HashtagType>) => {
+            state.files[state.currentIndex].hashtags.push(action.payload);
         },
     },
 });

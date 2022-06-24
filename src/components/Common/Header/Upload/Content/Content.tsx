@@ -308,7 +308,6 @@ const Content = ({ currentWidth }: ContentProps) => {
     const [isSearchBarOn, setIsSearchBarOn] = useState(false);
     const [searchBarPosition, setSearchBarPosition] = useState({ x: 0, y: 0 }); // %
     const [searchInput, setSearchInput] = useState("");
-    // const [isSearchedUserFocused];
     const [isEmojiModalOn, setIsEmojiModalOn] = useState(false);
     const [isAccessOptionOn, setIsAccessOptionOn] = useState(false);
     const [isAdvancedOptionOn, setIsAdvancedOptionOn] = useState(false);
@@ -410,6 +409,11 @@ const Content = ({ currentWidth }: ContentProps) => {
         }
     };
 
+    const searchListItemClickHandler = (username: string) => {
+        const { x: tagX, y: tagY } = searchBarPosition;
+        dispatch(uploadActions.addHashtags({ tagX, tagY, username }));
+    };
+
     return (
         <>
             <UploadHeader
@@ -482,10 +486,18 @@ const Content = ({ currentWidth }: ContentProps) => {
                                 <div className="modal__searched">
                                     {searchedUsers.length > 0 &&
                                         searchedUsers.map((user) => (
-                                            <SearchListItemLayout
-                                                member={user.member}
+                                            <div
+                                                onClick={() =>
+                                                    searchListItemClickHandler(
+                                                        user.member.username,
+                                                    )
+                                                }
                                                 key={user.member.id}
-                                            />
+                                            >
+                                                <SearchListItemLayout
+                                                    member={user.member}
+                                                />
+                                            </div>
                                         ))}
                                 </div>
                             </div>

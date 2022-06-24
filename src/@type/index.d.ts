@@ -284,9 +284,15 @@ declare module UploadType {
         // backgroundBlur
     }
 
+    interface HashtagType {
+        tagX: number;
+        tagY: number;
+        username: string;
+    }
     interface ContentType {
         newUrl: string;
         alternativeText: string;
+        hashtags: HashtagType[];
     }
     interface FileProps
         extends FileDragAndDropProps,
