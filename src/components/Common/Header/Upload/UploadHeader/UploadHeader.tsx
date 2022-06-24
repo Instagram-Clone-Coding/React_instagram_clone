@@ -54,6 +54,8 @@ const UploadHeader = ({
                 return "자르기";
             case "edit":
                 return "편집";
+            case "content":
+                return "새 게시물 만들기";
         }
     }, []);
 
