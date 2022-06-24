@@ -17,6 +17,7 @@ import sprite from "assets/Images/sprite.png";
 import { searchUser } from "app/store/ducks/common/commonThunk";
 import SearchListItemLayout from "components/Home/SearchListItemLayout";
 import { resetSearch } from "app/store/ducks/common/commonSlice";
+import { ReactComponent as Close } from "assets/Svgs/close.svg";
 
 const StyledContent = styled.div`
     display: flex;
@@ -466,7 +467,7 @@ const Content = ({ currentWidth }: ContentProps) => {
                             />
                         )}
                         {currentFile.hashtags.map(
-                            ({ tagX, tagY, username }) => (
+                            ({ tagX, tagY, username }, index) => (
                                 <div
                                     key={username}
                                     style={{
@@ -475,7 +476,18 @@ const Content = ({ currentWidth }: ContentProps) => {
                                     }}
                                     className="hashtag"
                                 >
-                                    {username}
+                                    <div>{username}</div>
+                                    <div
+                                        onClick={() =>
+                                            dispatch(
+                                                uploadActions.deleteHashtag(
+                                                    index,
+                                                ),
+                                            )
+                                        }
+                                    >
+                                        <Close />
+                                    </div>
                                 </div>
                             ),
                         )}

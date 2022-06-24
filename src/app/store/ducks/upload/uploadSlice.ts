@@ -319,6 +319,11 @@ const uploadSlice = createSlice({
                     action.payload;
             }
         },
+        deleteHashtag: (state, action: PayloadAction<number>) => {
+            state.files[state.currentIndex].hashtags = state.files[
+                state.currentIndex
+            ].hashtags.filter((hashtag, index) => index !== action.payload);
+        },
     },
 });
 
