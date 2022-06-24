@@ -309,7 +309,15 @@ const uploadSlice = createSlice({
             state.isCommentBlocked = !state.isCommentBlocked;
         },
         addHashtags: (state, action: PayloadAction<UploadType.HashtagType>) => {
-            state.files[state.currentIndex].hashtags.push(action.payload);
+            const index = state.files[state.currentIndex].hashtags.findIndex(
+                (hashtag) => hashtag.username === action.payload.username,
+            );
+            if (index === -1) {
+                state.files[state.currentIndex].hashtags.push(action.payload);
+            } else {
+                state.files[state.currentIndex].hashtags[index] =
+                    action.payload;
+            }
         },
     },
 });

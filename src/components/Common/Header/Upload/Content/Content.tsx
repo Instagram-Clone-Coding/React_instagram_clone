@@ -26,65 +26,76 @@ const StyledContent = styled.div`
         justify-content: center;
         align-items: center;
         position: relative;
-        & > img {
-            cursor: crosshair;
-        }
-        & > .searchBar {
-            position: absolute;
-            z-index: 1000;
-            & > .pointer {
-                box-shadow: rgba(0, 0, 0, 0.098) 0px 0px 5px 1px;
-                height: 14px;
-                width: 14px;
-                background-color: white;
-                transform: translateX(-5px) rotate(45deg);
+        & > .contentImg__relative {
+            position: relative;
+            & > .hashtag {
+                position: absolute;
+                background: red;
+                width: 200px;
+                height: 200px;
             }
-            & > .modal {
-                box-shadow: rgba(0, 0, 0, 0.098) 0px 0px 5px 1px;
-                width: 338px;
-                height: 226px;
-                background-color: white;
-                position: relative;
-                left: -23px;
-                top: -7px;
-                border-radius: 6px;
-                & > * {
-                    width: 100%;
+            & > img {
+                cursor: crosshair;
+                width: 100%;
+                height: 100%;
+            }
+            & > .searchBar {
+                position: absolute;
+                z-index: 1000;
+                & > .pointer {
+                    box-shadow: rgba(0, 0, 0, 0.098) 0px 0px 5px 1px;
+                    height: 14px;
+                    width: 14px;
+                    background-color: white;
+                    transform: translateX(-5px) rotate(45deg);
                 }
-                & > .modal__header {
-                    display: flex;
-                    align-items: center;
+                & > .modal {
+                    box-shadow: rgba(0, 0, 0, 0.098) 0px 0px 5px 1px;
+                    width: 338px;
+                    height: 226px;
+                    background-color: white;
                     position: relative;
-                    padding: 10px 8px;
-                    height: 46px;
-                    border-bottom: 1px solid
-                        ${(props) => props.theme.color.bd_gray};
-                    & > h4 {
-                        padding: 4px 12px;
-                        font-size: 16px;
-                        font-weight: ${(props) => props.theme.font.bold};
+                    left: -23px;
+                    top: -7px;
+                    border-radius: 6px;
+                    & > * {
+                        width: 100%;
                     }
-                    & > input {
-                        background-color: transparent;
-                        border: none;
-                        flex: 1;
-                        padding: 4px 12px 4px 0px;
-                        height: 28px;
+                    & > .modal__header {
+                        display: flex;
+                        align-items: center;
+                        position: relative;
+                        padding: 10px 8px;
+                        height: 46px;
+                        border-bottom: 1px solid
+                            ${(props) => props.theme.color.bd_gray};
+                        & > h4 {
+                            padding: 4px 12px;
+                            font-size: 16px;
+                            font-weight: ${(props) => props.theme.font.bold};
+                        }
+                        & > input {
+                            background-color: transparent;
+                            border: none;
+                            flex: 1;
+                            padding: 4px 12px 4px 0px;
+                            height: 28px;
+                        }
+                        & > span {
+                            position: absolute;
+                            right: 12px;
+                            background-image: url(${sprite});
+                            background-repeat: no-repeat;
+                            background-position: -500px -196px;
+                            height: 20px;
+                            width: 20px;
+                        }
                     }
-                    & > span {
-                        position: absolute;
-                        right: 12px;
-                        background-image: url(${sprite});
-                        background-repeat: no-repeat;
-                        background-position: -500px -196px;
-                        height: 20px;
-                        width: 20px;
+                    & > .modal__searched {
+                        width: 100%;
+                        height: 180px;
+                        overflow-y: auto;
                     }
-                }
-                & > .modal__searched {
-                    width: 100%;
-                    height: 180px;
-                    overflow-y: auto;
                 }
             }
         }
@@ -393,6 +404,7 @@ const Content = ({ currentWidth }: ContentProps) => {
             width,
             height,
         } = currentTarget.getBoundingClientRect();
+        console.log(left, top, width, height);
         const x = ((clientX - left) / width) * 100;
         const y = ((clientY - top) / height) * 100;
         setSearchBarPosition({ x, y });
@@ -411,9 +423,11 @@ const Content = ({ currentWidth }: ContentProps) => {
 
     const searchListItemClickHandler = (username: string) => {
         const { x: tagX, y: tagY } = searchBarPosition;
+        console.log(username);
         dispatch(uploadActions.addHashtags({ tagX, tagY, username }));
+        setIsSearchBarOn(false);
     };
-
+    console.log(files[currentIndex].hashtags);
     return (
         <>
             <UploadHeader
@@ -431,81 +445,105 @@ const Content = ({ currentWidth }: ContentProps) => {
                         minHeight: currentWidth,
                     }}
                 >
-                    {currentFile.newUrl !== "" && (
-                        <img
-                            src={currentFile.newUrl}
-                            alt={"태그할 수 있는 사진"}
-                            width={getRatioCalculatedBoxWidth(
+                    <div
+                        className="contentImg__relative"
+                        style={{
+                            width: getRatioCalculatedBoxWidth(
                                 ratioMode,
                                 currentWidth,
-                            )}
-                            height={getRatioCalculatedBoxHeight(
+                            ),
+                            height: getRatioCalculatedBoxHeight(
                                 ratioMode,
                                 currentWidth,
-                            )}
-                            onClick={ImgClickHandler}
-                        />
-                    )}
-                    {isSearchBarOn && (
-                        <div
-                            className="searchBar"
-                            style={{
-                                left: `${searchBarPosition.x}%`,
-                                top: `${searchBarPosition.y}%`,
-                            }}
-                        >
-                            <div className="pointer"></div>
-                            <div className="modal">
-                                <div className="modal__header">
-                                    <h4>태그:</h4>
-                                    <input
-                                        type="text"
-                                        placeholder="검색"
-                                        value={searchInput}
-                                        onChange={async (event) => {
-                                            setSearchInput(event.target.value);
-                                            if (event.target.value !== "") {
-                                                await dispatch(
-                                                    searchUser({
-                                                        keyword:
-                                                            event.target.value,
-                                                    }),
-                                                );
-                                            } else {
-                                                dispatch(resetSearch());
-                                            }
-                                        }}
-                                        autoFocus={true}
-                                    />
-                                    {searchInput && (
-                                        <span
-                                            onClick={() => {
-                                                dispatch(resetSearch());
-                                                setSearchInput("");
-                                            }}
-                                        ></span>
-                                    )}
+                            ),
+                        }}
+                    >
+                        {currentFile.newUrl !== "" && (
+                            <img
+                                src={currentFile.newUrl}
+                                alt={"태그할 수 있는 사진"}
+                                onClick={ImgClickHandler}
+                            />
+                        )}
+                        {currentFile.hashtags.map(
+                            ({ tagX, tagY, username }) => (
+                                <div
+                                    key={username}
+                                    style={{
+                                        left: tagX + "%",
+                                        top: tagY + "%",
+                                    }}
+                                    className="hashtag"
+                                >
+                                    {username}
                                 </div>
-                                <div className="modal__searched">
-                                    {searchedUsers.length > 0 &&
-                                        searchedUsers.map((user) => (
-                                            <div
-                                                onClick={() =>
-                                                    searchListItemClickHandler(
-                                                        user.member.username,
-                                                    )
+                            ),
+                        )}
+                        {isSearchBarOn && (
+                            <div
+                                className="searchBar"
+                                style={{
+                                    left: `${searchBarPosition.x}%`,
+                                    top: `${searchBarPosition.y}%`,
+                                }}
+                            >
+                                <div className="pointer"></div>
+                                <div className="modal">
+                                    <div className="modal__header">
+                                        <h4>태그:</h4>
+                                        <input
+                                            type="text"
+                                            placeholder="검색"
+                                            value={searchInput}
+                                            onChange={async (event) => {
+                                                setSearchInput(
+                                                    event.target.value,
+                                                );
+                                                if (event.target.value !== "") {
+                                                    await dispatch(
+                                                        searchUser({
+                                                            keyword:
+                                                                event.target
+                                                                    .value,
+                                                        }),
+                                                    );
+                                                } else {
+                                                    dispatch(resetSearch());
                                                 }
-                                                key={user.member.id}
-                                            >
-                                                <SearchListItemLayout
-                                                    member={user.member}
-                                                />
-                                            </div>
-                                        ))}
+                                            }}
+                                            autoFocus={true}
+                                        />
+                                        {searchInput && (
+                                            <span
+                                                onClick={() => {
+                                                    dispatch(resetSearch());
+                                                    setSearchInput("");
+                                                }}
+                                            ></span>
+                                        )}
+                                    </div>
+                                    <div className="modal__searched">
+                                        {searchedUsers.length > 0 &&
+                                            searchedUsers.map((user) => (
+                                                <div
+                                                    onClick={() =>
+                                                        searchListItemClickHandler(
+                                                            user.member
+                                                                .username,
+                                                        )
+                                                    }
+                                                    key={user.member.id}
+                                                >
+                                                    <SearchListItemLayout
+                                                        member={user.member}
+                                                    />
+                                                </div>
+                                            ))}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
                     {files.length > 1 && (
                         <UploadImgArrowAndDots
                             currentIndex={currentIndex}
