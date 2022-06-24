@@ -31,9 +31,42 @@ const StyledContent = styled.div`
             position: relative;
             & > .hashtag {
                 position: absolute;
-                background: red;
-                width: 200px;
-                height: 200px;
+                & * {
+                    color: white;
+                    font-size: 14px;
+                }
+                & > .hashtag__relative {
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    & > .pointer {
+                        position: absolute;
+                        width: 15px;
+                        height: 15px;
+                        transform: rotate(45deg);
+                        background-color: black;
+                    }
+                    & > .content {
+                        background: black;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding: 8px 12px;
+                        position: absolute;
+                        top: 7px;
+                        border-radius: 8px;
+                        & > .username {
+                            font-weight: ${(props) => props.theme.font.bold};
+                            margin: 0 4px;
+                        }
+                        & > .closeButton {
+                            width: 16px;
+                            height: 16px;
+                            font-weight: normal;
+                        }
+                    }
+                }
             }
             & > img {
                 cursor: crosshair;
@@ -405,7 +438,6 @@ const Content = ({ currentWidth }: ContentProps) => {
             width,
             height,
         } = currentTarget.getBoundingClientRect();
-        console.log(left, top, width, height);
         const x = ((clientX - left) / width) * 100;
         const y = ((clientY - top) / height) * 100;
         setSearchBarPosition({ x, y });
@@ -424,11 +456,10 @@ const Content = ({ currentWidth }: ContentProps) => {
 
     const searchListItemClickHandler = (username: string) => {
         const { x: tagX, y: tagY } = searchBarPosition;
-        console.log(username);
         dispatch(uploadActions.addHashtags({ tagX, tagY, username }));
         setIsSearchBarOn(false);
     };
-    console.log(files[currentIndex].hashtags);
+
     return (
         <>
             <UploadHeader
@@ -476,17 +507,25 @@ const Content = ({ currentWidth }: ContentProps) => {
                                     }}
                                     className="hashtag"
                                 >
-                                    <div>{username}</div>
-                                    <div
-                                        onClick={() =>
-                                            dispatch(
-                                                uploadActions.deleteHashtag(
-                                                    index,
-                                                ),
-                                            )
-                                        }
-                                    >
-                                        <Close />
+                                    <div className="hashtag__relative">
+                                        <div className="pointer"></div>
+                                        <div className="content">
+                                            <div className="username">
+                                                {username}
+                                            </div>
+                                            <button
+                                                className="closeButton"
+                                                onClick={() =>
+                                                    dispatch(
+                                                        uploadActions.deleteHashtag(
+                                                            index,
+                                                        ),
+                                                    )
+                                                }
+                                            >
+                                                <Close />
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             ),
