@@ -14,7 +14,9 @@ import { ReactComponent as LocationIcon } from "assets/Svgs/location.svg";
 import Picker, { IEmojiData } from "emoji-picker-react";
 import UploadImgArrowAndDots from "components/Common/Header/UploadImgArrowAndDots";
 import sprite from "assets/Images/sprite.png";
-import useInput from "hooks/useInput";
+import { searchUser } from "app/store/ducks/common/commonThunk";
+import SearchListItemLayout from "components/Home/SearchListItemLayout";
+import { resetSearch } from "app/store/ducks/common/commonSlice";
 
 const StyledContent = styled.div`
     display: flex;
@@ -54,6 +56,7 @@ const StyledContent = styled.div`
                     align-items: center;
                     position: relative;
                     padding: 10px 8px;
+                    height: 46px;
                     border-bottom: 1px solid
                         ${(props) => props.theme.color.bd_gray};
                     & > h4 {
@@ -77,6 +80,11 @@ const StyledContent = styled.div`
                         height: 20px;
                         width: 20px;
                     }
+                }
+                & > .modal__searched {
+                    width: 100%;
+                    height: 180px;
+                    overflow-y: auto;
                 }
             }
         }
@@ -296,9 +304,11 @@ const Content = ({ currentWidth }: ContentProps) => {
         isCommentBlocked,
     } = useAppSelector((state) => state.upload);
     const { userInfo } = useAppSelector((state) => state.auth);
+    const searchedUsers = useAppSelector((state) => state.common.searchUsers);
     const [isSearchBarOn, setIsSearchBarOn] = useState(false);
     const [searchBarPosition, setSearchBarPosition] = useState({ x: 0, y: 0 }); // %
-    const [searchInputProps, , , resetSearchInput] = useInput("");
+    const [searchInput, setSearchInput] = useState("");
+    // const [isSearchedUserFocused];
     const [isEmojiModalOn, setIsEmojiModalOn] = useState(false);
     const [isAccessOptionOn, setIsAccessOptionOn] = useState(false);
     const [isAdvancedOptionOn, setIsAdvancedOptionOn] = useState(false);
@@ -390,9 +400,14 @@ const Content = ({ currentWidth }: ContentProps) => {
     };
 
     const ImgClickHandler = (event: React.MouseEvent<HTMLImageElement>) => {
-        if (isSearchBarOn) return setIsSearchBarOn(false);
-        changeSearchBarPosition(event);
-        setIsSearchBarOn(true);
+        if (isSearchBarOn) {
+            dispatch(resetSearch());
+            setSearchInput("");
+            setIsSearchBarOn(false);
+        } else {
+            changeSearchBarPosition(event);
+            setIsSearchBarOn(true);
+        }
     };
 
     return (
@@ -442,14 +457,37 @@ const Content = ({ currentWidth }: ContentProps) => {
                                     <input
                                         type="text"
                                         placeholder="검색"
-                                        {...searchInputProps}
+                                        value={searchInput}
+                                        onChange={async (event) => {
+                                            setSearchInput(event.target.value);
+                                            if (event.target.value !== "") {
+                                                await dispatch(
+                                                    searchUser({
+                                                        keyword:
+                                                            event.target.value,
+                                                    }),
+                                                );
+                                            } else {
+                                                dispatch(resetSearch());
+                                            }
+                                        }}
                                         autoFocus={true}
                                     />
-                                    {searchInputProps.value && (
-                                        <span onClick={resetSearchInput}></span>
+                                    {searchInput && (
+                                        <span
+                                            onClick={() => setSearchInput("")}
+                                        ></span>
                                     )}
                                 </div>
-                                <div className="modal__searched"></div>
+                                <div className="modal__searched">
+                                    {searchedUsers.length > 0 &&
+                                        searchedUsers.map((user) => (
+                                            <SearchListItemLayout
+                                                member={user.member}
+                                                key={user.member.id}
+                                            />
+                                        ))}
+                                </div>
                             </div>
                         </div>
                     )}
@@ -500,7 +538,7 @@ const Content = ({ currentWidth }: ContentProps) => {
                                 // disabled={true}
                                 placeholder="위치 추가(개발 준비중)"
                             />
-                            <span onClick={resetSearchInput}>
+                            <span>
                                 <LocationIcon />
                             </span>
                         </div>

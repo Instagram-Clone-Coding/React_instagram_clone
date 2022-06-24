@@ -58,6 +58,7 @@ const commontSlice = createSlice({
     },
 });
 
-export const { changeSearchUser, resetRecordedUsers } = commontSlice.actions;
+export const { changeSearchUser, resetRecordedUsers, resetSearch } =
+    commontSlice.actions;
 
 export const commonReducer = commontSlice.reducer;
