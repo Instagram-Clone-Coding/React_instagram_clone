@@ -479,7 +479,10 @@ const Content = ({ currentWidth }: ContentProps) => {
                                     />
                                     {searchInput && (
                                         <span
-                                            onClick={() => setSearchInput("")}
+                                            onClick={() => {
+                                                dispatch(resetSearch());
+                                                setSearchInput("");
+                                            }}
                                         ></span>
                                     )}
                                 </div>
