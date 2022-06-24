@@ -14,6 +14,7 @@ import { ReactComponent as LocationIcon } from "assets/Svgs/location.svg";
 import Picker, { IEmojiData } from "emoji-picker-react";
 import UploadImgArrowAndDots from "components/Common/Header/UploadImgArrowAndDots";
 import sprite from "assets/Images/sprite.png";
+import useInput from "hooks/useInput";
 
 const StyledContent = styled.div`
     display: flex;
@@ -34,7 +35,7 @@ const StyledContent = styled.div`
                 height: 14px;
                 width: 14px;
                 background-color: white;
-                transform: rotate(45deg);
+                transform: translateX(-5px) rotate(45deg);
             }
             & > .modal {
                 box-shadow: rgba(0, 0, 0, 0.098) 0px 0px 5px 1px;
@@ -42,7 +43,7 @@ const StyledContent = styled.div`
                 height: 226px;
                 background-color: white;
                 position: relative;
-                left: -18px;
+                left: -23px;
                 top: -7px;
                 border-radius: 6px;
                 & > * {
@@ -297,6 +298,7 @@ const Content = ({ currentWidth }: ContentProps) => {
     const { userInfo } = useAppSelector((state) => state.auth);
     const [isSearchBarOn, setIsSearchBarOn] = useState(false);
     const [searchBarPosition, setSearchBarPosition] = useState({ x: 0, y: 0 }); // %
+    const [searchInputProps, , , resetSearchInput] = useInput("");
     const [isEmojiModalOn, setIsEmojiModalOn] = useState(false);
     const [isAccessOptionOn, setIsAccessOptionOn] = useState(false);
     const [isAdvancedOptionOn, setIsAdvancedOptionOn] = useState(false);
@@ -437,8 +439,15 @@ const Content = ({ currentWidth }: ContentProps) => {
                             <div className="modal">
                                 <div className="modal__header">
                                     <h4>태그:</h4>
-                                    <input type="text" placeholder="검색" />
-                                    <span></span>
+                                    <input
+                                        type="text"
+                                        placeholder="검색"
+                                        {...searchInputProps}
+                                        autoFocus={true}
+                                    />
+                                    {searchInputProps.value && (
+                                        <span onClick={resetSearchInput}></span>
+                                    )}
                                 </div>
                                 <div className="modal__searched"></div>
                             </div>
@@ -491,7 +500,7 @@ const Content = ({ currentWidth }: ContentProps) => {
                                 // disabled={true}
                                 placeholder="위치 추가(개발 준비중)"
                             />
-                            <span>
+                            <span onClick={resetSearchInput}>
                                 <LocationIcon />
                             </span>
                         </div>
