@@ -10,6 +10,8 @@ const initialState: UploadType.UploadStateProps = {
     grabbedGalleryImgIndex: null,
     grabbedGalleryImgNewIndex: null,
     textareaValue: "",
+    isLikesAndViewsHidden: false,
+    isCommentBlocked: false,
 };
 
 const uploadSlice = createSlice({
@@ -72,6 +74,8 @@ const uploadSlice = createSlice({
                 saturate: 0,
                 blur: 0,
                 newUrl: "",
+                alternativeText: "",
+                hashtags: [],
             });
         },
         startGrabbing: (state) => {
@@ -290,6 +294,35 @@ const uploadSlice = createSlice({
         },
         addEmojiOnTextarea: (state, action: PayloadAction<string>) => {
             state.textareaValue += action.payload;
+        },
+        setAlternativeValue: (
+            state,
+            action: PayloadAction<{ value: string; index: number }>,
+        ) => {
+            state.files[action.payload.index].alternativeText =
+                action.payload.value;
+        },
+        toggleIsLikesAndViewsHidden: (state) => {
+            state.isLikesAndViewsHidden = !state.isLikesAndViewsHidden;
+        },
+        toggleIsCommentBlocked: (state) => {
+            state.isCommentBlocked = !state.isCommentBlocked;
+        },
+        addHashtags: (state, action: PayloadAction<UploadType.HashtagType>) => {
+            const index = state.files[state.currentIndex].hashtags.findIndex(
+                (hashtag) => hashtag.username === action.payload.username,
+            );
+            if (index === -1) {
+                state.files[state.currentIndex].hashtags.push(action.payload);
+            } else {
+                state.files[state.currentIndex].hashtags[index] =
+                    action.payload;
+            }
+        },
+        deleteHashtag: (state, action: PayloadAction<number>) => {
+            state.files[state.currentIndex].hashtags = state.files[
+                state.currentIndex
+            ].hashtags.filter((hashtag, index) => index !== action.payload);
         },
     },
 });

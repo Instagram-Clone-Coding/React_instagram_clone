@@ -284,11 +284,16 @@ declare module UploadType {
         // backgroundBlur
     }
 
+    interface HashtagType {
+        tagX: number;
+        tagY: number;
+        username: string;
+    }
     interface ContentType {
         newUrl: string;
-        // 예정
+        alternativeText: string;
+        hashtags: HashtagType[];
     }
-
     interface FileProps
         extends FileDragAndDropProps,
             FileCutProps,
@@ -310,6 +315,8 @@ declare module UploadType {
         grabbedGalleryImgIndex: number | null;
         grabbedGalleryImgNewIndex: number | null;
         textareaValue: string;
+        isLikesAndViewsHidden: boolean;
+        isCommentBlocked: boolean;
     }
 }
 
