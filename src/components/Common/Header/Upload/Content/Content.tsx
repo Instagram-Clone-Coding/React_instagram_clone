@@ -13,6 +13,7 @@ import { ReactComponent as DownV } from "assets/Svgs/downV.svg";
 import { ReactComponent as LocationIcon } from "assets/Svgs/location.svg";
 import Picker, { IEmojiData } from "emoji-picker-react";
 import UploadImgArrowAndDots from "components/Common/Header/UploadImgArrowAndDots";
+import sprite from "assets/Images/sprite.png";
 
 const StyledContent = styled.div`
     display: flex;
@@ -22,6 +23,62 @@ const StyledContent = styled.div`
         justify-content: center;
         align-items: center;
         position: relative;
+        & > img {
+            cursor: crosshair;
+        }
+        & > .searchBar {
+            position: absolute;
+            z-index: 1000;
+            & > .pointer {
+                box-shadow: rgba(0, 0, 0, 0.098) 0px 0px 5px 1px;
+                height: 14px;
+                width: 14px;
+                background-color: white;
+                transform: rotate(45deg);
+            }
+            & > .modal {
+                box-shadow: rgba(0, 0, 0, 0.098) 0px 0px 5px 1px;
+                width: 338px;
+                height: 226px;
+                background-color: white;
+                position: relative;
+                left: -18px;
+                top: -7px;
+                border-radius: 6px;
+                & > * {
+                    width: 100%;
+                }
+                & > .modal__header {
+                    display: flex;
+                    align-items: center;
+                    position: relative;
+                    padding: 10px 8px;
+                    border-bottom: 1px solid
+                        ${(props) => props.theme.color.bd_gray};
+                    & > h4 {
+                        padding: 4px 12px;
+                        font-size: 16px;
+                        font-weight: ${(props) => props.theme.font.bold};
+                    }
+                    & > input {
+                        background-color: transparent;
+                        border: none;
+                        flex: 1;
+                        padding: 4px 12px 4px 0px;
+                        height: 28px;
+                    }
+                    & > span {
+                        position: absolute;
+                        right: 12px;
+                        background-image: url(${sprite});
+                        background-repeat: no-repeat;
+                        background-position: -500px -196px;
+                        height: 20px;
+                        width: 20px;
+                    }
+                }
+            }
+        }
     }
     & > .upload__contents {
         width: 340px;
@@ -238,6 +295,8 @@ const Content = ({ currentWidth }: ContentProps) => {
         isCommentBlocked,
     } = useAppSelector((state) => state.upload);
     const { userInfo } = useAppSelector((state) => state.auth);
+    const [isSearchBarOn, setIsSearchBarOn] = useState(false);
+    const [searchBarPosition, setSearchBarPosition] = useState({ x: 0, y: 0 }); // %
     const [isEmojiModalOn, setIsEmojiModalOn] = useState(false);
     const [isAccessOptionOn, setIsAccessOptionOn] = useState(false);
     const [isAdvancedOptionOn, setIsAdvancedOptionOn] = useState(false);
@@ -313,6 +372,27 @@ const Content = ({ currentWidth }: ContentProps) => {
         });
     }, [dispatch, ratioMode]);
 
+    const changeSearchBarPosition = (
+        event: React.MouseEvent<HTMLImageElement>,
+    ) => {
+        const { clientX, clientY, currentTarget } = event;
+        const {
+            x: left,
+            y: top,
+            width,
+            height,
+        } = currentTarget.getBoundingClientRect();
+        const x = ((clientX - left) / width) * 100;
+        const y = ((clientY - top) / height) * 100;
+        setSearchBarPosition({ x, y });
+    };
+
+    const ImgClickHandler = (event: React.MouseEvent<HTMLImageElement>) => {
+        if (isSearchBarOn) return setIsSearchBarOn(false);
+        changeSearchBarPosition(event);
+        setIsSearchBarOn(true);
+    };
+
     return (
         <>
             <UploadHeader
@@ -342,7 +422,27 @@ const Content = ({ currentWidth }: ContentProps) => {
                                 ratioMode,
                                 currentWidth,
                             )}
+                            onClick={ImgClickHandler}
                         />
+                    )}
+                    {isSearchBarOn && (
+                        <div
+                            className="searchBar"
+                            style={{
+                                left: `${searchBarPosition.x}%`,
+                                top: `${searchBarPosition.y}%`,
+                            }}
+                        >
+                            <div className="pointer"></div>
+                            <div className="modal">
+                                <div className="modal__header">
+                                    <h4>태그:</h4>
+                                    <input type="text" placeholder="검색" />
+                                    <span></span>
+                                </div>
+                                <div className="modal__searched"></div>
+                            </div>
+                        </div>
                     )}
                     {files.length > 1 && (
                         <UploadImgArrowAndDots
