@@ -23,6 +23,10 @@ const uploadSlice = createSlice({
             state.isUploading = true;
         },
         cancelUpload: (state) => {
+            state.files.forEach((file) => {
+                URL.revokeObjectURL(file.url);
+                URL.revokeObjectURL(file.newUrl);
+            });
             return initialState;
         },
         toCutStep: (state) => {
