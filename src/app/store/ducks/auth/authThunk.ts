@@ -78,7 +78,22 @@ export const getLoginDevice = createAsyncThunk<LoginDevice[], void>(
             const response = await authorizedCustomAxios.get(
                 `/accounts/login/device`,
             );
+            console.log(`get login device...`);
             return response.data.data;
+        } catch (error) {
+            ThunkOptions.rejectWithValue(error);
+        }
+    },
+);
+
+export const deviceLogout = createAsyncThunk<void, { tokenId: string }>(
+    "auth/deviceLogout",
+    async (payload, ThunkOptions) => {
+        try {
+            await authorizedCustomAxios.post(`logout/device`, null, {
+                params: { tokenId: payload.tokenId },
+            });
+            await ThunkOptions.dispatch(getLoginDevice());
         } catch (error) {
             ThunkOptions.rejectWithValue(error);
         }

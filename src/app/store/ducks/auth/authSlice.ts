@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FormState } from "./authThunk.type";
-import { getUserInfo, signIn } from "./authThunk";
+import { FormState, LoginDevice } from "./authThunk.type";
+import { getUserInfo, signIn, getLoginDevice } from "./authThunk";
 import { setAccessTokenInAxiosHeaders } from "customAxios";
 
 export interface AuthStateProps {
@@ -15,6 +15,7 @@ export interface AuthStateProps {
     userInfo: AuthType.UserInfo | null;
     hasNotification: boolean;
     resetPassword: AuthType.resetPasswordState;
+    loginDeviceList: LoginDevice[] | null;
 }
 
 const initialState: AuthStateProps = {
@@ -29,6 +30,7 @@ const initialState: AuthStateProps = {
     userInfo: null,
     hasNotification: false,
     resetPassword: { email: undefined },
+    loginDeviceList: null,
 };
 
 const authSlice = createSlice({
@@ -104,6 +106,9 @@ const authSlice = createSlice({
             .addCase(getUserInfo.pending, (state) => {})
             .addCase(getUserInfo.fulfilled, (state, action) => {
                 state.userInfo = action.payload;
+            })
+            .addCase(getLoginDevice.fulfilled, (state, action) => {
+                state.loginDeviceList = action.payload;
             });
     },
 });

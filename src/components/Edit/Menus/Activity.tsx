@@ -1,8 +1,7 @@
 import { getLoginDevice } from "app/store/ducks/auth/authThunk";
-import { LoginDevice } from "app/store/ducks/auth/authThunk.type";
-import { useAppDispatch } from "app/store/Hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import DeviceItem from "components/Edit/Menus/deviceItem";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 
 const Container = styled.article`
@@ -22,19 +21,11 @@ const Container = styled.article`
 `;
 
 const Activity = () => {
-    const [loginDeviceList, setLoginDeviceList] = useState<LoginDevice[]>();
     const dispatch = useAppDispatch();
+    const { loginDeviceList } = useAppSelector((state) => state.auth);
 
     useEffect(() => {
-        const loadLoginDeviceList = async () => {
-            try {
-                const response = await dispatch(getLoginDevice()).unwrap();
-                setLoginDeviceList(response);
-            } catch (error) {
-                // 로그인활동 못받아올때
-            }
-        };
-        loadLoginDeviceList();
+        dispatch(getLoginDevice());
     }, [dispatch]);
 
     return (
@@ -42,7 +33,13 @@ const Activity = () => {
             <div className="title">로그인 활동</div>
             <div className="sub-title">로그인한 위치</div>
             {loginDeviceList ? (
-                loginDeviceList.map((user) => <DeviceItem {...user} />)
+                loginDeviceList.map((user, index) => (
+                    <DeviceItem
+                        {...user}
+                        key={user.tokenId}
+                        index={String(index)}
+                    />
+                ))
             ) : (
                 <div>로그인 기록을 확인할 수 없습니다.</div>
             )}

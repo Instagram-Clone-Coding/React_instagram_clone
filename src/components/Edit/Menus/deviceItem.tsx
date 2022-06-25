@@ -1,4 +1,6 @@
+import { deviceLogout } from "app/store/ducks/auth/authThunk";
 import { LoginDevice } from "app/store/ducks/auth/authThunk.type";
+import { useAppDispatch } from "app/store/Hooks";
 import { ReactComponent as Map } from "assets/Svgs/position.svg";
 import { ReactComponent as MoreTap } from "assets/Svgs/v.svg";
 import NaverMap from "components/Edit/Menus/naver_map";
@@ -56,11 +58,17 @@ const Container = styled.div<{ isToggleOn: boolean }>`
     }
 `;
 
-export default function DeviceItem({ device, location, tokenId }: LoginDevice) {
+export default function DeviceItem({
+    device,
+    location,
+    tokenId,
+    index,
+}: LoginDevice & { index: string }) {
     // device 가공
     // location city 가공
     const [isToggleOn, setIsToggleOn] = useState(false);
     const [mapLoaded, setMapLoaded] = useState(false);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         const naverMap = new NaverMap();
@@ -74,7 +82,7 @@ export default function DeviceItem({ device, location, tokenId }: LoginDevice) {
                 center: userPosition,
                 zoom: 10,
             };
-            const map = new naver.maps.Map("map", mapOptions); // params: 지도가 들어갈 dom요소 or dom id, mapOption
+            const map = new naver.maps.Map(index, mapOptions);
             new naver.maps.Marker({
                 position: userPosition,
                 map: map,
@@ -88,11 +96,11 @@ export default function DeviceItem({ device, location, tokenId }: LoginDevice) {
                 <div className="device-content">
                     <Map />
                     <div className="description">
-                        <div className="city">Seoul, Korea</div>
+                        <div className="city">{location.city || "서울"}</div>
                         <div className="time">
-                            <span className="first-login-date">5시간 전</span>
-                            <span> · </span>
-                            <span>Mac Os</span>
+                            {/* <span className="first-login-date">5시간 전</span>
+                            <span> · </span> */}
+                            <span>{device}</span>
                         </div>
                     </div>
                 </div>
@@ -103,10 +111,15 @@ export default function DeviceItem({ device, location, tokenId }: LoginDevice) {
             {isToggleOn && (
                 <div className="map-container">
                     <div
-                        id="map"
+                        id={index}
                         style={{ width: "100%", height: "200px" }}
                     ></div>
-                    <button>로그아웃</button>
+                    <button
+                        onClick={() => dispatch(deviceLogout({ tokenId }))}
+                        type="button"
+                    >
+                        로그아웃
+                    </button>
                 </div>
             )}
             <hr />
