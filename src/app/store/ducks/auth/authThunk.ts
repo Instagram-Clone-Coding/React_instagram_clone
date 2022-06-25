@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { SignInRequestType } from "./authThunk.type";
+import { SignInRequestType, LoginDevice } from "./authThunk.type";
 import { authAction } from "./authSlice";
 import { authorizedCustomAxios, customAxios } from "customAxios";
 
@@ -70,3 +70,17 @@ export const getUserInfo = createAsyncThunk<AuthType.UserInfo>(
 //         }
 //     },
 // );
+
+export const getLoginDevice = createAsyncThunk<LoginDevice[], void>(
+    "auth/loginDevice",
+    async (payload, ThunkOptions) => {
+        try {
+            const response = await authorizedCustomAxios.get(
+                `/accounts/login/device`,
+            );
+            return response.data.data;
+        } catch (error) {
+            ThunkOptions.rejectWithValue(error);
+        }
+    },
+);

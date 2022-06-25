@@ -1,4 +1,5 @@
 import { getLoginDevice } from "app/store/ducks/auth/authThunk";
+import { LoginDevice } from "app/store/ducks/auth/authThunk.type";
 import { useAppDispatch } from "app/store/Hooks";
 import DeviceItem from "components/Edit/Menus/deviceItem";
 import { useEffect, useState } from "react";
@@ -21,13 +22,19 @@ const Container = styled.article`
 `;
 
 const Activity = () => {
-    const [loginDeviceList, setLoginDeviceList] = useState([]);
+    const [loginDeviceList, setLoginDeviceList] = useState<LoginDevice[]>();
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(getLoginDevice()).then((res) =>
-            setLoginDeviceList(res.payload),
-        );
+        const loadLoginDeviceList = async () => {
+            try {
+                const response = await dispatch(getLoginDevice()).unwrap();
+                setLoginDeviceList(response);
+            } catch (error) {
+                // 로그인활동 못받아올때
+            }
+        };
+        loadLoginDeviceList();
     }, [dispatch]);
 
     return (
