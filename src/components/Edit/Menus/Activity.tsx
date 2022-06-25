@@ -17,7 +17,7 @@ const Container = styled.article`
     .sub-title {
         font-size: 1rem;
         padding: 1rem 0;
-        font-weight: 400;
+        font-weight: 600;
     }
 `;
 

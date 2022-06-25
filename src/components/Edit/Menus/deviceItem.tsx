@@ -23,6 +23,10 @@ const Container = styled.div<{ isToggleOn: boolean }>`
             .description {
                 margin-left: 12px;
                 flex: 1;
+
+                .time {
+                    color: ${(props) => props.theme.font.gray};
+                }
             }
         }
 
@@ -30,6 +34,18 @@ const Container = styled.div<{ isToggleOn: boolean }>`
             font-weight: 400;
             transform: ${(props) =>
                 props.isToggleOn ? "none" : "rotate(180deg)"};
+        }
+    }
+
+    .map-container {
+        border: 1px solid ${(props) => props.theme.color.bd_gray};
+        border-radius: 4px;
+        display: flex;
+        flex-direction: column;
+        margin: 8px 0;
+
+        button {
+            padding: 20px 0;
         }
     }
 
@@ -73,9 +89,11 @@ export default function DeviceItem({ device, location, tokenId }: LoginDevice) {
                     <Map />
                     <div className="description">
                         <div className="city">Seoul, Korea</div>
-                        <span className="first-login-date">5시간 전</span>
-                        <span> · </span>
-                        <span>Mac Os</span>
+                        <div className="time">
+                            <span className="first-login-date">5시간 전</span>
+                            <span> · </span>
+                            <span>Mac Os</span>
+                        </div>
                     </div>
                 </div>
                 <button className="more-tap">
@@ -83,7 +101,13 @@ export default function DeviceItem({ device, location, tokenId }: LoginDevice) {
                 </button>
             </div>
             {isToggleOn && (
-                <div id="map" style={{ width: "100%", height: "400px" }}></div>
+                <div className="map-container">
+                    <div
+                        id="map"
+                        style={{ width: "100%", height: "200px" }}
+                    ></div>
+                    <button>로그아웃</button>
+                </div>
             )}
             <hr />
         </Container>
