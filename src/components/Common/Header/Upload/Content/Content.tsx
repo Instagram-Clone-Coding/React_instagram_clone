@@ -409,20 +409,13 @@ const Content = ({ currentWidth }: ContentProps) => {
                         virtualCanvas.width,
                         virtualCanvas.height,
                     );
-                    virtualCanvas.toBlob(function (blob) {
-                        if (!blob) return;
-                        var newImg = document.createElement("img"),
-                            url = URL.createObjectURL(blob);
-                        newImg.onload = function () {
-                            dispatch(
-                                uploadActions.addNewFileUrl({ url, index }),
-                            );
-                            // no longer need to read the blob so it's revoked
-                            // URL.revokeObjectURL(url);
-                        };
-                        newImg.src = url;
-                        document.body.appendChild(newImg);
-                    });
+                    const newImageFile = virtualCanvas.toDataURL("image/jpeg"); // jpeg로 하면 나머지 캔버스 영역이 검은색으로, png로 하면 투명색이다
+                    dispatch(
+                        uploadActions.addNewFileUrl({
+                            url: newImageFile,
+                            index,
+                        }),
+                    );
                 };
             }
         });
@@ -459,7 +452,6 @@ const Content = ({ currentWidth }: ContentProps) => {
         dispatch(uploadActions.addHashtags({ tagX, tagY, username }));
         setIsSearchBarOn(false);
     };
-
     return (
         <>
             <UploadHeader
