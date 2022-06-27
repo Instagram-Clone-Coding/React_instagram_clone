@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import React, { useCallback } from "react";
 import { ReactComponent as BackIcon } from "assets/Svgs/back.svg";
 import styled from "styled-components";
+import { uploadArticle } from "app/store/ducks/upload/uploadThunk";
 
 const StyledUploadHeader = styled.header`
     display: flex;
@@ -65,11 +66,18 @@ const UploadHeader = ({
         }
         dispatch(uploadActions.prevStep());
     };
-    const nextStepClickHandler = () => {
+    const nextStepClickHandler = async (
+        event: React.MouseEvent<HTMLDivElement>,
+    ) => {
         if (excuteBeforeNextStep) {
             excuteBeforeNextStep();
         }
-        dispatch(uploadActions.nextStep());
+        if (step !== "content") {
+            dispatch(uploadActions.nextStep());
+        } else {
+            event.preventDefault();
+            await dispatch(uploadArticle());
+        }
     };
 
     return (
