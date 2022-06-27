@@ -293,6 +293,7 @@ declare module UploadType {
         newUrl: string;
         alternativeText: string;
         hashtags: HashtagType[];
+        blob: Blob | null;
     }
     interface FileProps
         extends FileDragAndDropProps,

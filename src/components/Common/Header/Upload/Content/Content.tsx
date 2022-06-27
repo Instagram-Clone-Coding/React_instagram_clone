@@ -409,13 +409,24 @@ const Content = ({ currentWidth }: ContentProps) => {
                         virtualCanvas.width,
                         virtualCanvas.height,
                     );
-                    const newImageFile = virtualCanvas.toDataURL("image/png"); // jpeg로 하면 나머지 캔버스 영역이 검은색으로, png로 하면 투명색이다
-                    dispatch(
-                        uploadActions.addNewFileUrl({
-                            url: newImageFile,
-                            index,
-                        }),
-                    );
+                    // const newImageFile = virtualCanvas.toDataURL("image/png"); // jpeg로 하면 나머지 캔버스 영역이 검은색으로, png로 하면 투명색이다
+                    virtualCanvas.toBlob(function (blob) {
+                        const newImg = document.createElement("img");
+                        if (!blob) return;
+                        const url = URL.createObjectURL(blob);
+
+                        // newImg.onload = function() {
+                        //   // no longer need to read the blob so it's revoked
+                        //   URL.revokeObjectURL(url);
+                        // };
+                        dispatch(
+                            uploadActions.addNewFileUrl({
+                                url,
+                                index,
+                                blob,
+                            }),
+                        );
+                    });
                 };
             }
         });

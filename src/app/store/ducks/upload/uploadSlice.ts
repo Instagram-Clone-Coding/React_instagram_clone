@@ -80,6 +80,7 @@ const uploadSlice = createSlice({
                 newUrl: "",
                 alternativeText: "",
                 hashtags: [],
+                blob: null,
             });
         },
         startGrabbing: (state) => {
@@ -284,9 +285,14 @@ const uploadSlice = createSlice({
         },
         addNewFileUrl: (
             state,
-            action: PayloadAction<{ url: string; index: number }>,
+            action: PayloadAction<{
+                url: string;
+                index: number;
+                blob: Blob | null;
+            }>,
         ) => {
             state.files[action.payload.index].newUrl = action.payload.url;
+            state.files[action.payload.index].blob = action.payload.blob;
         },
         resetNewFileUrl: (state) => {
             state.files.forEach((file) => {
