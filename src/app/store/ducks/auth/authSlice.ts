@@ -6,6 +6,7 @@ import {
     resetPassword,
     checkCurrentURL,
     signInUseCode,
+    logout,
 } from "./authThunk";
 import { setAccessTokenInAxiosHeaders } from "customAxios";
 
@@ -126,6 +127,9 @@ const authSlice = createSlice({
             })
             .addCase(checkCurrentURL.rejected, (state) => {
                 // 유효하지 않은 url **
+            })
+            .addCase(logout.fulfilled, (state) => {
+                state.isLogin = false;
             });
     },
 });

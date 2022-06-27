@@ -50,7 +50,7 @@ const Routes = () => {
                                 path="/accounts/password/reset/confirm"
                                 component={ResetPasswordForm}
                             />
-                            {/* <Redirect to="/" /> */}
+                            <Redirect to="/" />
                         </>
                     )}
                 </Switch>
