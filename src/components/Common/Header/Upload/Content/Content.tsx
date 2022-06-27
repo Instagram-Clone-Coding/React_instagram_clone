@@ -409,7 +409,7 @@ const Content = ({ currentWidth }: ContentProps) => {
                         virtualCanvas.width,
                         virtualCanvas.height,
                     );
-                    const newImageFile = virtualCanvas.toDataURL("image/jpeg"); // jpeg로 하면 나머지 캔버스 영역이 검은색으로, png로 하면 투명색이다
+                    const newImageFile = virtualCanvas.toDataURL("image/png"); // jpeg로 하면 나머지 캔버스 영역이 검은색으로, png로 하면 투명색이다
                     dispatch(
                         uploadActions.addNewFileUrl({
                             url: newImageFile,
