@@ -13,7 +13,7 @@ export const uploadArticle = createAsyncThunk<
                 textareaValue,
                 files,
                 isCommentBlocked,
-                isLikesAndViewsHidden,
+                // isLikesAndViewsHidden, // 좋아요와 조회수 숨기기
             },
             auth: { userInfo },
         } = ThunkOptions.getState();
@@ -28,39 +28,39 @@ export const uploadArticle = createAsyncThunk<
             // ** Blob -> File 로 변환**
             if (!currentFileObj.blob) return;
             let file = new File([currentFileObj.blob], `file${i}.png`);
-            console.log(file);
             formData.append(`postImages[${i}]`, file);
             formData.append(
-                `altText[${i}]`,
+                `altTexts[${i}]`,
                 currentFileObj.alternativeText.trim() ||
                     `Photo by ${memberName} with ${memberUsername}`,
             );
             currentFileObj.hashtags.forEach((hashtag) => {
                 formData.append(
-                    `postImageTags[${hashtagIndex}].id`,
+                    `postImageTags[${hashtagIndex}].id`, // 해당 태그가 어떤 이미지에 있는지
                     JSON.stringify(i),
                 );
                 formData.append(
-                    `postImageTags[${hashtagIndex}].username`,
+                    `postImageTags[${hashtagIndex}].username`, // 해당 태그의 username
                     hashtag.username,
                 );
                 formData.append(
-                    `postImageTags[${hashtagIndex}].tagX`,
+                    `postImageTags[${hashtagIndex}].tagX`, // 해당 태그의 상대적 위치(left로부터)
                     JSON.stringify(hashtag.tagX),
                 );
                 formData.append(
-                    `postImageTags[${hashtagIndex}].tagY`,
+                    `postImageTags[${hashtagIndex}].tagY`, // 해당 태크의 상대적 위치(top으로부터)
                     JSON.stringify(hashtag.tagY),
                 );
                 hashtagIndex++;
             });
         }
-        authorizedCustomAxios.defaults.headers.post["Content-Type"] =
-            "multipart/form-data";
         const {
             data: { data },
-        } = await authorizedCustomAxios.post(`/posts`, formData);
-        console.log(data);
+        } = await authorizedCustomAxios.post(`/posts`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
         return data;
     } catch (error) {
         if (!window.navigator.onLine) {
