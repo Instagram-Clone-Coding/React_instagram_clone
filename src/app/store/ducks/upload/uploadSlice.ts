@@ -342,7 +342,7 @@ const uploadSlice = createSlice({
                 state.step = "uploading";
             })
             .addCase(uploadArticle.fulfilled, (state) => {
-                return initialState;
+                state.step = "complete";
             })
             .addCase(uploadArticle.rejected, (state) => {
                 return initialState;

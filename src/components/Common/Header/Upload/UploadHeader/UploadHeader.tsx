@@ -59,6 +59,8 @@ const UploadHeader = ({
                 return "새 게시물 만들기";
             case "uploading":
                 return "공유 중입니다";
+            case "complete":
+                return "게시물이 공유되었습니다";
         }
     }, []);
 
@@ -84,21 +86,25 @@ const UploadHeader = ({
 
     return (
         <StyledUploadHeader>
-            {step !== "dragAndDrop" && step !== "uploading" && (
-                <div onClick={prevStepClickHandler}>
-                    <button>
-                        <BackIcon />
-                    </button>
-                </div>
-            )}
+            {step !== "dragAndDrop" &&
+                step !== "uploading" &&
+                step !== "complete" && (
+                    <div onClick={prevStepClickHandler}>
+                        <button>
+                            <BackIcon />
+                        </button>
+                    </div>
+                )}
             <h1>{currentHeading(step)}</h1>
-            {step !== "dragAndDrop" && step !== "uploading" && (
-                <div onClick={nextStepClickHandler}>
-                    <button className="upload__next">
-                        {step === "content" ? "공유하기" : "다음"}
-                    </button>
-                </div>
-            )}
+            {step !== "dragAndDrop" &&
+                step !== "uploading" &&
+                step !== "complete" && (
+                    <div onClick={nextStepClickHandler}>
+                        <button className="upload__next">
+                            {step === "content" ? "공유하기" : "다음"}
+                        </button>
+                    </div>
+                )}
         </StyledUploadHeader>
     );
 };
