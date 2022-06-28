@@ -8,6 +8,7 @@ import {
     signInUseCode,
 } from "./authThunk";
 import { setAccessTokenInAxiosHeaders } from "customAxios";
+import { uploadArticle } from "app/store/ducks/upload/uploadThunk";
 
 export interface AuthStateProps {
     isLogin: boolean;
@@ -126,6 +127,9 @@ const authSlice = createSlice({
             })
             .addCase(checkCurrentURL.rejected, (state) => {
                 // 유효하지 않은 url **
+            })
+            .addCase(uploadArticle.rejected, (state) => {
+                state.isLogin = false;
             });
     },
 });
