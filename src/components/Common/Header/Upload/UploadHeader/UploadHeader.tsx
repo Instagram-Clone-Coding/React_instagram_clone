@@ -57,6 +57,8 @@ const UploadHeader = ({
                 return "편집";
             case "content":
                 return "새 게시물 만들기";
+            case "uploading":
+                return "공유 중입니다";
         }
     }, []);
 
@@ -82,7 +84,7 @@ const UploadHeader = ({
 
     return (
         <StyledUploadHeader>
-            {step !== "dragAndDrop" && (
+            {step !== "dragAndDrop" && step !== "uploading" && (
                 <div onClick={prevStepClickHandler}>
                     <button>
                         <BackIcon />
@@ -90,7 +92,7 @@ const UploadHeader = ({
                 </div>
             )}
             <h1>{currentHeading(step)}</h1>
-            {step !== "dragAndDrop" && (
+            {step !== "dragAndDrop" && step !== "uploading" && (
                 <div onClick={nextStepClickHandler}>
                     <button className="upload__next">
                         {step === "content" ? "공유하기" : "다음"}

@@ -7,6 +7,7 @@ import DragAndDrop from "components/Common/Header/Upload/DragAndDrop";
 import Cut from "components/Common/Header/Upload/Cut";
 import Edit from "components/Common/Header/Upload/Edit";
 import Content from "components/Common/Header/Upload/Content";
+import Uploading from "components/Common/Header/Upload/Uploading";
 
 interface ModalInnerProps {
     backdropWidth: number;
@@ -92,6 +93,8 @@ const Upload = () => {
                             currentWidth={currentWidthLimitedByWindowHeight}
                         />
                     );
+                case "uploading":
+                    return <Uploading />;
             }
         },
         [currentWidthLimitedByWindowHeight],

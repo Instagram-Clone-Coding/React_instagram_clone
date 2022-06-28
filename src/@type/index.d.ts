@@ -303,7 +303,7 @@ declare module UploadType {
     // type FileProps = FileDragAndDropProps & FileCutProps;
 
     type RatioType = "original" | "square" | "thin" | "fat";
-    type StepType = "dragAndDrop" | "cut" | "edit" | "content";
+    type StepType = "dragAndDrop" | "cut" | "edit" | "content" | "uploading";
     type AdjustInputTextType = "밝기" | "대비" | "채도" | "흐리게";
 
     interface UploadStateProps {

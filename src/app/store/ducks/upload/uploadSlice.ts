@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { uploadArticle } from "app/store/ducks/upload/uploadThunk";
 
 const initialState: UploadType.UploadStateProps = {
     isUploading: false,
@@ -334,6 +335,18 @@ const uploadSlice = createSlice({
                 state.currentIndex
             ].hashtags.filter((hashtag, index) => index !== action.payload);
         },
+    },
+    extraReducers: (build) => {
+        build
+            .addCase(uploadArticle.pending, (state) => {
+                state.step = "uploading";
+            })
+            .addCase(uploadArticle.fulfilled, (state) => {
+                return initialState;
+            })
+            .addCase(uploadArticle.rejected, (state) => {
+                return initialState;
+            });
     },
 });
 
