@@ -44,6 +44,10 @@ const NavItemWrapper = styled.div`
 `;
 
 const AvatarWrapper = styled(NavItemWrapper)<{ isSubnavModalOn: boolean }>`
+    .profile {
+        cursor: pointer;
+    }
+
     .img-container {
         display: flex;
         justify-content: center;
@@ -141,6 +145,7 @@ const NavItems = () => {
                         onClick={() => {
                             setIsSubnavMoalOn(!isSubnavModalOn);
                         }}
+                        className="profile"
                     >
                         <div className="img-container">
                             <img
