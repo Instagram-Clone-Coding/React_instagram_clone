@@ -70,7 +70,3 @@ export const uploadArticle = createAsyncThunk<
         }
     }
 });
-// postImages[0] = "이미지"
-// postImages[1] = "이미지2"
-// postImageTags[index].id , postImageTAgs[index].tagX
-// altTexts[0] = "대체텍스트1", altTexts[1] = "데채텍스트2"
