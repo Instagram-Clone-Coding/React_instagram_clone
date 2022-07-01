@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import sprite2 from "assets/Images/sprite2.png";
 import styled from "styled-components";
 import ArticleImgSliderUnit from "components/Home/Article/ArticleImgSlider/ArticleImgSliderUnit";
@@ -148,9 +148,23 @@ const ArticleImgSlider = ({ imageDTOs, onLike }: ArticleImgSliderProps) => {
     //slider state
     const [sliderIndex, setSliderIndex] = useState(0);
     const [doubleClicked, setDoubleClicked] = useState(false);
+    const [unitWidth, setUnitWidth] = useState(0);
     const totalIndex = imageDTOs.length - 1;
     const wrapRef = useRef<HTMLDivElement>(null);
     const sliderRef = useRef<HTMLDivElement>(null);
+
+    const resizeHandler = () => {
+        if (!wrapRef.current) return;
+        setUnitWidth(wrapRef.current.offsetWidth);
+    };
+
+    useEffect(() => {
+        window.addEventListener("resize", resizeHandler);
+        resizeHandler();
+        return () => {
+            window.removeEventListener("resize", resizeHandler);
+        };
+    }, []);
 
     const doubleClickLikeHandler = () => {
         setDoubleClicked(true);
@@ -212,11 +226,16 @@ const ArticleImgSlider = ({ imageDTOs, onLike }: ArticleImgSliderProps) => {
                 ></div>
             )}
             <div className="img-wrap" ref={wrapRef} onScroll={detectScroll}>
-                <div className="img-slider" ref={sliderRef}>
+                <div
+                    className="img-slider"
+                    ref={sliderRef}
+                    style={{ width: imageDTOs.length * 100 + "%" }}
+                >
                     {imageDTOs.map((imageDTO) => (
                         <ArticleImgSliderUnit
                             key={imageDTO.id}
                             imageDTO={imageDTO}
+                            unitWidth={unitWidth}
                         />
                     ))}
                 </div>
