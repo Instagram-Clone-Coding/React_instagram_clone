@@ -1,8 +1,7 @@
 import { changePassword } from "app/store/ducks/edit/editThunk";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import { authorizedCustomAxios } from "customAxios";
 import useInput from "hooks/useInput";
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import Button from "styles/UI/Button";
 import Notification from "styles/UI/Notification";
@@ -59,14 +58,14 @@ const PasswordEditContainer = styled.div`
 const PasswordEdit = () => {
     const dispatch = useAppDispatch();
     const userInfo = useAppSelector(({ auth }) => auth.userInfo);
-    const [errMsg, setErrMsg] = useState<string>("");
+    const [msg, setMsg] = useState<string>("");
 
     const oldPassword = useInput("");
     const newPassword = useInput("");
     const newPasswordConfirm = useInput("");
     const changePasswordHandler = async () => {
         if (newPassword[0].value !== newPasswordConfirm[0].value) {
-            setErrMsg("두 비밀번호가 일치하는지 확인하세요");
+            setMsg("두 비밀번호가 일치하는지 확인하세요");
             return;
         }
 
@@ -75,14 +74,20 @@ const PasswordEdit = () => {
             oldPassword: oldPassword[0].value,
         };
 
-        const data = dispatch(changePassword(body)).unwrap();
+        const data = await dispatch(changePassword(body)).unwrap();
 
-        // if (data.status === 401) {
-        // }
+        setMsg(data.message);
     };
     return (
         <PasswordEditContainer>
-            {errMsg.length > 0 && <Notification text={errMsg} />}
+            {msg.length > 0 && (
+                <Notification
+                    text={msg}
+                    reset={() => {
+                        setMsg("");
+                    }}
+                />
+            )}
 
             <div className="profile">
                 <img

@@ -430,5 +430,5 @@ declare module EditType {
         | "Instagram에서 보낸 이메일"
         | "도움말";
 
-    type modalType = "image" | null;
+    type modalType = "image" | "gender" | null;
 }
