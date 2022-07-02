@@ -243,9 +243,10 @@ const ArticleImgSlider = ({ imageDTOs, onLike }: ArticleImgSliderProps) => {
             <div className="leftArrow" onClick={leftArrowClickHandler}></div>
             <div className="rightArrow" onClick={rightArrowClickHandler}></div>
             <div className="img-dots">
-                {[...Array(totalIndex + 1)].map((a, index) => (
-                    <div key={index} className="img-dot" />
-                ))}
+                {totalIndex > 0 &&
+                    [...Array(totalIndex + 1)].map((a, index) => (
+                        <div key={index} className="img-dot" />
+                    ))}
             </div>
         </StyledImgSlider>
     );
