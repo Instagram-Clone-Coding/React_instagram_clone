@@ -138,199 +138,201 @@ const StyledContent = styled.div`
         width: 340px;
         min-width: 340px;
         max-width: 340px;
-
-        & > .textareaBox {
-            & > .textarea__header {
-                margin: 18px 16px 14px 16px;
+        overflow-y: auto;
+        & > .upload__contentsScroll {
+            & > .textareaBox {
+                & > .textarea__header {
+                    margin: 18px 16px 14px 16px;
+                    display: flex;
+                    align-items: center;
+                    img {
+                        width: 28px;
+                        height: 28px;
+                        margin-right: 12px;
+                    }
+                    div {
+                        font-weight: ${(props) => props.theme.font.bold};
+                        font-size: 16px;
+                    }
+                }
+                & > textarea {
+                    border: none;
+                    overflow: auto;
+                    outline: none;
+                    -webkit-box-shadow: none;
+                    -moz-box-shadow: none;
+                    box-shadow: none;
+                    resize: none; /*remove the resize handle on the bottom right*/
+                    width: 100%;
+                    height: 168px;
+                    padding: 0 16px;
+                    font-size: 16px;
+                    background: transparent;
+                }
+                & > .textarea__bottom {
+                    display: flex;
+                    justify-content: space-between;
+                    height: 30px;
+                    padding: 4px 16px 4px 8px;
+                    position: relative;
+                    .emoji-picker-react {
+                        position: absolute;
+                        left: -300px;
+                        top: -200px;
+                        width: 300px !important;
+                        height: 400px;
+                        @media (max-width: 800px) {
+                            top: -100px;
+                            height: 200px;
+                        }
+                    }
+                    & > button {
+                        color: #c7c7c7;
+                        font-size: 12px;
+                        font-weight: normal;
+                        &:hover {
+                            color: black;
+                        }
+                    }
+                    & > svg {
+                        color: ${(props) => props.theme.font.gray};
+                        cursor: pointer;
+                    }
+                }
+            }
+            & > .upload__contentOption {
+                width: 100%;
+                border-top: 1px solid ${(props) => props.theme.color.bd_gray};
                 display: flex;
                 align-items: center;
-                img {
-                    width: 28px;
-                    height: 28px;
-                    margin-right: 12px;
-                }
-                div {
-                    font-weight: ${(props) => props.theme.font.bold};
+                justify-content: center;
+                flex-direction: column;
+                min-height: 44px;
+                cursor: pointer;
+                & * {
                     font-size: 16px;
                 }
-            }
-            & > textarea {
-                border: none;
-                overflow: auto;
-                outline: none;
-                -webkit-box-shadow: none;
-                -moz-box-shadow: none;
-                box-shadow: none;
-                resize: none; /*remove the resize handle on the bottom right*/
-                width: 100%;
-                height: 168px;
-                padding: 0 16px;
-                font-size: 16px;
-                background: transparent;
-            }
-            & > .textarea__bottom {
-                display: flex;
-                justify-content: space-between;
-                height: 30px;
-                padding: 4px 16px 4px 8px;
-                position: relative;
-                .emoji-picker-react {
-                    position: absolute;
-                    left: -300px;
-                    top: -200px;
-                    width: 300px !important;
-                    height: 400px;
-                    @media (max-width: 800px) {
-                        top: -100px;
-                        height: 200px;
-                    }
+                & > .header,
+                & > .activated {
+                    width: 100%;
+                    padding: 14px 16px;
                 }
-                & > button {
-                    color: #c7c7c7;
-                    font-size: 12px;
-                    font-weight: normal;
-                    &:hover {
-                        color: black;
-                    }
-                }
-                & > svg {
-                    color: ${(props) => props.theme.font.gray};
-                    cursor: pointer;
-                }
-            }
-        }
-        & > .upload__contentOption {
-            width: 100%;
-            border-top: 1px solid ${(props) => props.theme.color.bd_gray};
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            min-height: 44px;
-            cursor: pointer;
-            & * {
-                font-size: 16px;
-            }
-            & > .header,
-            & > .activated {
-                width: 100%;
-                padding: 14px 16px;
-            }
-            & > .header {
-                padding: 14px 16px;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                & > span {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    & > svg {
-                        transform: rotate(180deg);
-                        width: 16px;
-                        height: 16px;
-                    }
-                    &.bold {
-                        font-weight: ${(props) => props.theme.font.bold};
-                    }
-                    &.reverse {
-                        transform: rotate(180deg);
-                    }
-                }
-            }
-            &.location > .header {
-                & > input {
-                    border: none;
-                    background-color: transparent;
-                }
-                & > span {
-                    & > svg {
-                        transform: none;
-                    }
-                }
-            }
-            & > .activated {
-                padding-top: 0;
-                & > .smallFont {
-                    font-size: 12px;
-                    color: ${(props) => props.theme.font.gray};
-                }
-
-                &.accessOption > div {
-                    height: 44px;
-                    margin: 12px 0 16px 0;
+                & > .header {
+                    padding: 14px 16px;
                     display: flex;
                     align-items: center;
-                    & > .imageWrapper,
-                    & > input {
-                        height: 44px;
-                        &:focus {
-                            border: 1px solid #a8a8a8;
-                        }
-                        &::placeholder {
-                            color: #c7c7c7;
-                        }
-                    }
-                    & > .imageWrapper {
-                        width: 44px;
-                        height: 44px;
+                    justify-content: space-between;
+                    & > span {
                         display: flex;
                         justify-content: center;
                         align-items: center;
-                    }
-                    & > input {
-                        margin-left: 8px;
-                        width: 255px;
-                        background-color: transparent;
-                        border-radius: 6px;
-                        font-size: 14px;
-                        padding: 4px 12px;
+                        & > svg {
+                            transform: rotate(180deg);
+                            width: 16px;
+                            height: 16px;
+                        }
+                        &.bold {
+                            font-weight: ${(props) => props.theme.font.bold};
+                        }
+                        &.reverse {
+                            transform: rotate(180deg);
+                        }
                     }
                 }
-                &.advanced > div {
-                    &.toggleArea {
-                        height: 28px;
+                &.location > .header {
+                    & > input {
+                        border: none;
+                        background-color: transparent;
+                    }
+                    & > span {
+                        & > svg {
+                            transform: none;
+                        }
+                    }
+                }
+                & > .activated {
+                    padding-top: 0;
+                    & > .smallFont {
+                        font-size: 12px;
+                        color: ${(props) => props.theme.font.gray};
+                    }
+
+                    &.accessOption > div {
+                        height: 44px;
+                        margin: 12px 0 16px 0;
                         display: flex;
-                        justify-content: space-between;
                         align-items: center;
-                        & > .toggle {
-                            width: 44px;
-                            height: 100%;
-                            background-color: ${(props) =>
-                                props.theme.font.gray};
-                            border-radius: 14px;
-                            display: flex;
-                            align-items: center;
-                            padding: 0 3px;
-                            transition: background-color 0.5s;
-                            & > div {
-                                transition: transform 0.5s;
-                                width: 22px;
-                                height: 22px;
-                                background-color: white;
-                                border-radius: 50%;
+                        & > .imageWrapper,
+                        & > input {
+                            height: 44px;
+                            &:focus {
+                                border: 1px solid #a8a8a8;
                             }
-                            &.on {
+                            &::placeholder {
+                                color: #c7c7c7;
+                            }
+                        }
+                        & > .imageWrapper {
+                            width: 44px;
+                            height: 44px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                        & > input {
+                            margin-left: 8px;
+                            width: 255px;
+                            background-color: transparent;
+                            border-radius: 6px;
+                            font-size: 14px;
+                            padding: 4px 12px;
+                        }
+                    }
+                    &.advanced > div {
+                        &.toggleArea {
+                            height: 28px;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            & > .toggle {
+                                width: 44px;
+                                height: 100%;
                                 background-color: ${(props) =>
-                                    props.theme.color.blue};
+                                    props.theme.font.gray};
+                                border-radius: 14px;
+                                display: flex;
+                                align-items: center;
+                                padding: 0 3px;
+                                transition: background-color 0.5s;
                                 & > div {
-                                    transform: translateX(15px);
+                                    transition: transform 0.5s;
+                                    width: 22px;
+                                    height: 22px;
+                                    background-color: white;
+                                    border-radius: 50%;
+                                }
+                                &.on {
+                                    background-color: ${(props) =>
+                                        props.theme.color.blue};
+                                    & > div {
+                                        transform: translateX(15px);
+                                    }
                                 }
                             }
                         }
-                    }
-                    &.smallFont {
-                        padding: 12px 0;
+                        &.smallFont {
+                            padding: 12px 0;
+                        }
                     }
                 }
             }
-        }
-        & > hr {
-            width: 100%;
-            margin: 0;
-            border: 0;
-            background-color: ${(props) => props.theme.color.bd_gray};
-            height: 1px;
+            & > hr {
+                width: 100%;
+                margin: 0;
+                border: 0;
+                background-color: ${(props) => props.theme.color.bd_gray};
+                height: 1px;
+            }
         }
     }
 `;
@@ -605,169 +607,192 @@ const Content = ({ currentWidth }: ContentProps) => {
                         />
                     )}
                 </div>
-                <div className="upload__contents">
-                    <div className="upload__contentInput textareaBox">
-                        <div className="textarea__header">
-                            <img
-                                src={userInfo?.memberImageUrl}
-                                alt={"유효하지 않은 url입니다."}
-                            />
-                            <div>{userInfo?.memberUsername}</div>
+
+                <div
+                    className="upload__contents"
+                    style={{ height: currentWidth }}
+                >
+                    <div className="upload__contentsScroll">
+                        <div className="upload__contentInput textareaBox">
+                            <div className="textarea__header">
+                                <img
+                                    src={userInfo?.memberImageUrl}
+                                    alt={"유효하지 않은 url입니다."}
+                                />
+                                <div>{userInfo?.memberUsername}</div>
+                            </div>
+                            <textarea
+                                placeholder="문구 입력..."
+                                value={textareaValue}
+                                onChange={(event) =>
+                                    dispatch(
+                                        uploadActions.setTextareaValue(
+                                            event.target.value,
+                                        ),
+                                    )
+                                }
+                                maxLength={2200}
+                            ></textarea>
+                            <div
+                                className="textarea__bottom"
+                                onBlur={() => setIsEmojiModalOn(false)}
+                            >
+                                {isEmojiModalOn && (
+                                    <Picker onEmojiClick={onEmojiClick} />
+                                )}
+                                <SmileFace
+                                    onClick={() => setIsEmojiModalOn(true)}
+                                />
+                                <button>{`${textareaValue.length}/2,200`}</button>
+                            </div>
                         </div>
-                        <textarea
-                            placeholder="문구 입력..."
-                            value={textareaValue}
-                            onChange={(event) =>
-                                dispatch(
-                                    uploadActions.setTextareaValue(
-                                        event.target.value,
-                                    ),
-                                )
-                            }
-                            maxLength={2200}
-                        ></textarea>
-                        <div
-                            className="textarea__bottom"
-                            onBlur={() => setIsEmojiModalOn(false)}
-                        >
-                            {isEmojiModalOn && (
-                                <Picker onEmojiClick={onEmojiClick} />
-                            )}
-                            <SmileFace
-                                onClick={() => setIsEmojiModalOn(true)}
-                            />
-                            <button>{`${textareaValue.length}/2,200`}</button>
+                        <div className="upload__contentOption location">
+                            <div className="header">
+                                <input
+                                    // disabled={true}
+                                    placeholder="위치 추가(개발 준비중)"
+                                />
+                                <span>
+                                    <LocationIcon />
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div className="upload__contentOption location">
-                        <div className="header">
-                            <input
-                                // disabled={true}
-                                placeholder="위치 추가(개발 준비중)"
-                            />
-                            <span>
-                                <LocationIcon />
-                            </span>
-                        </div>
-                    </div>
-                    <div className="upload__contentOption accessibility">
-                        <div
-                            className="header"
-                            onClick={() => setIsAccessOptionOn((prev) => !prev)}
-                        >
-                            <span className={isAccessOptionOn ? "bold" : ""}>
-                                접근성
-                            </span>
-                            <span className={isAccessOptionOn ? "reverse" : ""}>
-                                <DownV />
-                            </span>
-                        </div>
-                        {isAccessOptionOn && (
-                            <div className="activated accessOption">
-                                <div className="smallFont">
-                                    {`대체 텍스트는 시각적으로 사진을 보기 어려운 사람들에게 사진
-                                    내용을 설명하는 텍스트입니다. 대체 텍스트는 회원님의 사진에
-                                    대해 자동으로 생성되며, 직접 입력할 수도 있습니다.`}
-                                </div>
-                                {files.map((file, index) => (
-                                    <div key={file.newUrl}>
-                                        <div className="imageWrapper">
-                                            <img
-                                                src={file.newUrl}
-                                                alt={"유효하지 않은 url입니다."}
-                                                width={
-                                                    ratioMode !== "thin"
-                                                        ? 44
-                                                        : 44 * 0.8
+                        <div className="upload__contentOption accessibility">
+                            <div
+                                className="header"
+                                onClick={() =>
+                                    setIsAccessOptionOn((prev) => !prev)
+                                }
+                            >
+                                <span
+                                    className={isAccessOptionOn ? "bold" : ""}
+                                >
+                                    접근성
+                                </span>
+                                <span
+                                    className={
+                                        isAccessOptionOn ? "reverse" : ""
+                                    }
+                                >
+                                    <DownV />
+                                </span>
+                            </div>
+                            {isAccessOptionOn && (
+                                <div className="activated accessOption">
+                                    <div className="smallFont">
+                                        {`대체 텍스트는 시각적으로 사진을 보기 어려운 사람들에게 사진
+                                        내용을 설명하는 텍스트입니다. 대체 텍스트는 회원님의 사진에
+                                        대해 자동으로 생성되며, 직접 입력할 수도 있습니다.`}
+                                    </div>
+                                    {files.map((file, index) => (
+                                        <div key={file.newUrl}>
+                                            <div className="imageWrapper">
+                                                <img
+                                                    src={file.newUrl}
+                                                    alt={
+                                                        "유효하지 않은 url입니다."
+                                                    }
+                                                    width={
+                                                        ratioMode !== "thin"
+                                                            ? 44
+                                                            : 44 * 0.8
+                                                    }
+                                                ></img>
+                                            </div>
+                                            <input
+                                                type="text"
+                                                placeholder="대체 텍스트 입력..."
+                                                value={file.alternativeText}
+                                                onChange={(event) =>
+                                                    dispatch(
+                                                        uploadActions.setAlternativeValue(
+                                                            {
+                                                                value: event
+                                                                    .target
+                                                                    .value,
+                                                                index,
+                                                            },
+                                                        ),
+                                                    )
                                                 }
-                                            ></img>
+                                            />
                                         </div>
-                                        <input
-                                            type="text"
-                                            placeholder="대체 텍스트 입력..."
-                                            value={file.alternativeText}
-                                            onChange={(event) =>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                        <div className="upload__contentOption advanced">
+                            <div
+                                className="header"
+                                onClick={() =>
+                                    setIsAdvancedOptionOn((prev) => !prev)
+                                }
+                            >
+                                <span
+                                    className={isAdvancedOptionOn ? "bold" : ""}
+                                >
+                                    고급 설정
+                                </span>
+                                <span
+                                    className={
+                                        isAdvancedOptionOn ? "reverse" : ""
+                                    }
+                                >
+                                    <DownV />
+                                </span>
+                            </div>
+                            {isAdvancedOptionOn && (
+                                <div className="activated advanced">
+                                    <div className="toggleArea">
+                                        <div>
+                                            이 게시물의 좋아요 수 및 조회수
+                                            숨기기
+                                        </div>
+                                        <div
+                                            onClick={() =>
                                                 dispatch(
-                                                    uploadActions.setAlternativeValue(
-                                                        {
-                                                            value: event.target
-                                                                .value,
-                                                            index,
-                                                        },
-                                                    ),
+                                                    uploadActions.toggleIsLikesAndViewsHidden(),
                                                 )
                                             }
-                                        />
+                                            className={`toggle ${
+                                                isLikesAndViewsHidden && "on"
+                                            }`}
+                                        >
+                                            <div></div>
+                                        </div>
                                     </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                    <div className="upload__contentOption advanced">
-                        <div
-                            className="header"
-                            onClick={() =>
-                                setIsAdvancedOptionOn((prev) => !prev)
-                            }
-                        >
-                            <span className={isAdvancedOptionOn ? "bold" : ""}>
-                                고급 설정
-                            </span>
-                            <span
-                                className={isAdvancedOptionOn ? "reverse" : ""}
-                            >
-                                <DownV />
-                            </span>
+                                    <div className="smallFont">
+                                        이 게시물의 총 좋아요 및 조회수는
+                                        회원님만 볼 수 있습니다. 나중에 게시물
+                                        상단에 있는 ··· 메뉴에서 이 설정을
+                                        변경할 수 있습니다. 다른 사람의
+                                        게시물에서 좋아요 수를 숨기려면 계정
+                                        설정으로 이동하세요.
+                                    </div>
+                                    <div className="toggleArea">
+                                        <div>댓글 기능 해제</div>
+                                        <div
+                                            onClick={() =>
+                                                dispatch(
+                                                    uploadActions.toggleIsCommentBlocked(),
+                                                )
+                                            }
+                                            className={`toggle ${
+                                                isCommentBlocked && "on"
+                                            }`}
+                                        >
+                                            <div></div>
+                                        </div>
+                                    </div>
+                                    <div className="smallFont">
+                                        나중에 게시물 상단의 메뉴(···)에서 이
+                                        설정을 변경할 수 있습니다.
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                        {isAdvancedOptionOn && (
-                            <div className="activated advanced">
-                                <div className="toggleArea">
-                                    <div>
-                                        이 게시물의 좋아요 수 및 조회수 숨기기
-                                    </div>
-                                    <div
-                                        onClick={() =>
-                                            dispatch(
-                                                uploadActions.toggleIsLikesAndViewsHidden(),
-                                            )
-                                        }
-                                        className={`toggle ${
-                                            isLikesAndViewsHidden && "on"
-                                        }`}
-                                    >
-                                        <div></div>
-                                    </div>
-                                </div>
-                                <div className="smallFont">
-                                    이 게시물의 총 좋아요 및 조회수는 회원님만
-                                    볼 수 있습니다. 나중에 게시물 상단에 있는
-                                    ··· 메뉴에서 이 설정을 변경할 수 있습니다.
-                                    다른 사람의 게시물에서 좋아요 수를 숨기려면
-                                    계정 설정으로 이동하세요.
-                                </div>
-                                <div className="toggleArea">
-                                    <div>댓글 기능 해제</div>
-                                    <div
-                                        onClick={() =>
-                                            dispatch(
-                                                uploadActions.toggleIsCommentBlocked(),
-                                            )
-                                        }
-                                        className={`toggle ${
-                                            isCommentBlocked && "on"
-                                        }`}
-                                    >
-                                        <div></div>
-                                    </div>
-                                </div>
-                                <div className="smallFont">
-                                    나중에 게시물 상단의 메뉴(···)에서 이 설정을
-                                    변경할 수 있습니다.
-                                </div>
-                            </div>
-                        )}
+                        <hr />
                     </div>
-                    <hr />
                 </div>
             </StyledContent>
         </>
