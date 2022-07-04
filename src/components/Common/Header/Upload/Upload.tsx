@@ -33,8 +33,9 @@ const BORDER_TOTAL_WIDTH = 2;
 
 const Upload = () => {
     const dispatch = useAppDispatch();
-    const step = useAppSelector(({ upload }) => upload.step);
-    const isGrabbing = useAppSelector(({ upload }) => upload.isGrabbing);
+    const { isUploading, step, isGrabbing } = useAppSelector(
+        ({ upload }) => upload,
+    );
     const [backDropwidth, setBackDropWidth] = useState(window.innerWidth);
     const [backDropHeight, setBackDropHeight] = useState(window.innerHeight);
     const currentWidth = useMemo(
@@ -61,11 +62,15 @@ const Upload = () => {
         [currentHeightLimitedByWindowHeight, currentMaxWidth],
     );
     useEffect(() => {
+        if (isUploading) {
+            document.body.style.overflow = "hidden";
+        }
         window.addEventListener("resize", () => {
             setBackDropWidth(window.innerWidth);
             setBackDropHeight(window.innerHeight);
         });
         return () => {
+            document.body.style.overflow = "unset";
             window.removeEventListener("resize", () => {
                 setBackDropWidth(window.innerWidth);
                 setBackDropHeight(window.innerHeight);
