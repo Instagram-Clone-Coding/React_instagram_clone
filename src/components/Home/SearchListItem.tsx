@@ -1,6 +1,7 @@
 import { getSearchRecord } from "app/store/ducks/common/commonThunk";
 import { useAppDispatch } from "app/store/Hooks";
 import CloseSVG from "assets/Svgs/CloseSVG";
+import SearchListItemLayout from "components/Home/SearchListItemLayout";
 import { authorizedCustomAxios } from "customAxios";
 import React, { Dispatch, SetStateAction } from "react";
 import { Link } from "react-router-dom";
@@ -10,37 +11,7 @@ import theme from "styles/theme";
 const Container = styled.div`
     display: flex;
     a {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        height: 60px;
-        padding: 8px 16px;
-        cursor: pointer;
         text-decoration: none;
-        &:hover {
-            background-color: ${theme.color.bg_gray};
-        }
-
-        .profile-image {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-        }
-
-        .profile-contents {
-            .username {
-                font-weight: 600;
-            }
-            .name-container {
-                span {
-                    color: ${theme.font.gray};
-                }
-                .name {
-                }
-                .follow-info {
-                }
-            }
-        }
     }
 `;
 
@@ -79,24 +50,10 @@ const SearchListItem = ({
     return (
         <Container>
             <Link to={`/profile/${member.username}`} onClick={userClickHandler}>
-                <img
-                    src={member.image.imageUrl}
-                    alt="member"
-                    className="profile-image"
+                <SearchListItemLayout
+                    member={member}
+                    followingMemberFollow={followingMemberFollow}
                 />
-                <div className="profile-contents">
-                    <span className="username">{member.username}</span>
-                    <div className="name-container">
-                        <span className="name">{member.name}</span>
-                        {followingMemberFollow && (
-                            <span className="follow-info">
-                                •{followingMemberFollow[0].memberUsername} 외{" "}
-                                {followingMemberFollow.length - 1}명이
-                                팔로우합니다
-                            </span>
-                        )}
-                    </div>
-                </div>
             </Link>
             {button && (
                 <button onClick={removeUserHandler}>
