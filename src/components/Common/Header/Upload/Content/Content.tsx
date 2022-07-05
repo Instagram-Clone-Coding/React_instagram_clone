@@ -23,6 +23,7 @@ const StyledContent = styled.div`
     display: flex;
     width: 100%;
     & > .upload__contentImg {
+        background-color: ${(props) => props.theme.color.bg_gray};
         flex: 1;
         width: 100%;
         display: flex;
