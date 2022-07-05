@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { uploadArticle } from "app/store/ducks/upload/uploadThunk";
 
 const initialState: UploadType.UploadStateProps = {
     isUploading: false,
@@ -10,6 +11,8 @@ const initialState: UploadType.UploadStateProps = {
     grabbedGalleryImgIndex: null,
     grabbedGalleryImgNewIndex: null,
     textareaValue: "",
+    isLikesAndViewsHidden: false,
+    isCommentBlocked: false,
 };
 
 const uploadSlice = createSlice({
@@ -21,6 +24,10 @@ const uploadSlice = createSlice({
             state.isUploading = true;
         },
         cancelUpload: (state) => {
+            state.files.forEach((file) => {
+                URL.revokeObjectURL(file.url);
+                URL.revokeObjectURL(file.newUrl);
+            });
             return initialState;
         },
         toCutStep: (state) => {
@@ -72,6 +79,9 @@ const uploadSlice = createSlice({
                 saturate: 0,
                 blur: 0,
                 newUrl: "",
+                alternativeText: "",
+                hashtags: [],
+                blob: null,
             });
         },
         startGrabbing: (state) => {
@@ -276,9 +286,14 @@ const uploadSlice = createSlice({
         },
         addNewFileUrl: (
             state,
-            action: PayloadAction<{ url: string; index: number }>,
+            action: PayloadAction<{
+                url: string;
+                index: number;
+                blob: Blob | null;
+            }>,
         ) => {
             state.files[action.payload.index].newUrl = action.payload.url;
+            state.files[action.payload.index].blob = action.payload.blob;
         },
         resetNewFileUrl: (state) => {
             state.files.forEach((file) => {
@@ -291,6 +306,47 @@ const uploadSlice = createSlice({
         addEmojiOnTextarea: (state, action: PayloadAction<string>) => {
             state.textareaValue += action.payload;
         },
+        setAlternativeValue: (
+            state,
+            action: PayloadAction<{ value: string; index: number }>,
+        ) => {
+            state.files[action.payload.index].alternativeText =
+                action.payload.value;
+        },
+        toggleIsLikesAndViewsHidden: (state) => {
+            state.isLikesAndViewsHidden = !state.isLikesAndViewsHidden;
+        },
+        toggleIsCommentBlocked: (state) => {
+            state.isCommentBlocked = !state.isCommentBlocked;
+        },
+        addHashtags: (state, action: PayloadAction<UploadType.HashtagType>) => {
+            const index = state.files[state.currentIndex].hashtags.findIndex(
+                (hashtag) => hashtag.username === action.payload.username,
+            );
+            if (index === -1) {
+                state.files[state.currentIndex].hashtags.push(action.payload);
+            } else {
+                state.files[state.currentIndex].hashtags[index] =
+                    action.payload;
+            }
+        },
+        deleteHashtag: (state, action: PayloadAction<number>) => {
+            state.files[state.currentIndex].hashtags = state.files[
+                state.currentIndex
+            ].hashtags.filter((hashtag, index) => index !== action.payload);
+        },
+    },
+    extraReducers: (build) => {
+        build
+            .addCase(uploadArticle.pending, (state) => {
+                state.step = "uploading";
+            })
+            .addCase(uploadArticle.fulfilled, (state) => {
+                state.step = "complete";
+            })
+            .addCase(uploadArticle.rejected, (state) => {
+                return initialState;
+            });
     },
 });
 
