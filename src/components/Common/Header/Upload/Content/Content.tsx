@@ -21,7 +21,9 @@ import { ReactComponent as Close } from "assets/Svgs/close.svg";
 
 const StyledContent = styled.div`
     display: flex;
+    width: 100%;
     & > .upload__contentImg {
+        flex: 1;
         width: 100%;
         display: flex;
         justify-content: center;
@@ -340,6 +342,10 @@ const StyledContent = styled.div`
 interface ContentProps {
     currentWidth: number;
 }
+
+const minWidthForContent = (currentWidth: number) =>
+    Math.max(currentWidth, 350);
+
 const Content = ({ currentWidth }: ContentProps) => {
     const dispatch = useAppDispatch();
     const {
@@ -465,6 +471,7 @@ const Content = ({ currentWidth }: ContentProps) => {
         dispatch(uploadActions.addHashtags({ tagX, tagY, username }));
         setIsSearchBarOn(false);
     };
+    console.log(currentWidth);
     return (
         <>
             <UploadHeader
@@ -478,8 +485,8 @@ const Content = ({ currentWidth }: ContentProps) => {
                     style={{
                         width: currentWidth,
                         height: currentWidth,
-                        minWidth: currentWidth,
-                        minHeight: currentWidth,
+                        minWidth: 350,
+                        minHeight: 350,
                     }}
                 >
                     <div
@@ -487,11 +494,11 @@ const Content = ({ currentWidth }: ContentProps) => {
                         style={{
                             width: getRatioCalculatedBoxWidth(
                                 ratioMode,
-                                currentWidth,
+                                minWidthForContent(currentWidth),
                             ),
                             height: getRatioCalculatedBoxHeight(
                                 ratioMode,
-                                currentWidth,
+                                minWidthForContent(currentWidth),
                             ),
                         }}
                     >
@@ -610,7 +617,7 @@ const Content = ({ currentWidth }: ContentProps) => {
 
                 <div
                     className="upload__contents"
-                    style={{ height: currentWidth }}
+                    style={{ height: minWidthForContent(currentWidth) }}
                 >
                     <div className="upload__contentsScroll">
                         <div className="upload__contentInput textareaBox">
