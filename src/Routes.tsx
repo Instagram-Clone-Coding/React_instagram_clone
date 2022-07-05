@@ -67,10 +67,7 @@ const AuthedContainer = () => {
             <Route exact path="/" component={Home} />
             {/* Direct */}
             <Route path="/direct" component={Direct} />
-            {/*  */}
-            <Route path="*">
-                <Redirect to="/" />
-            </Route>
+            {/* 404 페이지 필요*/}
         </>
     );
 };
