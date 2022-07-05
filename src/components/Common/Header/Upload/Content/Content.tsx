@@ -137,6 +137,7 @@ const StyledContent = styled.div`
         }
     }
     & > .upload__contents {
+        border-left: 1px solid ${(props) => props.theme.color.bd_gray};
         width: 340px;
         min-width: 340px;
         max-width: 340px;
