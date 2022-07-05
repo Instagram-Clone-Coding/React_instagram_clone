@@ -17,43 +17,41 @@ const Routes = () => {
     return (
         <>
             <BrowserRouter basename={process.env.PUBLIC_URL}>
-                <Switch>
-                    {/* {!isLogin ? (
+                {/* {!isLogin ? (
                     <Redirect to="/accounts/signin" />
                 ) : (
                     <Route component={AuthedContainer} />
                 )} */}
-                    {isLogin ? (
-                        <>
-                            {AuthedContainer()}
-                            {/*<Header />*/}
-                            {/*<Route exact path="/" component={Home} />*/}
-                            {/*<Redirect to="/" />*/}
-                            {/* 인스타그램에서는 404처리 하지만 일단 rediect 처리 */}
-                        </>
-                    ) : (
-                        <>
-                            {/* <Route exact path="/" component={Home} /> */}
-                            <Route exact path="/" component={Landing} />
-                            <Route path="/accounts/emailsignup">
-                                <AuthPage router="signUp" />
-                            </Route>
-                            <Route path="/accounts/login">
-                                <AuthPage router="signIn" />
-                            </Route>
-                            <Route
-                                exact
-                                path="/accounts/password/reset/"
-                                component={ResetPassword}
-                            />
-                            <Route
-                                path="/accounts/password/reset/confirm"
-                                component={ResetPasswordForm}
-                            />
-                            <Redirect to="/" />
-                        </>
-                    )}
-                </Switch>
+                {isLogin ? (
+                    <Switch>
+                        {AuthedContainer()}
+                        {/*<Header />*/}
+                        {/*<Route exact path="/" component={Home} />*/}
+                        {/*<Redirect to="/" />*/}
+                        {/* 인스타그램에서는 404처리 하지만 일단 rediect 처리 */}
+                    </Switch>
+                ) : (
+                    <Switch>
+                        {/* <Route exact path="/" component={Home} /> */}
+                        <Route exact path="/" component={Landing} />
+                        <Route path="/accounts/emailsignup">
+                            <AuthPage router="signUp" />
+                        </Route>
+                        <Route path="/accounts/login">
+                            <AuthPage router="signIn" />
+                        </Route>
+                        <Route
+                            exact
+                            path="/accounts/password/reset/"
+                            component={ResetPassword}
+                        />
+                        <Route
+                            path="/accounts/password/reset/confirm"
+                            component={ResetPasswordForm}
+                        />
+                        <Redirect to="/" />
+                    </Switch>
+                )}
             </BrowserRouter>
         </>
     );
