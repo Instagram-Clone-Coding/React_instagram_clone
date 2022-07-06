@@ -35,6 +35,7 @@ const Upload = () => {
     const isGrabbing = useAppSelector(({ upload }) => upload.isGrabbing);
     const [backDropwidth, setBackDropWidth] = useState(window.innerWidth);
     const [backDropHeight, setBackDropHeight] = useState(window.innerHeight);
+    const [isWarningModalOn, setIsWarningModalOn] = useState(false);
     const currentWidth = useMemo(
         () => (backDropwidth < 1140 ? backDropwidth - 219 : 920),
         [backDropwidth],
@@ -101,41 +102,53 @@ const Upload = () => {
         if (isGrabbing) {
             dispatch(uploadActions.stopGrabbing());
         } else {
-            dispatch(uploadActions.cancelUpload());
+            setIsWarningModalOn(true);
+            // dispatch(uploadActions.cancelUpload());
         }
     };
 
     return (
-        <ModalCard
-            modalType="withBackDrop"
-            onModalOn={() => dispatch(uploadActions.startUpload())}
-            onModalOff={checkIsGrabbingAndCancelUpload}
-            isWithCancelBtn={true}
-            width={
-                currentWidthLimitedByWindowHeight +
-                (step !== "edit" && step !== "content" ? 0 : 340)
-            }
-            height={currentHeightLimitedByWindowHeight}
-            maxWidth={
-                currentMaxWidth +
-                BORDER_TOTAL_WIDTH +
-                (step !== "edit" && step !== "content" ? 0 : 340)
-            }
-            maxHeight={currentMaxWidth + BORDER_TOTAL_WIDTH + 43}
-            minWidth={
-                348 +
-                BORDER_TOTAL_WIDTH +
-                (step !== "edit" && step !== "content" ? 0 : 340)
-            }
-            minHeight={391 + BORDER_TOTAL_WIDTH}
-        >
-            <StyledUploadModalInner
-                backdropWidth={backDropwidth}
-                onMouseUp={() => dispatch(uploadActions.stopGrabbing())}
+        <>
+            {isWarningModalOn && (
+                <ModalCard
+                    modalType="withBackDrop"
+                    onModalOn={() => setIsWarningModalOn(true)}
+                    onModalOff={() => setIsWarningModalOn(false)}
+                >
+                    warning
+                </ModalCard>
+            )}
+            <ModalCard
+                modalType="withBackDrop"
+                onModalOn={() => dispatch(uploadActions.startUpload())}
+                onModalOff={checkIsGrabbingAndCancelUpload}
+                isWithCancelBtn={true}
+                width={
+                    currentWidthLimitedByWindowHeight +
+                    (step !== "edit" && step !== "content" ? 0 : 340)
+                }
+                height={currentHeightLimitedByWindowHeight}
+                maxWidth={
+                    currentMaxWidth +
+                    BORDER_TOTAL_WIDTH +
+                    (step !== "edit" && step !== "content" ? 0 : 340)
+                }
+                maxHeight={currentMaxWidth + BORDER_TOTAL_WIDTH + 43}
+                minWidth={
+                    348 +
+                    BORDER_TOTAL_WIDTH +
+                    (step !== "edit" && step !== "content" ? 0 : 340)
+                }
+                minHeight={391 + BORDER_TOTAL_WIDTH}
             >
-                {currentComponent(step)}
-            </StyledUploadModalInner>
-        </ModalCard>
+                <StyledUploadModalInner
+                    backdropWidth={backDropwidth}
+                    onMouseUp={() => dispatch(uploadActions.stopGrabbing())}
+                >
+                    {currentComponent(step)}
+                </StyledUploadModalInner>
+            </ModalCard>
+        </>
     );
 };
 
