@@ -3,6 +3,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const initialState: UploadType.UploadStateProps = {
     isUploading: false,
     isGrabbing: false,
+    isWarningModalOn: false,
+    isJustWarningBeforePrevStep: false,
     step: "dragAndDrop",
     ratioMode: "square",
     files: [],
@@ -31,7 +33,6 @@ const uploadSlice = createSlice({
                 case "dragAndDrop":
                     return initialState;
                 case "cut":
-                    // 나중에 경고 모달 필요
                     state.files.forEach((file) =>
                         window.URL.revokeObjectURL(file.url),
                     );
@@ -290,6 +291,20 @@ const uploadSlice = createSlice({
         },
         addEmojiOnTextarea: (state, action: PayloadAction<string>) => {
             state.textareaValue += action.payload;
+        },
+        startWarningModal: (state) => {
+            state.isWarningModalOn = true;
+        },
+        notificateWarningIsJustAboutBeforePrevStep: (state) => {
+            state.isJustWarningBeforePrevStep = true;
+        },
+        // excuteFunctionAfterWarning: (state) => {
+        //     state.isWarningModalOn = false;
+        //     state.functionAfterWarning && state.functionAfterWarning();
+        // },
+        cancelWarningModal: (state) => {
+            state.isWarningModalOn = false;
+            state.isJustWarningBeforePrevStep = false;
         },
     },
 });
