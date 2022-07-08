@@ -7,6 +7,7 @@ import DragAndDrop from "components/Common/Header/Upload/DragAndDrop";
 import Cut from "components/Common/Header/Upload/Cut";
 import Edit from "components/Common/Header/Upload/Edit";
 import Content from "components/Common/Header/Upload/Content";
+import UploadWarningModal from "components/Common/Header/Upload/UploadWarningModal";
 
 interface ModalInnerProps {
     backdropWidth: number;
@@ -33,6 +34,9 @@ const Upload = () => {
     const dispatch = useAppDispatch();
     const step = useAppSelector(({ upload }) => upload.step);
     const isGrabbing = useAppSelector(({ upload }) => upload.isGrabbing);
+    const isWarningModalOn = useAppSelector(
+        ({ upload }) => upload.isWarningModalOn,
+    );
     const [backDropwidth, setBackDropWidth] = useState(window.innerWidth);
     const [backDropHeight, setBackDropHeight] = useState(window.innerHeight);
     const currentWidth = useMemo(
@@ -101,41 +105,44 @@ const Upload = () => {
         if (isGrabbing) {
             dispatch(uploadActions.stopGrabbing());
         } else {
-            dispatch(uploadActions.cancelUpload());
+            dispatch(uploadActions.startWarningModal());
         }
     };
 
     return (
-        <ModalCard
-            modalType="withBackDrop"
-            onModalOn={() => dispatch(uploadActions.startUpload())}
-            onModalOff={checkIsGrabbingAndCancelUpload}
-            isWithCancelBtn={true}
-            width={
-                currentWidthLimitedByWindowHeight +
-                (step !== "edit" && step !== "content" ? 0 : 340)
-            }
-            height={currentHeightLimitedByWindowHeight}
-            maxWidth={
-                currentMaxWidth +
-                BORDER_TOTAL_WIDTH +
-                (step !== "edit" && step !== "content" ? 0 : 340)
-            }
-            maxHeight={currentMaxWidth + BORDER_TOTAL_WIDTH + 43}
-            minWidth={
-                348 +
-                BORDER_TOTAL_WIDTH +
-                (step !== "edit" && step !== "content" ? 0 : 340)
-            }
-            minHeight={391 + BORDER_TOTAL_WIDTH}
-        >
-            <StyledUploadModalInner
-                backdropWidth={backDropwidth}
-                onMouseUp={() => dispatch(uploadActions.stopGrabbing())}
+        <>
+            {isWarningModalOn && <UploadWarningModal />}
+            <ModalCard
+                modalType="withBackDrop"
+                onModalOn={() => dispatch(uploadActions.startUpload())}
+                onModalOff={checkIsGrabbingAndCancelUpload}
+                isWithCancelBtn={true}
+                width={
+                    currentWidthLimitedByWindowHeight +
+                    (step !== "edit" && step !== "content" ? 0 : 340)
+                }
+                height={currentHeightLimitedByWindowHeight}
+                maxWidth={
+                    currentMaxWidth +
+                    BORDER_TOTAL_WIDTH +
+                    (step !== "edit" && step !== "content" ? 0 : 340)
+                }
+                maxHeight={currentMaxWidth + BORDER_TOTAL_WIDTH + 43}
+                minWidth={
+                    348 +
+                    BORDER_TOTAL_WIDTH +
+                    (step !== "edit" && step !== "content" ? 0 : 340)
+                }
+                minHeight={391 + BORDER_TOTAL_WIDTH}
             >
-                {currentComponent(step)}
-            </StyledUploadModalInner>
-        </ModalCard>
+                <StyledUploadModalInner
+                    backdropWidth={backDropwidth}
+                    onMouseUp={() => dispatch(uploadActions.stopGrabbing())}
+                >
+                    {currentComponent(step)}
+                </StyledUploadModalInner>
+            </ModalCard>
+        </>
     );
 };
 

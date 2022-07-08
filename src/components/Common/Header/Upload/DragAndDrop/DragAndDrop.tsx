@@ -96,7 +96,7 @@ const DragAndDrop = () => {
                     }),
                 );
                 if (index === droppedFiles.length - 1) {
-                    dispatch(uploadActions.toCutStep());
+                    dispatch(uploadActions.nextStep());
                 }
             };
         });
@@ -120,7 +120,7 @@ const DragAndDrop = () => {
                     }),
                 );
                 if (index === addedFiles.length - 1) {
-                    dispatch(uploadActions.toCutStep());
+                    dispatch(uploadActions.nextStep());
                 }
             };
         });

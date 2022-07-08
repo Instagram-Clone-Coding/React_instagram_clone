@@ -303,6 +303,8 @@ declare module UploadType {
     interface UploadStateProps {
         isUploading: boolean;
         isGrabbing: boolean;
+        isWarningModalOn: boolean;
+        isJustWarningBeforePrevStep: boolean;
         step: StepType;
         ratioMode: RatioType;
         files: FileProps[];
