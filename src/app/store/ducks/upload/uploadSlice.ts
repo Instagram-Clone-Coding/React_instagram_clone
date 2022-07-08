@@ -25,9 +25,6 @@ const uploadSlice = createSlice({
         cancelUpload: (state) => {
             return initialState;
         },
-        toCutStep: (state) => {
-            state.step = "cut";
-        },
         prevStep: (state) => {
             switch (state.step) {
                 case "dragAndDrop":
