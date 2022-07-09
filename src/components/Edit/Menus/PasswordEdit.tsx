@@ -114,17 +114,17 @@ const PasswordEdit = () => {
                 </div>
                 <div className="input">
                     <aside>
-                        <label htmlFor="prev">새 비밀번호</label>
+                        <label htmlFor="new">새 비밀번호</label>
                     </aside>
-                    <input type="password" name="prev" {...newPassword[0]} />
+                    <input type="password" name="new" {...newPassword[0]} />
                 </div>
                 <div className="input">
                     <aside>
-                        <label htmlFor="prev">새 비밀번호 확인</label>
+                        <label htmlFor="confirm">새 비밀번호 확인</label>
                     </aside>
                     <input
                         type="password"
-                        name="prev"
+                        name="confirm"
                         {...newPasswordConfirm[0]}
                     />
                 </div>
