@@ -8,6 +8,7 @@ import useOnView from "hooks/useOnView";
 
 const SingleRowContainer = styled.div`
     display: flex;
+    height: 290px;
 
     @media (min-width: 736px) {
         margin-bottom: 28px;
