@@ -41,16 +41,17 @@ const NewChatRecommendUserContainer = styled.div`
     }
 `;
 
-const NewChatRecommendUser = ({ member }: Common.searchUserType) => {
+const NewChatRecommendUser = ({ member }: Common.searchResultType) => {
     const { selectedNewChatUsers } = useAppSelector((state) => state.direct);
     const dispatch = useAppDispatch();
+    if (!member) return null;
 
     const selectNewChatUserHandler = () => {
         // 이미 선택했다면 제거해줍니다.
-        if (selectedNewChatUsers.includes(member.username)) {
-            dispatch(unSelectNewChatUser(member.username));
+        if (selectedNewChatUsers.includes(member?.username)) {
+            dispatch(unSelectNewChatUser(member?.username));
         } else {
-            dispatch(selectNewChatUser(member.username));
+            dispatch(selectNewChatUser(member?.username));
             dispatch(changeSearchUser(""));
         }
     };

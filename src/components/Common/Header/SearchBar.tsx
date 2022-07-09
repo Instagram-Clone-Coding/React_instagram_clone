@@ -58,6 +58,7 @@ const SearchBarContainer = styled.div`
         .recent-container {
             display: flex;
             flex-direction: column;
+            width: 100%;
             .header {
                 padding: 8px 16px;
                 display: flex;
@@ -160,10 +161,10 @@ const SearchBar = () => {
                                         모두 지우기
                                     </button>
                                 </div>
-                                {recordedUsers.map((user) => (
+                                {recordedUsers.map((item) => (
                                     <SearchListItem
-                                        key={user.member.id}
-                                        {...user}
+                                        key={item.member?.username || item.name}
+                                        {...item}
                                         setIsFocused={setIsFocused}
                                         button
                                     />
@@ -173,10 +174,10 @@ const SearchBar = () => {
 
                         {/* 실제 검색시에 나오게 되는 화면 */}
                         {searchUsers.length > 0 &&
-                            searchUsers.map((user) => (
+                            searchUsers.map((item) => (
                                 <SearchListItem
-                                    key={user.member.id}
-                                    {...user}
+                                    key={item.member?.username || item.name}
+                                    {...item}
                                     setIsFocused={setIsFocused}
                                 />
                             ))}

@@ -33,9 +33,15 @@ const NewChatFriendList = () => {
             <span>추천</span>
 
             <div className="new-chat-recommend-container">
-                {searchUsers.map((user) => (
-                    <NewChatRecommendUser key={user.member.id} {...user} />
-                ))}
+                {searchUsers.map(
+                    (user) =>
+                        user.member && (
+                            <NewChatRecommendUser
+                                key={user.member.id}
+                                {...user}
+                            />
+                        ),
+                )}
             </div>
         </NewChatFriendListContainer>
     );
