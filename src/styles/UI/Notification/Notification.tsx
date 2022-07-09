@@ -49,9 +49,15 @@ const StyledNotification = styled.div`
 
 interface NotificationProps {
     text: string;
+    reset?: Function;
 }
 
-const Notification = ({ text }: NotificationProps) => {
+const Notification = ({ text, reset }: NotificationProps) => {
+    // after 8.5s unfold notification
+    setTimeout(() => {
+        reset && reset();
+    }, 8500);
+
     const notificationRoot = ReactDOM.createPortal(
         <StyledNotification>
             <p>{text}</p>

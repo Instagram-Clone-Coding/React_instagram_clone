@@ -5,10 +5,11 @@ import sprite from "assets/Images/sprite4.png";
 import ImageSprite from "components/Common/ImageSprite";
 
 const SingleContentContainer = styled.div`
-    margin-right: 30px;
     position: relative;
     cursor: pointer;
-
+    width: 100%;
+    max-width: 292px;
+    height: 100%;
     svg {
         position: absolute;
         right: 0;
@@ -62,7 +63,7 @@ const SingleContentContainer = styled.div`
     }
 `;
 
-interface SingleContentContainer {
+interface SingleContentProps {
     post: Profile.PostType;
 }
 
@@ -79,7 +80,7 @@ const commentImage: Common.ImageProps = {
     url: sprite,
 };
 
-const SingleContent = ({ post }: SingleContentContainer) => {
+const SingleContent = ({ post }: SingleContentProps) => {
     const [hoverd, setHoverd] = useState<boolean>(false);
     return (
         <SingleContentContainer

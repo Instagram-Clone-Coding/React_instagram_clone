@@ -1,7 +1,5 @@
-import { Dispatch } from "@reduxjs/toolkit";
-import { changeEditItem } from "app/store/ducks/edit/editSlice";
+import { changeEditItem, selectModal } from "app/store/ducks/edit/editSlice";
 import { useAppDispatch } from "app/store/Hooks";
-import React, { SetStateAction } from "react";
 import styled from "styled-components";
 
 const en2kr = {
@@ -54,7 +52,6 @@ interface EditItemProps {
 
 const EditItemInput = ({ item, guide }: EditItemProps) => {
     const dispatch = useAppDispatch();
-
     return (
         <Container>
             <aside>
@@ -73,6 +70,11 @@ const EditItemInput = ({ item, guide }: EditItemProps) => {
                                 value: e.target.value,
                             }),
                         );
+                    }}
+                    onClick={() => {
+                        if (item[0] === "memberGender") {
+                            dispatch(selectModal("gender"));
+                        }
                     }}
                 />
                 <div className="guide">{guide}</div>

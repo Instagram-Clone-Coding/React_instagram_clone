@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getEditItem } from "./editThunk";
+import { changePassword, getEditItem } from "./editThunk";
 export interface InitialStateType {
     currentMenu: EditType.menuType;
     editItem: EditType.editItemType;
     modal: EditType.modalType;
+    isLoading: boolean;
 }
 
 const initialState: InitialStateType = {
@@ -18,6 +19,7 @@ const initialState: InitialStateType = {
         memberGender: "비공개",
     },
     modal: null,
+    isLoading: false,
 };
 
 const editSlice = createSlice({
@@ -43,9 +45,19 @@ const editSlice = createSlice({
         },
     },
     extraReducers: (build) => {
-        build.addCase(getEditItem.fulfilled, (state, action) => {
-            state.editItem = action.payload;
-        });
+        build
+            .addCase(getEditItem.fulfilled, (state, action) => {
+                state.editItem = action.payload;
+            })
+            .addCase(changePassword.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(changePassword.fulfilled, (state) => {
+                state.isLoading = false;
+            })
+            .addCase(changePassword.rejected, (state) => {
+                state.isLoading = false;
+            });
     },
 });
 

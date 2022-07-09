@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Button from "styles/UI/Button";
 import Notification from "styles/UI/Notification";
+import ProfileGenderModal from "../Modal/ProfileGenderModal";
 import ProfileImageModal from "../Modal/ProfileImageModal";
 import EditItemInput from "../Section/EditItemInput";
 
@@ -90,8 +91,8 @@ const Profile = () => {
         }
     };
 
-    const openImageModalHandler = () => {
-        dispatch(selectModal("image"));
+    const openModalHandler = (type: EditType.modalType) => {
+        dispatch(selectModal(type));
     };
 
     return (
@@ -105,7 +106,12 @@ const Profile = () => {
                 />
                 <div className="name-guide">
                     <span className="username">{editItem.memberUsername}</span>
-                    <span className="guide" onClick={openImageModalHandler}>
+                    <span
+                        className="guide"
+                        onClick={() => {
+                            openModalHandler("image");
+                        }}
+                    >
                         프로필 사진 바꾸기
                     </span>
                 </div>
@@ -113,6 +119,7 @@ const Profile = () => {
             <div className="input-wrapper">
                 {Object.entries(editItem).map((item: string[]) => (
                     <EditItemInput
+                        key={item[0]}
                         item={item as [EditType.editItemKeyType, string | null]}
                         guide={
                             guide[
@@ -132,7 +139,20 @@ const Profile = () => {
             </div>
             {modal === "image" && (
                 <ProfileImageModal
-                    onModalOn={openImageModalHandler}
+                    onModalOn={() => {
+                        openModalHandler("image");
+                    }}
+                    onModalOff={() => {
+                        dispatch(selectModal(null));
+                    }}
+                />
+            )}
+
+            {modal === "gender" && (
+                <ProfileGenderModal
+                    onModalOn={() => {
+                        openModalHandler("gender");
+                    }}
                     onModalOff={() => {
                         dispatch(selectModal(null));
                     }}
