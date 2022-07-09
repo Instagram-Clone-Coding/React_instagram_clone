@@ -53,6 +53,9 @@ const PasswordEditContainer = styled.div`
             }
         }
     }
+    .button-wrapper {
+        margin-right: 42px;
+    }
 `;
 
 const PasswordEdit = () => {
