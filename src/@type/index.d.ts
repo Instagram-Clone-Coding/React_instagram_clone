@@ -337,12 +337,18 @@ declare module Common {
         hasStory: boolean;
     }
 
-    interface searchUserType {
-        dtype: "MEMBER";
-        follwer: boolean;
-        following: boolean;
-        followingMemberFollow: { memberUsername: string }[];
-        member: memberType;
+    interface searchResultType {
+        dtype: "MEMBER" | "HASHTAG";
+
+        // MEMBER
+        follwer?: boolean;
+        following?: boolean;
+        followingMemberFollow?: { memberUsername: string }[];
+        member?: memberType;
+
+        // HASHTAG
+        name?: string;
+        postCount?: number;
     }
     interface PostImageDTOProps {
         id: number;
