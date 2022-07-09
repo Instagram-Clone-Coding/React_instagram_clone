@@ -111,3 +111,14 @@ export const signInUseCode = createAsyncThunk<
         // 에러나는 경우? username, code가 잘못됐을 때?
     }
 });
+
+export const logout = createAsyncThunk<void, void>(
+    "auth/logout",
+    async (payload, ThunkOptions) => {
+        try {
+            await authorizedCustomAxios.post(`/logout`);
+        } catch (error) {
+            ThunkOptions.rejectWithValue(error);
+        }
+    },
+);

@@ -1,6 +1,8 @@
 import React from "react";
 import ModalCard from "styles/UI/ModalCard";
 import styled from "styled-components";
+import { useAppDispatch } from "app/store/Hooks";
+import { logout } from "app/store/ducks/auth/authThunk";
 
 const SettingModalInner = styled.div`
     display: flex;
@@ -27,6 +29,7 @@ interface SettingModalProps {
 }
 
 const SettingModal = ({ onModalOn, onModalOff }: SettingModalProps) => {
+    const dispatch = useAppDispatch();
     return (
         <ModalCard
             modalType="withBackDrop"
@@ -42,7 +45,7 @@ const SettingModal = ({ onModalOn, onModalOff }: SettingModalProps) => {
                 <div>로그인 활동</div>
                 <div>Instagram에서 보낸 이메일</div>
                 <div>문제 신고</div>
-                <div>로그아웃</div>
+                <div onClick={() => dispatch(logout())}>로그아웃</div>
                 <div onClick={onModalOff}>취소</div>
             </SettingModalInner>
         </ModalCard>
