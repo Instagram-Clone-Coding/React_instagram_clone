@@ -1,5 +1,6 @@
 import { changePassword } from "app/store/ducks/edit/editThunk";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import Loading from "components/Common/Loading";
 import useInput from "hooks/useInput";
 import { useState } from "react";
 import styled from "styled-components";
@@ -55,12 +56,16 @@ const PasswordEditContainer = styled.div`
     }
     .button-wrapper {
         margin-right: 42px;
+        button {
+            width: 96px;
+        }
     }
 `;
 
 const PasswordEdit = () => {
     const dispatch = useAppDispatch();
     const userInfo = useAppSelector(({ auth }) => auth.userInfo);
+    const isLoading = useAppSelector(({ edit }) => edit.isLoading);
     const [msg, setMsg] = useState<string>("");
 
     const oldPassword = useInput("");
@@ -130,7 +135,7 @@ const PasswordEdit = () => {
                     color="#fff"
                     onClick={changePasswordHandler}
                 >
-                    비밀번호 변경{" "}
+                    {isLoading ? <Loading size={18} /> : "비밀번호 변경"}
                 </Button>
             </div>
         </PasswordEditContainer>
