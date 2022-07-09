@@ -119,6 +119,7 @@ const Profile = () => {
             <div className="input-wrapper">
                 {Object.entries(editItem).map((item: string[]) => (
                     <EditItemInput
+                        key={item[0]}
                         item={item as [EditType.editItemKeyType, string | null]}
                         guide={
                             guide[
