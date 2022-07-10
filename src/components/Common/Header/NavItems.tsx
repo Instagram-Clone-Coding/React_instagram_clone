@@ -41,6 +41,9 @@ const NavItemWrapper = styled.div`
     & + & {
         margin-left: 22px;
     }
+    & > div {
+        cursor: pointer;
+    }
 `;
 
 const AvatarWrapper = styled(NavItemWrapper)<{ isSubnavModalOn: boolean }>`
@@ -135,7 +138,17 @@ const NavItems = () => {
                 {isUploading && <Upload />}
                 {navItems.map((navItem) => (
                     <NavItemWrapper key={navItem.id}>
-                        <NavLink to={navItem.path}>{navItem.component}</NavLink>
+                        {navItem.id === "새 글 작성" ? (
+                            <div>
+                                {isUploading
+                                    ? navItem.activeComponent
+                                    : navItem.component}
+                            </div>
+                        ) : (
+                            <NavLink to={navItem.path}>
+                                {navItem.component}
+                            </NavLink>
+                        )}
                     </NavItemWrapper>
                 ))}
 
