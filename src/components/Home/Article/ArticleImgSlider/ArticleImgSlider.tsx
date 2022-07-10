@@ -159,6 +159,9 @@ const ArticleImgSlider = ({ imageDTOs, onLike }: ArticleImgSliderProps) => {
     };
 
     useEffect(() => {
+        wrapRef.current?.scrollBy({
+            left: 0,
+        });
         window.addEventListener("resize", resizeHandler);
         resizeHandler();
         return () => {
