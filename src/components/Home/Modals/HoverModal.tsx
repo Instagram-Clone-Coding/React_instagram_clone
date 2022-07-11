@@ -161,7 +161,7 @@ const HoverModal = ({
             {miniProfile.memberName && (
                 <StyledHoverModalInner>
                     <div className="hoverModal-top">
-                        <Link to={`/${miniProfile.memberName}`}>
+                        <Link to={`/profile/${miniProfile.memberUsername}`}>
                             <StoryCircle
                                 type="default"
                                 avatarUrl={miniProfile.memberImage.imageUrl}
