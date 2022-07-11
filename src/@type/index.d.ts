@@ -219,11 +219,18 @@ declare module ModalType {
         blocking: boolean;
         follower: boolean;
         following: boolean;
-        followingMemberFollow: string;
+        hasStory: boolean;
+        followingMemberFollow: // 내가 팔로우 하는 사람 중에 이 유저를 팔로우하는 사람 대표 1명
+        [
+            {
+                memberUsername: string;
+            },
+        ];
+        followingMemberFollowCount: number; // 위 member 제외 나머지 수
         me: boolean;
-        memberFollowersCount: number;
-        memberFollowingsCount: number;
-        memberPostsCount: number;
+        memberFollowersCount: number; // 유저를 팔로우우하는 사람
+        memberFollowingsCount: number; // 유저가 팔로우하는 사람 전부
+        memberPostsCount: number; // 게시글 수
         memberImage: {
             imageUrl: string;
             imageType: string;
