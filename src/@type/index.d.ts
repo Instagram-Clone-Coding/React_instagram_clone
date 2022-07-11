@@ -220,10 +220,12 @@ declare module ModalType {
         follower: boolean;
         following: boolean;
         hasStory: boolean;
-        followingMemberFollow: {
-            // 내가 팔로우 하는 사람 중에 이 유저를 팔로우하는 사람 대표 3명
-            memberUsername: string;
-        }[];
+        followingMemberFollow: // 내가 팔로우 하는 사람 중에 이 유저를 팔로우하는 사람 대표 1명
+        [
+            {
+                memberUsername: string;
+            },
+        ];
         followingMemberFollowCount: number; // 위 member 제외 나머지 수
         me: boolean;
         memberFollowersCount: number; // 유저를 팔로우우하는 사람

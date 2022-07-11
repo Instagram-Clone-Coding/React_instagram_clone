@@ -16,6 +16,7 @@ export const getMiniProfile = createAsyncThunk<
         } = await authorizedCustomAxios.get(
             `/accounts/${payload.memberNickname}/mini`,
         );
+        console.log(data);
         return {
             ...data,
             isLoading: false,
