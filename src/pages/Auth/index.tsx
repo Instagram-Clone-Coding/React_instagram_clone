@@ -45,7 +45,7 @@ export default function AuthPage(props: { router: "signIn" | "signUp" }) {
         } else {
             dispatch(authAction.changeFormState(props.router));
         }
-    }, []);
+    }, [props.router]);
 
     return (
         <>
