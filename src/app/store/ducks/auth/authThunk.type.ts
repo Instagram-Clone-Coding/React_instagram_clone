@@ -13,4 +13,5 @@ export type LoginDevice = {
         latitude: string;
     };
     device: string;
+    lastLoginDate: string;
 };

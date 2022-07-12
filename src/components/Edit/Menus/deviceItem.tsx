@@ -4,6 +4,7 @@ import { useAppDispatch } from "app/store/Hooks";
 import { ReactComponent as Map } from "assets/Svgs/position.svg";
 import { ReactComponent as MoreTap } from "assets/Svgs/v.svg";
 import NaverMap from "components/Edit/Menus/naver_map";
+import useGapText from "hooks/useGapText";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -63,12 +64,12 @@ export default function DeviceItem({
     location,
     tokenId,
     index,
+    lastLoginDate,
 }: LoginDevice & { index: string }) {
-    // device 가공
-    // location city 가공
     const [isToggleOn, setIsToggleOn] = useState(false);
     const [mapLoaded, setMapLoaded] = useState(false);
     const dispatch = useAppDispatch();
+    const firstLoginTime = useGapText(lastLoginDate);
 
     useEffect(() => {
         const naverMap = new NaverMap();
@@ -98,8 +99,10 @@ export default function DeviceItem({
                     <div className="description">
                         <div className="city">{location.city || "서울"}</div>
                         <div className="time">
-                            {/* <span className="first-login-date">5시간 전</span>
-                            <span> · </span> */}
+                            <span className="first-login-date">
+                                {firstLoginTime} 전
+                            </span>
+                            <span> · </span>
                             <span>{device}</span>
                         </div>
                     </div>
