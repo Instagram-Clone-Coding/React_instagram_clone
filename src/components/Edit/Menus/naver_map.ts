@@ -3,7 +3,7 @@ export default class NaverMap {
     private baseURL: string;
 
     constructor() {
-        this.apiKey = process.env.REACT_APP_NAVER_MAP_KEY;
+        this.apiKey = process.env.REACT_APP_NAVER_MAP_ID;
         this.baseURL = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${this.apiKey}`;
     }
 
@@ -12,11 +12,6 @@ export default class NaverMap {
 
         if (!existingScript) {
             const mapScript = this.getScript(this.baseURL, `naverMaps`);
-            const submoduleScript = this.getScript(
-                `${this.baseURL}&submodules=geocoder`,
-                `submodule`,
-            );
-            // TODO: 2개 script load된 후에 콜백하려면?
             mapScript.onload = () => {
                 if (callbackAfterLoad) callbackAfterLoad();
             };
