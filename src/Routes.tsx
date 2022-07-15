@@ -49,6 +49,9 @@ const Routes = () => {
                             path="/accounts/password/reset/confirm"
                             component={ResetPasswordForm}
                         />
+                        <Route path="/error">
+                            <h1>404 page</h1>
+                        </Route>
                         <Redirect to="/" />
                     </Switch>
                 )}
