@@ -25,8 +25,6 @@ const routerMessageState = {
 
 export default function Suggest() {
     const formState = useAppSelector((state) => state.auth.currentFormState);
-    console.log(formState);
-
     const [question, suggest, linkRouter] =
         routerMessageState[formState === "signIn" ? "signin" : "emailsignup"];
 
