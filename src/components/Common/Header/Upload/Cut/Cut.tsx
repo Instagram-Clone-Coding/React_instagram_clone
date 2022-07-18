@@ -717,9 +717,13 @@ const Cut = ({ currentWidth }: CutProps) => {
     return (
         <>
             <UploadHeader
-                excuteBeforePrevStep={() =>
-                    fixOverTranformedImage(files[currentIndex].scale)
-                }
+                excuteBeforePrevStep={() => {
+                    fixOverTranformedImage(files[currentIndex].scale);
+                    dispatch(uploadActions.startWarningModal());
+                    dispatch(
+                        uploadActions.notificateWarningIsJustAboutBeforePrevStep(),
+                    );
+                }}
                 excuteBeforeNextStep={() =>
                     fixOverTranformedImage(files[currentIndex].scale)
                 }

@@ -65,10 +65,8 @@ const UploadHeader = ({
     }, []);
 
     const prevStepClickHandler = () => {
-        if (excuteBeforePrevStep) {
-            excuteBeforePrevStep();
-        }
-        dispatch(uploadActions.prevStep());
+        if (excuteBeforePrevStep) excuteBeforePrevStep();
+        if (step !== "cut") dispatch(uploadActions.prevStep());
     };
     const nextStepClickHandler = async (
         event: React.MouseEvent<HTMLDivElement>,
