@@ -361,6 +361,8 @@ const Content = ({ currentWidth }: ContentProps) => {
     const { userInfo } = useAppSelector((state) => state.auth);
     const searchedUsers = useAppSelector((state) => state.common.searchUsers);
     const [isSearchBarOn, setIsSearchBarOn] = useState(false);
+    const [isTextareaSearchBarOn, setIsTextareaSearchBarOn] = useState(false);
+    const [isTextareaSearchKeyword, setIsTextareaSearchKeyword] = useState("");
     const [searchBarPosition, setSearchBarPosition] = useState({ x: 0, y: 0 }); // %
     const [searchInput, setSearchInput] = useState("");
     const [isEmojiModalOn, setIsEmojiModalOn] = useState(false);
@@ -473,7 +475,59 @@ const Content = ({ currentWidth }: ContentProps) => {
         dispatch(uploadActions.addHashtags({ tagX, tagY, username }));
         setIsSearchBarOn(false);
     };
-    console.log(currentWidth);
+
+    const decideWhetherToSearchForHashtagsWithTyping = async (
+        event: React.ChangeEvent<HTMLTextAreaElement>,
+    ) => {
+        const text = event.target.value;
+        const textLength = text.length;
+        // off 상태일 때
+        // 이전 text가 #이나 @ + 현재 text가 " ", #, @ 아닐 때
+        let keyword;
+        if (!isTextareaSearchBarOn) {
+            const prevString = text[textLength - 2];
+            const currentString = text[textLength - 1];
+            if (
+                currentString !== " " &&
+                currentString !== "#" &&
+                currentString !== "@"
+            ) {
+                if (prevString === "#") {
+                    setIsTextareaSearchBarOn(true);
+                    keyword = "#" + text[textLength - 1];
+                } else if (prevString === "@") {
+                    setIsTextareaSearchBarOn(true);
+                    keyword = text[textLength - 1];
+                }
+            }
+        }
+        //  on된 상태라면
+        // 현재 text가 #, @, " "일 때 검색 중지
+        // 그게 아니라면 #, @에서 잘라 키워드로 검색
+        else {
+            const currentString = text[textLength - 1];
+            if (
+                currentString === "#" ||
+                currentString === "@" ||
+                currentString === " "
+            ) {
+                setIsTextareaSearchBarOn(false);
+            } else {
+                const indexOfHashTag = text.lastIndexOf("#");
+                const indexOfMentionTag = text.lastIndexOf("@");
+                if (indexOfHashTag > indexOfMentionTag) {
+                    keyword = text.slice(indexOfHashTag); // # 포함
+                } else if (indexOfMentionTag > indexOfHashTag) {
+                    keyword = text.slice(indexOfMentionTag + 1);
+                }
+            }
+        }
+        if (keyword) {
+            await dispatch(searchUser({ keyword }));
+        }
+        dispatch(uploadActions.setTextareaValue(text));
+    };
+    console.log(searchedUsers);
     return (
         <>
             <UploadHeader
@@ -634,10 +688,8 @@ const Content = ({ currentWidth }: ContentProps) => {
                                 placeholder="문구 입력..."
                                 value={textareaValue}
                                 onChange={(event) =>
-                                    dispatch(
-                                        uploadActions.setTextareaValue(
-                                            event.target.value,
-                                        ),
+                                    decideWhetherToSearchForHashtagsWithTyping(
+                                        event,
                                     )
                                 }
                                 maxLength={2200}
