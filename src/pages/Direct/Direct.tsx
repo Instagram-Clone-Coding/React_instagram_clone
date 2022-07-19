@@ -56,6 +56,7 @@ const Direct = () => {
                         `/sub/${userInfo?.memberUsername}`,
                         async ({ body }) => {
                             const newMessage = JSON.parse(body);
+                            console.log(newMessage);
 
                             switch (newMessage.action) {
                                 case "MESSAGE_SEEN":
@@ -125,17 +126,7 @@ const Direct = () => {
         };
         connect();
         return () => disconnect();
-    }, [client]);
-
-    // 내가 채팅 메시지를 타이핑하고 있을 때, 상대방에게 "입력 중" 표시를 표현하기 위함
-    // useEffect(() => {
-    //     client?.current?.publish({
-    //         destination: "/pub/messages/indicate", body: JSON.stringify({
-    //             "senderId": userInfo?.memberId,
-    //             "roomId": selectedRoom?.chatRoomId,
-    //         }),
-    //     });
-    // }, [message, client]);
+    }, [chatListPage, client, dispatch, userInfo]);
 
     // 일반적인 채팅 메세지 보내기
     const sendMessageHandler = () => {

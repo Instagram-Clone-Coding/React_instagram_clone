@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { ReactComponent as Slide } from "assets/Svgs/slide.svg";
 import { ReactComponent as ThreeDots } from "assets/Svgs/threeDots.svg";
 import moment from "moment";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -239,7 +239,7 @@ const ChatBubble = ({
         );
     }, [messageId, modal, selectedMessageId]);
 
-    const copyhandler = () => {
+    const copyhandler = useCallback(() => {
         // 흐음 1.
         if (navigator.clipboard) {
             // (IE는 사용 못하고, 크롬은 66버전 이상일때 사용 가능합니다.)
@@ -275,7 +275,7 @@ const ChatBubble = ({
         }
         setShowGuide(false);
         dispatch(setSelectedMessageId(null));
-    };
+    }, [content, dispatch]);
 
     const isPostImage = (object: any): object is Direct.PostMessageDTO => {
         return "postImage" in object;
@@ -318,16 +318,19 @@ const ChatBubble = ({
     };
 
     // 포커싱이 풀리면 해당 박스가 사라지는 기능을 추가해 주세요.
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (
                 guideRef.current &&
                 !guideRef.current.contains(event.target as Node)
             ) {
-                setTimeout(() => {
-                    setShowGuide(false);
-                    dispatch(setSelectedMessageId(null));
-                }, 0);
+                if (messageId === selectedMessageId) {
+                    setTimeout(() => {
+                        setShowGuide(false);
+                        dispatch(setSelectedMessageId(null));
+                    }, 0);
+                }
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
@@ -335,7 +338,7 @@ const ChatBubble = ({
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [dispatch]);
+    }, [dispatch, messageId, selectedMessageId]);
 
     return (
         <ChatBubbleContainer
@@ -418,9 +421,9 @@ const ChatBubble = ({
                         </div>
                     </div>
                     <ThreeDots
-                        onClick={() =>
-                            dispatch(setSelectedMessageId(messageId))
-                        }
+                        onClick={() => {
+                            dispatch(setSelectedMessageId(messageId));
+                        }}
                     />
                 </div>
                 <p>{renderContent()}</p>
