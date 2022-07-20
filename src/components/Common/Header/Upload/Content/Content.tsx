@@ -204,6 +204,9 @@ const StyledContent = styled.div`
                     }
                 }
             }
+            & > .upload__textareaSearchBar {
+                // 예정
+            }
             & > .upload__contentOption {
                 width: 100%;
                 border-top: 1px solid ${(props) => props.theme.color.bd_gray};
@@ -527,7 +530,7 @@ const Content = ({ currentWidth }: ContentProps) => {
         }
         dispatch(uploadActions.setTextareaValue(text));
     };
-    console.log(searchedUsers);
+
     return (
         <>
             <UploadHeader
@@ -707,152 +710,176 @@ const Content = ({ currentWidth }: ContentProps) => {
                                 <button>{`${textareaValue.length}/2,200`}</button>
                             </div>
                         </div>
-                        <div className="upload__contentOption location">
-                            <div className="header">
-                                <input
-                                    // disabled={true}
-                                    placeholder="위치 추가(개발 준비중)"
-                                />
-                                <span>
-                                    <LocationIcon />
-                                </span>
+                        {isTextareaSearchBarOn ? (
+                            <div className="upload__textareaSearchBar">
+                                Hello
                             </div>
-                        </div>
-                        <div className="upload__contentOption accessibility">
-                            <div
-                                className="header"
-                                onClick={() =>
-                                    setIsAccessOptionOn((prev) => !prev)
-                                }
-                            >
-                                <span
-                                    className={isAccessOptionOn ? "bold" : ""}
-                                >
-                                    접근성
-                                </span>
-                                <span
-                                    className={
-                                        isAccessOptionOn ? "reverse" : ""
-                                    }
-                                >
-                                    <DownV />
-                                </span>
-                            </div>
-                            {isAccessOptionOn && (
-                                <div className="activated accessOption">
-                                    <div className="smallFont">
-                                        {`대체 텍스트는 시각적으로 사진을 보기 어려운 사람들에게 사진
+                        ) : (
+                            <>
+                                <div className="upload__contentOption location">
+                                    <div className="header">
+                                        <input
+                                            // disabled={true}
+                                            placeholder="위치 추가(개발 준비중)"
+                                        />
+                                        <span>
+                                            <LocationIcon />
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="upload__contentOption accessibility">
+                                    <div
+                                        className="header"
+                                        onClick={() =>
+                                            setIsAccessOptionOn((prev) => !prev)
+                                        }
+                                    >
+                                        <span
+                                            className={
+                                                isAccessOptionOn ? "bold" : ""
+                                            }
+                                        >
+                                            접근성
+                                        </span>
+                                        <span
+                                            className={
+                                                isAccessOptionOn
+                                                    ? "reverse"
+                                                    : ""
+                                            }
+                                        >
+                                            <DownV />
+                                        </span>
+                                    </div>
+                                    {isAccessOptionOn && (
+                                        <div className="activated accessOption">
+                                            <div className="smallFont">
+                                                {`대체 텍스트는 시각적으로 사진을 보기 어려운 사람들에게 사진
                                         내용을 설명하는 텍스트입니다. 대체 텍스트는 회원님의 사진에
                                         대해 자동으로 생성되며, 직접 입력할 수도 있습니다.`}
-                                    </div>
-                                    {files.map((file, index) => (
-                                        <div key={file.newUrl}>
-                                            <div className="imageWrapper">
-                                                <img
-                                                    src={file.newUrl}
-                                                    alt={
-                                                        "유효하지 않은 url입니다."
-                                                    }
-                                                    width={
-                                                        ratioMode !== "thin"
-                                                            ? 44
-                                                            : 44 * 0.8
-                                                    }
-                                                ></img>
                                             </div>
-                                            <input
-                                                type="text"
-                                                placeholder="대체 텍스트 입력..."
-                                                value={file.alternativeText}
-                                                onChange={(event) =>
-                                                    dispatch(
-                                                        uploadActions.setAlternativeValue(
-                                                            {
-                                                                value: event
-                                                                    .target
-                                                                    .value,
-                                                                index,
-                                                            },
-                                                        ),
-                                                    )
-                                                }
-                                            />
+                                            {files.map((file, index) => (
+                                                <div key={file.newUrl}>
+                                                    <div className="imageWrapper">
+                                                        <img
+                                                            src={file.newUrl}
+                                                            alt={
+                                                                "유효하지 않은 url입니다."
+                                                            }
+                                                            width={
+                                                                ratioMode !==
+                                                                "thin"
+                                                                    ? 44
+                                                                    : 44 * 0.8
+                                                            }
+                                                        ></img>
+                                                    </div>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="대체 텍스트 입력..."
+                                                        value={
+                                                            file.alternativeText
+                                                        }
+                                                        onChange={(event) =>
+                                                            dispatch(
+                                                                uploadActions.setAlternativeValue(
+                                                                    {
+                                                                        value: event
+                                                                            .target
+                                                                            .value,
+                                                                        index,
+                                                                    },
+                                                                ),
+                                                            )
+                                                        }
+                                                    />
+                                                </div>
+                                            ))}
                                         </div>
-                                    ))}
+                                    )}
                                 </div>
-                            )}
-                        </div>
-                        <div className="upload__contentOption advanced">
-                            <div
-                                className="header"
-                                onClick={() =>
-                                    setIsAdvancedOptionOn((prev) => !prev)
-                                }
-                            >
-                                <span
-                                    className={isAdvancedOptionOn ? "bold" : ""}
-                                >
-                                    고급 설정
-                                </span>
-                                <span
-                                    className={
-                                        isAdvancedOptionOn ? "reverse" : ""
-                                    }
-                                >
-                                    <DownV />
-                                </span>
-                            </div>
-                            {isAdvancedOptionOn && (
-                                <div className="activated advanced">
-                                    <div className="toggleArea">
-                                        <div>
-                                            이 게시물의 좋아요 수 및 조회수
-                                            숨기기
-                                        </div>
-                                        <div
-                                            onClick={() =>
-                                                dispatch(
-                                                    uploadActions.toggleIsLikesAndViewsHidden(),
-                                                )
+                                <div className="upload__contentOption advanced">
+                                    <div
+                                        className="header"
+                                        onClick={() =>
+                                            setIsAdvancedOptionOn(
+                                                (prev) => !prev,
+                                            )
+                                        }
+                                    >
+                                        <span
+                                            className={
+                                                isAdvancedOptionOn ? "bold" : ""
                                             }
-                                            className={`toggle ${
-                                                isLikesAndViewsHidden && "on"
-                                            }`}
                                         >
-                                            <div></div>
-                                        </div>
-                                    </div>
-                                    <div className="smallFont">
-                                        이 게시물의 총 좋아요 및 조회수는
-                                        회원님만 볼 수 있습니다. 나중에 게시물
-                                        상단에 있는 ··· 메뉴에서 이 설정을
-                                        변경할 수 있습니다. 다른 사람의
-                                        게시물에서 좋아요 수를 숨기려면 계정
-                                        설정으로 이동하세요.
-                                    </div>
-                                    <div className="toggleArea">
-                                        <div>댓글 기능 해제</div>
-                                        <div
-                                            onClick={() =>
-                                                dispatch(
-                                                    uploadActions.toggleIsCommentBlocked(),
-                                                )
+                                            고급 설정
+                                        </span>
+                                        <span
+                                            className={
+                                                isAdvancedOptionOn
+                                                    ? "reverse"
+                                                    : ""
                                             }
-                                            className={`toggle ${
-                                                isCommentBlocked && "on"
-                                            }`}
                                         >
-                                            <div></div>
+                                            <DownV />
+                                        </span>
+                                    </div>
+                                    {isAdvancedOptionOn && (
+                                        <div className="activated advanced">
+                                            <div className="toggleArea">
+                                                <div>
+                                                    이 게시물의 좋아요 수 및
+                                                    조회수 숨기기
+                                                </div>
+                                                <div
+                                                    onClick={() =>
+                                                        dispatch(
+                                                            uploadActions.toggleIsLikesAndViewsHidden(),
+                                                        )
+                                                    }
+                                                    className={`toggle ${
+                                                        isLikesAndViewsHidden &&
+                                                        "on"
+                                                    }`}
+                                                >
+                                                    <div></div>
+                                                </div>
+                                            </div>
+                                            <div className="smallFont">
+                                                이 게시물의 총 좋아요 및
+                                                조회수는 회원님만 볼 수
+                                                있습니다. 나중에 게시물 상단에
+                                                있는 ··· 메뉴에서 이 설정을
+                                                변경할 수 있습니다. 다른 사람의
+                                                게시물에서 좋아요 수를 숨기려면
+                                                계정 설정으로 이동하세요.
+                                            </div>
+                                            <div className="toggleArea">
+                                                <div>댓글 기능 해제</div>
+                                                <div
+                                                    onClick={() =>
+                                                        dispatch(
+                                                            uploadActions.toggleIsCommentBlocked(),
+                                                        )
+                                                    }
+                                                    className={`toggle ${
+                                                        isCommentBlocked && "on"
+                                                    }`}
+                                                >
+                                                    <div></div>
+                                                </div>
+                                            </div>
+                                            <div className="smallFont">
+                                                나중에 게시물 상단의
+                                                메뉴(···)에서 이 설정을 변경할
+                                                수 있습니다.
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="smallFont">
-                                        나중에 게시물 상단의 메뉴(···)에서 이
-                                        설정을 변경할 수 있습니다.
-                                    </div>
+                                    )}
                                 </div>
-                            )}
-                        </div>
-                        <hr />
+                                <hr />
+                            </>
+                        )}
                     </div>
                 </div>
             </StyledContent>
