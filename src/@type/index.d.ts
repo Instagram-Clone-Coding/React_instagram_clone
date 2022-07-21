@@ -15,7 +15,7 @@ declare module Direct {
         sender: Common.memberType;
         roomId: number;
         senderImage: Common.ImageInfo;
-        likeMembers: AuthType.UserInfo[];
+        likeMembers: Common.memberType[];
     }
 
     interface ChatItem {

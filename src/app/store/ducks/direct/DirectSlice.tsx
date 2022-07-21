@@ -117,7 +117,18 @@ const directSlice = createSlice({
             // 내가 좋아요 누른 메세지의 likemembers 에 내 정보를 추가해준다. 그래야 바로 반영이된다.
             state.chatMessageList.forEach((chatMessageItem) => {
                 if (chatMessageItem.messageId === action.payload.messageId) {
-                    chatMessageItem.likeMembers.push(action.payload.userInfo);
+                    chatMessageItem.likeMembers.push({
+                        hasStory: false,
+                        id: action.payload.userInfo.memberId,
+                        image: {
+                            imageName: "dummy",
+                            imageType: "JPG",
+                            imageUUID: "dasda-123-13",
+                            imageUrl: action.payload.userInfo.memberImageUrl,
+                        },
+                        name: action.payload.userInfo.memberName,
+                        username: action.payload.userInfo.memberUsername,
+                    });
                     return;
                 }
             });
@@ -132,7 +143,7 @@ const directSlice = createSlice({
                 if (chatMessageItem.messageId === action.payload.messageId) {
                     chatMessageItem.likeMembers =
                         chatMessageItem.likeMembers.filter((member) => {
-                            return member.memberId !== action.payload.memberId;
+                            return member.id !== action.payload.memberId;
                         });
                     return;
                 }

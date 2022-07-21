@@ -18,7 +18,7 @@ interface ChatBubbleProps {
     messageId: number;
     likeMessageHandler: () => void;
     unlikeMessageHandler: () => void;
-    likeMembers: AuthType.UserInfo[];
+    likeMembers: Common.memberType[];
     senderImage: Common.ImageInfo;
     sender: Common.memberType;
 }
@@ -29,7 +29,7 @@ interface ChatBubbleContainerType {
     showGuide: boolean;
     onMouseEnter: (event: React.MouseEvent<HTMLDivElement>) => void;
     onMouseLeave: (event: React.MouseEvent<HTMLDivElement>) => void;
-    liked: AuthType.UserInfo | undefined;
+    liked: Common.memberType | undefined;
     isString: boolean;
 }
 
@@ -229,7 +229,7 @@ const ChatBubble = ({
 
     // 내가 좋아요 했는지 판단하는 상수
     const liked = likeMembers.find((member) => {
-        return member.memberId === userInfo?.memberId;
+        return member.id === userInfo?.memberId;
     });
 
     useEffect(() => {
