@@ -2,7 +2,7 @@ import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { getNewImageSizeBasedOnOriginal } from "components/Common/Header/Upload/Edit/Edit";
 import UploadHeader from "components/Common/Header/Upload/UploadHeader";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import {
     getRatioCalculatedBoxWidth,
@@ -382,12 +382,12 @@ const Content = ({ currentWidth }: ContentProps) => {
         (state) => state.upload.isCommentBlocked,
     );
     const userInfo = useAppSelector((state) => state.auth.userInfo);
-    const searchedImageTagUsers = useAppSelector(
-        (state) => state.common.searchUsers,
-    );
-    const isImageTagUserSearchLoading = useAppSelector(
-        (state) => state.common.isLoading,
-    );
+    const [searchedImageTagUsers, setSearchedImageTagUsers] = useState<
+        Common.searchUserType[]
+    >([]);
+    const [isImageTagUserSearchLoading, setIsImageTagUserSearchLoading] =
+        useState(false);
+
     const [searchedUsers, setSearchedUsers] = useState<Common.searchUserType[]>(
         [],
     );
@@ -509,6 +509,29 @@ const Content = ({ currentWidth }: ContentProps) => {
         setIsSearchBarOn(false);
     };
 
+    const typeAndSearchImageTagUsers = async (
+        event: ChangeEvent<HTMLInputElement>,
+    ) => {
+        setSearchInput(event.target.value);
+        if (event.target.value !== "") {
+            try {
+                setIsImageTagUserSearchLoading(true);
+                const searchedImageTagUsers = await dispatch(
+                    searchUser({
+                        keyword: event.target.value,
+                    }),
+                ).unwrap();
+                setSearchedImageTagUsers(searchedImageTagUsers);
+            } catch {
+                setSearchedImageTagUsers([]);
+            } finally {
+                setIsImageTagUserSearchLoading(false);
+            }
+        } else {
+            dispatch(resetSearch());
+        }
+    };
+
     const decideWhetherToSearchForHashtagsWithTyping = async (
         event: React.ChangeEvent<HTMLTextAreaElement>,
     ) => {
@@ -564,7 +587,9 @@ const Content = ({ currentWidth }: ContentProps) => {
                 setSearchedUsers(searchedUsers);
                 setIsTextareaSearchLoading(false);
             } catch {
-                dispatch(resetSearch());
+                setSearchedUsers([]);
+            } finally {
+                setIsTextareaSearchLoading(false);
             }
         }
         dispatch(uploadActions.setTextareaValue(text));
@@ -656,22 +681,9 @@ const Content = ({ currentWidth }: ContentProps) => {
                                             type="text"
                                             placeholder="검색"
                                             value={searchInput}
-                                            onChange={async (event) => {
-                                                setSearchInput(
-                                                    event.target.value,
-                                                );
-                                                if (event.target.value !== "") {
-                                                    await dispatch(
-                                                        searchUser({
-                                                            keyword:
-                                                                event.target
-                                                                    .value,
-                                                        }),
-                                                    );
-                                                } else {
-                                                    dispatch(resetSearch());
-                                                }
-                                            }}
+                                            onChange={
+                                                typeAndSearchImageTagUsers
+                                            }
                                             autoFocus={true}
                                         />
                                         {searchInput &&
