@@ -22,6 +22,7 @@ const ChatListItemContainer = styled.div<ChatListItemContainerType>`
     // 갠톡
     .user-image {
         width: 56px;
+        height: 56px;
         border-radius: 50%;
         margin-right: 12px;
     }
@@ -34,6 +35,7 @@ const ChatListItemContainer = styled.div<ChatListItemContainerType>`
         img {
             position: absolute;
             width: 40px;
+            height: 40px;
             border-radius: 50%;
         }
         .first {
