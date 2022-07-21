@@ -376,8 +376,11 @@ const Content = ({ currentWidth }: ContentProps) => {
         (state) => state.upload.isCommentBlocked,
     );
     const userInfo = useAppSelector((state) => state.auth.userInfo);
-    const searchedUsers = useAppSelector((state) => state.common.searchUsers);
-    const isLoading = useAppSelector((state) => state.common.isLoading);
+    const [searchedUsers, setSearchedUsers] = useState<Common.searchUserType[]>(
+        [],
+    );
+    const [isTextareaSearchLoading, setIsTextareaSearchLoading] =
+        useState(false);
     const [isSearchBarOn, setIsSearchBarOn] = useState(false);
     const [isTextareaSearchBarOn, setIsTextareaSearchBarOn] = useState(false);
     const [isTextareaSearchKeyword, setIsTextareaSearchKeyword] = useState("");
@@ -541,7 +544,16 @@ const Content = ({ currentWidth }: ContentProps) => {
             }
         }
         if (keyword) {
-            await dispatch(searchUser({ keyword }));
+            try {
+                setIsTextareaSearchLoading(true);
+                const searchedUsers = await dispatch(
+                    searchUser({ keyword }),
+                ).unwrap();
+                setSearchedUsers(searchedUsers);
+                setIsTextareaSearchLoading(false);
+            } catch {
+                dispatch(resetSearch());
+            }
         }
         dispatch(uploadActions.setTextareaValue(text));
     };
@@ -727,7 +739,7 @@ const Content = ({ currentWidth }: ContentProps) => {
                         </div>
                         {isTextareaSearchBarOn ? (
                             <div className="upload__textareaSearchBar">
-                                {isLoading ? (
+                                {isTextareaSearchLoading ? (
                                     <div className="loadingLayout">
                                         <Loading size={32} />
                                     </div>
