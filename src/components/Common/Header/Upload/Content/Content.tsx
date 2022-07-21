@@ -133,6 +133,12 @@ const StyledContent = styled.div`
                         width: 100%;
                         height: 180px;
                         overflow-y: auto;
+                        & > .loadingLayout {
+                            height: 100%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
                     }
                 }
             }
@@ -376,6 +382,12 @@ const Content = ({ currentWidth }: ContentProps) => {
         (state) => state.upload.isCommentBlocked,
     );
     const userInfo = useAppSelector((state) => state.auth.userInfo);
+    const searchedImageTagUsers = useAppSelector(
+        (state) => state.common.searchUsers,
+    );
+    const isImageTagUserSearchLoading = useAppSelector(
+        (state) => state.common.isLoading,
+    );
     const [searchedUsers, setSearchedUsers] = useState<Common.searchUserType[]>(
         [],
     );
@@ -662,7 +674,10 @@ const Content = ({ currentWidth }: ContentProps) => {
                                             }}
                                             autoFocus={true}
                                         />
-                                        {searchInput && (
+                                        {searchInput &&
+                                        isImageTagUserSearchLoading ? (
+                                            <Loading size={18} />
+                                        ) : (
                                             <span
                                                 onClick={() => {
                                                     dispatch(resetSearch());
@@ -672,22 +687,29 @@ const Content = ({ currentWidth }: ContentProps) => {
                                         )}
                                     </div>
                                     <div className="modal__searched">
-                                        {searchedUsers.length > 0 &&
-                                            searchedUsers.map((user) => (
-                                                <div
-                                                    onClick={() =>
-                                                        searchListItemClickHandler(
-                                                            user.member
-                                                                .username,
-                                                        )
-                                                    }
-                                                    key={user.member.id}
-                                                >
-                                                    <SearchListItemLayout
-                                                        member={user.member}
-                                                    />
-                                                </div>
-                                            ))}
+                                        {isImageTagUserSearchLoading ? (
+                                            <div className="loadingLayout">
+                                                <Loading size={32} />
+                                            </div>
+                                        ) : (
+                                            searchedImageTagUsers.map(
+                                                (user) => (
+                                                    <div
+                                                        onClick={() =>
+                                                            searchListItemClickHandler(
+                                                                user.member
+                                                                    .username,
+                                                            )
+                                                        }
+                                                        key={user.member.id}
+                                                    >
+                                                        <SearchListItemLayout
+                                                            member={user.member}
+                                                        />
+                                                    </div>
+                                                ),
+                                            )
+                                        )}
                                     </div>
                                 </div>
                             </div>
