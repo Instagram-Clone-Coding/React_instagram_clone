@@ -27,6 +27,7 @@ export interface InitialStateType {
     subChatCount: number; // 채팅메시지 subscribe 를 통해서 읽은 개수입니다.
     messageScrollable: boolean;
     selectedMessageId: number | null; // 메세지 옆에 3개의 점을 클릭했을때 여러가지 action 을 처리해주기 위함입니다.
+    closeModalSelectedMessageId: number | null; // 취소 모달을 위해.
 }
 
 const initialState: InitialStateType = {
@@ -45,6 +46,7 @@ const initialState: InitialStateType = {
     subChatCount: 0,
     messageScrollable: true,
     selectedMessageId: null,
+    closeModalSelectedMessageId: null,
 };
 
 const directSlice = createSlice({
@@ -106,6 +108,9 @@ const directSlice = createSlice({
         },
         setSelectedMessageId: (state, action: PayloadAction<number | null>) => {
             state.selectedMessageId = action.payload;
+        },
+        setCloseModalSelectedMessageId: (state) => {
+            state.closeModalSelectedMessageId = state.selectedMessageId;
         },
         likeChatMessageItem: (
             state,
@@ -329,5 +334,6 @@ export const {
     unLikeChatMessageItem,
     deleteChatMessageItem,
     resetSelectNewChatUser,
+    setCloseModalSelectedMessageId,
 } = directSlice.actions;
 export const directReducer = directSlice.reducer;

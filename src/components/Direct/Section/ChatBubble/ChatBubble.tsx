@@ -1,5 +1,6 @@
 import {
     openModal,
+    setCloseModalSelectedMessageId,
     setSelectedMessageId,
 } from "app/store/ducks/direct/DirectSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
@@ -403,6 +404,9 @@ const ChatBubble = ({
                                         onClick={() => {
                                             dispatch(
                                                 openModal("deleteChatMessage"),
+                                            );
+                                            dispatch(
+                                                setCloseModalSelectedMessageId(),
                                             );
                                         }}
                                     >

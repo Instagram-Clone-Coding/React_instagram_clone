@@ -34,6 +34,9 @@ const Direct = () => {
     const selectedMessageId = useAppSelector(
         (state) => state.direct.selectedMessageId,
     );
+    const closeModalSelectedMessageId = useAppSelector(
+        (state) => state.direct.closeModalSelectedMessageId,
+    );
     const [message, setMessage] = useState<string>("");
     const client = useRef<StompJs.Client>();
 
@@ -56,7 +59,6 @@ const Direct = () => {
                         `/sub/${userInfo?.memberUsername}`,
                         async ({ body }) => {
                             const newMessage = JSON.parse(body);
-                            console.log(newMessage);
 
                             switch (newMessage.action) {
                                 case "MESSAGE_SEEN":
@@ -105,7 +107,7 @@ const Direct = () => {
                                         unLikeChatMessageItem({
                                             messageId:
                                                 newMessage.data.messageId,
-                                            memberId: newMessage.data.memberId,
+                                            memberId: newMessage.data.member.id,
                                         }),
                                     );
                                     dispatch(setSelectedMessageId(null));
@@ -151,7 +153,7 @@ const Direct = () => {
             destination: "/pub/messages/delete",
             body: JSON.stringify({
                 memberId: userInfo?.memberId,
-                messageId: selectedMessageId,
+                messageId: closeModalSelectedMessageId,
             }),
         });
     };
