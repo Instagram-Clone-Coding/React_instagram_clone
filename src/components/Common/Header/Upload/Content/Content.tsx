@@ -18,6 +18,7 @@ import { searchUser } from "app/store/ducks/common/commonThunk";
 import SearchListItemLayout from "components/Home/SearchListItemLayout";
 import { resetSearch } from "app/store/ducks/common/commonSlice";
 import { ReactComponent as Close } from "assets/Svgs/close.svg";
+import Loading from "components/Common/Loading";
 
 const StyledContent = styled.div`
     display: flex;
@@ -205,7 +206,18 @@ const StyledContent = styled.div`
                 }
             }
             & > .upload__textareaSearchBar {
-                // 예정
+                border-top: 1px solid ${(props) => props.theme.color.bd_gray};
+                & > .loadingLayout {
+                    height: 200px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                & > .searchedUser {
+                    border-bottom: 1px solid
+                        ${(props) => props.theme.color.bd_gray};
+                    padding: 14px 16px;
+                }
             }
             & > .upload__contentOption {
                 width: 100%;
@@ -353,16 +365,19 @@ const minWidthForContent = (currentWidth: number) =>
 
 const Content = ({ currentWidth }: ContentProps) => {
     const dispatch = useAppDispatch();
-    const {
-        files,
-        currentIndex,
-        ratioMode,
-        textareaValue,
-        isLikesAndViewsHidden,
-        isCommentBlocked,
-    } = useAppSelector((state) => state.upload);
-    const { userInfo } = useAppSelector((state) => state.auth);
+    const files = useAppSelector((state) => state.upload.files);
+    const currentIndex = useAppSelector((state) => state.upload.currentIndex);
+    const ratioMode = useAppSelector((state) => state.upload.ratioMode);
+    const textareaValue = useAppSelector((state) => state.upload.textareaValue);
+    const isLikesAndViewsHidden = useAppSelector(
+        (state) => state.upload.isLikesAndViewsHidden,
+    );
+    const isCommentBlocked = useAppSelector(
+        (state) => state.upload.isCommentBlocked,
+    );
+    const userInfo = useAppSelector((state) => state.auth.userInfo);
     const searchedUsers = useAppSelector((state) => state.common.searchUsers);
+    const isLoading = useAppSelector((state) => state.common.isLoading);
     const [isSearchBarOn, setIsSearchBarOn] = useState(false);
     const [isTextareaSearchBarOn, setIsTextareaSearchBarOn] = useState(false);
     const [isTextareaSearchKeyword, setIsTextareaSearchKeyword] = useState("");
@@ -712,7 +727,20 @@ const Content = ({ currentWidth }: ContentProps) => {
                         </div>
                         {isTextareaSearchBarOn ? (
                             <div className="upload__textareaSearchBar">
-                                Hello
+                                {isLoading ? (
+                                    <div className="loadingLayout">
+                                        <Loading size={32} />
+                                    </div>
+                                ) : (
+                                    searchedUsers.map((user) => (
+                                        <div
+                                            key={user.member.id}
+                                            className="searchedUser"
+                                        >
+                                            {user.member.username}
+                                        </div>
+                                    ))
+                                )}
                             </div>
                         ) : (
                             <>
