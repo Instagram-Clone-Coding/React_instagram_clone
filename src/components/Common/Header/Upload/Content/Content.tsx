@@ -213,8 +213,11 @@ const StyledContent = styled.div`
             }
             & > .upload__textareaSearchBar {
                 border-top: 1px solid ${(props) => props.theme.color.bd_gray};
+                border-bottom: 1px solid ${(props) => props.theme.color.bd_gray};
+                height: 200px;
+                overflow-y: auto;
                 & > .loadingLayout {
-                    height: 200px;
+                    height: 100%;
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -222,7 +225,29 @@ const StyledContent = styled.div`
                 & > .searchedUser {
                     border-bottom: 1px solid
                         ${(props) => props.theme.color.bd_gray};
-                    padding: 14px 16px;
+                    padding: 10px 16px;
+                    display: flex;
+                    align-items: center;
+                    height: 50px;
+                    cursor: pointer;
+                    &:hover {
+                        background-color: ${(props) =>
+                            props.theme.color.bg_gray};
+                    }
+                    & > img {
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 50%;
+                        margin-right: 10px;
+                    }
+                    & > div {
+                        & > span {
+                            font-weight: ${(props) => props.theme.font.bold};
+                        }
+                        & > div {
+                            color: ${(props) => props.theme.font.gray};
+                        }
+                    }
                 }
             }
             & > .upload__contentOption {
@@ -783,7 +808,18 @@ const Content = ({ currentWidth }: ContentProps) => {
                                             key={user.member.id}
                                             className="searchedUser"
                                         >
-                                            {user.member.username}
+                                            <img
+                                                src={user.member.image.imageUrl}
+                                                alt={
+                                                    user.member.image.imageName
+                                                }
+                                            />
+                                            <div>
+                                                <span>
+                                                    {user.member.username}
+                                                </span>
+                                                <div>{user.member.name}</div>
+                                            </div>
                                         </div>
                                     ))
                                 )}
