@@ -19,6 +19,7 @@ import SearchListItemLayout from "components/Home/SearchListItemLayout";
 import { resetSearch } from "app/store/ducks/common/commonSlice";
 import { ReactComponent as Close } from "assets/Svgs/close.svg";
 import Loading from "components/Common/Loading";
+import { authorizedCustomAxios } from "customAxios";
 
 const StyledContent = styled.div`
     display: flex;
@@ -387,6 +388,9 @@ const StyledContent = styled.div`
     }
 `;
 
+interface MentionResponseType extends AxiosType.ResponseType {
+    data: Common.memberType[];
+}
 interface ContentProps {
     currentWidth: number;
 }
@@ -413,9 +417,7 @@ const Content = ({ currentWidth }: ContentProps) => {
     const [isImageTagUserSearchLoading, setIsImageTagUserSearchLoading] =
         useState(false);
 
-    const [searchedUsers, setSearchedUsers] = useState<Common.searchUserType[]>(
-        [],
-    );
+    const [searchedUsers, setSearchedUsers] = useState<Common.memberType[]>([]);
     const [isTextareaSearchLoading, setIsTextareaSearchLoading] =
         useState(false);
     const [isSearchBarOn, setIsSearchBarOn] = useState(false);
@@ -607,10 +609,18 @@ const Content = ({ currentWidth }: ContentProps) => {
         if (keyword) {
             try {
                 setIsTextareaSearchLoading(true);
-                const searchedUsers = await dispatch(
-                    searchUser({ keyword }),
-                ).unwrap();
-                setSearchedUsers(searchedUsers);
+                const config = {
+                    params: { text: keyword },
+                };
+                const {
+                    data: { data },
+                } = await authorizedCustomAxios.get<MentionResponseType>(
+                    `/topsearch/auto/${
+                        keyword[0] === "#" ? "hashtag" : "member"
+                    }`,
+                    config,
+                );
+                setSearchedUsers(data);
                 setIsTextareaSearchLoading(false);
             } catch {
                 setSearchedUsers([]);
@@ -803,22 +813,18 @@ const Content = ({ currentWidth }: ContentProps) => {
                                         <Loading size={32} />
                                     </div>
                                 ) : (
-                                    searchedUsers.map((user) => (
+                                    searchedUsers.map((member) => (
                                         <div
-                                            key={user.member.id}
+                                            key={member.id}
                                             className="searchedUser"
                                         >
                                             <img
-                                                src={user.member.image.imageUrl}
-                                                alt={
-                                                    user.member.image.imageName
-                                                }
+                                                src={member.image.imageUrl}
+                                                alt={member.image.imageName}
                                             />
                                             <div>
-                                                <span>
-                                                    {user.member.username}
-                                                </span>
-                                                <div>{user.member.name}</div>
+                                                <span>{member.username}</span>
+                                                <div>{member.name}</div>
                                             </div>
                                         </div>
                                     ))
