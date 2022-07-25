@@ -562,6 +562,7 @@ const Content = ({ currentWidth }: ContentProps) => {
     ) => {
         const text = event.target.value;
         const textLength = text.length;
+        dispatch(uploadActions.setTextareaValue(text));
         // off 상태일 때
         // 이전 text가 #이나 @ + 현재 text가 " ", #, @ 아닐 때
         let keyword;
@@ -617,7 +618,6 @@ const Content = ({ currentWidth }: ContentProps) => {
                 setIsTextareaSearchLoading(false);
             }
         }
-        dispatch(uploadActions.setTextareaValue(text));
     };
 
     return (
