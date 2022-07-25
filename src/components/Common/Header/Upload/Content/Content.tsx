@@ -395,6 +395,13 @@ interface ContentProps {
     currentWidth: number;
 }
 
+function findFirstDifferenceIndexBetweenTwoStrings(a: string, b: string) {
+    var i = 0;
+    if (a === b) return -1;
+    while (a[i] === b[i]) i++;
+    return i;
+}
+
 const minWidthForContent = (currentWidth: number) =>
     Math.max(currentWidth, 350);
 
@@ -422,7 +429,8 @@ const Content = ({ currentWidth }: ContentProps) => {
         useState(false);
     const [isSearchBarOn, setIsSearchBarOn] = useState(false);
     const [isTextareaSearchBarOn, setIsTextareaSearchBarOn] = useState(false);
-    const [isTextareaSearchKeyword, setIsTextareaSearchKeyword] = useState("");
+    const [textareaSearchKeyword, setTextareaSearchKeyword] = useState("");
+    const [currentTypedIndex, setCurrentTypedIndex] = useState(-1);
     const [searchBarPosition, setSearchBarPosition] = useState({ x: 0, y: 0 }); // %
     const [searchInput, setSearchInput] = useState("");
     const [isEmojiModalOn, setIsEmojiModalOn] = useState(false);
@@ -607,6 +615,11 @@ const Content = ({ currentWidth }: ContentProps) => {
             }
         }
         if (keyword) {
+            setTextareaSearchKeyword(keyword);
+            setCurrentTypedIndex(
+                findFirstDifferenceIndexBetweenTwoStrings(textareaValue, text) +
+                    1,
+            );
             try {
                 setIsTextareaSearchLoading(true);
                 const config = {
@@ -628,6 +641,25 @@ const Content = ({ currentWidth }: ContentProps) => {
                 setIsTextareaSearchLoading(false);
             }
         }
+    };
+
+    const addUserToTextarea = (usernameOrHashtag: string) => {
+        if (!textareaSearchKeyword) return;
+        const keywordStartIndex = textareaValue.lastIndexOf(
+            textareaSearchKeyword,
+            currentTypedIndex,
+        );
+        const newTextareaValue =
+            textareaValue.substring(0, keywordStartIndex) +
+            usernameOrHashtag +
+            " " +
+            textareaValue.substring(
+                keywordStartIndex + textareaSearchKeyword.length,
+            );
+        dispatch(uploadActions.setTextareaValue(newTextareaValue));
+        setIsTextareaSearchBarOn(false);
+        setTextareaSearchKeyword("");
+        setCurrentTypedIndex(-1);
     };
 
     return (
@@ -817,6 +849,11 @@ const Content = ({ currentWidth }: ContentProps) => {
                                         <div
                                             key={member.id}
                                             className="searchedUser"
+                                            onClick={() =>
+                                                addUserToTextarea(
+                                                    member.username,
+                                                )
+                                            }
                                         >
                                             <img
                                                 src={member.image.imageUrl}
