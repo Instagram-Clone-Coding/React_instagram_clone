@@ -135,7 +135,11 @@ const PasswordEdit = () => {
                     color="#fff"
                     onClick={changePasswordHandler}
                 >
-                    {isLoading ? <Loading size={18} /> : "비밀번호 변경"}
+                    {isLoading ? (
+                        <Loading size={18} isInButton={true} />
+                    ) : (
+                        "비밀번호 변경"
+                    )}
                 </Button>
             </div>
         </PasswordEditContainer>
