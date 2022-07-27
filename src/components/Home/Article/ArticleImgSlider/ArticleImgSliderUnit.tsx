@@ -29,16 +29,19 @@ const StyledArticleImgSliderUnit = styled.div`
     }
 `;
 
+interface ArticleImgSliderUnitProps {
+    imageDTO: Common.PostImageDTOProps;
+    unitWidth: number;
+}
+
 const ArticleImgSliderUnit = ({
     imageDTO,
-}: {
-    imageDTO: Common.PostImageDTOProps;
-}) => {
+    unitWidth,
+}: ArticleImgSliderUnitProps) => {
     const [isAvatarOn, setIsAvatarOn] = useState(false);
     const [isImgHashTagsOn, setIsImgHashTagOn] = useState<boolean | null>(null);
-    const [timeoutId, setTimeoutId] = useState<null | ReturnType<
-        typeof setTimeout
-    >>(null);
+    const [timeoutId, setTimeoutId] =
+        useState<null | ReturnType<typeof setTimeout>>(null);
 
     const onClickHandler = () => {
         if (!isAvatarOn) {
@@ -85,7 +88,11 @@ const ArticleImgSliderUnit = ({
                         isImgHashTagsOn={isImgHashTagsOn}
                     />
                 ))}
-            <img src={imageDTO.postImageUrl} alt={imageDTO.postImageUrl} />
+            <img
+                src={imageDTO.postImageUrl}
+                alt={imageDTO.postImageUrl}
+                width={unitWidth}
+            />
         </StyledArticleImgSliderUnit>
     );
 };
