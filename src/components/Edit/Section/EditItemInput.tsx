@@ -1,7 +1,5 @@
-import { Dispatch } from "@reduxjs/toolkit";
 import { changeEditItem, selectModal } from "app/store/ducks/edit/editSlice";
 import { useAppDispatch } from "app/store/Hooks";
-import React, { SetStateAction, useState } from "react";
 import styled from "styled-components";
 
 const en2kr = {

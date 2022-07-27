@@ -1,5 +1,4 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { AxiosError } from "axios";
 import { authorizedCustomAxios } from "customAxios";
 import { FAIL_TO_REISSUE_MESSAGE } from "utils/constant";
 import { authAction } from "../auth/authSlice";
