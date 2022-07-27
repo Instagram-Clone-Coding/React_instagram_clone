@@ -106,6 +106,19 @@ const StyledHoverModalInner = styled.div`
     }
 `;
 
+type printAboutFollowingMemberFollowTypes = (
+    followingMemberFollowArr: [{ memberUsername: string }],
+    rest: number,
+) => string;
+
+const printAboutFollowingMemberFollow: printAboutFollowingMemberFollowTypes = (
+    followingMemberFollowArr,
+    rest,
+) => {
+    if (rest === 0) return "1명이 팔로우합니다";
+    return `${followingMemberFollowArr[0].memberUsername}님 외 ${rest}명이 팔로우합니다.`;
+};
+
 interface HoverModalProps {
     onMouseEnter: () => void;
     onMouseLeave: () => void;
@@ -148,7 +161,7 @@ const HoverModal = ({
             {miniProfile.memberName && (
                 <StyledHoverModalInner>
                     <div className="hoverModal-top">
-                        <Link to={`/${miniProfile.memberName}`}>
+                        <Link to={`/profile/${miniProfile.memberUsername}`}>
                             <StoryCircle
                                 type="default"
                                 avatarUrl={miniProfile.memberImage.imageUrl}
@@ -185,13 +198,10 @@ const HoverModal = ({
                                 </a>
                             )}
                             <div className="hoverModal-top-follwers">
-                                {miniProfile.followingMemberFollow
-                                    ? `${
-                                          miniProfile.followingMemberFollow
-                                      }님 외 ${
-                                          miniProfile.memberFollowersCount - 1
-                                      }명이 팔로우합니다`
-                                    : `${miniProfile.memberFollowersCount}명이 팔로우합니다`}
+                                {printAboutFollowingMemberFollow(
+                                    miniProfile.followingMemberFollow,
+                                    miniProfile.followingMemberFollowCount,
+                                )}
                             </div>
                         </div>
                     </div>
