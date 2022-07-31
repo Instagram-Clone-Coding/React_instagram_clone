@@ -214,7 +214,6 @@ const Content = ({ currentWidth }: ContentProps) => {
                             // URL.revokeObjectURL(url);
                         };
                         newImg.src = url;
-                        document.body.appendChild(newImg);
                     });
                 };
             }
