@@ -2,7 +2,13 @@ import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { getNewImageSizeBasedOnOriginal } from "components/Common/Header/Upload/Edit/Edit";
 import UploadHeader from "components/Common/Header/Upload/UploadHeader";
-import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
+import React, {
+    ChangeEvent,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import styled from "styled-components";
 import {
     getRatioCalculatedBoxWidth,
@@ -436,6 +442,7 @@ const Content = ({ currentWidth }: ContentProps) => {
     const [isEmojiModalOn, setIsEmojiModalOn] = useState(false);
     const [isAccessOptionOn, setIsAccessOptionOn] = useState(false);
     const [isAdvancedOptionOn, setIsAdvancedOptionOn] = useState(false);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     const onEmojiClick = (event: React.MouseEvent, emojiObject: IEmojiData) => {
         dispatch(uploadActions.addEmojiOnTextarea(emojiObject.emoji));
@@ -660,6 +667,7 @@ const Content = ({ currentWidth }: ContentProps) => {
         setIsTextareaSearchBarOn(false);
         setTextareaSearchKeyword("");
         setCurrentTypedIndex(-1);
+        textareaRef.current?.focus();
     };
 
     return (
@@ -824,6 +832,7 @@ const Content = ({ currentWidth }: ContentProps) => {
                                     )
                                 }
                                 maxLength={2200}
+                                ref={textareaRef}
                             ></textarea>
                             <div
                                 className="textarea__bottom"
