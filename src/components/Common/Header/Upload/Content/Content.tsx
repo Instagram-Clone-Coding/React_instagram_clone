@@ -578,14 +578,18 @@ const Content = ({ currentWidth }: ContentProps) => {
         event: React.ChangeEvent<HTMLTextAreaElement>,
     ) => {
         const text = event.target.value;
-        const textLength = text.length;
+        const typedIndex = findFirstDifferenceIndexBetweenTwoStrings(
+            textareaValue,
+            text,
+        );
+        // const textLength = text.length;
         dispatch(uploadActions.setTextareaValue(text));
         // off 상태일 때
         // 이전 text가 #이나 @ + 현재 text가 " ", #, @ 아닐 때
         let keyword;
         if (!isTextareaSearchBarOn) {
-            const prevString = text[textLength - 2];
-            const currentString = text[textLength - 1];
+            const prevString = text[typedIndex - 1];
+            const currentString = text[typedIndex];
             if (
                 currentString !== " " &&
                 currentString !== "#" &&
@@ -593,10 +597,10 @@ const Content = ({ currentWidth }: ContentProps) => {
             ) {
                 if (prevString === "#") {
                     setIsTextareaSearchBarOn(true);
-                    keyword = "#" + text[textLength - 1];
+                    keyword = "#" + text[typedIndex];
                 } else if (prevString === "@") {
                     setIsTextareaSearchBarOn(true);
-                    keyword = text[textLength - 1];
+                    keyword = text[typedIndex];
                 }
             }
         }
@@ -604,7 +608,7 @@ const Content = ({ currentWidth }: ContentProps) => {
         // 현재 text가 #, @, " "일 때 검색 중지
         // 그게 아니라면 #, @에서 잘라 키워드로 검색
         else {
-            const currentString = text[textLength - 1];
+            const currentString = text[typedIndex];
             if (
                 currentString === "#" ||
                 currentString === "@" ||
@@ -623,10 +627,7 @@ const Content = ({ currentWidth }: ContentProps) => {
         }
         if (keyword) {
             setTextareaSearchKeyword(keyword);
-            setCurrentTypedIndex(
-                findFirstDifferenceIndexBetweenTwoStrings(textareaValue, text) +
-                    1,
-            );
+            setCurrentTypedIndex(typedIndex + 1);
             try {
                 setIsTextareaSearchLoading(true);
                 const config = {
