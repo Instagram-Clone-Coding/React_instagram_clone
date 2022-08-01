@@ -13,7 +13,7 @@ export const uploadArticle = createAsyncThunk<
                 textareaValue,
                 files,
                 isCommentBlocked,
-                // isLikesAndViewsHidden, // 좋아요와 조회수 숨기기
+                isLikesAndViewsHidden, // 좋아요와 조회수 숨기기
             },
             auth: { userInfo },
         } = ThunkOptions.getState();
@@ -22,6 +22,8 @@ export const uploadArticle = createAsyncThunk<
         const formData = new FormData();
         formData.append("content", textareaValue);
         formData.append("commentFlag", JSON.stringify(isCommentBlocked));
+        formData.append("likeFlag", JSON.stringify(isLikesAndViewsHidden));
+
         let hashtagIndex = 0;
         for (let i = 0; i < files.length; i++) {
             const currentFileObj = files[i];
