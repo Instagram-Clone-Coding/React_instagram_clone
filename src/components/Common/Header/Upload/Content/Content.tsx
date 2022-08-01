@@ -473,7 +473,7 @@ const Content = ({ currentWidth }: ContentProps) => {
         dispatch(uploadActions.addHashtags({ tagX, tagY, username }));
         setIsSearchBarOn(false);
     };
-    console.log(currentWidth);
+
     return (
         <>
             <UploadHeader
