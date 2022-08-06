@@ -229,18 +229,34 @@ const StyledContent = styled.div`
                     justify-content: center;
                     align-items: center;
                 }
-                & > .searchedUser {
+                & > .searchedUser,
+                & > .searchedHashtag {
                     border-bottom: 1px solid
                         ${(props) => props.theme.color.bd_gray};
-                    padding: 10px 16px;
-                    display: flex;
-                    align-items: center;
                     height: 50px;
                     cursor: pointer;
+                    display: flex;
                     &:hover {
                         background-color: ${(props) =>
                             props.theme.color.bg_gray};
                     }
+                }
+                & > .searchedHashtag {
+                    flex-direction: column;
+                    justify-content: space-between;
+                    padding: 4px 16px;
+                    & > #name {
+                        font-weight: ${(props) => props.theme.font.bold};
+                    }
+                    & > #count {
+                        font-size: 16px;
+                        min-height: 24px;
+                        line-height: 24px;
+                    }
+                }
+                & > .searchedUser {
+                    padding: 10px 16px;
+                    align-items: center;
                     & > img {
                         width: 30px;
                         height: 30px;
@@ -397,6 +413,13 @@ const StyledContent = styled.div`
 interface MentionResponseType extends AxiosType.ResponseType {
     data: Common.memberType[];
 }
+interface SearchedHashtagType {
+    name: string;
+    count: number;
+}
+interface HashtagResponseType extends AxiosType.ResponseType {
+    data: SearchedHashtagType[];
+}
 interface ContentProps {
     currentWidth: number;
 }
@@ -429,8 +452,12 @@ const Content = ({ currentWidth }: ContentProps) => {
     >([]);
     const [isImageTagUserSearchLoading, setIsImageTagUserSearchLoading] =
         useState(false);
-
+    const [textareaSearchType, setTextareaSearchType] =
+        useState<"mention" | "hashtag">("mention");
     const [searchedUsers, setSearchedUsers] = useState<Common.memberType[]>([]);
+    const [searchedHashtags, setSearchedHashtags] = useState<
+        SearchedHashtagType[]
+    >([]);
     const [isTextareaSearchLoading, setIsTextareaSearchLoading] =
         useState(false);
     const [isSearchBarOn, setIsSearchBarOn] = useState(false);
@@ -633,25 +660,39 @@ const Content = ({ currentWidth }: ContentProps) => {
                 const config = {
                     params: { text: keyword },
                 };
-                const {
-                    data: { data },
-                } = await authorizedCustomAxios.get<MentionResponseType>(
-                    `/topsearch/auto/${
-                        keyword[0] === "#" ? "hashtag" : "member"
-                    }`,
-                    config,
-                );
-                setSearchedUsers(data);
+                if (keyword[0] === "#" && keyword.length > 1) {
+                    // 해시태그를 포함한 검색어 길이가 2개 이상이어야
+                    setTextareaSearchType("hashtag");
+                    setSearchedUsers([]);
+                    const {
+                        data: { data },
+                    } = await authorizedCustomAxios.get<HashtagResponseType>(
+                        `/topsearch/auto/hashtag`,
+                        config,
+                    );
+                    setSearchedHashtags(data);
+                } else if (keyword[0] !== "#") {
+                    setTextareaSearchType("mention");
+                    setSearchedHashtags([]);
+                    const {
+                        data: { data },
+                    } = await authorizedCustomAxios.get<MentionResponseType>(
+                        `/topsearch/auto/member`,
+                        config,
+                    );
+                    setSearchedUsers(data);
+                }
                 setIsTextareaSearchLoading(false);
             } catch {
                 setSearchedUsers([]);
+                setSearchedHashtags([]);
             } finally {
                 setIsTextareaSearchLoading(false);
             }
         }
     };
 
-    const addUserToTextarea = (usernameOrHashtag: string) => {
+    const addUsernameOrHashtagToTextarea = (usernameOrHashtag: string) => {
         if (!textareaSearchKeyword) return;
         const keywordStartIndex = textareaValue.lastIndexOf(
             textareaSearchKeyword,
@@ -854,13 +895,13 @@ const Content = ({ currentWidth }: ContentProps) => {
                                     <div className="loadingLayout">
                                         <Loading size={32} />
                                     </div>
-                                ) : (
+                                ) : textareaSearchType === "mention" ? (
                                     searchedUsers.map((member) => (
                                         <div
                                             key={member.id}
                                             className="searchedUser"
                                             onClick={() =>
-                                                addUserToTextarea(
+                                                addUsernameOrHashtagToTextarea(
                                                     member.username,
                                                 )
                                             }
@@ -872,6 +913,25 @@ const Content = ({ currentWidth }: ContentProps) => {
                                             <div>
                                                 <span>{member.username}</span>
                                                 <div>{member.name}</div>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    searchedHashtags.map((hashtagObj) => (
+                                        <div
+                                            key={hashtagObj.name}
+                                            className="searchedHashtag"
+                                            onClick={() =>
+                                                addUsernameOrHashtagToTextarea(
+                                                    "#" + hashtagObj.name,
+                                                )
+                                            }
+                                        >
+                                            <div id="name">
+                                                #{hashtagObj.name}
+                                            </div>
+                                            <div id="count">
+                                                게시물 {hashtagObj.count}
                                             </div>
                                         </div>
                                     ))
