@@ -424,11 +424,14 @@ interface ContentProps {
     currentWidth: number;
 }
 
-function findFirstDifferenceIndexBetweenTwoStrings(a: string, b: string) {
+function findFirstDifferenceIndexBetweenTwoStrings(
+    prev: string,
+    current: string,
+) {
     var i = 0;
-    if (a === b) return -1;
-    while (a[i] === b[i]) i++;
-    return i;
+    if (prev === current) return -1;
+    while (prev[i] === current[i]) i++;
+    return prev.length > current.length ? i - 1 : i; // 타이핑한게 텍스트를 지운 거였다면 -1
 }
 
 const minWidthForContent = (currentWidth: number) =>
@@ -643,12 +646,15 @@ const Content = ({ currentWidth }: ContentProps) => {
             ) {
                 setIsTextareaSearchBarOn(false);
             } else {
-                const indexOfHashTag = text.lastIndexOf("#");
-                const indexOfMentionTag = text.lastIndexOf("@");
+                const indexOfHashTag = text.lastIndexOf("#", typedIndex);
+                const indexOfMentionTag = text.lastIndexOf("@", typedIndex);
                 if (indexOfHashTag > indexOfMentionTag) {
-                    keyword = text.slice(indexOfHashTag); // # 포함
+                    keyword = text.substring(indexOfHashTag, typedIndex + 1); // # 포함
                 } else if (indexOfMentionTag > indexOfHashTag) {
-                    keyword = text.slice(indexOfMentionTag + 1);
+                    keyword = text.substring(
+                        indexOfMentionTag + 1,
+                        typedIndex + 1,
+                    );
                 }
             }
         }
