@@ -65,6 +65,7 @@ export default function DeviceItem({
     tokenId,
     index,
     lastLoginDate,
+    current,
 }: LoginDevice & { index: string }) {
     const [isToggleOn, setIsToggleOn] = useState(false);
     const [mapLoaded, setMapLoaded] = useState(false);
@@ -97,7 +98,11 @@ export default function DeviceItem({
                 <div className="device-content">
                     <Map />
                     <div className="description">
-                        <div className="city">{location.city || "서울"}</div>
+                        <div className="city">
+                            {location.city === "Unknown"
+                                ? "위치를 찾을 수 없습니다"
+                                : location.city}
+                        </div>
                         <div className="time">
                             <span className="first-login-date">
                                 {firstLoginTime} 전
@@ -118,7 +123,9 @@ export default function DeviceItem({
                         style={{ width: "100%", height: "200px" }}
                     ></div>
                     <button
-                        onClick={() => dispatch(deviceLogout({ tokenId }))}
+                        onClick={() =>
+                            dispatch(deviceLogout({ tokenId, current }))
+                        }
                         type="button"
                     >
                         로그아웃

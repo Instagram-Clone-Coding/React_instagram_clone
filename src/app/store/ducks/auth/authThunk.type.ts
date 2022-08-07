@@ -14,4 +14,5 @@ export type LoginDevice = {
     };
     device: string;
     lastLoginDate: string;
+    current: boolean;
 };
