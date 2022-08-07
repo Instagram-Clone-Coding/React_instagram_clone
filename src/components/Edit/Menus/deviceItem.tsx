@@ -29,6 +29,10 @@ const Container = styled.div<{ isToggleOn: boolean }>`
 
                 .time {
                     color: ${(props) => props.theme.font.gray};
+
+                    .first-login-date > span {
+                        color: rgb(88, 195, 34);
+                    }
                 }
             }
         }
@@ -105,7 +109,11 @@ export default function DeviceItem({
                         </div>
                         <div className="time">
                             <span className="first-login-date">
-                                {firstLoginTime} 전
+                                {current ? (
+                                    <span>지금 활동중</span>
+                                ) : (
+                                    `${firstLoginTime} 전`
+                                )}
                             </span>
                             <span> · </span>
                             <span>{device}</span>
