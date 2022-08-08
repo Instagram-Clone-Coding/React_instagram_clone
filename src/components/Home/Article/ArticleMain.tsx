@@ -1,11 +1,16 @@
 import PopHeart from "components/Common/PopHeart";
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import styled from "styled-components";
 import Username from "../../Common/Username";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
-import { loadavg } from "os";
+import parse, {
+    DOMNode,
+    domToReact,
+    HTMLReactParserOptions,
+} from "html-react-parser";
+import { Link } from "react-router-dom";
 
 const StyledMain = styled.div`
     padding: 0 16px;
@@ -52,6 +57,8 @@ interface MainProps {
         username: string;
         comment: string;
     }[];
+    mentions: string[];
+    hashtags: string[];
 }
 
 const ArticleMain = ({
@@ -63,6 +70,8 @@ const ArticleMain = ({
     content,
     commentsCount,
     comments,
+    mentions,
+    hashtags,
 }: MainProps) => {
     // like state
     const [isComment1Liked, setIsComment1Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
@@ -77,22 +86,64 @@ const ArticleMain = ({
         [content, isTextLineBreak],
     );
 
+    const parseLinkToContent = useCallback(
+        (str: string) => {
+            let parsed = str;
+            for (const mention of mentions) {
+                const regexAll = new RegExp("@" + mention + " ", "g"); // 변수가 가리키는 값을 정규식에 사용하려 할 때
+                parsed = parsed.replace(
+                    regexAll,
+                    `<a href=/profile/${mention}>${"@" + mention + " "}</a>`,
+                    // `<Link to={/profile/${mention}}>${
+                    //     "@" + mention + " "
+                    // }</Link>`,
+                );
+            }
+            for (const hashtag of hashtags) {
+                const regexAll = new RegExp("#" + hashtag + " ", "g"); // 변수가 가리키는 값을 정규식에 사용하려 할 때
+                parsed = parsed.replace(
+                    regexAll,
+                    `<a href={/hashtag/${hashtag}}>${"#" + hashtag + " "}</a>`,
+                    // `<Link to={/hashtag/${hashtag}}>${
+                    //     "#" + hashtag + " "
+                    // }</Link>`,
+                ); // route를 어떻개 할까?
+            }
+
+            // const options:HTMLReactParserOptions. = {
+            //     replace: ({ name, attribs, children }) => {
+            //         if (name === "a" && attribs.href) {
+            //             return (
+            //                 <Link to={attribs.href}>
+            //                     {domToReact(children)}
+            //                 </Link>
+            //             );
+            //         }
+            //     },
+            // };
+
+            return parse(parsed);
+        },
+        [mentions, hashtags],
+    );
+
     const textSpan = useMemo(
         () =>
             !isFullText ? (
-                <span>{textArray[0]}</span>
+                <span>{parseLinkToContent(textArray[0])}</span>
             ) : (
                 textArray.map((line: string, index: number) => {
                     return (
                         <span key={index}>
-                            {line}
+                            {parseLinkToContent(line)}
                             <br />
                         </span>
                     );
                 })
             ),
-        [isFullText, textArray],
+        [isFullText, textArray, parseLinkToContent],
     );
+
     const comment1LikeHandler = () => {
         setIsComment1Liked((prev) => !prev);
         // 백엔드 수행
