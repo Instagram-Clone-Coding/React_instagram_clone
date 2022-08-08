@@ -5,7 +5,7 @@ import { FAIL_TO_REISSUE_MESSAGE } from "utils/constant";
 import { authAction } from "../auth/authSlice";
 
 export const searchUser = createAsyncThunk<
-    Common.searchUserType[],
+    Common.searchResultType[],
     {
         keyword: string;
     },
@@ -17,18 +17,12 @@ export const searchUser = createAsyncThunk<
             params: { text: payload.keyword },
         };
         try {
-            const myUsername = getState().auth.userInfo?.memberUsername;
-
             const { data } = await authorizedCustomAxios.get(
                 `/topsearch`,
                 config,
             );
 
-            // 검색해서 나온 결과중에 자기 자신을 제외해줍니다.
-            return data.data.filter(
-                (user: Common.searchUserType) =>
-                    user.member.username !== myUsername,
-            );
+            return data.data;
         } catch (error) {
             error === FAIL_TO_REISSUE_MESSAGE && dispatch(authAction.logout());
             throw rejectWithValue(error);
@@ -37,23 +31,18 @@ export const searchUser = createAsyncThunk<
 );
 
 export const getSearchRecord = createAsyncThunk<
-    Common.searchUserType[],
+    Common.searchResultType[],
     void,
     { state: RootState }
 >(
     "common/getSearchRecord",
     async (payload, { getState, dispatch, rejectWithValue }) => {
         try {
-            const myUsername = getState().auth.userInfo?.memberUsername;
-
             const { data } = await authorizedCustomAxios.get(
                 "/topsearch/recent/top",
             );
 
-            return data.data.content.filter(
-                (user: Common.searchUserType) =>
-                    user.member.username !== myUsername,
-            );
+            return data.data.content;
         } catch (error) {
             error === FAIL_TO_REISSUE_MESSAGE && dispatch(authAction.logout());
             throw rejectWithValue(error);

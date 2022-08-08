@@ -30,9 +30,11 @@ const ChatSectionContainer = styled.div<{
         //스크롤 때문에 처리해줘야한다.. 특정 height 를 안먹으면 스크롤이 안생긴다..
         // 그리고 채팅이 얼마없을때는 아래서부터 나오는거 구현하려고 한거임
         // 특정height 넘어야지 스크롤가능함
-        position: relative;
-        right: 0;
-        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        height: 100%;
         width: 100%;
     }
 
@@ -106,7 +108,7 @@ const ChatSection = ({
         return () => {
             dispatch(resetChatMessageList());
         };
-    }, [dispatch, selectedRoom?.chatRoomId]);
+    }, [dispatch, selectedRoom, selectedRoom?.chatRoomId]);
 
     // chatsection 에서 상단의 비행기 모양을 누르면 inbox view 로 바뀝니다. 그때 왼쪽 채팅방 리스트가 클릭되어있으면 안되기때문에
     // seletedRoom 을 null 로 바꿔줘서 아무것도 클릭 안한 상태를 만들어줘야합니다다
@@ -136,7 +138,14 @@ const ChatSection = ({
                 sectionRef.current.scrollTo(0, 300);
             }
         },
-        [dispatch, selectedRoom, chatMessageListPage, y],
+        [
+            y,
+            scrollDirection,
+            messageScrollable,
+            dispatch,
+            chatMessageListPage,
+            selectedRoom?.chatRoomId,
+        ],
     );
 
     useEffect(() => {

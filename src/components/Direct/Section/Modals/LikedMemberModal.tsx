@@ -32,7 +32,7 @@ interface LikedMemberModalProps {
 }
 
 const LikedMemberModal = ({ onModalOn, onModalOff }: LikedMemberModalProps) => {
-    const [likedMembers, setLikedMembers] = useState<AuthType.UserInfo[]>([]);
+    const [likedMembers, setLikedMembers] = useState<Common.memberType[]>([]);
     const chatMessageList = useAppSelector(
         (state) => state.direct.chatMessageList,
     );
@@ -58,10 +58,8 @@ const LikedMemberModal = ({ onModalOn, onModalOff }: LikedMemberModalProps) => {
                 {likedMembers.map((member) => (
                     <div className="member">
                         <div className="member-info">
-                            <img src={member.memberImageUrl} alt="member" />
-                            <span className="username">
-                                {member.memberUsername}
-                            </span>
+                            <img src={member.image.imageUrl} alt="member" />
+                            <span className="username">{member.username}</span>
                         </div>
                         <div className="heart">❤️</div>
                     </div>

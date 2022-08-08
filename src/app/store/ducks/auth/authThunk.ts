@@ -100,14 +100,21 @@ export const resetPassword = createAsyncThunk<
 export const signInUseCode = createAsyncThunk<
     AuthType.Token,
     { code: string; username: string }
->("auth/signInUseCode", async (payload) => {
-    try {
-        const { data } = await customAxios.post(`/accounts/login/recovery`, {
-            code: payload.code,
-            username: payload.username,
-        });
-        return data.data;
-    } catch {
-        // 에러나는 경우? username, code가 잘못됐을 때?
-    }
+>("auth/signInUseCode", async (payload, ThunkOptions) => {
+    const { data } = await customAxios.post(`/login/recovery`, {
+        code: payload.code,
+        username: payload.username,
+    });
+    return data.data;
 });
+
+export const logout = createAsyncThunk<void, void>(
+    "auth/logout",
+    async (payload, ThunkOptions) => {
+        try {
+            await authorizedCustomAxios.post(`/logout`);
+        } catch (error) {
+            ThunkOptions.rejectWithValue(error);
+        }
+    },
+);

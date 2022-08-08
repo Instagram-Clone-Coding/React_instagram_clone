@@ -451,7 +451,7 @@ const Content = ({ currentWidth }: ContentProps) => {
     );
     const userInfo = useAppSelector((state) => state.auth.userInfo);
     const [searchedImageTagUsers, setSearchedImageTagUsers] = useState<
-        Common.searchUserType[]
+        Common.memberType[]
     >([]);
     const [isImageTagUserSearchLoading, setIsImageTagUserSearchLoading] =
         useState(false);
@@ -528,7 +528,7 @@ const Content = ({ currentWidth }: ContentProps) => {
                     );
                     // const newImageFile = virtualCanvas.toDataURL("image/png"); // jpeg로 하면 나머지 캔버스 영역이 검은색으로, png로 하면 투명색이다
                     virtualCanvas.toBlob(function (blob) {
-                        const newImg = document.createElement("img");
+                        // const newImg = document.createElement("img");
                         if (!blob) return;
                         const url = URL.createObjectURL(blob);
 
@@ -588,12 +588,16 @@ const Content = ({ currentWidth }: ContentProps) => {
         if (event.target.value !== "") {
             try {
                 setIsImageTagUserSearchLoading(true);
-                const searchedImageTagUsers = await dispatch(
-                    searchUser({
-                        keyword: event.target.value,
-                    }),
-                ).unwrap();
-                setSearchedImageTagUsers(searchedImageTagUsers);
+                const config = {
+                    params: { text: event.target.value },
+                };
+                const {
+                    data: { data },
+                } = await authorizedCustomAxios.get<MentionResponseType>(
+                    `/topsearch/auto/member`,
+                    config,
+                );
+                setSearchedImageTagUsers(data);
             } catch {
                 setSearchedImageTagUsers([]);
             } finally {
@@ -832,14 +836,13 @@ const Content = ({ currentWidth }: ContentProps) => {
                                                     <div
                                                         onClick={() =>
                                                             searchListItemClickHandler(
-                                                                user.member
-                                                                    .username,
+                                                                user.username,
                                                             )
                                                         }
-                                                        key={user.member.id}
+                                                        key={user.id}
                                                     >
                                                         <SearchListItemLayout
-                                                            member={user.member}
+                                                            member={user}
                                                         />
                                                     </div>
                                                 ),

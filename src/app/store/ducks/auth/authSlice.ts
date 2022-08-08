@@ -6,6 +6,7 @@ import {
     resetPassword,
     checkCurrentURL,
     signInUseCode,
+    logout,
 } from "./authThunk";
 import { setAccessTokenInAxiosHeaders } from "customAxios";
 import { uploadArticle } from "app/store/ducks/upload/uploadThunk";
@@ -129,6 +130,9 @@ const authSlice = createSlice({
                 // 유효하지 않은 url **
             })
             .addCase(uploadArticle.rejected, (state) => {
+                state.isLogin = false;
+            })
+            .addCase(logout.fulfilled, (state) => {
                 state.isLogin = false;
             });
     },

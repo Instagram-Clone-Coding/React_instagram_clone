@@ -15,7 +15,7 @@ declare module Direct {
         sender: Common.memberType;
         roomId: number;
         senderImage: Common.ImageInfo;
-        likeMembers: AuthType.UserInfo[];
+        likeMembers: Common.memberType[];
     }
 
     interface ChatItem {
@@ -219,11 +219,18 @@ declare module ModalType {
         blocking: boolean;
         follower: boolean;
         following: boolean;
-        followingMemberFollow: string;
+        hasStory: boolean;
+        followingMemberFollow: // 내가 팔로우 하는 사람 중에 이 유저를 팔로우하는 사람 대표 1명
+        [
+            {
+                memberUsername: string;
+            },
+        ];
+        followingMemberFollowCount: number; // 위 member 제외 나머지 수
         me: boolean;
-        memberFollowersCount: number;
-        memberFollowingsCount: number;
-        memberPostsCount: number;
+        memberFollowersCount: number; // 유저를 팔로우우하는 사람
+        memberFollowingsCount: number; // 유저가 팔로우하는 사람 전부
+        memberPostsCount: number; // 게시글 수
         memberImage: {
             imageUrl: string;
             imageType: string;
@@ -353,12 +360,18 @@ declare module Common {
         hasStory: boolean;
     }
 
-    interface searchUserType {
-        dtype: "MEMBER";
-        follwer: boolean;
-        following: boolean;
-        followingMemberFollow: { memberUsername: string }[];
-        member: memberType;
+    interface searchResultType {
+        dtype: "MEMBER" | "HASHTAG";
+
+        // MEMBER
+        follwer?: boolean;
+        following?: boolean;
+        followingMemberFollow?: { memberUsername: string }[];
+        member?: memberType;
+
+        // HASHTAG
+        name?: string;
+        postCount?: number;
     }
     interface PostImageDTOProps {
         id: number;
@@ -446,5 +459,5 @@ declare module EditType {
         | "Instagram에서 보낸 이메일"
         | "도움말";
 
-    type modalType = "image" | null;
+    type modalType = "image" | "gender" | null;
 }
