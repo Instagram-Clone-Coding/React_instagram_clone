@@ -35,6 +35,7 @@ const StyledContent = styled.div`
                     width: 28px;
                     height: 28px;
                     margin-right: 12px;
+                    border-radius: 50%;
                 }
                 div {
                     font-weight: ${(props) => props.theme.font.bold};
