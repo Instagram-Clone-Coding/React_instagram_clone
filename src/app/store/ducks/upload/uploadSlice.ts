@@ -304,20 +304,6 @@ const uploadSlice = createSlice({
         addEmojiOnTextarea: (state, action: PayloadAction<string>) => {
             state.textareaValue += action.payload;
         },
-        startWarningModal: (state) => {
-            state.isWarningModalOn = true;
-        },
-        notificateWarningIsJustAboutBeforePrevStep: (state) => {
-            state.isJustWarningBeforePrevStep = true;
-        },
-        // excuteFunctionAfterWarning: (state) => {
-        //     state.isWarningModalOn = false;
-        //     state.functionAfterWarning && state.functionAfterWarning();
-        // },
-        cancelWarningModal: (state) => {
-            state.isWarningModalOn = false;
-            state.isJustWarningBeforePrevStep = false;
-        },
         setAlternativeValue: (
             state,
             action: PayloadAction<{ value: string; index: number }>,
@@ -346,6 +332,20 @@ const uploadSlice = createSlice({
             state.files[state.currentIndex].hashtags = state.files[
                 state.currentIndex
             ].hashtags.filter((hashtag, index) => index !== action.payload);
+        },
+        startWarningModal: (state) => {
+            state.isWarningModalOn = true;
+        },
+        notificateWarningIsJustAboutBeforePrevStep: (state) => {
+            state.isJustWarningBeforePrevStep = true;
+        },
+        // excuteFunctionAfterWarning: (state) => {
+        //     state.isWarningModalOn = false;
+        //     state.functionAfterWarning && state.functionAfterWarning();
+        // },
+        cancelWarningModal: (state) => {
+            state.isWarningModalOn = false;
+            state.isJustWarningBeforePrevStep = false;
         },
     },
     extraReducers: (build) => {

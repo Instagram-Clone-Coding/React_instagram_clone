@@ -7,9 +7,9 @@ import DragAndDrop from "components/Common/Header/Upload/DragAndDrop";
 import Cut from "components/Common/Header/Upload/Cut";
 import Edit from "components/Common/Header/Upload/Edit";
 import Content from "components/Common/Header/Upload/Content";
-import UploadWarningModal from "components/Common/Header/Upload/UploadWarningModal";
 import Uploading from "components/Common/Header/Upload/Uploading";
 import UploadComplete from "components/Common/Header/Upload/UploadComplete";
+import UploadWarningModal from "components/Common/Header/Upload/UploadWarningModal";
 
 interface ModalInnerProps {
     backdropWidth: number;

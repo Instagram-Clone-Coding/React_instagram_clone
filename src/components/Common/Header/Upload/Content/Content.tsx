@@ -2,7 +2,13 @@ import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { getNewImageSizeBasedOnOriginal } from "components/Common/Header/Upload/Edit/Edit";
 import UploadHeader from "components/Common/Header/Upload/UploadHeader";
-import React, { useEffect, useMemo, useState } from "react";
+import React, {
+    ChangeEvent,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import styled from "styled-components";
 import {
     getRatioCalculatedBoxWidth,
@@ -18,6 +24,8 @@ import { searchUser } from "app/store/ducks/common/commonThunk";
 import SearchListItemLayout from "components/Home/SearchListItemLayout";
 import { resetSearch } from "app/store/ducks/common/commonSlice";
 import { ReactComponent as Close } from "assets/Svgs/close.svg";
+import Loading from "components/Common/Loading";
+import { authorizedCustomAxios } from "customAxios";
 
 const StyledContent = styled.div`
     display: flex;
@@ -132,6 +140,12 @@ const StyledContent = styled.div`
                         width: 100%;
                         height: 180px;
                         overflow-y: auto;
+                        & > .loadingLayout {
+                            height: 100%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
                     }
                 }
             }
@@ -201,6 +215,61 @@ const StyledContent = styled.div`
                     & > svg {
                         color: ${(props) => props.theme.font.gray};
                         cursor: pointer;
+                    }
+                }
+            }
+            & > .upload__textareaSearchBar {
+                border-top: 1px solid ${(props) => props.theme.color.bd_gray};
+                border-bottom: 1px solid ${(props) => props.theme.color.bd_gray};
+                height: 200px;
+                overflow-y: auto;
+                & > .loadingLayout {
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                & > .searchedUser,
+                & > .searchedHashtag {
+                    border-bottom: 1px solid
+                        ${(props) => props.theme.color.bd_gray};
+                    height: 50px;
+                    cursor: pointer;
+                    display: flex;
+                    &:hover {
+                        background-color: ${(props) =>
+                            props.theme.color.bg_gray};
+                    }
+                }
+                & > .searchedHashtag {
+                    flex-direction: column;
+                    justify-content: space-between;
+                    padding: 4px 16px;
+                    & > #name {
+                        font-weight: ${(props) => props.theme.font.bold};
+                    }
+                    & > #count {
+                        font-size: 16px;
+                        min-height: 24px;
+                        line-height: 24px;
+                    }
+                }
+                & > .searchedUser {
+                    padding: 10px 16px;
+                    align-items: center;
+                    & > img {
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 50%;
+                        margin-right: 10px;
+                    }
+                    & > div {
+                        & > span {
+                            font-weight: ${(props) => props.theme.font.bold};
+                        }
+                        & > div {
+                            color: ${(props) => props.theme.font.gray};
+                        }
                     }
                 }
             }
@@ -341,8 +410,28 @@ const StyledContent = styled.div`
     }
 `;
 
+interface MentionResponseType extends AxiosType.ResponseType {
+    data: Common.memberType[];
+}
+interface SearchedHashtagType {
+    name: string;
+    count: number;
+}
+interface HashtagResponseType extends AxiosType.ResponseType {
+    data: SearchedHashtagType[];
+}
 interface ContentProps {
     currentWidth: number;
+}
+
+function findFirstDifferenceIndexBetweenTwoStrings(
+    prev: string,
+    current: string,
+) {
+    var i = 0;
+    if (prev === current) return -1;
+    while (prev[i] === current[i]) i++;
+    return prev.length > current.length ? i - 1 : i; // 타이핑한게 텍스트를 지운 거였다면 -1
 }
 
 const minWidthForContent = (currentWidth: number) =>
@@ -350,22 +439,40 @@ const minWidthForContent = (currentWidth: number) =>
 
 const Content = ({ currentWidth }: ContentProps) => {
     const dispatch = useAppDispatch();
-    const {
-        files,
-        currentIndex,
-        ratioMode,
-        textareaValue,
-        isLikesAndViewsHidden,
-        isCommentBlocked,
-    } = useAppSelector((state) => state.upload);
-    const { userInfo } = useAppSelector((state) => state.auth);
-    const searchedUsers = useAppSelector((state) => state.common.searchUsers);
+    const files = useAppSelector((state) => state.upload.files);
+    const currentIndex = useAppSelector((state) => state.upload.currentIndex);
+    const ratioMode = useAppSelector((state) => state.upload.ratioMode);
+    const textareaValue = useAppSelector((state) => state.upload.textareaValue);
+    const isLikesAndViewsHidden = useAppSelector(
+        (state) => state.upload.isLikesAndViewsHidden,
+    );
+    const isCommentBlocked = useAppSelector(
+        (state) => state.upload.isCommentBlocked,
+    );
+    const userInfo = useAppSelector((state) => state.auth.userInfo);
+    const [searchedImageTagUsers, setSearchedImageTagUsers] = useState<
+        Common.searchUserType[]
+    >([]);
+    const [isImageTagUserSearchLoading, setIsImageTagUserSearchLoading] =
+        useState(false);
+    const [textareaSearchType, setTextareaSearchType] =
+        useState<"mention" | "hashtag">("mention");
+    const [searchedUsers, setSearchedUsers] = useState<Common.memberType[]>([]);
+    const [searchedHashtags, setSearchedHashtags] = useState<
+        SearchedHashtagType[]
+    >([]);
+    const [isTextareaSearchLoading, setIsTextareaSearchLoading] =
+        useState(false);
     const [isSearchBarOn, setIsSearchBarOn] = useState(false);
+    const [isTextareaSearchBarOn, setIsTextareaSearchBarOn] = useState(false);
+    const [textareaSearchKeyword, setTextareaSearchKeyword] = useState("");
+    const [currentTypedIndex, setCurrentTypedIndex] = useState(-1);
     const [searchBarPosition, setSearchBarPosition] = useState({ x: 0, y: 0 }); // %
     const [searchInput, setSearchInput] = useState("");
     const [isEmojiModalOn, setIsEmojiModalOn] = useState(false);
     const [isAccessOptionOn, setIsAccessOptionOn] = useState(false);
     const [isAdvancedOptionOn, setIsAdvancedOptionOn] = useState(false);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     const onEmojiClick = (event: React.MouseEvent, emojiObject: IEmojiData) => {
         dispatch(uploadActions.addEmojiOnTextarea(emojiObject.emoji));
@@ -474,6 +581,143 @@ const Content = ({ currentWidth }: ContentProps) => {
         setIsSearchBarOn(false);
     };
 
+    const typeAndSearchImageTagUsers = async (
+        event: ChangeEvent<HTMLInputElement>,
+    ) => {
+        setSearchInput(event.target.value);
+        if (event.target.value !== "") {
+            try {
+                setIsImageTagUserSearchLoading(true);
+                const searchedImageTagUsers = await dispatch(
+                    searchUser({
+                        keyword: event.target.value,
+                    }),
+                ).unwrap();
+                setSearchedImageTagUsers(searchedImageTagUsers);
+            } catch {
+                setSearchedImageTagUsers([]);
+            } finally {
+                setIsImageTagUserSearchLoading(false);
+            }
+        } else {
+            dispatch(resetSearch());
+        }
+    };
+
+    const decideWhetherToSearchForHashtagsWithTyping = async (
+        event: React.ChangeEvent<HTMLTextAreaElement>,
+    ) => {
+        const text = event.target.value;
+        const typedIndex = findFirstDifferenceIndexBetweenTwoStrings(
+            textareaValue,
+            text,
+        );
+        // const textLength = text.length;
+        dispatch(uploadActions.setTextareaValue(text));
+        // off 상태일 때
+        // 이전 text가 #이나 @ + 현재 text가 " ", #, @ 아닐 때
+        let keyword;
+        if (!isTextareaSearchBarOn) {
+            const prevString = text[typedIndex - 1];
+            const currentString = text[typedIndex];
+            if (
+                currentString !== " " &&
+                currentString !== "#" &&
+                currentString !== "@"
+            ) {
+                if (prevString === "#") {
+                    setIsTextareaSearchBarOn(true);
+                    keyword = "#" + text[typedIndex];
+                } else if (prevString === "@") {
+                    setIsTextareaSearchBarOn(true);
+                    keyword = text[typedIndex];
+                }
+            }
+        }
+        //  on된 상태라면
+        // 현재 text가 #, @, " "일 때 검색 중지
+        // 그게 아니라면 #, @에서 잘라 키워드로 검색
+        else {
+            const currentString = text[typedIndex];
+            if (
+                currentString === "#" ||
+                currentString === "@" ||
+                currentString === " "
+            ) {
+                setIsTextareaSearchBarOn(false);
+            } else {
+                const indexOfHashTag = text.lastIndexOf("#", typedIndex);
+                const indexOfMentionTag = text.lastIndexOf("@", typedIndex);
+                if (indexOfHashTag > indexOfMentionTag) {
+                    keyword = text.substring(indexOfHashTag, typedIndex + 1); // # 포함
+                } else if (indexOfMentionTag > indexOfHashTag) {
+                    keyword = text.substring(
+                        indexOfMentionTag + 1,
+                        typedIndex + 1,
+                    );
+                }
+            }
+        }
+        if (keyword) {
+            setTextareaSearchKeyword(keyword);
+            setCurrentTypedIndex(typedIndex + 1);
+            try {
+                setIsTextareaSearchLoading(true);
+                const config = {
+                    params: { text: keyword },
+                };
+                if (keyword[0] === "#" && keyword.length > 1) {
+                    // 해시태그를 포함한 검색어 길이가 2개 이상이어야
+                    setTextareaSearchType("hashtag");
+                    setSearchedUsers([]);
+                    const {
+                        data: { data },
+                    } = await authorizedCustomAxios.get<HashtagResponseType>(
+                        `/topsearch/auto/hashtag`,
+                        config,
+                    );
+                    setSearchedHashtags(data);
+                } else if (keyword[0] !== "#") {
+                    setTextareaSearchType("mention");
+                    setSearchedHashtags([]);
+                    const {
+                        data: { data },
+                    } = await authorizedCustomAxios.get<MentionResponseType>(
+                        `/topsearch/auto/member`,
+                        config,
+                    );
+                    setSearchedUsers(data);
+                }
+                setIsTextareaSearchLoading(false);
+            } catch {
+                setSearchedUsers([]);
+                setSearchedHashtags([]);
+            } finally {
+                setIsTextareaSearchLoading(false);
+            }
+        }
+    };
+
+    const addUsernameOrHashtagToTextarea = (usernameOrHashtag: string) => {
+        if (!textareaSearchKeyword) return;
+        const keywordStartIndex = textareaValue.lastIndexOf(
+            textareaSearchKeyword,
+            currentTypedIndex,
+        );
+        const newTextareaValue =
+            textareaValue.substring(0, keywordStartIndex) +
+            usernameOrHashtag +
+            " " +
+            textareaValue.substring(
+                keywordStartIndex + textareaSearchKeyword.length,
+            );
+        dispatch(uploadActions.setTextareaValue(newTextareaValue));
+        setIsTextareaSearchBarOn(false);
+        setTextareaSearchKeyword("");
+        setCurrentTypedIndex(-1);
+        textareaRef.current?.focus();
+    };
+
     return (
         <>
             <UploadHeader
@@ -560,25 +804,15 @@ const Content = ({ currentWidth }: ContentProps) => {
                                             type="text"
                                             placeholder="검색"
                                             value={searchInput}
-                                            onChange={async (event) => {
-                                                setSearchInput(
-                                                    event.target.value,
-                                                );
-                                                if (event.target.value !== "") {
-                                                    await dispatch(
-                                                        searchUser({
-                                                            keyword:
-                                                                event.target
-                                                                    .value,
-                                                        }),
-                                                    );
-                                                } else {
-                                                    dispatch(resetSearch());
-                                                }
-                                            }}
+                                            onChange={
+                                                typeAndSearchImageTagUsers
+                                            }
                                             autoFocus={true}
                                         />
-                                        {searchInput && (
+                                        {searchInput &&
+                                        isImageTagUserSearchLoading ? (
+                                            <Loading size={18} />
+                                        ) : (
                                             <span
                                                 onClick={() => {
                                                     dispatch(resetSearch());
@@ -588,22 +822,29 @@ const Content = ({ currentWidth }: ContentProps) => {
                                         )}
                                     </div>
                                     <div className="modal__searched">
-                                        {searchedUsers.length > 0 &&
-                                            searchedUsers.map((user) => (
-                                                <div
-                                                    onClick={() =>
-                                                        searchListItemClickHandler(
-                                                            user.member
-                                                                .username,
-                                                        )
-                                                    }
-                                                    key={user.member.id}
-                                                >
-                                                    <SearchListItemLayout
-                                                        member={user.member}
-                                                    />
-                                                </div>
-                                            ))}
+                                        {isImageTagUserSearchLoading ? (
+                                            <div className="loadingLayout">
+                                                <Loading size={32} />
+                                            </div>
+                                        ) : (
+                                            searchedImageTagUsers.map(
+                                                (user) => (
+                                                    <div
+                                                        onClick={() =>
+                                                            searchListItemClickHandler(
+                                                                user.member
+                                                                    .username,
+                                                            )
+                                                        }
+                                                        key={user.member.id}
+                                                    >
+                                                        <SearchListItemLayout
+                                                            member={user.member}
+                                                        />
+                                                    </div>
+                                                ),
+                                            )
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -634,13 +875,12 @@ const Content = ({ currentWidth }: ContentProps) => {
                                 placeholder="문구 입력..."
                                 value={textareaValue}
                                 onChange={(event) =>
-                                    dispatch(
-                                        uploadActions.setTextareaValue(
-                                            event.target.value,
-                                        ),
+                                    decideWhetherToSearchForHashtagsWithTyping(
+                                        event,
                                     )
                                 }
                                 maxLength={2200}
+                                ref={textareaRef}
                             ></textarea>
                             <div
                                 className="textarea__bottom"
@@ -655,152 +895,220 @@ const Content = ({ currentWidth }: ContentProps) => {
                                 <button>{`${textareaValue.length}/2,200`}</button>
                             </div>
                         </div>
-                        <div className="upload__contentOption location">
-                            <div className="header">
-                                <input
-                                    // disabled={true}
-                                    placeholder="위치 추가(개발 준비중)"
-                                />
-                                <span>
-                                    <LocationIcon />
-                                </span>
+                        {isTextareaSearchBarOn ? (
+                            <div className="upload__textareaSearchBar">
+                                {isTextareaSearchLoading ? (
+                                    <div className="loadingLayout">
+                                        <Loading size={32} />
+                                    </div>
+                                ) : textareaSearchType === "mention" ? (
+                                    searchedUsers.map((member) => (
+                                        <div
+                                            key={member.id}
+                                            className="searchedUser"
+                                            onClick={() =>
+                                                addUsernameOrHashtagToTextarea(
+                                                    member.username,
+                                                )
+                                            }
+                                        >
+                                            <img
+                                                src={member.image.imageUrl}
+                                                alt={member.image.imageName}
+                                            />
+                                            <div>
+                                                <span>{member.username}</span>
+                                                <div>{member.name}</div>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    searchedHashtags.map((hashtagObj) => (
+                                        <div
+                                            key={hashtagObj.name}
+                                            className="searchedHashtag"
+                                            onClick={() =>
+                                                addUsernameOrHashtagToTextarea(
+                                                    "#" + hashtagObj.name,
+                                                )
+                                            }
+                                        >
+                                            <div id="name">
+                                                #{hashtagObj.name}
+                                            </div>
+                                            <div id="count">
+                                                게시물 {hashtagObj.count}
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
                             </div>
-                        </div>
-                        <div className="upload__contentOption accessibility">
-                            <div
-                                className="header"
-                                onClick={() =>
-                                    setIsAccessOptionOn((prev) => !prev)
-                                }
-                            >
-                                <span
-                                    className={isAccessOptionOn ? "bold" : ""}
-                                >
-                                    접근성
-                                </span>
-                                <span
-                                    className={
-                                        isAccessOptionOn ? "reverse" : ""
-                                    }
-                                >
-                                    <DownV />
-                                </span>
-                            </div>
-                            {isAccessOptionOn && (
-                                <div className="activated accessOption">
-                                    <div className="smallFont">
-                                        {`대체 텍스트는 시각적으로 사진을 보기 어려운 사람들에게 사진
+                        ) : (
+                            <>
+                                <div className="upload__contentOption location">
+                                    <div className="header">
+                                        <input
+                                            // disabled={true}
+                                            placeholder="위치 추가(개발 준비중)"
+                                        />
+                                        <span>
+                                            <LocationIcon />
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="upload__contentOption accessibility">
+                                    <div
+                                        className="header"
+                                        onClick={() =>
+                                            setIsAccessOptionOn((prev) => !prev)
+                                        }
+                                    >
+                                        <span
+                                            className={
+                                                isAccessOptionOn ? "bold" : ""
+                                            }
+                                        >
+                                            접근성
+                                        </span>
+                                        <span
+                                            className={
+                                                isAccessOptionOn
+                                                    ? "reverse"
+                                                    : ""
+                                            }
+                                        >
+                                            <DownV />
+                                        </span>
+                                    </div>
+                                    {isAccessOptionOn && (
+                                        <div className="activated accessOption">
+                                            <div className="smallFont">
+                                                {`대체 텍스트는 시각적으로 사진을 보기 어려운 사람들에게 사진
                                         내용을 설명하는 텍스트입니다. 대체 텍스트는 회원님의 사진에
                                         대해 자동으로 생성되며, 직접 입력할 수도 있습니다.`}
-                                    </div>
-                                    {files.map((file, index) => (
-                                        <div key={file.newUrl}>
-                                            <div className="imageWrapper">
-                                                <img
-                                                    src={file.newUrl}
-                                                    alt={
-                                                        "유효하지 않은 url입니다."
-                                                    }
-                                                    width={
-                                                        ratioMode !== "thin"
-                                                            ? 44
-                                                            : 44 * 0.8
-                                                    }
-                                                ></img>
                                             </div>
-                                            <input
-                                                type="text"
-                                                placeholder="대체 텍스트 입력..."
-                                                value={file.alternativeText}
-                                                onChange={(event) =>
-                                                    dispatch(
-                                                        uploadActions.setAlternativeValue(
-                                                            {
-                                                                value: event
-                                                                    .target
-                                                                    .value,
-                                                                index,
-                                                            },
-                                                        ),
-                                                    )
-                                                }
-                                            />
+                                            {files.map((file, index) => (
+                                                <div key={file.newUrl}>
+                                                    <div className="imageWrapper">
+                                                        <img
+                                                            src={file.newUrl}
+                                                            alt={
+                                                                "유효하지 않은 url입니다."
+                                                            }
+                                                            width={
+                                                                ratioMode !==
+                                                                "thin"
+                                                                    ? 44
+                                                                    : 44 * 0.8
+                                                            }
+                                                        ></img>
+                                                    </div>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="대체 텍스트 입력..."
+                                                        value={
+                                                            file.alternativeText
+                                                        }
+                                                        onChange={(event) =>
+                                                            dispatch(
+                                                                uploadActions.setAlternativeValue(
+                                                                    {
+                                                                        value: event
+                                                                            .target
+                                                                            .value,
+                                                                        index,
+                                                                    },
+                                                                ),
+                                                            )
+                                                        }
+                                                    />
+                                                </div>
+                                            ))}
                                         </div>
-                                    ))}
+                                    )}
                                 </div>
-                            )}
-                        </div>
-                        <div className="upload__contentOption advanced">
-                            <div
-                                className="header"
-                                onClick={() =>
-                                    setIsAdvancedOptionOn((prev) => !prev)
-                                }
-                            >
-                                <span
-                                    className={isAdvancedOptionOn ? "bold" : ""}
-                                >
-                                    고급 설정
-                                </span>
-                                <span
-                                    className={
-                                        isAdvancedOptionOn ? "reverse" : ""
-                                    }
-                                >
-                                    <DownV />
-                                </span>
-                            </div>
-                            {isAdvancedOptionOn && (
-                                <div className="activated advanced">
-                                    <div className="toggleArea">
-                                        <div>
-                                            이 게시물의 좋아요 수 및 조회수
-                                            숨기기
-                                        </div>
-                                        <div
-                                            onClick={() =>
-                                                dispatch(
-                                                    uploadActions.toggleIsLikesAndViewsHidden(),
-                                                )
+                                <div className="upload__contentOption advanced">
+                                    <div
+                                        className="header"
+                                        onClick={() =>
+                                            setIsAdvancedOptionOn(
+                                                (prev) => !prev,
+                                            )
+                                        }
+                                    >
+                                        <span
+                                            className={
+                                                isAdvancedOptionOn ? "bold" : ""
                                             }
-                                            className={`toggle ${
-                                                isLikesAndViewsHidden && "on"
-                                            }`}
                                         >
-                                            <div></div>
-                                        </div>
-                                    </div>
-                                    <div className="smallFont">
-                                        이 게시물의 총 좋아요 및 조회수는
-                                        회원님만 볼 수 있습니다. 나중에 게시물
-                                        상단에 있는 ··· 메뉴에서 이 설정을
-                                        변경할 수 있습니다. 다른 사람의
-                                        게시물에서 좋아요 수를 숨기려면 계정
-                                        설정으로 이동하세요.
-                                    </div>
-                                    <div className="toggleArea">
-                                        <div>댓글 기능 해제</div>
-                                        <div
-                                            onClick={() =>
-                                                dispatch(
-                                                    uploadActions.toggleIsCommentBlocked(),
-                                                )
+                                            고급 설정
+                                        </span>
+                                        <span
+                                            className={
+                                                isAdvancedOptionOn
+                                                    ? "reverse"
+                                                    : ""
                                             }
-                                            className={`toggle ${
-                                                isCommentBlocked && "on"
-                                            }`}
                                         >
-                                            <div></div>
+                                            <DownV />
+                                        </span>
+                                    </div>
+                                    {isAdvancedOptionOn && (
+                                        <div className="activated advanced">
+                                            <div className="toggleArea">
+                                                <div>
+                                                    이 게시물의 좋아요 수 및
+                                                    조회수 숨기기
+                                                </div>
+                                                <div
+                                                    onClick={() =>
+                                                        dispatch(
+                                                            uploadActions.toggleIsLikesAndViewsHidden(),
+                                                        )
+                                                    }
+                                                    className={`toggle ${
+                                                        isLikesAndViewsHidden &&
+                                                        "on"
+                                                    }`}
+                                                >
+                                                    <div></div>
+                                                </div>
+                                            </div>
+                                            <div className="smallFont">
+                                                이 게시물의 총 좋아요 및
+                                                조회수는 회원님만 볼 수
+                                                있습니다. 나중에 게시물 상단에
+                                                있는 ··· 메뉴에서 이 설정을
+                                                변경할 수 있습니다. 다른 사람의
+                                                게시물에서 좋아요 수를 숨기려면
+                                                계정 설정으로 이동하세요.
+                                            </div>
+                                            <div className="toggleArea">
+                                                <div>댓글 기능 해제</div>
+                                                <div
+                                                    onClick={() =>
+                                                        dispatch(
+                                                            uploadActions.toggleIsCommentBlocked(),
+                                                        )
+                                                    }
+                                                    className={`toggle ${
+                                                        isCommentBlocked && "on"
+                                                    }`}
+                                                >
+                                                    <div></div>
+                                                </div>
+                                            </div>
+                                            <div className="smallFont">
+                                                나중에 게시물 상단의
+                                                메뉴(···)에서 이 설정을 변경할
+                                                수 있습니다.
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="smallFont">
-                                        나중에 게시물 상단의 메뉴(···)에서 이
-                                        설정을 변경할 수 있습니다.
-                                    </div>
+                                    )}
                                 </div>
-                            )}
-                        </div>
-                        <hr />
+                                <hr />
+                            </>
+                        )}
                     </div>
                 </div>
             </StyledContent>
