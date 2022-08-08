@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import React, { useCallback } from "react";
 import { ReactComponent as BackIcon } from "assets/Svgs/back.svg";
 import styled from "styled-components";
+import { uploadArticle } from "app/store/ducks/upload/uploadThunk";
 
 const StyledUploadHeader = styled.header`
     display: flex;
@@ -54,6 +55,12 @@ const UploadHeader = ({
                 return "자르기";
             case "edit":
                 return "편집";
+            case "content":
+                return "새 게시물 만들기";
+            case "uploading":
+                return "공유 중입니다";
+            case "complete":
+                return "게시물이 공유되었습니다";
         }
     }, []);
 
@@ -61,31 +68,41 @@ const UploadHeader = ({
         if (excuteBeforePrevStep) excuteBeforePrevStep();
         if (step !== "cut") dispatch(uploadActions.prevStep());
     };
-
-    const nextStepClickHandler = () => {
+    const nextStepClickHandler = async (
+        event: React.MouseEvent<HTMLDivElement>,
+    ) => {
         if (excuteBeforeNextStep) {
             excuteBeforeNextStep();
         }
-        dispatch(uploadActions.nextStep());
+        if (step !== "content") {
+            dispatch(uploadActions.nextStep());
+        } else {
+            event.preventDefault();
+            await dispatch(uploadArticle());
+        }
     };
 
     return (
         <StyledUploadHeader>
-            {step !== "dragAndDrop" && (
-                <div onClick={prevStepClickHandler}>
-                    <button>
-                        <BackIcon />
-                    </button>
-                </div>
-            )}
+            {step !== "dragAndDrop" &&
+                step !== "uploading" &&
+                step !== "complete" && (
+                    <div onClick={prevStepClickHandler}>
+                        <button>
+                            <BackIcon />
+                        </button>
+                    </div>
+                )}
             <h1>{currentHeading(step)}</h1>
-            {step !== "dragAndDrop" && (
-                <div onClick={nextStepClickHandler}>
-                    <button className="upload__next">
-                        {step === "content" ? "공유하기" : "다음"}
-                    </button>
-                </div>
-            )}
+            {step !== "dragAndDrop" &&
+                step !== "uploading" &&
+                step !== "complete" && (
+                    <div onClick={nextStepClickHandler}>
+                        <button className="upload__next">
+                            {step === "content" ? "공유하기" : "다음"}
+                        </button>
+                    </div>
+                )}
         </StyledUploadHeader>
     );
 };

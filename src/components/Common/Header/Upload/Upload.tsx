@@ -8,6 +8,8 @@ import Cut from "components/Common/Header/Upload/Cut";
 import Edit from "components/Common/Header/Upload/Edit";
 import Content from "components/Common/Header/Upload/Content";
 import UploadWarningModal from "components/Common/Header/Upload/UploadWarningModal";
+import Uploading from "components/Common/Header/Upload/Uploading";
+import UploadComplete from "components/Common/Header/Upload/UploadComplete";
 
 interface ModalInnerProps {
     backdropWidth: number;
@@ -37,6 +39,7 @@ const Upload = () => {
     const isWarningModalOn = useAppSelector(
         ({ upload }) => upload.isWarningModalOn,
     );
+    const isUploading = useAppSelector(({ upload }) => upload.isWarningModalOn);
     const [backDropwidth, setBackDropWidth] = useState(window.innerWidth);
     const [backDropHeight, setBackDropHeight] = useState(window.innerHeight);
     const currentWidth = useMemo(
@@ -63,11 +66,15 @@ const Upload = () => {
         [currentHeightLimitedByWindowHeight, currentMaxWidth],
     );
     useEffect(() => {
+        if (isUploading) {
+            document.body.style.overflow = "hidden";
+        }
         window.addEventListener("resize", () => {
             setBackDropWidth(window.innerWidth);
             setBackDropHeight(window.innerHeight);
         });
         return () => {
+            document.body.style.overflow = "unset";
             window.removeEventListener("resize", () => {
                 setBackDropWidth(window.innerWidth);
                 setBackDropHeight(window.innerHeight);
@@ -96,6 +103,10 @@ const Upload = () => {
                             currentWidth={currentWidthLimitedByWindowHeight}
                         />
                     );
+                case "uploading":
+                    return <Uploading />;
+                case "complete":
+                    return <UploadComplete />;
             }
         },
         [currentWidthLimitedByWindowHeight],
