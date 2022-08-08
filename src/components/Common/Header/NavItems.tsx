@@ -20,8 +20,10 @@ import { selectView } from "app/store/ducks/direct/DirectSlice";
 import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import Upload from "components/Common/Header/Upload";
 import SubNav from "./SubNav";
+
 import { useRef, useState } from "react";
 import useOutsideClick from "hooks/useOutsideClick";
+import Alarm from "components/Common/Header/alarm";
 
 const Container = styled.div`
     flex: 1 0 0%;
@@ -71,13 +73,25 @@ const AvatarWrapper = styled(NavItemWrapper)<{ isSubnavModalOn: boolean }>`
 
 const NavItems = () => {
     const [isSubnavModalOn, setIsSubnavMoalOn] = useState(false);
+    const [isClickAlarm, setIsClickAlarm] = useState(false);
+
     const dispatch = useAppDispatch();
     const isUploading = useAppSelector(({ upload }) => upload.isUploading);
     const userInfo = useAppSelector((state) => state.auth.userInfo);
 
+    // setting
     const navContainerRef = useRef<HTMLDivElement | null>(null);
-    const subModalControllerRef = useRef<HTMLDivElement | null>(null);
+    const subModalControllerRef = useRef<HTMLImageElement | null>(null);
     useOutsideClick(navContainerRef, setIsSubnavMoalOn, subModalControllerRef);
+
+    // alarm
+    const alarmContainerRef = useRef<HTMLDivElement | null>(null);
+    const alarmModalControllerRef = useRef<HTMLSpanElement | null>(null);
+    useOutsideClick(
+        alarmContainerRef,
+        setIsClickAlarm,
+        alarmModalControllerRef,
+    );
 
     const navItems = [
         {
@@ -127,8 +141,21 @@ const NavItems = () => {
         {
             id: "피드 활동",
             path: "/",
-            component: <Heart />,
-            activeComponent: <HeartActive />,
+            component: (
+                <span ref={alarmModalControllerRef}>
+                    <Heart onClick={() => setIsClickAlarm(!isClickAlarm)} />
+                </span>
+            ),
+            activeComponent: (
+                <span ref={alarmModalControllerRef} style={{ width: `22px` }}>
+                    <HeartActive
+                        onClick={() => setIsClickAlarm(!isClickAlarm)}
+                    />
+                    {isClickAlarm && (
+                        <Alarm alarmContainerRef={alarmContainerRef} />
+                    )}
+                </span>
+            ),
         },
     ];
 
@@ -144,6 +171,12 @@ const NavItems = () => {
                                     ? navItem.activeComponent
                                     : navItem.component}
                             </div>
+                        ) : navItem.id === "피드 활동" ? (
+                            <>
+                                {isClickAlarm
+                                    ? navItem.activeComponent
+                                    : navItem.component}
+                            </>
                         ) : (
                             <NavLink to={navItem.path}>
                                 {navItem.component}
@@ -154,7 +187,6 @@ const NavItems = () => {
 
                 <AvatarWrapper isSubnavModalOn={isSubnavModalOn}>
                     <div
-                        ref={subModalControllerRef}
                         onClick={() => {
                             setIsSubnavMoalOn(!isSubnavModalOn);
                         }}
@@ -166,6 +198,7 @@ const NavItems = () => {
                                 data-testid="user-avatar"
                                 draggable="false"
                                 src={userInfo?.memberImageUrl}
+                                ref={subModalControllerRef}
                             />
                         </div>
                         {isSubnavModalOn && (

@@ -1,3 +1,4 @@
+import { alarmReducer } from "./ducks/alarm/alarmSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import { authReducer } from "app/store/ducks/auth/authSlice";
 import { homeReducer } from "app/store/ducks/home/homeSlice";
@@ -18,6 +19,7 @@ export const store = configureStore({
         profile: profileReducer,
         edit: editReducer,
         common: commonReducer,
+        alarm: alarmReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

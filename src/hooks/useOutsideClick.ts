@@ -8,6 +8,7 @@ const useOutsideClick = (
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (trigger?.current.contains(event.target as Node)) {
+                // 정리: 클릭버튼을 클릭 시, 여기서 모달이 닫히도록 처리되지만, 컴포넌트에서도 클릭이벤트가 일어나(!false), 모달 안꺼짐
                 // event 발생시킨 요소가 trigger에 속한다면, 외부에 클릭한 거로 여기지 않음
                 // 즉, event는 외부클릭 | trigger 클릭으로 나눌 수 있음
                 // 여기서는 event 외부클릭을 처리하고,
