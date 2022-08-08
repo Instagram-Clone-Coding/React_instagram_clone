@@ -1,8 +1,7 @@
-import { AlarmItem } from "./alarmThunk.d";
 import { createSlice } from "@reduxjs/toolkit";
 import { loadAlarmList } from "app/store/ducks/alarm/alarmThunk";
 export interface AlarmStateProps {
-    alarmList: AlarmItem[] | null;
+    alarmList: Alarm.AlarmItem[] | null;
 }
 
 const initialState: AlarmStateProps = {

@@ -445,3 +445,27 @@ declare module EditType {
 
     type modalType = "image" | "gender" | null;
 }
+
+declare module Alarm {
+    interface AlarmItem {
+        id: number;
+        type: "COMMENT" | "LIKE_POST" | "MENTION_POST";
+        message: string;
+        agent: {
+            id: number;
+            username: string;
+            name: string;
+            image: {
+                imageUrl: string;
+                imageType: string;
+                imageName: string;
+                imageUUID: string;
+            };
+            hasStory: false;
+        };
+        createdDate: string;
+        postId: number;
+        postImageUrl: string;
+        content: string;
+    }
+}

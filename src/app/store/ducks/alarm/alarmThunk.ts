@@ -1,8 +1,7 @@
 import { authorizedCustomAxios } from "customAxios";
-import { AlarmItem } from "./alarmThunk.d";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const loadAlarmList = createAsyncThunk<AlarmItem[], void>(
+export const loadAlarmList = createAsyncThunk<Alarm.AlarmItem[], void>(
     "alarm/loadList",
     async (payload, ThunkOptions) => {
         try {
