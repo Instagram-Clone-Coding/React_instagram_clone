@@ -1,5 +1,9 @@
 import { loadAlarmList } from "app/store/ducks/alarm/alarmThunk";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import AlarmProfile from "components/Common/Header/alarm/alarm_profile";
+import Comment from "components/Common/Header/alarm/alarm_type/comment";
+import Like from "components/Common/Header/alarm/alarm_type/like";
+import Mention from "components/Common/Header/alarm/alarm_type/mention";
 import React, { useEffect } from "react";
 import styled from "styled-components";
 
@@ -30,6 +34,8 @@ const Container = styled.div`
         background-color: #fff;
         box-shadow: rgba(0, 0, 0, 0.098) 0px 0px 5px 1px;
         border-radius: 6px;
+        max-height: 440px;
+        overflow: auto;
 
         .title {
             font-weight: 700;
@@ -37,6 +43,13 @@ const Container = styled.div`
             display: flex;
             justify-content: flex-start;
             margin: 8px 0 0 8px;
+        }
+
+        .alarm-list {
+            .alarm-item {
+                display: flex;
+                padding: 12px 16px;
+            }
         }
     }
 `;
@@ -54,6 +67,12 @@ export default function Alarm({
         dispatch(loadAlarmList());
     }, []);
 
+    // const matchComponentAtAlarmType = {
+    //     COMMENT: <Comment />,
+    //     LIKE_POST: <Like />,
+    //     MENTION_POST: <Mention />,
+    // };
+
     return (
         <Container>
             <div className="pointer" />
@@ -61,7 +80,24 @@ export default function Alarm({
                 <div className="title">
                     <div>이전 활동</div>
                 </div>
-                <div className="alarm-list"></div>
+                <div className="alarm-list">
+                    {alarmList
+                        ? alarmList.map((alarm) => {
+                              return (
+                                  <div className="alarm-item">
+                                      <AlarmProfile agent={alarm.agent} />
+                                      {alarm.type === "COMMENT" ? (
+                                          <Comment alarm={alarm} />
+                                      ) : alarm.type === "LIKE_POST" ? (
+                                          <Like alarm={alarm} />
+                                      ) : (
+                                          <Mention alarm={alarm} />
+                                      )}
+                                  </div>
+                              );
+                          })
+                        : `알람이 없습니다.`}
+                </div>
             </div>
         </Container>
     );
