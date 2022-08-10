@@ -6,9 +6,11 @@ import useGapText from "hooks/useGapText";
 
 const Container = styled.div`
     display: flex;
+    flex: 1;
 
     .alarm {
         margin: 0 12px;
+        flex: 1;
 
         a {
             text-decoration: none;
@@ -30,6 +32,7 @@ const Container = styled.div`
 
         img {
             height: 40px;
+            width: 40px;
         }
     }
 `;
@@ -52,8 +55,7 @@ export default function AlarmItem({ alarm }: { alarm: Alarm.AlarmItem }) {
                 <Link to={`/profile/${alarm.agent.username}`}>
                     <span className="username">{alarm.agent.username}</span>
                 </Link>
-                {alarmMessage}
-                {alarm.content}{" "}
+                {alarmMessage} {alarm.content}{" "}
                 <span className="create-date">
                     {useGapText(alarm.createdDate)}
                 </span>
