@@ -1,9 +1,7 @@
 import { loadAlarmList } from "app/store/ducks/alarm/alarmThunk";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import AlarmProfile from "components/Common/Header/alarm/alarm_profile";
-import Comment from "components/Common/Header/alarm/alarm_type/comment";
-import Like from "components/Common/Header/alarm/alarm_type/like";
-import Mention from "components/Common/Header/alarm/alarm_type/mention";
+import AlarmItem from "components/Common/Header/alarm/alarm_item";
+import Loading from "components/Common/Loading";
 import React, { useEffect } from "react";
 import styled from "styled-components";
 
@@ -35,6 +33,7 @@ const Container = styled.div`
         box-shadow: rgba(0, 0, 0, 0.098) 0px 0px 5px 1px;
         border-radius: 6px;
         max-height: 440px;
+        min-height: 200px;
         overflow: auto;
 
         .title {
@@ -50,6 +49,13 @@ const Container = styled.div`
                 display: flex;
                 padding: 12px 16px;
             }
+
+            .empty-container {
+                display: flex;
+                justify-content: center;
+                margin: 50px;
+                font-size: 20px;
+            }
         }
     }
 `;
@@ -59,19 +65,12 @@ export default function Alarm({
 }: {
     alarmContainerRef: React.RefObject<HTMLDivElement>;
 }) {
-    // alarm list 가져오기 <- api 호출
     const dispatch = useAppDispatch();
     const { alarmList } = useAppSelector((state) => state.alarm);
 
     useEffect(() => {
         dispatch(loadAlarmList());
     }, []);
-
-    // const matchComponentAtAlarmType = {
-    //     COMMENT: <Comment />,
-    //     LIKE_POST: <Like />,
-    //     MENTION_POST: <Mention />,
-    // };
 
     return (
         <Container>
@@ -81,22 +80,19 @@ export default function Alarm({
                     <div>이전 활동</div>
                 </div>
                 <div className="alarm-list">
-                    {alarmList
-                        ? alarmList.map((alarm) => {
-                              return (
-                                  <div className="alarm-item">
-                                      <AlarmProfile agent={alarm.agent} />
-                                      {alarm.type === "COMMENT" ? (
-                                          <Comment alarm={alarm} />
-                                      ) : alarm.type === "LIKE_POST" ? (
-                                          <Like alarm={alarm} />
-                                      ) : (
-                                          <Mention alarm={alarm} />
-                                      )}
-                                  </div>
-                              );
-                          })
-                        : `알람이 없습니다.`}
+                    {!alarmList ? (
+                        <Loading size={36} isInButton={false} />
+                    ) : alarmList.length === 0 ? (
+                        <div className="empty-container">알람이 없습니다.</div>
+                    ) : (
+                        alarmList.map((alarm) => {
+                            return (
+                                <div className="alarm-item">
+                                    <AlarmItem alarm={alarm} />
+                                </div>
+                            );
+                        })
+                    )}
                 </div>
             </div>
         </Container>
