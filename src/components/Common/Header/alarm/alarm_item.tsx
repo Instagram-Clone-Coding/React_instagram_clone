@@ -59,7 +59,9 @@ export default function AlarmItem({ alarm }: { alarm: Alarm.AlarmItem }) {
                 </span>
             </div>
             <div className="relative-image">
-                <img src={alarm.postImageUrl} alt={"이미지 썸네일"}></img>
+                <Link to={`/p/${alarm.postId}`}>
+                    <img src={alarm.postImageUrl} alt={"이미지 썸네일"}></img>
+                </Link>
             </div>
         </Container>
     );
