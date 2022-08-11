@@ -17,7 +17,6 @@ const Container = styled.div`
         align-items: center;
         gap: 20px;
         height: 60px;
-        padding: 8px 16px;
         cursor: pointer;
         text-decoration: none;
     }

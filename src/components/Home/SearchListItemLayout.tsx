@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const StyledSearchListItemLayout = styled.div`
+    flex: 1;
     display: flex;
     align-items: center;
     gap: 20px;
@@ -55,10 +56,11 @@ const SearchListItemLayout = ({
                 <span className="username">{member.username}</span>
                 <div className="name-container">
                     <span className="name">{member.name}</span>
-                    {followingMemberFollow && (
+                    {followingMemberFollow && followingMemberFollow.length > 0 && (
                         <span className="follow-info">
                             •{followingMemberFollow[0].memberUsername} 외{" "}
-                            {followingMemberFollow.length - 1}명이 팔로우합니다
+                            {followingMemberFollow.length - 1}
+                            명이 팔로우합니다
                         </span>
                     )}
                 </div>
