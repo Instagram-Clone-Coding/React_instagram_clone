@@ -20,7 +20,6 @@ const Container = styled.div`
         cursor: pointer;
         text-decoration: none;
     }
-
     .close-button {
         flex: 1;
     }
@@ -66,7 +65,7 @@ const SearchListItem = ({
 
     return (
         <Container>
-            {member && (
+            {dtype === "MEMBER" && member ? (
                 <Link
                     to={`/profile/${member.username}`}
                     onClick={itemClickHandler}
@@ -75,6 +74,10 @@ const SearchListItem = ({
                         member={member}
                         followingMemberFollow={followingMemberFollow}
                     />
+                </Link>
+            ) : (
+                <Link to={`/hashtag/${name}`} onClick={itemClickHandler}>
+                    <SearchListItemLayout name={name} postCount={postCount} />
                 </Link>
             )}
             {button && (
