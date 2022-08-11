@@ -79,21 +79,20 @@ export default function Alarm({
                 <div className="title">
                     <div>이전 활동</div>
                 </div>
-                <div className="alarm-list">
+                <ul className="alarm-list">
                     {!alarmList ? (
                         <Loading size={36} isInButton={false} />
                     ) : alarmList.length === 0 ? (
                         <div className="empty-container">알람이 없습니다.</div>
                     ) : (
-                        alarmList.map((alarm) => {
-                            return (
-                                <div className="alarm-item">
-                                    <AlarmItem alarm={alarm} />
-                                </div>
-                            );
-                        })
+                        alarmList.map((alarm) => (
+                            <li className="alarm-item">
+                                <AlarmItem alarm={alarm} />
+                            </li>
+                        ))
                     )}
-                </div>
+                </ul>
+                {/* 무한스크롤 footer */}
             </div>
         </Container>
     );
