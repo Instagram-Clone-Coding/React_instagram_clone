@@ -112,14 +112,14 @@ const ArticleMain = ({
 
             const options: HTMLReactParserOptions = {
                 replace: (domNode) => {
-                    const typedDomNode = domNode as Element;
                     if (
-                        typedDomNode.name === "a" &&
-                        typedDomNode.attribs.href
+                        domNode instanceof Element &&
+                        domNode.name === "a" &&
+                        domNode.attribs.href
                     ) {
                         return (
-                            <Link to={typedDomNode.attribs.href}>
-                                {domToReact(typedDomNode.children)}
+                            <Link to={domNode.attribs.href}>
+                                {domToReact(domNode.children)}
                             </Link>
                         );
                     }
