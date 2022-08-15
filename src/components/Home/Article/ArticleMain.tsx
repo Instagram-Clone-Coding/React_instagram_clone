@@ -6,9 +6,9 @@ import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
 import parse, {
-    DOMNode,
     domToReact,
     HTMLReactParserOptions,
+    Element,
 } from "html-react-parser";
 import { Link } from "react-router-dom";
 
@@ -110,19 +110,24 @@ const ArticleMain = ({
                 ); // route를 어떻개 할까?
             }
 
-            // const options:HTMLReactParserOptions. = {
-            //     replace: ({ name, attribs, children }) => {
-            //         if (name === "a" && attribs.href) {
-            //             return (
-            //                 <Link to={attribs.href}>
-            //                     {domToReact(children)}
-            //                 </Link>
-            //             );
-            //         }
-            //     },
-            // };
+            const options: HTMLReactParserOptions = {
+                replace: (domNode) => {
+                    const typedDomNode = domNode as Element;
+                    if (
+                        typedDomNode.name === "a" &&
+                        typedDomNode.attribs.href
+                    ) {
+                        return (
+                            <Link to={typedDomNode.attribs.href}>
+                                {domToReact(typedDomNode.children)}
+                            </Link>
+                        );
+                    }
+                    // }
+                },
+            };
 
-            return parse(parsed);
+            return parse(parsed, options);
         },
         [mentions, hashtags],
     );
