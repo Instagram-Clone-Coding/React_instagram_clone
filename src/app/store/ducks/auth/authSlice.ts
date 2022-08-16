@@ -4,7 +4,6 @@ import {
     getUserInfo,
     signIn,
     resetPassword,
-    checkCurrentURL,
     signInUseCode,
     logout,
 } from "./authThunk";
@@ -124,9 +123,6 @@ const authSlice = createSlice({
             })
             .addCase(resetPassword.rejected, (state) => {
                 state.errorMessage = `전에 사용한 적 없는 새로운 비밀번호를 만드세요.`;
-            })
-            .addCase(checkCurrentURL.rejected, (state) => {
-                // 유효하지 않은 url **
             })
             .addCase(logout.fulfilled, (state) => {
                 state.isLogin = false;

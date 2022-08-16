@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import queryString from "query-string";
 import HeaderBeforeLogin from "./HeaderBeforeLogin";
 import ContentBox from "components/Common/ContentBox";
@@ -77,6 +77,7 @@ export default function ResetPasswordForm() {
         search,
     ) as AuthType.resetPasswordQuery;
     const dispatch = useAppDispatch();
+    const history = useHistory();
     const { errorMessage } = useAppSelector((state) => state.auth);
 
     const [newPasswordInputProps, newPasswordIsValid] = useInput(
@@ -92,7 +93,11 @@ export default function ResetPasswordForm() {
     );
 
     useEffect(() => {
-        dispatch(checkCurrentURL({ code, username }));
+        dispatch(checkCurrentURL({ code, username }))
+            .unwrap()
+            .catch(() => {
+                history.push("/error");
+            });
     }, []);
 
     const resetPasswordClickHandler = (

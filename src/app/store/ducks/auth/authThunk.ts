@@ -63,22 +63,14 @@ export const getUserInfo = createAsyncThunk<AuthType.UserInfo>(
 export const checkCurrentURL = createAsyncThunk<
     void,
     { code: string; username: string }
->("auth/checkResetPassword", async (payload, ThunkOptions) => {
-    try {
-        const config = {
-            params: {
-                code: payload.code,
-                username: payload.username,
-            },
-        };
-        const { data } = await customAxios.get(
-            `/accounts/password/reset`,
-            config,
-        );
-        console.log(data);
-    } catch (error) {
-        throw ThunkOptions.rejectWithValue(error);
-    }
+>("auth/checkResetPassword", async (payload) => {
+    const config = {
+        params: {
+            code: payload.code,
+            username: payload.username,
+        },
+    };
+    await customAxios.get(`/accounts/password/reset`, config);
 });
 
 export const resetPassword = createAsyncThunk<
