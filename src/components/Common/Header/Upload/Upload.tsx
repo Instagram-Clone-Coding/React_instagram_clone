@@ -115,8 +115,10 @@ const Upload = () => {
     const checkIsGrabbingAndCancelUpload = () => {
         if (isGrabbing) {
             dispatch(uploadActions.stopGrabbing());
-        } else {
+        } else if (step === "cut" || step === "edit" || step === "content") {
             dispatch(uploadActions.startWarningModal());
+        } else {
+            dispatch(uploadActions.cancelUpload());
         }
     };
 
