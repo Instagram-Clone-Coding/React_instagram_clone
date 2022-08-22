@@ -1,16 +1,11 @@
 import PopHeart from "components/Common/PopHeart";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 import Username from "../../Common/Username";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
-import parse, {
-    domToReact,
-    HTMLReactParserOptions,
-    Element,
-} from "html-react-parser";
-import { Link } from "react-router-dom";
+import StringFragmentWithMentionOrHashtagLink from "components/Common/StringFragmentWithMentionOrHashtagLink";
 
 const StyledMain = styled.div`
     padding: 0 16px;
@@ -86,67 +81,31 @@ const ArticleMain = ({
         [content, isTextLineBreak],
     );
 
-    const parseLinkToContent = useCallback(
-        (str: string) => {
-            let parsed = str;
-            for (const mention of mentions) {
-                const regexAll = new RegExp("@" + mention + " ", "g"); // 변수가 가리키는 값을 정규식에 사용하려 할 때
-                parsed = parsed.replace(
-                    regexAll,
-                    `<a href=/profile/${mention}>${"@" + mention + " "}</a>`,
-                    // `<Link to={/profile/${mention}}>${
-                    //     "@" + mention + " "
-                    // }</Link>`,
-                );
-            }
-            for (const hashtag of hashtags) {
-                const regexAll = new RegExp("#" + hashtag + " ", "g"); // 변수가 가리키는 값을 정규식에 사용하려 할 때
-                parsed = parsed.replace(
-                    regexAll,
-                    `<a href={/hashtag/${hashtag}}>${"#" + hashtag + " "}</a>`,
-                    // `<Link to={/hashtag/${hashtag}}>${
-                    //     "#" + hashtag + " "
-                    // }</Link>`,
-                ); // route를 어떻개 할까?
-            }
-
-            const options: HTMLReactParserOptions = {
-                replace: (domNode) => {
-                    if (
-                        domNode instanceof Element &&
-                        domNode.name === "a" &&
-                        domNode.attribs.href
-                    ) {
-                        return (
-                            <Link to={domNode.attribs.href}>
-                                {domToReact(domNode.children)}
-                            </Link>
-                        );
-                    }
-                    // }
-                },
-            };
-
-            return parse(parsed, options);
-        },
-        [mentions, hashtags],
-    );
-
     const textSpan = useMemo(
         () =>
             !isFullText ? (
-                <span>{parseLinkToContent(textArray[0])}</span>
+                <span>
+                    <StringFragmentWithMentionOrHashtagLink
+                        str={textArray[0]}
+                        mentions={mentions}
+                        hashtags={hashtags}
+                    />
+                </span>
             ) : (
                 textArray.map((line: string, index: number) => {
                     return (
                         <span key={index}>
-                            {parseLinkToContent(line)}
+                            <StringFragmentWithMentionOrHashtagLink
+                                str={line}
+                                mentions={mentions}
+                                hashtags={hashtags}
+                            />
                             <br />
                         </span>
                     );
                 })
             ),
-        [isFullText, textArray, parseLinkToContent],
+        [isFullText, textArray, mentions, hashtags],
     );
 
     const comment1LikeHandler = () => {
