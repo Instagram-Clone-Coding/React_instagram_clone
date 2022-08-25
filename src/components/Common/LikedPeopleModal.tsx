@@ -91,7 +91,9 @@ const LikedPeopleModal = ({
             <div>좋아요</div>
             <div>
                 {likedPeople.map((personObj) => (
-                    <div>{personObj.member.username}</div>
+                    <div key={personObj.member.id}>
+                        {personObj.member.username}
+                    </div>
                 ))}
             </div>
             {isLoading && <Loading size={32} />}
