@@ -12,6 +12,9 @@ const StyledMain = styled.div`
     padding: 0 16px;
     .article-likeInfo {
         margin-bottom: 8px;
+        &#notZero {
+            cursor: pointer;
+        }
         span {
             font-weight: ${(props) => props.theme.font.bold};
         }
@@ -169,7 +172,8 @@ const ArticleMain = ({
             )}
             <div
                 className="article-likeInfo"
-                onClick={() => setIsLikedPeopleModalOn(true)}
+                id={likesCount > 0 ? "notZero" : ""}
+                onClick={() => likesCount > 0 && setIsLikedPeopleModalOn(true)}
             >
                 {followingUserWhoLikesArticle ? (
                     <div>
