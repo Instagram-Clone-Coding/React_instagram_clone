@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
 import { loadavg } from "os";
+import LikedPeopleModal from "components/Common/LikedPeopleModal";
 
 const StyledMain = styled.div`
     padding: 0 16px;
@@ -41,6 +42,7 @@ const StyledMain = styled.div`
 
 interface MainProps {
     followingUserWhoLikesArticle: null | string;
+    postId: number;
     likesCount: number;
     memberUsername: string;
     memberNickname: string;
@@ -56,6 +58,7 @@ interface MainProps {
 
 const ArticleMain = ({
     followingUserWhoLikesArticle,
+    postId,
     likesCount,
     memberUsername,
     memberNickname,
@@ -67,6 +70,7 @@ const ArticleMain = ({
     // like state
     const [isComment1Liked, setIsComment1Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
     const [isComment2Liked, setIsComment2Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
+    const [isLikedPeopleModalOn, setIsLikedPeopleModalOn] = useState(false);
     // content state
     const [isFullText, setIsFullText] = useState(false);
     const { miniProfile } = useAppSelector(({ modal }) => modal);
@@ -153,7 +157,20 @@ const ArticleMain = ({
     const getFullText = () => setIsFullText(true);
     return (
         <StyledMain>
-            <div className="article-likeInfo">
+            {isLikedPeopleModalOn && (
+                <LikedPeopleModal
+                    onModalOn={() => setIsLikedPeopleModalOn(true)}
+                    onModalOff={() => setIsLikedPeopleModalOn(false)}
+                    modalInfo={{
+                        type: "post",
+                        id: postId,
+                    }}
+                />
+            )}
+            <div
+                className="article-likeInfo"
+                onClick={() => setIsLikedPeopleModalOn(true)}
+            >
                 {followingUserWhoLikesArticle ? (
                     <div>
                         {/* 임의로 첫 번째 인덱스 선택 */}
