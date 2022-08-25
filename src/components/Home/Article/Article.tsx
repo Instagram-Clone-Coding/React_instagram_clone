@@ -133,6 +133,7 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
                 onToggleLike={toggleLikeHandler}
             />
             <ArticleMain
+                postId={article.postId}
                 followingUserWhoLikesArticle={followingUserWhoLikesArticle}
                 likesCount={likesCount}
                 memberImageUrl={article.member.image.imageUrl}
