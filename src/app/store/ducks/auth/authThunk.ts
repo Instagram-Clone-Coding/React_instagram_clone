@@ -60,7 +60,6 @@ export const getUserInfo = createAsyncThunk<AuthType.UserInfo>(
     },
 );
 
-
 export const getLoginDevice = createAsyncThunk<LoginDevice[], void>(
     "auth/loginDevice",
     async (payload, ThunkOptions) => {
@@ -69,7 +68,10 @@ export const getLoginDevice = createAsyncThunk<LoginDevice[], void>(
                 `/accounts/login/device`,
             );
             return response.data.data;
-            
+        } catch (error) {}
+    },
+);
+
 export const checkCurrentURL = createAsyncThunk<
     void,
     { code: string; username: string }
@@ -128,7 +130,6 @@ export const logout = createAsyncThunk<void, void>(
         }
     },
 );
-
 
 export const deviceLogout = createAsyncThunk<
     void,

@@ -7,7 +7,7 @@ import {
     checkCurrentURL,
     signInUseCode,
     logout,
-    getLoginDevice
+    getLoginDevice,
 } from "./authThunk";
 import { setAccessTokenInAxiosHeaders } from "customAxios";
 import { uploadArticle } from "app/store/ducks/upload/uploadThunk";
@@ -128,7 +128,7 @@ const authSlice = createSlice({
             })
             .addCase(getLoginDevice.fulfilled, (state, action) => {
                 state.loginDeviceList = action.payload;
-
+            })
             .addCase(resetPassword.rejected, (state) => {
                 state.errorMessage = `전에 사용한 적 없는 새로운 비밀번호를 만드세요.`;
             })
