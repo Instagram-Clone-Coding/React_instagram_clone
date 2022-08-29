@@ -48,7 +48,6 @@ const UploadWarningModal = () => {
         if (isJustWarningBeforePrevStep) {
             dispatch(uploadActions.prevStep());
         } else {
-            console.log("그냥 뒤로");
             dispatch(uploadActions.cancelUpload());
         }
     };
