@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FormState } from "./authThunk.type";
+import { FormState, LoginDevice } from "./authThunk.type";
 import {
     getUserInfo,
     signIn,
@@ -7,6 +7,7 @@ import {
     checkCurrentURL,
     signInUseCode,
     logout,
+    getLoginDevice
 } from "./authThunk";
 import { setAccessTokenInAxiosHeaders } from "customAxios";
 import { uploadArticle } from "app/store/ducks/upload/uploadThunk";
@@ -23,6 +24,7 @@ export interface AuthStateProps {
     userInfo: AuthType.UserInfo | null;
     hasNotification: boolean;
     resetPassword: AuthType.resetPasswordState;
+    loginDeviceList: LoginDevice[] | null;
 }
 
 const initialState: AuthStateProps = {
@@ -37,6 +39,7 @@ const initialState: AuthStateProps = {
     userInfo: null,
     hasNotification: false,
     resetPassword: { email: undefined },
+    loginDeviceList: null,
 };
 
 const authSlice = createSlice({
@@ -123,6 +126,9 @@ const authSlice = createSlice({
             .addCase(getUserInfo.fulfilled, (state, action) => {
                 state.userInfo = action.payload;
             })
+            .addCase(getLoginDevice.fulfilled, (state, action) => {
+                state.loginDeviceList = action.payload;
+
             .addCase(resetPassword.rejected, (state) => {
                 state.errorMessage = `전에 사용한 적 없는 새로운 비밀번호를 만드세요.`;
             })
