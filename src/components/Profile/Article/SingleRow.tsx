@@ -8,6 +8,7 @@ import useOnView from "hooks/useOnView";
 
 const SingleRowContainer = styled.div`
     display: flex;
+    height: 290px;
 
     @media (min-width: 736px) {
         margin-bottom: 28px;
@@ -46,12 +47,14 @@ const SingleRow = ({ posts, isObserving }: SingleRowProps) => {
         isObserving && isVisible && dispatchExtraPost(); // 이 때 비동기 작업 및 무한 스크롤
         // isLast && isVisible && dispatchExtraArticle();
     }, [isObserving, isVisible, dispatch]);
+    console.log(posts);
 
     return (
         <SingleRowContainer ref={postRef}>
-            {posts.map((post) => (
-                <SingleContent key={post.postId} post={post} />
-            ))}
+            {posts.map(
+                (post) =>
+                    post && <SingleContent key={post.postId} post={post} />,
+            )}
         </SingleRowContainer>
     );
 };

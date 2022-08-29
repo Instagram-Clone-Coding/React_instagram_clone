@@ -17,6 +17,7 @@ export const checkToken = async (config: AxiosRequestConfig) => {
         authorizedCustomAxios.defaults.headers.common.Authorization.split(
             " ",
         )[1];
+    console.log(accessToken);
     const decode = jwt.decode(accessToken);
     const nowDate = new Date().getTime() / 1000;
     if (decode.exp < nowDate) {
@@ -35,8 +36,9 @@ export const checkToken = async (config: AxiosRequestConfig) => {
                 }
             }
         } catch (error) {
-            // 토큰재발급 실패한 경우(refresh token만료)
-            window.location.replace("/");
+            // 토큰재발급 실패한 경우(refreshToken 쿠키 제거 - httpOnly쿠키라, 백엔드에서만 제거가능)
+            customAxios.post(`/logout/only/cookie`);
+            window.location.replace("/"); // FIXME: 새로고침 => 토큰 재발급 불필요하게 호출 **
         }
     }
     return config;

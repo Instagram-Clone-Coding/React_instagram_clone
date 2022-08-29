@@ -1,8 +1,8 @@
 import { changePassword } from "app/store/ducks/edit/editThunk";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import { authorizedCustomAxios } from "customAxios";
+import Loading from "components/Common/Loading";
 import useInput from "hooks/useInput";
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import Button from "styles/UI/Button";
 import Notification from "styles/UI/Notification";
@@ -54,19 +54,26 @@ const PasswordEditContainer = styled.div`
             }
         }
     }
+    .button-wrapper {
+        margin-right: 42px;
+        button {
+            width: 96px;
+        }
+    }
 `;
 
 const PasswordEdit = () => {
     const dispatch = useAppDispatch();
     const userInfo = useAppSelector(({ auth }) => auth.userInfo);
-    const [errMsg, setErrMsg] = useState<string>("");
+    const isLoading = useAppSelector(({ edit }) => edit.isLoading);
+    const [msg, setMsg] = useState<string>("");
 
     const oldPassword = useInput("");
     const newPassword = useInput("");
     const newPasswordConfirm = useInput("");
     const changePasswordHandler = async () => {
         if (newPassword[0].value !== newPasswordConfirm[0].value) {
-            setErrMsg("두 비밀번호가 일치하는지 확인하세요");
+            setMsg("두 비밀번호가 일치하는지 확인하세요");
             return;
         }
 
@@ -75,14 +82,20 @@ const PasswordEdit = () => {
             oldPassword: oldPassword[0].value,
         };
 
-        const data = dispatch(changePassword(body)).unwrap();
+        const data = await dispatch(changePassword(body)).unwrap();
 
-        // if (data.status === 401) {
-        // }
+        setMsg(data.message);
     };
     return (
         <PasswordEditContainer>
-            {errMsg.length > 0 && <Notification text={errMsg} />}
+            {msg.length > 0 && (
+                <Notification
+                    text={msg}
+                    reset={() => {
+                        setMsg("");
+                    }}
+                />
+            )}
 
             <div className="profile">
                 <img
@@ -101,17 +114,17 @@ const PasswordEdit = () => {
                 </div>
                 <div className="input">
                     <aside>
-                        <label htmlFor="prev">새 비밀번호</label>
+                        <label htmlFor="new">새 비밀번호</label>
                     </aside>
-                    <input type="password" name="prev" {...newPassword[0]} />
+                    <input type="password" name="new" {...newPassword[0]} />
                 </div>
                 <div className="input">
                     <aside>
-                        <label htmlFor="prev">새 비밀번호 확인</label>
+                        <label htmlFor="confirm">새 비밀번호 확인</label>
                     </aside>
                     <input
                         type="password"
-                        name="prev"
+                        name="confirm"
                         {...newPasswordConfirm[0]}
                     />
                 </div>
@@ -122,7 +135,11 @@ const PasswordEdit = () => {
                     color="#fff"
                     onClick={changePasswordHandler}
                 >
-                    비밀번호 변경{" "}
+                    {isLoading ? (
+                        <Loading size={18} isInButton={true} />
+                    ) : (
+                        "비밀번호 변경"
+                    )}
                 </Button>
             </div>
         </PasswordEditContainer>

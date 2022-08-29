@@ -25,7 +25,6 @@ const Routes = () => {
                 {isLogin ? (
                     <Switch>
                         {AuthedContainer()}
-                        <Redirect to="/" />
                         {/*<Header />*/}
                         {/*<Route exact path="/" component={Home} />*/}
                         {/*<Redirect to="/" />*/}

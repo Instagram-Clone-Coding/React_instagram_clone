@@ -1,12 +1,13 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { ReactComponent as Circle } from "assets/Svgs/circle.svg";
-import { ReactComponent as CheckedCircle } from "assets/Svgs/checkedCircle.svg";
-import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { changeSearchUser } from "app/store/ducks/common/commonSlice";
 import {
     selectNewChatUser,
     unSelectNewChatUser,
 } from "app/store/ducks/direct/DirectSlice";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { ReactComponent as CheckedCircle } from "assets/Svgs/checkedCircle.svg";
+import { ReactComponent as Circle } from "assets/Svgs/circle.svg";
+import React from "react";
+import styled from "styled-components";
 
 const NewChatRecommendUserContainer = styled.div`
     padding: 8px 16px;
@@ -40,44 +41,37 @@ const NewChatRecommendUserContainer = styled.div`
     }
 `;
 
-interface NewChatRecommendUserProps extends Direct.ChatItem {
-    opponent: Direct.memberProps;
-}
-
-const NewChatRecommendUser = ({
-    roomId,
-    members,
-    opponent,
-}: NewChatRecommendUserProps) => {
-    const { selectedNewChatUser } = useAppSelector((state) => state.direct);
+const NewChatRecommendUser = ({ member }: Common.searchResultType) => {
+    const { selectedNewChatUsers } = useAppSelector((state) => state.direct);
     const dispatch = useAppDispatch();
+    if (!member) return null;
 
     const selectNewChatUserHandler = () => {
-        if (!selectedNewChatUser) {
-            dispatch(selectNewChatUser(opponent.username));
-        } else if (selectedNewChatUser === opponent.username) {
-            dispatch(unSelectNewChatUser());
+        // 이미 선택했다면 제거해줍니다.
+        if (selectedNewChatUsers.includes(member?.username)) {
+            dispatch(unSelectNewChatUser(member?.username));
         } else {
-            dispatch(selectNewChatUser(opponent.username));
+            dispatch(selectNewChatUser(member?.username));
+            dispatch(changeSearchUser(""));
         }
     };
     return (
         <NewChatRecommendUserContainer onClick={selectNewChatUserHandler}>
             <div className="user-info">
                 <img
-                    src={opponent.imageUrl}
+                    src={member.image.imageUrl}
                     alt="avatarImg"
                     className="user-image"
                 />
                 <div className="user-name-container">
                     <span className="user-memberUsername">
-                        {opponent.username}
+                        {member.username}
                     </span>
-                    <span className="user-memberName">{opponent.name}</span>
+                    <span className="user-memberName">{member.name}</span>
                 </div>
             </div>
             <div className="circle-svg">
-                {selectedNewChatUser === opponent.username ? (
+                {selectedNewChatUsers.includes(member.username) ? (
                     <CheckedCircle />
                 ) : (
                     <Circle />

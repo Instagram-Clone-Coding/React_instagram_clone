@@ -1,14 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { uploadArticle } from "app/store/ducks/upload/uploadThunk";
 
 const initialState: UploadType.UploadStateProps = {
     isUploading: false,
     isGrabbing: false,
+    isWarningModalOn: false,
+    isJustWarningBeforePrevStep: false,
     step: "dragAndDrop",
     ratioMode: "square",
     files: [],
     currentIndex: 0,
     grabbedGalleryImgIndex: null,
     grabbedGalleryImgNewIndex: null,
+    textareaValue: "",
+    isLikesAndViewsHidden: false,
+    isCommentBlocked: false,
 };
 
 const uploadSlice = createSlice({
@@ -20,17 +26,17 @@ const uploadSlice = createSlice({
             state.isUploading = true;
         },
         cancelUpload: (state) => {
+            state.files.forEach((file) => {
+                URL.revokeObjectURL(file.url);
+                URL.revokeObjectURL(file.newUrl);
+            });
             return initialState;
-        },
-        toCutStep: (state) => {
-            state.step = "cut";
         },
         prevStep: (state) => {
             switch (state.step) {
                 case "dragAndDrop":
                     return initialState;
                 case "cut":
-                    // 나중에 경고 모달 필요
                     state.files.forEach((file) =>
                         window.URL.revokeObjectURL(file.url),
                     );
@@ -66,6 +72,14 @@ const uploadSlice = createSlice({
                 translateY: 0,
                 scale: 0,
                 grabbedPosition: { x: 0, y: 0 },
+                brightness: 0,
+                contrast: 0,
+                saturate: 0,
+                blur: 0,
+                newUrl: "",
+                alternativeText: "",
+                hashtags: [],
+                blob: null,
             });
         },
         startGrabbing: (state) => {
@@ -101,27 +115,30 @@ const uploadSlice = createSlice({
         },
         fixOverTranslatedImg: (
             state,
-            action: PayloadAction<{ widthGap: number; heightGap: number }>,
+            action: PayloadAction<{
+                widthGapRatio: number;
+                heightGapRatio: number;
+            }>,
         ) => {
             // 객체 형태로 하면 최신 "값"을 가져오지 못함
-            const { widthGap, heightGap } = action.payload;
+            const { widthGapRatio, heightGapRatio } = action.payload;
             const currentFile = state.files[state.currentIndex];
-            if (widthGap === 0) {
+            if (widthGapRatio === 0) {
                 currentFile.translateX = 0;
             } else {
-                if (currentFile.translateX > widthGap) {
-                    currentFile.translateX = widthGap;
-                } else if (currentFile.translateX < -widthGap) {
-                    currentFile.translateX = -widthGap;
+                if (currentFile.translateX > widthGapRatio) {
+                    currentFile.translateX = widthGapRatio;
+                } else if (currentFile.translateX < -widthGapRatio) {
+                    currentFile.translateX = -widthGapRatio;
                 }
             }
-            if (heightGap === 0) {
+            if (heightGapRatio === 0) {
                 currentFile.translateY = 0;
             } else {
-                if (currentFile.translateY > heightGap) {
-                    currentFile.translateY = heightGap;
-                } else if (currentFile.translateY < -heightGap) {
-                    currentFile.translateY = -heightGap;
+                if (currentFile.translateY > heightGapRatio) {
+                    currentFile.translateY = heightGapRatio;
+                } else if (currentFile.translateY < -heightGapRatio) {
+                    currentFile.translateY = -heightGapRatio;
                 }
             }
         },
@@ -221,6 +238,127 @@ const uploadSlice = createSlice({
                 // state.files = [...prevArr, translatedFile, ...nextArr];
             }
         },
+        changeAdjustInput: (
+            state,
+            action: PayloadAction<{
+                type: UploadType.AdjustInputTextType;
+                value: number;
+            }>,
+        ) => {
+            switch (action.payload.type) {
+                case "밝기":
+                    state.files[state.currentIndex].brightness =
+                        action.payload.value;
+                    break;
+                case "대비":
+                    state.files[state.currentIndex].contrast =
+                        action.payload.value;
+                    break;
+                case "채도":
+                    state.files[state.currentIndex].saturate =
+                        action.payload.value;
+                    break;
+                case "흐리게":
+                    state.files[state.currentIndex].blur = action.payload.value;
+                    break;
+            }
+        },
+        resetAdjustInput: (
+            state,
+            action: PayloadAction<UploadType.AdjustInputTextType>,
+        ) => {
+            switch (action.payload) {
+                case "밝기":
+                    state.files[state.currentIndex].brightness = 0;
+                    break;
+                case "대비":
+                    state.files[state.currentIndex].contrast = 0;
+                    break;
+                case "채도":
+                    state.files[state.currentIndex].saturate = 0;
+                    break;
+                case "흐리게":
+                    state.files[state.currentIndex].blur = 0;
+                    break;
+            }
+        },
+        addNewFileUrl: (
+            state,
+            action: PayloadAction<{
+                url: string;
+                index: number;
+                blob: Blob | null;
+            }>,
+        ) => {
+            state.files[action.payload.index].newUrl = action.payload.url;
+            state.files[action.payload.index].blob = action.payload.blob;
+        },
+        resetNewFileUrl: (state) => {
+            state.files.forEach((file) => {
+                file.newUrl = "";
+            });
+        },
+        setTextareaValue: (state, action: PayloadAction<string>) => {
+            state.textareaValue = action.payload;
+        },
+        addEmojiOnTextarea: (state, action: PayloadAction<string>) => {
+            state.textareaValue += action.payload;
+        },
+        setAlternativeValue: (
+            state,
+            action: PayloadAction<{ value: string; index: number }>,
+        ) => {
+            state.files[action.payload.index].alternativeText =
+                action.payload.value;
+        },
+        toggleIsLikesAndViewsHidden: (state) => {
+            state.isLikesAndViewsHidden = !state.isLikesAndViewsHidden;
+        },
+        toggleIsCommentBlocked: (state) => {
+            state.isCommentBlocked = !state.isCommentBlocked;
+        },
+        addHashtags: (state, action: PayloadAction<UploadType.HashtagType>) => {
+            const index = state.files[state.currentIndex].hashtags.findIndex(
+                (hashtag) => hashtag.username === action.payload.username,
+            );
+            if (index === -1) {
+                state.files[state.currentIndex].hashtags.push(action.payload);
+            } else {
+                state.files[state.currentIndex].hashtags[index] =
+                    action.payload;
+            }
+        },
+        deleteHashtag: (state, action: PayloadAction<number>) => {
+            state.files[state.currentIndex].hashtags = state.files[
+                state.currentIndex
+            ].hashtags.filter((hashtag, index) => index !== action.payload);
+        },
+        startWarningModal: (state) => {
+            state.isWarningModalOn = true;
+        },
+        notificateWarningIsJustAboutBeforePrevStep: (state) => {
+            state.isJustWarningBeforePrevStep = true;
+        },
+        // excuteFunctionAfterWarning: (state) => {
+        //     state.isWarningModalOn = false;
+        //     state.functionAfterWarning && state.functionAfterWarning();
+        // },
+        cancelWarningModal: (state) => {
+            state.isWarningModalOn = false;
+            state.isJustWarningBeforePrevStep = false;
+        },
+    },
+    extraReducers: (build) => {
+        build
+            .addCase(uploadArticle.pending, (state) => {
+                state.step = "uploading";
+            })
+            .addCase(uploadArticle.fulfilled, (state) => {
+                state.step = "complete";
+            })
+            .addCase(uploadArticle.rejected, (state) => {
+                return initialState;
+            });
     },
 });
 

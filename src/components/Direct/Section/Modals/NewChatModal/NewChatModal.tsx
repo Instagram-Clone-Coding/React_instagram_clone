@@ -8,7 +8,7 @@ import { useAppDispatch } from "app/store/Hooks";
 import {
     closeModal,
     openModal,
-    selectNewChatUser,
+    resetSelectNewChatUser,
 } from "app/store/ducks/direct/DirectSlice";
 
 const NewChatModalContainer = styled.div`
@@ -19,8 +19,8 @@ const NewChatModal = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(selectNewChatUser(null));
-    }, []);
+        dispatch(resetSelectNewChatUser());
+    }, [dispatch]);
 
     return (
         <ModalCard

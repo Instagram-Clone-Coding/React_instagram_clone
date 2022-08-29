@@ -4,6 +4,7 @@ import Button from "styles/UI/Button";
 import { useAppDispatch } from "app/store/Hooks";
 import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import styled from "styled-components";
+import UploadHeader from "components/Common/Header/Upload/UploadHeader";
 
 const StyledDragAndDrop = styled.div`
     width: 100%;
@@ -89,11 +90,13 @@ const DragAndDrop = () => {
                 dispatch(
                     uploadActions.addFile({
                         url: img.src,
+                        width: img.width,
+                        height: img.height,
                         imageRatio: img.width / img.height,
                     }),
                 );
                 if (index === droppedFiles.length - 1) {
-                    dispatch(uploadActions.toCutStep());
+                    dispatch(uploadActions.nextStep());
                 }
             };
         });
@@ -111,48 +114,55 @@ const DragAndDrop = () => {
                 dispatch(
                     uploadActions.addFile({
                         url: img.src,
+                        width: img.width,
+                        height: img.height,
                         imageRatio: img.width / img.height,
                     }),
                 );
                 if (index === addedFiles.length - 1) {
-                    dispatch(uploadActions.toCutStep());
+                    dispatch(uploadActions.nextStep());
                 }
             };
         });
     };
 
     return (
-        <StyledDragAndDrop>
-            <div
-                className={`upload__file ${isDraggingOver ? "dragOver" : ""}`}
-                onDrop={dropHandler}
-                onDragEnter={dragInHandler}
-                onDragLeave={dragOutHandler}
-                onDragOver={dragOverHandler}
-            >
-                <ImgOrVideoIcon />
-                <div>
-                    <h2>사진과 동영상을 여기 끌어다 놓으세요</h2>
+        <>
+            <UploadHeader />
+            <StyledDragAndDrop>
+                <div
+                    className={`upload__file ${
+                        isDraggingOver ? "dragOver" : ""
+                    }`}
+                    onDrop={dropHandler}
+                    onDragEnter={dragInHandler}
+                    onDragLeave={dragOutHandler}
+                    onDragOver={dragOverHandler}
+                >
+                    <ImgOrVideoIcon />
+                    <div>
+                        <h2>사진과 동영상을 여기 끌어다 놓으세요</h2>
+                    </div>
+                    <Button type="button" onClick={buttonClickHandler}>
+                        컴퓨터에서 선택
+                    </Button>
                 </div>
-                <Button type="button" onClick={buttonClickHandler}>
-                    컴퓨터에서 선택
-                </Button>
-            </div>
-            <form
-                encType="multipart/form-data"
-                method="POST"
-                role="presentation"
-            >
-                <input
-                    accept="image/jpeg,image/png,image/heic,image/heif"
-                    multiple={true}
-                    type="file"
-                    ref={inputRef}
-                    onChange={fileInputChangeHandler}
-                    // value={}
-                />
-            </form>
-        </StyledDragAndDrop>
+                <form
+                    encType="multipart/form-data"
+                    method="POST"
+                    role="presentation"
+                >
+                    <input
+                        accept="image/jpeg,image/png,image/heic,image/heif"
+                        multiple={true}
+                        type="file"
+                        ref={inputRef}
+                        onChange={fileInputChangeHandler}
+                        // value={}
+                    />
+                </form>
+            </StyledDragAndDrop>
+        </>
     );
 };
 

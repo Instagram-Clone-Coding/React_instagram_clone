@@ -12,10 +12,10 @@ declare module Direct {
         content: string | PostMessageDTO;
         messageType: messageType;
         messageDate: string;
-        senderId: number;
+        sender: Common.memberType;
         roomId: number;
         senderImage: Common.ImageInfo;
-        likeMembers: AuthType.UserInfo[];
+        likeMembers: Common.memberType[];
     }
 
     interface ChatItem {
@@ -135,6 +135,11 @@ declare module AuthType {
     interface resetPasswordState {
         email?: string;
     }
+
+    type resetPasswordQuery = {
+        username: string;
+        code: string;
+    };
 }
 
 declare module HomeType {
@@ -214,11 +219,18 @@ declare module ModalType {
         blocking: boolean;
         follower: boolean;
         following: boolean;
-        followingMemberFollow: string;
+        hasStory: boolean;
+        followingMemberFollow: // 내가 팔로우 하는 사람 중에 이 유저를 팔로우하는 사람 대표 1명
+        [
+            {
+                memberUsername: string;
+            },
+        ];
+        followingMemberFollowCount: number; // 위 member 제외 나머지 수
         me: boolean;
-        memberFollowersCount: number;
-        memberFollowingsCount: number;
-        memberPostsCount: number;
+        memberFollowersCount: number; // 유저를 팔로우우하는 사람
+        memberFollowingsCount: number; // 유저가 팔로우하는 사람 전부
+        memberPostsCount: number; // 게시글 수
         memberImage: {
             imageUrl: string;
             imageType: string;
@@ -253,12 +265,16 @@ declare module UploadType {
         x: number;
         y: number;
     }
+
+    // 퍼센트 값으로 변경
     interface TranslateProps {
         translateX: number;
         translateY: number;
     }
     interface FileDragAndDropProps {
         imageRatio: number;
+        width: number;
+        height: number;
         url: string;
     }
     interface FileCutProps extends TranslateProps {
@@ -266,21 +282,57 @@ declare module UploadType {
         scale: number;
     }
 
-    interface FileProps extends FileDragAndDropProps, FileCutProps {}
+    interface EditType {
+        brightness: number;
+        contrast: number;
+        saturate: number;
+        // 온도
+        blur: number;
+        // backgroundBlur
+    }
+
+    interface HashtagType {
+        tagX: number;
+        tagY: number;
+        username: string;
+    }
+    interface ContentType {
+        newUrl: string;
+        alternativeText: string;
+        hashtags: HashtagType[];
+        blob: Blob | null;
+    }
+    interface FileProps
+        extends FileDragAndDropProps,
+            FileCutProps,
+            EditType,
+            ContentType {}
     // type FileProps = FileDragAndDropProps & FileCutProps;
 
     type RatioType = "original" | "square" | "thin" | "fat";
-    type StepType = "dragAndDrop" | "cut" | "edit" | "content";
+    type StepType =
+        | "dragAndDrop"
+        | "cut"
+        | "edit"
+        | "content"
+        | "uploading"
+        | "complete";
+    type AdjustInputTextType = "밝기" | "대비" | "채도" | "흐리게";
 
     interface UploadStateProps {
         isUploading: boolean;
         isGrabbing: boolean;
+        isWarningModalOn: boolean;
+        isJustWarningBeforePrevStep: boolean;
         step: StepType;
         ratioMode: RatioType;
         files: FileProps[];
         currentIndex: number;
         grabbedGalleryImgIndex: number | null;
         grabbedGalleryImgNewIndex: number | null;
+        textareaValue: string;
+        isLikesAndViewsHidden: boolean;
+        isCommentBlocked: boolean;
     }
 }
 
@@ -308,6 +360,19 @@ declare module Common {
         hasStory: boolean;
     }
 
+    interface searchResultType {
+        dtype: "MEMBER" | "HASHTAG";
+
+        // MEMBER
+        follwer?: boolean;
+        following?: boolean;
+        followingMemberFollow?: { memberUsername: string }[];
+        member?: memberType;
+
+        // HASHTAG
+        name?: string;
+        postCount?: number;
+    }
     interface PostImageDTOProps {
         id: number;
         postImageUrl: string;
@@ -394,5 +459,5 @@ declare module EditType {
         | "Instagram에서 보낸 이메일"
         | "도움말";
 
-    type modalType = "image" | null;
+    type modalType = "image" | "gender" | null;
 }

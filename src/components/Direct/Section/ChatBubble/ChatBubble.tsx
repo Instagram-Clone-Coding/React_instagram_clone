@@ -1,14 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import { ReactComponent as ThreeDots } from "assets/Svgs/threeDots.svg";
 import {
     openModal,
+    setCloseModalSelectedMessageId,
     setSelectedMessageId,
 } from "app/store/ducks/direct/DirectSlice";
-import moment from "moment";
-import Direct from "pages/Direct";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { ReactComponent as Slide } from "assets/Svgs/slide.svg";
+import { ReactComponent as ThreeDots } from "assets/Svgs/threeDots.svg";
+import moment from "moment";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 interface ChatBubbleProps {
     content: string | Direct.PostMessageDTO | Common.ImageInfo; // DM 메세지에는 여러가지 타입이 있습니다. 순서대로 일반 메세지, 포스트 공유, 이미지 전송
@@ -18,8 +19,9 @@ interface ChatBubbleProps {
     messageId: number;
     likeMessageHandler: () => void;
     unlikeMessageHandler: () => void;
-    likeMembers: AuthType.UserInfo[];
+    likeMembers: Common.memberType[];
     senderImage: Common.ImageInfo;
+    sender: Common.memberType;
 }
 
 interface ChatBubbleContainerType {
@@ -28,7 +30,7 @@ interface ChatBubbleContainerType {
     showGuide: boolean;
     onMouseEnter: (event: React.MouseEvent<HTMLDivElement>) => void;
     onMouseLeave: (event: React.MouseEvent<HTMLDivElement>) => void;
-    liked: AuthType.UserInfo | undefined;
+    liked: Common.memberType | undefined;
     isString: boolean;
 }
 
@@ -171,7 +173,7 @@ const ChatBubbleContainer = styled.div<ChatBubbleContainerType>`
         }
     }
 
-    & > img {
+    & > a > img {
         position: absolute;
         bottom: 0;
         left: 20px;
@@ -204,11 +206,13 @@ const ChatBubble = ({
     unlikeMessageHandler,
     likeMembers,
     senderImage,
+    sender,
 }: ChatBubbleProps) => {
     const [showThreeDotsButton, setShowThreeDotsButton] =
         useState<boolean>(false);
     const [showGuide, setShowGuide] = useState<boolean>(false);
     const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
+    const guideRef: React.RefObject<HTMLDivElement> = useRef(null);
     const renewScroll = useAppSelector((state) => state.direct.renewScroll);
     const selectedMessageId = useAppSelector(
         (state) => state.direct.selectedMessageId,
@@ -222,11 +226,11 @@ const ChatBubble = ({
         if (renewScroll) {
             scrollRef.current?.scrollIntoView();
         }
-    }, [content]);
+    }, [content, renewScroll]);
 
     // 내가 좋아요 했는지 판단하는 상수
     const liked = likeMembers.find((member) => {
-        return member.memberId === userInfo?.memberId;
+        return member.id === userInfo?.memberId;
     });
 
     useEffect(() => {
@@ -234,9 +238,9 @@ const ChatBubble = ({
         setShowGuide(
             selectedMessageId === messageId && modal !== "likedMember",
         );
-    }, [selectedMessageId]);
+    }, [messageId, modal, selectedMessageId]);
 
-    const copyhandler = () => {
+    const copyhandler = useCallback(() => {
         // 흐음 1.
         if (navigator.clipboard) {
             // (IE는 사용 못하고, 크롬은 66버전 이상일때 사용 가능합니다.)
@@ -272,7 +276,7 @@ const ChatBubble = ({
         }
         setShowGuide(false);
         dispatch(setSelectedMessageId(null));
-    };
+    }, [content, dispatch]);
 
     const isPostImage = (object: any): object is Direct.PostMessageDTO => {
         return "postImage" in object;
@@ -314,6 +318,29 @@ const ChatBubble = ({
         }
     };
 
+    // 포커싱이 풀리면 해당 박스가 사라지는 기능을 추가해 주세요.
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                guideRef.current &&
+                !guideRef.current.contains(event.target as Node)
+            ) {
+                if (messageId === selectedMessageId) {
+                    setTimeout(() => {
+                        setShowGuide(false);
+                        dispatch(setSelectedMessageId(null));
+                    }, 0);
+                }
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [dispatch, messageId, selectedMessageId]);
+
     return (
         <ChatBubbleContainer
             me={me}
@@ -336,9 +363,13 @@ const ChatBubble = ({
                     {moment(messageDate).format("YYYY년 M월 DD일 a  h:mm")}
                 </div>
             )}
-            {!me && <img src={senderImage.imageUrl} alt={"보낸사람"} />}
+            {!me && (
+                <Link to={`/profile/${sender.username}`}>
+                    <img src={senderImage.imageUrl} alt={"보낸사람"} />
+                </Link>
+            )}
 
-            <div className={"content"}>
+            <div className={"content"} ref={guideRef}>
                 <div className={"guide-part"}>
                     <div className="guide-container">
                         <div className="guide-inner">
@@ -374,6 +405,9 @@ const ChatBubble = ({
                                             dispatch(
                                                 openModal("deleteChatMessage"),
                                             );
+                                            dispatch(
+                                                setCloseModalSelectedMessageId(),
+                                            );
                                         }}
                                     >
                                         전송 취소
@@ -391,9 +425,9 @@ const ChatBubble = ({
                         </div>
                     </div>
                     <ThreeDots
-                        onClick={() =>
-                            dispatch(setSelectedMessageId(messageId))
-                        }
+                        onClick={() => {
+                            dispatch(setSelectedMessageId(messageId));
+                        }}
                     />
                 </div>
                 <p>{renderContent()}</p>

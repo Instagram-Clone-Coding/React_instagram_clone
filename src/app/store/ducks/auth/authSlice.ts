@@ -1,7 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FormState, LoginDevice } from "./authThunk.type";
-import { getUserInfo, signIn, getLoginDevice } from "./authThunk";
+import {
+    getUserInfo,
+    signIn,
+    resetPassword,
+    checkCurrentURL,
+    signInUseCode,
+    logout,
+    getLoginDevice
+} from "./authThunk";
 import { setAccessTokenInAxiosHeaders } from "customAxios";
+import { uploadArticle } from "app/store/ducks/upload/uploadThunk";
 
 export interface AuthStateProps {
     isLogin: boolean;
@@ -92,6 +101,16 @@ const authSlice = createSlice({
                 state.isLogin = true;
                 setAccessTokenInAxiosHeaders(action.payload);
             })
+            .addCase(resetPassword.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isLogin = true;
+                setAccessTokenInAxiosHeaders(action.payload);
+            })
+            .addCase(signInUseCode.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isLogin = true;
+                setAccessTokenInAxiosHeaders(action.payload);
+            })
             .addCase(signIn.rejected, (state, action) => {
                 state.isAsyncReject = true;
                 state.isLoading = false;
@@ -109,6 +128,18 @@ const authSlice = createSlice({
             })
             .addCase(getLoginDevice.fulfilled, (state, action) => {
                 state.loginDeviceList = action.payload;
+
+            .addCase(resetPassword.rejected, (state) => {
+                state.errorMessage = `전에 사용한 적 없는 새로운 비밀번호를 만드세요.`;
+            })
+            .addCase(checkCurrentURL.rejected, (state) => {
+                // 유효하지 않은 url **
+            })
+            .addCase(uploadArticle.rejected, (state) => {
+                state.isLogin = false;
+            })
+            .addCase(logout.fulfilled, (state) => {
+                state.isLogin = false;
             });
     },
 });

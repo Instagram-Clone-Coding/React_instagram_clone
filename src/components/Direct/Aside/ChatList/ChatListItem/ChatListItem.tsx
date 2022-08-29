@@ -1,10 +1,10 @@
-import styled from "styled-components";
-import useGapText from "hooks/useGapText";
-import React, { useEffect, useRef } from "react";
-import Direct from "pages/Direct";
-import useOnView from "hooks/useOnView";
-import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { lookUpChatList } from "app/store/ducks/direct/DirectThunk";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import useGapText from "hooks/useGapText";
+import useOnView from "hooks/useOnView";
+import Direct from "pages/Direct";
+import React, { useEffect, useMemo, useRef } from "react";
+import styled from "styled-components";
 
 interface ChatListItemContainerType {
     unreadFlag: boolean;
@@ -19,10 +19,33 @@ const ChatListItemContainer = styled.div<ChatListItemContainerType>`
     background-color: ${(props) =>
         props.isSelected ? "rgb(239,239,239)" : "transparent"};
 
+    // 갠톡
     .user-image {
         width: 56px;
+        height: 56px;
         border-radius: 50%;
         margin-right: 12px;
+    }
+
+    // 단톡
+    .group-user-image-container {
+        position: relative;
+        width: 68px;
+        height: 56px;
+        img {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .first {
+            top: 0;
+            left: 0;
+        }
+        .second {
+            bottom: 3px;
+            right: 10px;
+        }
     }
 
     .right-section-container {
@@ -67,8 +90,8 @@ const ChatListItemContainer = styled.div<ChatListItemContainerType>`
 
 interface ChatListItemProps extends Direct.ChatItem {
     isSelected: boolean;
-    opponent: Direct.memberProps;
-    chatListClickHandler: (chatRoomId: number, username: string) => void;
+    opponents: Direct.memberProps[];
+    chatListClickHandler: (chatRoomId: number, usernames: string[]) => void;
     isObserving: boolean;
     isTyping: boolean;
 }
@@ -79,7 +102,7 @@ const ChatListItem = ({
     unreadFlag,
     isSelected,
     chatListClickHandler,
-    opponent,
+    opponents,
     isObserving,
     isTyping,
 }: ChatListItemProps) => {
@@ -98,7 +121,9 @@ const ChatListItem = ({
             }
         };
         false && isObserving && isVisible && dispatchExtraChatList(); // 이 때 비동기 작업 및 무한 스크롤
-    }, [isObserving, isVisible, dispatch]);
+    }, [isObserving, isVisible, dispatch, chatListPage]);
+
+    const isGroupChat = useMemo(() => opponents.length > 1, [opponents.length]);
 
     return (
         <ChatListItemContainer
@@ -106,16 +131,41 @@ const ChatListItem = ({
             unreadFlag={unreadFlag}
             isSelected={isSelected}
             onClick={() => {
-                chatListClickHandler(roomId, opponent.username);
+                chatListClickHandler(
+                    roomId,
+                    opponents.map((opponent) => opponent.username),
+                );
             }}
         >
-            <img
-                src={opponent.imageUrl}
-                alt="avatarImg"
-                className="user-image"
-            />
+            {isGroupChat ? (
+                <div className="group-user-image-container">
+                    <img
+                        src={opponents[0].imageUrl}
+                        alt="avatarImg"
+                        className="first"
+                    />
+                    <img
+                        src={opponents[1].imageUrl}
+                        alt="avatarImg"
+                        className="second"
+                    />
+                </div>
+            ) : (
+                <img
+                    src={opponents[0].imageUrl}
+                    alt="avatarImg"
+                    className="user-image"
+                />
+            )}
             <div className="right-section-container">
-                <div className="user-nickName">{opponent.username}님</div>
+                <div className="user-nickName">
+                    {/* 1:1 대화일때랑 단톡일때 구분 */}
+                    {isGroupChat
+                        ? opponents
+                              .map((opponent) => opponent.username)
+                              .join(",")
+                        : opponents[0].username + " 님"}
+                </div>
 
                 <div className="last-info">
                     <div className="last-chat-container">

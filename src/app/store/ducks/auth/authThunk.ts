@@ -60,16 +60,6 @@ export const getUserInfo = createAsyncThunk<AuthType.UserInfo>(
     },
 );
 
-// export const resetPassword = createAsyncThunk<>(
-//     "auth/passwordReset",
-//     async (payload, ThunkOptions) => {
-//         try {
-//             // call api
-//         } catch (error) {
-//             // error handling
-//         }
-//     },
-// );
 
 export const getLoginDevice = createAsyncThunk<LoginDevice[], void>(
     "auth/loginDevice",
@@ -79,11 +69,66 @@ export const getLoginDevice = createAsyncThunk<LoginDevice[], void>(
                 `/accounts/login/device`,
             );
             return response.data.data;
+            
+export const checkCurrentURL = createAsyncThunk<
+    void,
+    { code: string; username: string }
+>("auth/checkResetPassword", async (payload, ThunkOptions) => {
+    try {
+        const config = {
+            params: {
+                code: payload.code,
+                username: payload.username,
+            },
+        };
+        const { data } = await customAxios.get(
+            `/accounts/password/reset`,
+            config,
+        );
+        console.log(data);
+    } catch (error) {
+        throw ThunkOptions.rejectWithValue(error);
+    }
+});
+
+export const resetPassword = createAsyncThunk<
+    AuthType.Token,
+    { code: string; username: string; newPassword: string }
+>("auth/resetPassword", async (payload, ThunkOptions) => {
+    try {
+        const { data } = await customAxios.put(`/accounts/password/reset`, {
+            code: payload.code,
+            username: payload.username,
+            newPassword: payload.newPassword,
+        });
+        return data.data;
+    } catch (error) {
+        throw ThunkOptions.rejectWithValue(error);
+    }
+});
+
+export const signInUseCode = createAsyncThunk<
+    AuthType.Token,
+    { code: string; username: string }
+>("auth/signInUseCode", async (payload, ThunkOptions) => {
+    const { data } = await customAxios.post(`/login/recovery`, {
+        code: payload.code,
+        username: payload.username,
+    });
+    return data.data;
+});
+
+export const logout = createAsyncThunk<void, void>(
+    "auth/logout",
+    async (payload, ThunkOptions) => {
+        try {
+            await authorizedCustomAxios.post(`/logout`);
         } catch (error) {
             ThunkOptions.rejectWithValue(error);
         }
     },
 );
+
 
 export const deviceLogout = createAsyncThunk<
     void,

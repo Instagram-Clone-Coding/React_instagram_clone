@@ -15,7 +15,7 @@ export interface InitialStateType {
     modal: Direct.modalType;
     view: Direct.currentSectionViewType;
     selectedChatItem: number | null;
-    selectedNewChatUser: string | null;
+    selectedNewChatUsers: string[];
     selectedRoom: Direct.RoomsProps | null;
     isLoading: boolean;
     chatList: Direct.ChatItem[];
@@ -27,13 +27,14 @@ export interface InitialStateType {
     subChatCount: number; // 채팅메시지 subscribe 를 통해서 읽은 개수입니다.
     messageScrollable: boolean;
     selectedMessageId: number | null; // 메세지 옆에 3개의 점을 클릭했을때 여러가지 action 을 처리해주기 위함입니다.
+    closeModalSelectedMessageId: number | null; // 취소 모달을 위해.
 }
 
 const initialState: InitialStateType = {
     modal: null,
     view: "inbox",
     selectedChatItem: null,
-    selectedNewChatUser: null,
+    selectedNewChatUsers: [],
     selectedRoom: null,
     isLoading: false,
     chatList: [],
@@ -45,6 +46,7 @@ const initialState: InitialStateType = {
     subChatCount: 0,
     messageScrollable: true,
     selectedMessageId: null,
+    closeModalSelectedMessageId: null,
 };
 
 const directSlice = createSlice({
@@ -66,11 +68,19 @@ const directSlice = createSlice({
         selectChatItem: (state, action: PayloadAction<number | null>) => {
             state.selectedChatItem = action.payload;
         },
-        selectNewChatUser: (state, action: PayloadAction<string | null>) => {
-            state.selectedNewChatUser = action.payload;
+        // DM 추천 클릭하면 사람 이름 추가
+        selectNewChatUser: (state, action: PayloadAction<string>) => {
+            state.selectedNewChatUsers?.push(action.payload);
         },
-        unSelectNewChatUser: (state) => {
-            state.selectedNewChatUser = null;
+        // DM 추천된사람 클릭하면 사람 이름 제거
+        unSelectNewChatUser: (state, action: PayloadAction<string>) => {
+            state.selectedNewChatUsers = state.selectedNewChatUsers.filter(
+                (username) => username !== action.payload,
+            );
+        },
+        // DM 추천된사람 목록 모달창 remount 시 빈배열로
+        resetSelectNewChatUser: (state) => {
+            state.selectedNewChatUsers = [];
         },
         resetChatMessageList: (state) => {
             state.chatMessageList = [];
@@ -99,6 +109,9 @@ const directSlice = createSlice({
         setSelectedMessageId: (state, action: PayloadAction<number | null>) => {
             state.selectedMessageId = action.payload;
         },
+        setCloseModalSelectedMessageId: (state) => {
+            state.closeModalSelectedMessageId = state.selectedMessageId;
+        },
         likeChatMessageItem: (
             state,
             action: PayloadAction<{
@@ -109,7 +122,18 @@ const directSlice = createSlice({
             // 내가 좋아요 누른 메세지의 likemembers 에 내 정보를 추가해준다. 그래야 바로 반영이된다.
             state.chatMessageList.forEach((chatMessageItem) => {
                 if (chatMessageItem.messageId === action.payload.messageId) {
-                    chatMessageItem.likeMembers.push(action.payload.userInfo);
+                    chatMessageItem.likeMembers.push({
+                        hasStory: false,
+                        id: action.payload.userInfo.memberId,
+                        image: {
+                            imageName: "dummy",
+                            imageType: "JPG",
+                            imageUUID: "dasda-123-13",
+                            imageUrl: action.payload.userInfo.memberImageUrl,
+                        },
+                        name: action.payload.userInfo.memberName,
+                        username: action.payload.userInfo.memberUsername,
+                    });
                     return;
                 }
             });
@@ -124,7 +148,7 @@ const directSlice = createSlice({
                 if (chatMessageItem.messageId === action.payload.messageId) {
                     chatMessageItem.likeMembers =
                         chatMessageItem.likeMembers.filter((member) => {
-                            return member.memberId !== action.payload.memberId;
+                            return member.id !== action.payload.memberId;
                         });
                     return;
                 }
@@ -309,5 +333,7 @@ export const {
     likeChatMessageItem,
     unLikeChatMessageItem,
     deleteChatMessageItem,
+    resetSelectNewChatUser,
+    setCloseModalSelectedMessageId,
 } = directSlice.actions;
 export const directReducer = directSlice.reducer;
