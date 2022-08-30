@@ -3,6 +3,8 @@ import styled from "styled-components";
 import AlarmProfile from "components/Common/Header/alarm/alarm_profile";
 import { Link } from "react-router-dom";
 import useGapText from "hooks/useGapText";
+import { removeRefer } from "components/Common/Header/alarm/utils";
+import StringFragmentWithMentionOrHashtagLink from "components/Common/StringFragmentWithMentionOrHashtagLink";
 
 const Container = styled.div`
     display: flex;
@@ -37,14 +39,8 @@ const Container = styled.div`
     }
 `;
 
-const removeRefer = (message: string) => {
-    return message.replace(/\{[a-z.]+\}/g, "");
-};
-
-export default function AlarmItem({ alarm }: { alarm: Alarm.AlarmItem }) {
+export default function AlarmItem({ alarm }: { alarm: Alarm.CommonAlarm }) {
     const alarmMessage = removeRefer(alarm.message);
-    // content -> @username, #search -> 파란색으로 스타일링..! -> 검색가능해야하는데..? -> #search 프로필페이지 만들어야함
-
     // 무한스크롤
     // 컴포넌트 언마운트 -> alarm창 닫도록
 
@@ -55,7 +51,12 @@ export default function AlarmItem({ alarm }: { alarm: Alarm.AlarmItem }) {
                 <Link to={`/profile/${alarm.agent.username}`}>
                     <span className="username">{alarm.agent.username}</span>
                 </Link>
-                {alarmMessage} {alarm.content}{" "}
+                {alarmMessage}
+                <StringFragmentWithMentionOrHashtagLink
+                    str={alarm.content}
+                    mentions={alarm.mentionsOfContent}
+                    hashtags={alarm.hashtagsOfContent}
+                />{" "}
                 <span className="create-date">
                     {useGapText(alarm.createdDate)}
                 </span>

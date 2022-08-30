@@ -465,7 +465,8 @@ declare module EditType {
 }
 
 declare module Alarm {
-    interface AlarmItem {
+    type AlarmItem = CommonAlarm | FollowAlarm;
+    interface CommonAlarm {
         id: number;
         type: "COMMENT" | "LIKE_POST" | "MENTION_POST";
         message: string;
@@ -485,5 +486,27 @@ declare module Alarm {
         postId: number;
         postImageUrl: string;
         content: string;
+        mentionsOfContent: string[];
+        hashtagsOfContent: string[];
+    }
+
+    interface FollowAlarm {
+        id: number;
+        type: "FOLLOW";
+        message: string;
+        agent: {
+            id: number;
+            username: string;
+            name: string;
+            image: {
+                imageUrl: string;
+                imageType: string;
+                imageName: string;
+                imageUUID: string;
+            };
+            hasStory: false;
+        };
+        createdDate: string;
+        following: boolean;
     }
 }

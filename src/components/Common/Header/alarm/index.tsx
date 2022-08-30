@@ -1,6 +1,7 @@
 import { loadAlarmList } from "app/store/ducks/alarm/alarmThunk";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import AlarmItem from "components/Common/Header/alarm/alarm_item";
+import AlarmItem from "components/Common/Header/alarm/alarmType/alarm_item";
+import FollowAlarm from "components/Common/Header/alarm/alarmType/follow_alarm";
 import Loading from "components/Common/Loading";
 import React, { useEffect } from "react";
 import styled from "styled-components";
@@ -86,13 +87,16 @@ export default function Alarm({
                         <div className="empty-container">알람이 없습니다.</div>
                     ) : (
                         alarmList.map((alarm) => (
-                            <li className="alarm-item">
-                                <AlarmItem alarm={alarm} />
+                            <li className="alarm-item" key={alarm.id}>
+                                {alarm.type === "FOLLOW" ? (
+                                    <FollowAlarm alarm={alarm} />
+                                ) : (
+                                    <AlarmItem alarm={alarm} />
+                                )}
                             </li>
                         ))
                     )}
                 </ul>
-                {/* 무한스크롤 footer */}
             </div>
         </Container>
     );
