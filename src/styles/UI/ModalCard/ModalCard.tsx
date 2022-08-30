@@ -48,6 +48,9 @@ const StyledBackDrop = styled.div<StyledBackDropProps>`
         position: fixed;
         top: 10px;
         right: 10px;
+        &:hover {
+            cursor: pointer;
+        }
     }
     & > div {
         width: ${(props) => (props.width ? props.width : 400)}px;

@@ -5,7 +5,7 @@ import Username from "../../Common/Username";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
-import { loadavg } from "os";
+import StringFragmentWithMentionOrHashtagLink from "components/Common/StringFragmentWithMentionOrHashtagLink";
 
 const StyledMain = styled.div`
     padding: 0 16px;
@@ -52,6 +52,8 @@ interface MainProps {
         username: string;
         comment: string;
     }[];
+    mentions: string[];
+    hashtags: string[];
 }
 
 const ArticleMain = ({
@@ -63,6 +65,8 @@ const ArticleMain = ({
     content,
     commentsCount,
     comments,
+    mentions,
+    hashtags,
 }: MainProps) => {
     // like state
     const [isComment1Liked, setIsComment1Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
@@ -80,19 +84,30 @@ const ArticleMain = ({
     const textSpan = useMemo(
         () =>
             !isFullText ? (
-                <span>{textArray[0]}</span>
+                <span>
+                    <StringFragmentWithMentionOrHashtagLink
+                        str={textArray[0]}
+                        mentions={mentions}
+                        hashtags={hashtags}
+                    />
+                </span>
             ) : (
                 textArray.map((line: string, index: number) => {
                     return (
                         <span key={index}>
-                            {line}
+                            <StringFragmentWithMentionOrHashtagLink
+                                str={line}
+                                mentions={mentions}
+                                hashtags={hashtags}
+                            />
                             <br />
                         </span>
                     );
                 })
             ),
-        [isFullText, textArray],
+        [isFullText, textArray, mentions, hashtags],
     );
+
     const comment1LikeHandler = () => {
         setIsComment1Liked((prev) => !prev);
         // 백엔드 수행
