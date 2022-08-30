@@ -1,6 +1,7 @@
 import { getSearchRecord } from "app/store/ducks/common/commonThunk";
 import { useAppDispatch } from "app/store/Hooks";
 import CloseSVG from "assets/Svgs/CloseSVG";
+import SearchListItemLayout from "components/Home/SearchListItemLayout";
 import { authorizedCustomAxios } from "customAxios";
 import React, { Dispatch, SetStateAction } from "react";
 import { Link } from "react-router-dom";
@@ -16,35 +17,9 @@ const Container = styled.div`
         align-items: center;
         gap: 20px;
         height: 60px;
-        padding: 8px 16px;
         cursor: pointer;
         text-decoration: none;
-        &:hover {
-            background-color: ${theme.color.bg_gray};
-        }
-
-        .profile-image {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-        }
-
-        .profile-contents {
-            .username {
-                font-weight: 600;
-            }
-            .name-container {
-                span {
-                    color: ${theme.font.gray};
-                }
-                .name {
-                }
-                .follow-info {
-                }
-            }
-        }
     }
-
     .close-button {
         flex: 1;
     }
@@ -90,55 +65,19 @@ const SearchListItem = ({
 
     return (
         <Container>
-            {dtype === "MEMBER" ? (
+            {dtype === "MEMBER" && member ? (
                 <Link
-                    to={`/profile/${member?.username}`}
+                    to={`/profile/${member.username}`}
                     onClick={itemClickHandler}
                 >
-                    <img
-                        src={member?.image.imageUrl}
-                        alt="member"
-                        className="profile-image"
+                    <SearchListItemLayout
+                        member={member}
+                        followingMemberFollow={followingMemberFollow}
                     />
-                    <div className="profile-contents">
-                        <span className="username">{member?.username}</span>
-                        <div className="name-container">
-                            <span className="name">{member?.name}</span>
-                            {followingMemberFollow &&
-                                followingMemberFollow.length > 0 && (
-                                    <span className="follow-info">
-                                        •
-                                        {
-                                            followingMemberFollow[0]
-                                                .memberUsername
-                                        }{" "}
-                                        외 {followingMemberFollow.length - 1}
-                                        명이 팔로우합니다
-                                    </span>
-                                )}
-                        </div>
-                    </div>
                 </Link>
             ) : (
                 <Link to={`/hashtag/${name}`} onClick={itemClickHandler}>
-                    <img
-                        src={
-                            "https://user-images.githubusercontent.com/69495129/178100078-a0570a9c-99c8-4d67-b4d9-e589df0a4ab9.png"
-                        }
-                        alt="hashtag"
-                        className="profile-image"
-                    />
-                    <div className="profile-contents">
-                        {name && <span className="username">#{name}</span>}
-                        <div className="name-container">
-                            <span className="name">{member?.name}</span>
-                            {
-                                <span className="follow-info">
-                                    게시물 {postCount}
-                                </span>
-                            }
-                        </div>
-                    </div>
+                    <SearchListItemLayout name={name} postCount={postCount} />
                 </Link>
             )}
             {button && (

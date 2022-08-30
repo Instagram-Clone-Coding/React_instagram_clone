@@ -291,11 +291,17 @@ declare module UploadType {
         // backgroundBlur
     }
 
+    interface HashtagType {
+        tagX: number;
+        tagY: number;
+        username: string;
+    }
     interface ContentType {
         newUrl: string;
-        // 예정
+        alternativeText: string;
+        hashtags: HashtagType[];
+        blob: Blob | null;
     }
-
     interface FileProps
         extends FileDragAndDropProps,
             FileCutProps,
@@ -304,12 +310,20 @@ declare module UploadType {
     // type FileProps = FileDragAndDropProps & FileCutProps;
 
     type RatioType = "original" | "square" | "thin" | "fat";
-    type StepType = "dragAndDrop" | "cut" | "edit" | "content";
+    type StepType =
+        | "dragAndDrop"
+        | "cut"
+        | "edit"
+        | "content"
+        | "uploading"
+        | "complete";
     type AdjustInputTextType = "밝기" | "대비" | "채도" | "흐리게";
 
     interface UploadStateProps {
         isUploading: boolean;
         isGrabbing: boolean;
+        isWarningModalOn: boolean;
+        isJustWarningBeforePrevStep: boolean;
         step: StepType;
         ratioMode: RatioType;
         files: FileProps[];
@@ -317,6 +331,8 @@ declare module UploadType {
         grabbedGalleryImgIndex: number | null;
         grabbedGalleryImgNewIndex: number | null;
         textareaValue: string;
+        isLikesAndViewsHidden: boolean;
+        isCommentBlocked: boolean;
     }
 }
 
