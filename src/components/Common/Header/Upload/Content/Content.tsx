@@ -626,6 +626,7 @@ const Content = ({ currentWidth }: ContentProps) => {
             const currentString = text[typedIndex];
             if (
                 currentString !== " " &&
+                currentString !== "\n" &&
                 currentString !== "#" &&
                 currentString !== "@"
             ) {
@@ -646,6 +647,7 @@ const Content = ({ currentWidth }: ContentProps) => {
             if (
                 currentString === "#" ||
                 currentString === "@" ||
+                currentString === "\n" ||
                 currentString === " "
             ) {
                 setIsTextareaSearchBarOn(false);
