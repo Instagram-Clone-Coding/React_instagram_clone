@@ -39,13 +39,13 @@ const StyledUploadWarningModalInner = styled.div`
 `;
 
 const UploadWarningModal = () => {
-    const isJustWarningBeforePrevStep = useAppSelector(
-        ({ upload }) => upload.isJustWarningBeforePrevStep,
+    const purposeOfWarningModal = useAppSelector(
+        ({ upload }) => upload.purposeOfWarningModal,
     );
     const dispatch = useAppDispatch();
 
     const deleteBtnClickHandler = () => {
-        if (isJustWarningBeforePrevStep) {
+        if (purposeOfWarningModal === "toDragAndDrop") {
             dispatch(uploadActions.prevStep());
         } else {
             dispatch(uploadActions.cancelUpload());
@@ -55,7 +55,9 @@ const UploadWarningModal = () => {
     return (
         <ModalCard
             modalType="withBackDrop"
-            onModalOn={() => dispatch(uploadActions.startWarningModal())}
+            onModalOn={() =>
+                dispatch(uploadActions.startWarningModal(purposeOfWarningModal))
+            }
             onModalOff={() => dispatch(uploadActions.cancelWarningModal())}
         >
             <StyledUploadWarningModalInner>
