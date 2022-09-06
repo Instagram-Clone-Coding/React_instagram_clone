@@ -84,6 +84,9 @@ const ArticleHeader = ({
     followLoading,
 }: ArticleHeaderProps) => {
     const { miniProfile } = useAppSelector(({ modal }) => modal);
+    const myUsername = useAppSelector(
+        (state) => state.auth.userInfo?.memberUsername,
+    );
     const dispatch = useAppDispatch();
 
     // const [isFollowing, setIsFollowing] = useState(false); // followingModal의 isFollowing과 연결할 것
@@ -173,18 +176,19 @@ const ArticleHeader = ({
                             {memberNickname}
                         </Link>
                     </Username>
-                    {!isFollowing && (
-                        <div className="header-followBox">
-                            <span>•</span>
-                            <button onClick={followHandler}>
-                                {followLoading ? (
-                                    <Loading size={18} />
-                                ) : (
-                                    "팔로우"
-                                )}
-                            </button>
-                        </div> // 로딩 처리 필요
-                    )}
+                    {!isFollowing ||
+                        (memberNickname === myUsername && (
+                            <div className="header-followBox">
+                                <span>•</span>
+                                <button onClick={followHandler}>
+                                    {followLoading ? (
+                                        <Loading size={18} />
+                                    ) : (
+                                        "팔로우"
+                                    )}
+                                </button>
+                            </div> // 로딩 처리 필요
+                        ))}
                 </div>
                 <Link to={`/explore/locations/:id/${location}`}>
                     {/* location id */}

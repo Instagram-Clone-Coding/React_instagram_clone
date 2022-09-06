@@ -1,6 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { homeActions } from "app/store/ducks/home/homeSlice";
 import { RootState } from "app/store/store";
 import { authorizedCustomAxios } from "customAxios";
+
+interface UploadResponseType extends AxiosType.ResponseType {
+    data: {
+        data: { postId: number };
+    };
+}
 
 export const uploadArticle = createAsyncThunk<
     AxiosType.ResponseType,
@@ -57,12 +64,22 @@ export const uploadArticle = createAsyncThunk<
             });
         }
         const {
-            data: { data },
-        } = await authorizedCustomAxios.post(`/posts`, formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
+            data: {
+                data: { postId },
             },
-        });
+        } = await authorizedCustomAxios.post<null, UploadResponseType>(
+            `/posts`,
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            },
+        );
+        const {
+            data: { data },
+        } = await authorizedCustomAxios.get(`/posts/${postId}`);
+        ThunkOptions.dispatch(homeActions.updateUploadedArticle(data));
         return data;
     } catch (error) {
         if (!window.navigator.onLine) {
