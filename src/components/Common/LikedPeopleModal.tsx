@@ -157,6 +157,7 @@ const LikedPeopleModal = ({
             onModalOn={onModalOn}
             onModalOff={onModalOff}
             width={isModalWidthSmall ? 260 : 400}
+            height={400}
         >
             <LIkedPeopleModalHeader>
                 <h1>좋아요</h1>
