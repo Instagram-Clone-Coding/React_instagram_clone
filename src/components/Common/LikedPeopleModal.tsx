@@ -125,9 +125,16 @@ const LikedPeopleModal = ({
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [likedPeople, setLikedPeople] = useState<LikedPersonType[]>([]);
+    const [modalWidth, setModalWidth] = useState(
+        window.innerWidth <= 735 ? 260 : 400,
+    );
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
+        const resizeEventHandler = () => {
+            window.innerWidth <= 735 ? setModalWidth(260) : setModalWidth(400);
+        };
+        window.addEventListener("resize", resizeEventHandler);
         getLikedPeople(1, modalInfo.type, modalInfo.id)
             .then((data) => {
                 setLikedPeople(data);
@@ -136,6 +143,7 @@ const LikedPeopleModal = ({
             .finally(() => setIsLoading(false));
         return () => {
             document.body.style.overflow = "unset";
+            window.removeEventListener("resize", resizeEventHandler);
         };
     }, [modalInfo.id, modalInfo.type]);
 
@@ -144,6 +152,7 @@ const LikedPeopleModal = ({
             modalType="withBackDrop"
             onModalOn={onModalOn}
             onModalOff={onModalOff}
+            width={modalWidth}
         >
             <LIkedPeopleModalHeader>
                 <h1>좋아요</h1>
