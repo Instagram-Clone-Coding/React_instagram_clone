@@ -96,7 +96,8 @@ const LikedPeopleModalMain = styled.div`
             }
             & > div:nth-child(2) {
                 flex: 1;
-                & > div:nth-child(2) {
+                #username {
+                    font-weight: ${(props) => props.theme.font.bold};
                 }
             }
             & > button {
@@ -171,7 +172,9 @@ const LikedPeopleModal = ({
                                 onMouseLeave={() => {}} // hoverModal
                             />
                             <div>
-                                <div>{personObj.member.username}</div>
+                                <div id="username">
+                                    {personObj.member.username}
+                                </div>
                                 <div>{personObj.member.name}</div>
                             </div>
                             <Button
