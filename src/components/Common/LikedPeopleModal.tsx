@@ -127,12 +127,16 @@ const LikedPeopleModal = ({
     const [likedPeople, setLikedPeople] = useState<LikedPersonType[]>([]);
 
     useEffect(() => {
+        document.body.style.overflow = "hidden";
         getLikedPeople(1, modalInfo.type, modalInfo.id)
             .then((data) => {
                 setLikedPeople(data);
                 setCurrentPage((prev) => prev + 1);
             })
             .finally(() => setIsLoading(false));
+        return () => {
+            document.body.style.overflow = "unset";
+        };
     }, [modalInfo.id, modalInfo.type]);
 
     return (
