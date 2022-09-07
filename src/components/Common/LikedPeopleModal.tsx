@@ -107,6 +107,10 @@ const LikedPeopleModalMain = styled.div`
     }
 `;
 
+const FollowBtn = styled(Button)<{ isSmall: boolean }>`
+    width: ${(props) => (props.isSmall ? 64 : 88)}px;
+`;
+
 interface LikedPeopleModalProps {
     onModalOn: () => void;
     onModalOff: () => void;
@@ -125,15 +129,15 @@ const LikedPeopleModal = ({
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [likedPeople, setLikedPeople] = useState<LikedPersonType[]>([]);
-    const [modalWidth, setModalWidth] = useState(
-        window.innerWidth <= 735 ? 260 : 400,
+    const [isModalWidthSmall, setIsModalWidthSmall] = useState(
+        window.innerWidth <= 735,
     );
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
-        const resizeEventHandler = () => {
-            window.innerWidth <= 735 ? setModalWidth(260) : setModalWidth(400);
-        };
+        const resizeEventHandler = () =>
+            setIsModalWidthSmall(window.innerWidth <= 735);
+
         window.addEventListener("resize", resizeEventHandler);
         getLikedPeople(1, modalInfo.type, modalInfo.id)
             .then((data) => {
@@ -152,7 +156,7 @@ const LikedPeopleModal = ({
             modalType="withBackDrop"
             onModalOn={onModalOn}
             onModalOff={onModalOff}
-            width={modalWidth}
+            width={isModalWidthSmall ? 260 : 400}
         >
             <LIkedPeopleModalHeader>
                 <h1>좋아요</h1>
@@ -190,15 +194,16 @@ const LikedPeopleModal = ({
                                 </div>
                                 <div>{personObj.member.name}</div>
                             </div>
-                            <Button
+                            <FollowBtn
                                 bgColor={
                                     personObj.following
                                         ? theme.color.bg_white
                                         : undefined
                                 }
+                                isSmall={isModalWidthSmall}
                             >
                                 {personObj.following ? "팔로잉" : "팔로우"}
-                            </Button>
+                            </FollowBtn>
                         </div>
                     ))}
                 </div>
