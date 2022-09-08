@@ -1,14 +1,13 @@
 import CloseSVG from "assets/Svgs/CloseSVG";
+import LikedPersonUnit from "components/Common/LikedPeopleModal/LikedPersonUnit";
 import Loading from "components/Common/Loading";
-import StoryCircle from "components/Common/StoryCircle";
 import { authorizedCustomAxios } from "customAxios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import theme from "styles/theme";
-import Button from "styles/UI/Button";
 import ModalCard from "styles/UI/ModalCard";
 
-interface LikedPersonType {
+export interface LikedPersonType {
     follower: boolean;
     following: boolean;
     hasStory: boolean;
@@ -86,29 +85,7 @@ const LikedPeopleModalMain = styled.div`
     height: 100%;
     & > .wrapper {
         overflow-y: auto;
-        & > .likedPerson {
-            padding: 8px 16px;
-            display: flex;
-            align-items: center;
-            height: 60px;
-            & > div:first-child {
-                margin-right: 12px;
-            }
-            & > div:nth-child(2) {
-                flex: 1;
-                #username {
-                    font-weight: ${(props) => props.theme.font.bold};
-                }
-            }
-            & > button {
-                margin-left: 8px;
-            }
-        }
     }
-`;
-
-const FollowBtn = styled(Button)<{ isSmall: boolean }>`
-    width: ${(props) => (props.isSmall ? 64 : 88)}px;
 `;
 
 interface LikedPeopleModalProps {
@@ -176,36 +153,10 @@ const LikedPeopleModal = ({
                 >
                     {/* hasStory 2개? */}
                     {likedPeople.map((personObj) => (
-                        <div className="likedPerson" key={personObj.member.id}>
-                            <StoryCircle
-                                type={
-                                    personObj.member.hasStory
-                                        ? "unread"
-                                        : "read"
-                                }
-                                avatarUrl={personObj.member.image.imageUrl}
-                                username={personObj.member.username}
-                                scale={54 / 64}
-                                onMouseEnter={() => {}}
-                                onMouseLeave={() => {}} // hoverModal
-                            />
-                            <div>
-                                <div id="username">
-                                    {personObj.member.username}
-                                </div>
-                                <div>{personObj.member.name}</div>
-                            </div>
-                            <FollowBtn
-                                bgColor={
-                                    personObj.following
-                                        ? theme.color.bg_white
-                                        : undefined
-                                }
-                                isSmall={isModalWidthSmall}
-                            >
-                                {personObj.following ? "팔로잉" : "팔로우"}
-                            </FollowBtn>
-                        </div>
+                        <LikedPersonUnit
+                            personObj={personObj}
+                            isSmall={isModalWidthSmall}
+                        />
                     ))}
                 </div>
             </LikedPeopleModalMain>
