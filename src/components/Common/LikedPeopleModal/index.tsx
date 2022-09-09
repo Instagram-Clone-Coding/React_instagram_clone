@@ -156,6 +156,7 @@ const LikedPeopleModal = ({
                         <LikedPersonUnit
                             personObj={personObj}
                             isSmall={isModalWidthSmall}
+                            key={personObj.member.id}
                         />
                     ))}
                 </div>

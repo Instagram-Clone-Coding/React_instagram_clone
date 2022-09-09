@@ -4,7 +4,12 @@ import styled from "styled-components";
 import Button from "styles/UI/Button";
 import type { LikedPersonType } from "components/Common/LikedPeopleModal";
 import theme from "styles/theme";
-import { useAppSelector } from "app/store/Hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { postFollow, postUnfollow } from "app/store/ducks/home/homThunk";
+import Loading from "components/Common/Loading";
+import { authorizedCustomAxios } from "customAxios";
+import { authAction } from "app/store/ducks/auth/authSlice";
+import { FAIL_TO_REISSUE_MESSAGE } from "utils/constant";
 
 const StyledLikedPersonUnit = styled.div`
     padding: 8px 16px;
@@ -25,8 +30,10 @@ const StyledLikedPersonUnit = styled.div`
     }
 `;
 
-const FollowBtn = styled(Button)<{ isSmall: boolean }>`
+const FollowBtn = styled(Button)<{ isSmall: boolean; isFollowing?: boolean }>`
     width: ${(props) => (props.isSmall ? 64 : 88)}px;
+    border: 1px solid
+        ${(props) => (props.isFollowing ? props.theme.color.bd_gray : "none")};
 `;
 
 interface LikedPersonUnitProps {
@@ -36,9 +43,32 @@ interface LikedPersonUnitProps {
 
 const LikedPersonUnit = ({ personObj, isSmall }: LikedPersonUnitProps) => {
     const [isFollowing, setIsFollowing] = useState(personObj.following);
+    const [isFollowLoading, setIsFollowLoading] = useState(false);
     const myUsername = useAppSelector(
         (state) => state.auth.userInfo?.memberUsername,
     );
+    const dispatch = useAppDispatch();
+
+    const followBtnClickHandler = async () => {
+        try {
+            setIsFollowLoading(true);
+            const {
+                data: { data },
+            } = isFollowing
+                ? await authorizedCustomAxios.delete(
+                      `/${personObj.member.username}/follow`,
+                  )
+                : await authorizedCustomAxios.post(
+                      `/${personObj.member.username}/follow`,
+                  );
+            setIsFollowing((prev) => !prev);
+            return data;
+        } catch (error) {
+            error === FAIL_TO_REISSUE_MESSAGE && dispatch(authAction.logout());
+        } finally {
+            setIsFollowLoading(false);
+        }
+    };
 
     return (
         <StyledLikedPersonUnit
@@ -59,12 +89,20 @@ const LikedPersonUnit = ({ personObj, isSmall }: LikedPersonUnitProps) => {
             </div>
             {personObj.member.username !== myUsername && (
                 <FollowBtn
-                    bgColor={
-                        personObj.following ? theme.color.bg_white : undefined
-                    }
+                    bgColor={isFollowing ? theme.color.bg_white : undefined}
+                    color={isFollowing ? theme.font.default_black : undefined}
                     isSmall={isSmall}
+                    isFollowing={isFollowing}
+                    onClick={followBtnClickHandler}
+                    disabled={isFollowLoading}
                 >
-                    {isFollowing ? "팔로잉" : "팔로우"}
+                    {isFollowLoading ? (
+                        <Loading size={14} isInButton={!isFollowing} />
+                    ) : isFollowing ? (
+                        "팔로잉"
+                    ) : (
+                        "팔로우"
+                    )}
                 </FollowBtn>
             )}
         </StyledLikedPersonUnit>
