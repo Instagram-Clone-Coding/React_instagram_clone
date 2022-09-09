@@ -104,7 +104,6 @@ const LikedPeopleModal = ({
     modalInfo,
 }: LikedPeopleModalProps) => {
     const [isLoading, setIsLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
     const [likedPeople, setLikedPeople] = useState<LikedPersonType[]>([]);
     const [isModalWidthSmall, setIsModalWidthSmall] = useState(
         window.innerWidth <= 735,
@@ -119,7 +118,6 @@ const LikedPeopleModal = ({
         getLikedPeople(1, modalInfo.type, modalInfo.id)
             .then((data) => {
                 setLikedPeople(data);
-                setCurrentPage((prev) => prev + 1);
             })
             .finally(() => setIsLoading(false));
         return () => {

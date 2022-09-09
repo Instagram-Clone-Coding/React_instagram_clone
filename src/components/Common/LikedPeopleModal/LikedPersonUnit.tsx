@@ -5,7 +5,6 @@ import Button from "styles/UI/Button";
 import type { LikedPersonType } from "components/Common/LikedPeopleModal";
 import theme from "styles/theme";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import { postFollow, postUnfollow } from "app/store/ducks/home/homThunk";
 import Loading from "components/Common/Loading";
 import { authorizedCustomAxios } from "customAxios";
 import { authAction } from "app/store/ducks/auth/authSlice";
