@@ -5,8 +5,6 @@ import ArticleHeader from "components/Home/Article/ArticleHeader";
 import ArticleImgSlider from "components/Home/Article/ArticleImgSlider";
 import ArticleMainIcons from "components/Home/Article/ArticleMainIcons";
 import ArticleMain from "components/Home/Article/ArticleMain";
-import CommentForm from "components/Home/Article/CommentForm";
-import useGapText from "hooks/useGapText";
 import useOnView from "hooks/useOnView";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import {
@@ -14,24 +12,11 @@ import {
     getExtraArticle,
     postLike,
 } from "app/store/ducks/home/homThunk";
+import ArticleGap from "components/Home/Article/ArticleGap";
+import ArticleCommentFormLayout from "components/Home/Article/ArticleCommentFormLayout";
 
 const ArticleCard = styled(Card)`
     margin-bottom: 24px;
-    .article-createdAt {
-        padding-left: 16px;
-        margin-bottom: 16px;
-        color: ${(props) => props.theme.font.gray};
-        font-size: 10px;
-    }
-    .article-form-layout {
-        padding: 6px 16px;
-        display: flex;
-        align-items: center;
-        border-top: 1px solid #efefef;
-        form {
-            width: 100%;
-        }
-    }
 `;
 
 interface ArticleComponentPros {
@@ -48,7 +33,6 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
     // like state
     const [isLiked, setIsliked] = useState(article.postLikeFlag);
     const [likesCount, setLikesCount] = useState(article.postLikesCount);
-    const gapText = `${useGapText(article.postUploadDate)} 전`;
     const articleRef = useRef<HTMLDivElement>(null);
     const isVisible = useOnView(articleRef);
     const { extraArticlesCount } = useAppSelector(({ home }) => home);
@@ -144,10 +128,8 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
                 hashtags={article.hashtagsOfContent}
                 // comments={article.comments}
             />
-            <div className="article-createdAt">{gapText}</div>
-            <div className="article-form-layout">
-                <CommentForm />
-            </div>
+            <ArticleGap postUploadDate={article.postUploadDate} />
+            <ArticleCommentFormLayout />
         </ArticleCard>
     );
 };
