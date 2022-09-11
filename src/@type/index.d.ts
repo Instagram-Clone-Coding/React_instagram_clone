@@ -165,6 +165,8 @@ declare module HomeType {
         postLikeFlag: boolean; // 내가 좋아요 했는지
         postLikesCount: number;
         postUploadDate: string;
+        hashtagsOfContent: string[];
+        mentionsOfContent: string[];
         // comment 몇 개 가져오기
     }
 

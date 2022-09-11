@@ -141,9 +141,11 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
                 memberNickname={article.member.username} // dlwlram
                 content={article.postContent}
                 commentsCount={article.postCommentsCount}
+                mentions={article.mentionsOfContent}
+                hashtags={article.hashtagsOfContent}
                 // comments={article.comments}
             />
-            <div className="article-createdAt">{gapText}전</div>
+            <div className="article-createdAt">{gapText}</div>
             <div className="article-form-layout">
                 <CommentForm />
             </div>

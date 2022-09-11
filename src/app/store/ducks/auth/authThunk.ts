@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { SignInRequestType } from "./authThunk.type";
-import { authAction } from "./authSlice";
+import { SignInRequestType, LoginDevice } from "./authThunk.type";
 import { authorizedCustomAxios, customAxios } from "customAxios";
+import { authAction } from "app/store/ducks/auth/authSlice";
 
 // 로그인(토큰최초발급) + 토큰만료 시, 로그인 홈페이지로 **
 export const signIn = createAsyncThunk<AuthType.Token, SignInRequestType>(
@@ -57,6 +57,18 @@ export const getUserInfo = createAsyncThunk<AuthType.UserInfo>(
             //     ThunkOptions.dispatch(authAction.logout());
             throw ThunkOptions.rejectWithValue(error);
         }
+    },
+);
+
+export const getLoginDevice = createAsyncThunk<LoginDevice[], void>(
+    "auth/loginDevice",
+    async (payload, ThunkOptions) => {
+        try {
+            const response = await authorizedCustomAxios.get(
+                `/accounts/login/device`,
+            );
+            return response.data.data;
+        } catch (error) {}
     },
 );
 
@@ -118,3 +130,21 @@ export const logout = createAsyncThunk<void, void>(
         }
     },
 );
+
+export const deviceLogout = createAsyncThunk<
+    void,
+    { tokenId: string; current: boolean }
+>("auth/deviceLogout", async (payload, ThunkOptions) => {
+    try {
+        await authorizedCustomAxios.post(`logout/device`, null, {
+            params: { tokenId: payload.tokenId },
+        });
+        if (payload.current) {
+            ThunkOptions.dispatch(authAction.logout());
+        } else {
+            ThunkOptions.dispatch(getLoginDevice());
+        }
+    } catch (error) {
+        ThunkOptions.rejectWithValue(error);
+    }
+});
