@@ -81,6 +81,7 @@ const Home = () => {
                         dispatch(modalActions.maintainModalon("articleMenu"))
                     }
                     onModalOff={() => dispatch(modalActions.resetModal())}
+                    postId={postId}
                 />
             )}
             {/* 아래 두 모달은 이전 모달을 거쳐야 하므로 필요없는 data는 action에 담지 않음 */}
