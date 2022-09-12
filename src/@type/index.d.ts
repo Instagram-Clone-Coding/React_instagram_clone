@@ -167,7 +167,9 @@ declare module HomeType {
         postUploadDate: string;
         hashtagsOfContent: string[];
         mentionsOfContent: string[];
-        // comment 몇 개 가져오기
+        likeOptionFlag: boolean; // 업로드한 사람만 좋아요 및 좋아요한 사람 확인 가능
+        commentOptionFlag: boolean; // 댓글 작성 가능 여부
+        // recentComments: string[]; 내부 객체 구조
     }
 
     interface ArticleStateProps extends ArticleProps {
