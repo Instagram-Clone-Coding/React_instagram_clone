@@ -140,7 +140,7 @@ interface SliderProps {
 }
 
 interface ArticleImgSliderProps {
-    imageDTOs: Common.PostImageDTOProps[];
+    imageDTOs: CommonType.PostImageDTOProps[];
     onLike: () => undefined;
 }
 

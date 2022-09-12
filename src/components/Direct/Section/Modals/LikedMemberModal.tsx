@@ -32,7 +32,9 @@ interface LikedMemberModalProps {
 }
 
 const LikedMemberModal = ({ onModalOn, onModalOff }: LikedMemberModalProps) => {
-    const [likedMembers, setLikedMembers] = useState<Common.memberType[]>([]);
+    const [likedMembers, setLikedMembers] = useState<CommonType.memberType[]>(
+        [],
+    );
     const chatMessageList = useAppSelector(
         (state) => state.direct.chatMessageList,
     );

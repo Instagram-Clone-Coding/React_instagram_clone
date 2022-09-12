@@ -30,7 +30,7 @@ const StyledArticleImgSliderUnit = styled.div`
 `;
 
 interface ArticleImgSliderUnitProps {
-    imageDTO: Common.PostImageDTOProps;
+    imageDTO: CommonType.PostImageDTOProps;
     unitWidth: number;
 }
 

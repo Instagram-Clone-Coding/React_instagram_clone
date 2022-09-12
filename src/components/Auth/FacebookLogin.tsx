@@ -19,14 +19,14 @@ const FacebookButtonContainer = styled.div`
     }
 `;
 
-const backgroundWhiteFacebook: Common.ImageProps = {
+const backgroundWhiteFacebook: CommonType.ImageProps = {
     width: 16,
     height: 16,
     position: `-414px -259px`,
     url: sprite,
 };
 
-const backgroundBlueFacebook: Common.ImageProps = {
+const backgroundBlueFacebook: CommonType.ImageProps = {
     width: 16,
     height: 16,
     position: `-414px -300px`,

@@ -37,7 +37,7 @@ const StyledSearchListItemLayout = styled.div`
 `;
 
 interface SearchUserLayoutProps {
-    member?: Common.memberType;
+    member?: CommonType.memberType;
     followingMemberFollow?: { memberUsername: string }[];
     name?: string;
     postCount?: number;

@@ -86,7 +86,7 @@ const Container = styled.section`
     }
 `;
 
-const image: Common.ImageProps = {
+const image: CommonType.ImageProps = {
     width: 96,
     height: 96,
     position: `-129px 0`,
