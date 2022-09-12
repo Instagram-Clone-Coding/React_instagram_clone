@@ -41,7 +41,7 @@ const NewChatRecommendUserContainer = styled.div`
     }
 `;
 
-const NewChatRecommendUser = ({ member }: Common.searchResultType) => {
+const NewChatRecommendUser = ({ member }: CommonType.searchResultType) => {
     const { selectedNewChatUsers } = useAppSelector((state) => state.direct);
     const dispatch = useAppDispatch();
     if (!member) return null;

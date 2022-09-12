@@ -67,13 +67,13 @@ interface SingleContentProps {
     post: Profile.PostType;
 }
 
-const heartImage: Common.ImageProps = {
+const heartImage: CommonType.ImageProps = {
     width: 19,
     height: 19,
     position: `-340px -333px`,
     url: sprite,
 };
-const commentImage: Common.ImageProps = {
+const commentImage: CommonType.ImageProps = {
     width: 19,
     height: 19,
     position: `-382px -333px`,

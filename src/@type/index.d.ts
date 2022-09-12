@@ -1,7 +1,7 @@
 declare module Direct {
     interface PostMessageDTO {
         postId: number;
-        postImage: Common.ImageInfo;
+        postImage: CommonType.ImageInfo;
         postImageCount: number;
         status: string;
         uploader: AuthType.UserInfo;
@@ -12,10 +12,10 @@ declare module Direct {
         content: string | PostMessageDTO;
         messageType: messageType;
         messageDate: string;
-        sender: Common.memberType;
+        sender: CommonType.memberType;
         roomId: number;
-        senderImage: Common.ImageInfo;
-        likeMembers: Common.memberType[];
+        senderImage: CommonType.ImageInfo;
+        likeMembers: CommonType.memberType[];
     }
 
     interface ChatItem {
@@ -63,14 +63,6 @@ declare module Direct {
         | "requestsChat";
     type messageType = "TEXT" | "POST";
 }
-
-declare module CommonType {
-    interface FooterTextProps {
-        text: string;
-        url?: string;
-    }
-}
-
 declare module UIType {
     interface ButtonProps {
         bgColor?: string;
@@ -156,12 +148,12 @@ declare module HomeType {
 
     interface ArticleProps {
         followingMemberUsernameLikedPost: null | string; // 내가 팔로우한 사람 중에서 이 글을 좋아한 사람 있으면 보내줌
-        member: Common.memberType;
+        member: CommonType.memberType;
         postBookmarkFlag: boolean; // 내가 북마크 했는지
         postCommentsCount: number;
         postContent: string;
         postId: number;
-        postImages: Common.PostImageDTOProps[];
+        postImages: CommonType.PostImageDTOProps[];
         postLikeFlag: boolean; // 내가 좋아요 했는지
         postLikesCount: number;
         postUploadDate: string;
@@ -340,7 +332,11 @@ declare module UploadType {
     }
 }
 
-declare module Common {
+declare module CommonType {
+    interface FooterTextProps {
+        text: string;
+        url?: string;
+    }
     interface ImageProps {
         width: number;
         height: number;
@@ -391,7 +387,7 @@ declare module Profile {
         memberUsername: string;
         memberName: string;
         memberWebsite: string | null;
-        memberImage: Common.ImageInfo;
+        memberImage: CommonType.ImageInfo;
         memberIntroduce: string | null;
         memberPostsCount: number;
         memberFollowingsCount: number;
@@ -406,7 +402,7 @@ declare module Profile {
 
     interface PostType {
         postId: number;
-        postImages: Common.PostImageDTOProps;
+        postImages: CommonType.PostImageDTOProps;
         hasManyPosts: boolean;
         postCommentsCount: number;
         postLikesCount: number;
@@ -414,7 +410,7 @@ declare module Profile {
 
     interface personType {
         // 팔로잉 팔로워 한명을 나타내는 타입입니다.
-        member: Common.memberType;
+        member: CommonType.memberType;
         following: boolean;
         follower: boolean;
         me: boolean;
