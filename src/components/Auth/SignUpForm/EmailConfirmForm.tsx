@@ -63,7 +63,7 @@ const Container = styled.div`
     }
 `;
 
-const messageImage: Common.ImageProps = {
+const messageImage: CommonType.ImageProps = {
     width: 87,
     height: 62,
     position: `-430px -5px`,

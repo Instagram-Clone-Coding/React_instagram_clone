@@ -5,7 +5,7 @@ import { FAIL_TO_REISSUE_MESSAGE } from "utils/constant";
 import { authAction } from "../auth/authSlice";
 
 export const searchUser = createAsyncThunk<
-    Common.searchResultType[],
+    CommonType.searchResultType[],
     {
         keyword: string;
     },
@@ -31,7 +31,7 @@ export const searchUser = createAsyncThunk<
 );
 
 export const getSearchRecord = createAsyncThunk<
-    Common.searchResultType[],
+    CommonType.searchResultType[],
     void,
     { state: RootState }
 >(

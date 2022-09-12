@@ -145,7 +145,7 @@ const ProfileHeaderContainer = styled.header<ProfileHeaderContainerProps>`
 
 interface ProfileHeaderProps {}
 
-const memberImage: Common.ImageProps = {
+const memberImage: CommonType.ImageProps = {
     width: 24,
     height: 12,
     position: `-553px -100px`,

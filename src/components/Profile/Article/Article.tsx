@@ -18,7 +18,7 @@ const ArticleContainer = styled.main`
     }
 `;
 
-const noArticleImage: Common.ImageProps = {
+const noArticleImage: CommonType.ImageProps = {
     width: 24,
     height: 24,
     position: `-252px -426px`,
@@ -26,14 +26,14 @@ const noArticleImage: Common.ImageProps = {
     size: `569px 521px`,
 };
 
-const noTagImage: Common.ImageProps = {
+const noTagImage: CommonType.ImageProps = {
     width: 62,
     height: 62,
     position: `-189px -288px`,
     url: sprite2,
     size: `440px 411px`,
 };
-const noSaveImage: Common.ImageProps = {
+const noSaveImage: CommonType.ImageProps = {
     width: 62,
     height: 62,
     position: `-126px -288px`,
