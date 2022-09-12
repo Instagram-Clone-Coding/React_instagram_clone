@@ -22,11 +22,10 @@ const ArticleCard = styled(Card)`
 interface ArticleComponentPros {
     article: HomeType.ArticleStateProps;
     isObserving: boolean;
-    isLast: boolean;
 }
 
 // 아마 여기 articleData는 상위 HomeSection 컴포넌트에서 가져와야 하지 않을까
-const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
+const Article = ({ article, isObserving }: ArticleComponentPros) => {
     // data state
     const followingUserWhoLikesArticle =
         article.followingMemberUsernameLikedPost;
@@ -52,7 +51,6 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
         };
 
         isObserving && isVisible && dispatchExtraArticle(); // 이 때 비동기 작업 및 무한 스크롤
-        // isLast && isVisible && dispatchExtraArticle();
     }, [isObserving, isVisible, dispatch]);
 
     const dispatchPostLike = async () => {
@@ -126,10 +124,11 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
                 commentsCount={article.postCommentsCount}
                 mentions={article.mentionsOfContent}
                 hashtags={article.hashtagsOfContent}
+                likeOptionFlag={article.likeOptionFlag}
                 // comments={article.comments}
             />
             <ArticleGap postUploadDate={article.postUploadDate} />
-            <ArticleCommentFormLayout />
+            {!article.commentOptionFlag && <ArticleCommentFormLayout />}
         </ArticleCard>
     );
 };

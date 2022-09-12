@@ -25,7 +25,6 @@ const HomeSection = () => {
                         key={article.postId}
                         article={article}
                         isObserving={articles.length - 4 === index}
-                        isLast={articles.length - 1 === index}
                     />
                 ))}
             {isExtraArticleLoading && <ExtraLoadingCircle />}

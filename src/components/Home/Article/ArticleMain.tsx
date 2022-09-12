@@ -54,6 +54,7 @@ interface MainProps {
     }[];
     mentions: string[];
     hashtags: string[];
+    likeOptionFlag: boolean;
 }
 
 const ArticleMain = ({
@@ -67,6 +68,7 @@ const ArticleMain = ({
     comments,
     mentions,
     hashtags,
+    likeOptionFlag,
 }: MainProps) => {
     // like state
     const [isComment1Liked, setIsComment1Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
@@ -166,24 +168,26 @@ const ArticleMain = ({
     };
 
     const getFullText = () => setIsFullText(true);
+
     return (
         <StyledMain>
-            <div className="article-likeInfo">
-                {followingUserWhoLikesArticle ? (
-                    <div>
-                        {/* 임의로 첫 번째 인덱스 선택 */}
-                        <Username
-                            onMouseEnter={mouseEnterHandler}
-                            onMouseLeave={mouseLeaveHandler}
-                        >
-                            {followingUserWhoLikesArticle}
-                        </Username>
-                        님 외<span>{likesCount - 1}명</span>이 좋아합니다
-                    </div>
-                ) : (
-                    <span>좋아요 {likesCount}개</span>
-                )}
-            </div>
+            {!likeOptionFlag && (
+                <div className="article-likeInfo">
+                    {followingUserWhoLikesArticle ? (
+                        <div>
+                            <Username
+                                onMouseEnter={mouseEnterHandler}
+                                onMouseLeave={mouseLeaveHandler}
+                            >
+                                {followingUserWhoLikesArticle}
+                            </Username>
+                            님 외<span>{likesCount - 1}명</span>이 좋아합니다
+                        </div>
+                    ) : (
+                        <span>좋아요 {likesCount}개</span>
+                    )}
+                </div>
+            )}
             <div className="article-textBox">
                 <Username
                     onMouseEnter={mouseEnterHandler}
