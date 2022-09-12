@@ -1,7 +1,9 @@
-import React from "react";
+import styled from "styled-components";
+
+const StyledOnlyArticlePage = styled.article``;
 
 const OnlyArticlePage = () => {
-    return <article></article>;
+    return <StyledOnlyArticlePage></StyledOnlyArticlePage>;
 };
 
 export default OnlyArticlePage;
