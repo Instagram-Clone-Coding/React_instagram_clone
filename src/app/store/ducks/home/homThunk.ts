@@ -8,7 +8,7 @@ import {
 import { FAIL_TO_REISSUE_MESSAGE } from "utils/constant";
 import { authAction } from "app/store/ducks/auth/authSlice";
 
-export const getHomeArticles = createAsyncThunk<HomeType.ArticleStateProps[]>(
+export const getHomeArticles = createAsyncThunk<PostType.ArticleStateProps[]>(
     "home/getHomeArticles",
     async (payload, ThunkOptions) => {
         try {
@@ -17,7 +17,7 @@ export const getHomeArticles = createAsyncThunk<HomeType.ArticleStateProps[]>(
             }: RecentArticlesProps = await authorizedCustomAxios.get(
                 `/posts/recent`,
             );
-            const articlesState: HomeType.ArticleStateProps[] = data.map(
+            const articlesState: PostType.ArticleStateProps[] = data.map(
                 (article) => ({
                     ...article,
                     isFollowing: true,
@@ -34,7 +34,7 @@ export const getHomeArticles = createAsyncThunk<HomeType.ArticleStateProps[]>(
 );
 
 export const getExtraArticle = createAsyncThunk<
-    HomeType.ArticleStateProps,
+    PostType.ArticleStateProps,
     {
         page: number;
     }
@@ -60,7 +60,7 @@ export const getExtraArticle = createAsyncThunk<
             );
         }
         ThunkOptions.dispatch(homeActions.increaseExtraArticlesCount());
-        const articleState: HomeType.ArticleStateProps = {
+        const articleState: PostType.ArticleStateProps = {
             ...data[0],
             isFollowing: true,
             followLoading: false,

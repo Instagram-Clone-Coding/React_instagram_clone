@@ -20,7 +20,7 @@ const ArticleCard = styled(Card)`
 `;
 
 interface ArticleComponentPros {
-    article: HomeType.ArticleStateProps;
+    article: PostType.ArticleStateProps;
     isObserving: boolean;
 }
 

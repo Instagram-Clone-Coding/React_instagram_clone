@@ -3,7 +3,7 @@ import { authorizedCustomAxios } from "customAxios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 interface ArticleProps {
-    data: HomeType.ArticleProps;
+    data: PostType.ArticleProps;
     status: number;
 }
 

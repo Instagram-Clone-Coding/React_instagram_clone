@@ -136,7 +136,34 @@ declare module AuthType {
 
 declare module HomeType {
     type StoriesScrollPositionType = "left" | "right" | "center";
+    interface homeStateProps {
+        storiesScrollPosition: storiesScrollPositionType;
+        articles: ArticleStateProps[];
+        // location?
+        isLoading: boolean; // 더미 로딩
+        isExtraArticleLoading: boolean;
+        extraArticlesCount: number;
+        isAsyncError: boolean;
+        hoveredUser: {
+            avatarUrl: string;
+            verified: boolean;
+            isFollowing: boolean;
+            realName: string;
+            link: string;
+            followingUsernames: string[];
+            articlesNum: number;
+            followersNum: number;
+            followsNum: number;
+            recentImgs: {
+                src: string;
+                param: string;
+            }[]; // 최신 3개
+        } | null;
+        isCopiedNotification: boolean;
+    }
+}
 
+declare module PostType {
     interface PostImgTagDTOProps {
         id: number;
         tag: {
@@ -167,32 +194,6 @@ declare module HomeType {
     interface ArticleStateProps extends ArticleProps {
         isFollowing: boolean;
         followLoading: boolean;
-    }
-
-    interface homeStateProps {
-        storiesScrollPosition: storiesScrollPositionType;
-        articles: ArticleStateProps[];
-        // location?
-        isLoading: boolean; // 더미 로딩
-        isExtraArticleLoading: boolean;
-        extraArticlesCount: number;
-        isAsyncError: boolean;
-        hoveredUser: {
-            avatarUrl: string;
-            verified: boolean;
-            isFollowing: boolean;
-            realName: string;
-            link: string;
-            followingUsernames: string[];
-            articlesNum: number;
-            followersNum: number;
-            followsNum: number;
-            recentImgs: {
-                src: string;
-                param: string;
-            }[]; // 최신 3개
-        } | null;
-        isCopiedNotification: boolean;
     }
 }
 

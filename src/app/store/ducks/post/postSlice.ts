@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState: HomeType.ArticleStateProps = {
+const initialState: PostType.ArticleStateProps = {
     followingMemberUsernameLikedPost: null, // 내가 팔로우한 사람 중에서 이 글을 좋아한 사람 있으면 보내줌
     member: {
         id: 0,

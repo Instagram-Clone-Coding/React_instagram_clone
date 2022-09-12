@@ -1,14 +1,14 @@
 // fetched data type
 export interface RecentArticlesProps {
     data: {
-        data: HomeType.ArticleProps[];
+        data: PostType.ArticleProps[];
     };
 }
 
 export interface ExtraArticleProps {
     data: {
         data: {
-            content: [HomeType.ArticleProps];
+            content: [PostType.ArticleProps];
             empty: boolean;
         };
     };
