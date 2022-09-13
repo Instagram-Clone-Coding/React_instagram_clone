@@ -42,7 +42,7 @@ const InboxSectionContainer = styled.div`
     }
 `;
 
-const paperImage: Common.ImageProps = {
+const paperImage: CommonType.ImageProps = {
     width: 96,
     height: 96,
     position: `-196px -205px`,

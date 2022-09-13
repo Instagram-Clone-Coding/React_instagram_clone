@@ -4,8 +4,8 @@ import { getSearchRecord, searchUser } from "./commonThunk";
 export interface InitialStateType {
     isLoading: boolean;
     searchUserKeyword: string;
-    searchUsers: Common.searchResultType[];
-    recordedUsers: Common.searchResultType[];
+    searchUsers: CommonType.searchResultType[];
+    recordedUsers: CommonType.searchResultType[];
 }
 
 const initialState: InitialStateType = {

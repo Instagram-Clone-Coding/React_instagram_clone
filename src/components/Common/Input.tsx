@@ -80,14 +80,14 @@ const InputContainer = styled.div<InputProps>`
     }
 `;
 
-const ValidFlag: Common.ImageProps = {
+const ValidFlag: CommonType.ImageProps = {
     width: 22,
     height: 22,
     position: `-225px -333px`,
     url: sprite,
 };
 
-const InvalidFlag: Common.ImageProps = {
+const InvalidFlag: CommonType.ImageProps = {
     width: 22,
     height: 22,
     position: `-249px -333px`,
@@ -99,9 +99,8 @@ const Input = (props: AuthType.InputProps) => {
     const [isSmallInnerText, setInnerTextSize] = useState(false);
     const [inputType, setInputType] = useState(type);
     const [isShowPassword, setShowPassword] = useState(false);
-    const [passwordMessage, setPasswordMessage] = useState<
-        "비밀번호 표시" | "숨기기"
-    >("비밀번호 표시");
+    const [passwordMessage, setPasswordMessage] =
+        useState<"비밀번호 표시" | "숨기기">("비밀번호 표시");
 
     const textChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const hasValue = event.target.value.trim().length ? true : false;

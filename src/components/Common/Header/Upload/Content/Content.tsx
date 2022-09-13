@@ -411,7 +411,7 @@ const StyledContent = styled.div`
 `;
 
 interface MentionResponseType extends AxiosType.ResponseType {
-    data: Common.memberType[];
+    data: CommonType.memberType[];
 }
 interface SearchedHashtagType {
     name: string;
@@ -451,13 +451,15 @@ const Content = ({ currentWidth }: ContentProps) => {
     );
     const userInfo = useAppSelector((state) => state.auth.userInfo);
     const [searchedImageTagUsers, setSearchedImageTagUsers] = useState<
-        Common.memberType[]
+        CommonType.memberType[]
     >([]);
     const [isImageTagUserSearchLoading, setIsImageTagUserSearchLoading] =
         useState(false);
     const [textareaSearchType, setTextareaSearchType] =
         useState<"mention" | "hashtag">("mention");
-    const [searchedUsers, setSearchedUsers] = useState<Common.memberType[]>([]);
+    const [searchedUsers, setSearchedUsers] = useState<CommonType.memberType[]>(
+        [],
+    );
     const [searchedHashtags, setSearchedHashtags] = useState<
         SearchedHashtagType[]
     >([]);
