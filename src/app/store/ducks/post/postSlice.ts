@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: PostType.ArticleStateProps = {
     followingMemberUsernameLikedPost: null, // 내가 팔로우한 사람 중에서 이 글을 좋아한 사람 있으면 보내줌
@@ -33,8 +33,16 @@ const initialState: PostType.ArticleStateProps = {
 const postSlice = createSlice({
     name: "post",
     initialState,
-    reducers: {},
-    extraReducers: (build) => {},
+    reducers: {
+        getArticle: (state, action: PayloadAction<PostType.ArticleProps>) => {
+            state = {
+                ...action.payload,
+                followLoading: false,
+                isFollowing: false, // 데이터로 와야 할 데이터로 보임. 추후 수정 예정
+            };
+        },
+    },
+    // extraReducers: (build) => {},
 });
 
 export const postReducer = postSlice.reducer;
