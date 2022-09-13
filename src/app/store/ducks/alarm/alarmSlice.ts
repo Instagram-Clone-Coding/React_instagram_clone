@@ -1,21 +1,33 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { loadAlarmList } from "app/store/ducks/alarm/alarmThunk";
+
 export interface AlarmStateProps {
-    alarmList: Alarm.AlarmItem[] | null;
+    alarmList: Alarm.AlarmContent[] | null;
+    totalPage: number;
 }
 
 const initialState: AlarmStateProps = {
     alarmList: null,
+    totalPage: 0,
 };
 
 const alarmSlice = createSlice({
     name: " alarm",
     initialState,
-    reducers: {},
+    reducers: {
+        clearAlarmList: (state) => {
+            state.alarmList = null;
+        },
+    },
     extraReducers: (build) => {
         build //
             .addCase(loadAlarmList.fulfilled, (state, action) => {
-                state.alarmList = action.payload;
+                if (action.payload.currentPage === 1) {
+                    state.alarmList = action.payload.content;
+                    state.totalPage = action.payload.totalPages;
+                } else {
+                    state.alarmList?.push(...action.payload.content);
+                }
             });
     },
 });

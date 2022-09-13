@@ -1,9 +1,9 @@
+import { alarmAction } from "app/store/ducks/alarm/alarmSlice";
 import { loadAlarmList } from "app/store/ducks/alarm/alarmThunk";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import AlarmItem from "components/Common/Header/alarm/alarmType/alarm_item";
-import FollowAlarm from "components/Common/Header/alarm/alarmType/follow_alarm";
+import AlarmList from "components/Common/Header/alarm/alarm_list";
 import Loading from "components/Common/Loading";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -45,18 +45,11 @@ const Container = styled.div`
             margin: 8px 0 0 8px;
         }
 
-        .alarm-list {
-            .alarm-item {
-                display: flex;
-                padding: 12px 16px;
-            }
-
-            .empty-container {
-                display: flex;
-                justify-content: center;
-                margin: 50px;
-                font-size: 20px;
-            }
+        .empty-container {
+            display: flex;
+            justify-content: center;
+            margin: 50px;
+            font-size: 20px;
         }
     }
 `;
@@ -67,11 +60,24 @@ export default function Alarm({
     alarmContainerRef: React.RefObject<HTMLDivElement>;
 }) {
     const dispatch = useAppDispatch();
-    const { alarmList } = useAppSelector((state) => state.alarm);
+    const [pageToLoad, setPageToLoad] = useState(1);
+    const { alarmList, totalPage } = useAppSelector((state) => state.alarm);
 
     useEffect(() => {
-        dispatch(loadAlarmList());
+        dispatch(loadAlarmList({ page: pageToLoad }));
+        setPageToLoad(pageToLoad + 1);
+
+        return () => {
+            dispatch(alarmAction.clearAlarmList());
+        };
     }, []);
+
+    const loadExtraAlarmList = () => {
+        if (pageToLoad <= totalPage) {
+            dispatch(loadAlarmList({ page: pageToLoad }));
+            setPageToLoad(pageToLoad + 1);
+        }
+    };
 
     return (
         <Container>
@@ -80,23 +86,18 @@ export default function Alarm({
                 <div className="title">
                     <div>이전 활동</div>
                 </div>
-                <ul className="alarm-list">
+                <section className="alarm-list">
                     {!alarmList ? (
                         <Loading size={36} isInButton={false} />
                     ) : alarmList.length === 0 ? (
                         <div className="empty-container">알람이 없습니다.</div>
                     ) : (
-                        alarmList.map((alarm) => (
-                            <li className="alarm-item" key={alarm.id}>
-                                {alarm.type === "FOLLOW" ? (
-                                    <FollowAlarm alarm={alarm} />
-                                ) : (
-                                    <AlarmItem alarm={alarm} />
-                                )}
-                            </li>
-                        ))
+                        <AlarmList
+                            alarmList={alarmList}
+                            onLoadExtraAlarm={loadExtraAlarmList}
+                        />
                     )}
-                </ul>
+                </section>
             </div>
         </Container>
     );
