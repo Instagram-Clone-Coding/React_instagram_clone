@@ -465,7 +465,13 @@ declare module EditType {
 }
 
 declare module Alarm {
-    type AlarmItem = CommonAlarm | FollowAlarm;
+    type AlarmItem = {
+        content: AlarmContent[];
+        totalPages: number;
+        currentPage: number;
+    };
+
+    type AlarmContent = CommonAlarm | FollowAlarm;
     interface CommonAlarm {
         id: number;
         type: "COMMENT" | "LIKE_POST" | "MENTION_POST";

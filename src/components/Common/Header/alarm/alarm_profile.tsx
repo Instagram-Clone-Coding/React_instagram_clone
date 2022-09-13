@@ -12,7 +12,7 @@ const Container = styled.div`
 
 export default function AlarmProfile({
     agent,
-}: Pick<Alarm.AlarmItem, "agent">) {
+}: Pick<Alarm.AlarmContent, "agent">) {
     return (
         <Container>
             <Link to={`/profile/${agent.username}`}>
