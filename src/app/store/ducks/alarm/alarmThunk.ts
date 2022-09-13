@@ -15,8 +15,6 @@ export const loadAlarmList = createAsyncThunk<
         const {
             data: { data },
         } = await authorizedCustomAxios.get(`/alarms`, config);
-
-        console.log(data);
         return { ...data, currentPage: payload.page };
     } catch (error) {
         ThunkOptions.rejectWithValue(error);
