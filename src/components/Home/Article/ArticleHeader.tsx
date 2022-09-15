@@ -176,8 +176,8 @@ const ArticleHeader = ({
                             {memberNickname}
                         </Link>
                     </Username>
-                    {!isFollowing ||
-                        (memberNickname === myUsername && (
+                    {memberNickname !== myUsername &&
+                        (!isFollowing || (
                             <div className="header-followBox">
                                 <span>•</span>
                                 <button onClick={followHandler}>
