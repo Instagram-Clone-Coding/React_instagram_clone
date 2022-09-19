@@ -7,8 +7,12 @@ import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
 import StringFragmentWithMentionOrHashtagLink from "components/Common/StringFragmentWithMentionOrHashtagLink";
 
-const StyledMain = styled.div`
-    padding: 0 16px;
+interface StyledMainProps {
+    isInLargerArticle: boolean;
+}
+
+const StyledMain = styled.div<StyledMainProps>`
+    padding: 0 ${(props) => (props.isInLargerArticle ? 0 : "16px")};
     .article-likeInfo {
         margin-bottom: 8px;
         span {
@@ -55,6 +59,7 @@ interface MainProps {
     mentions: string[];
     hashtags: string[];
     likeOptionFlag: boolean;
+    isInLargerArticle?: boolean;
 }
 
 const ArticleMain = ({
@@ -69,6 +74,7 @@ const ArticleMain = ({
     mentions,
     hashtags,
     likeOptionFlag,
+    isInLargerArticle = false,
 }: MainProps) => {
     // like state
     const [isComment1Liked, setIsComment1Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
@@ -170,7 +176,7 @@ const ArticleMain = ({
     const getFullText = () => setIsFullText(true);
 
     return (
-        <StyledMain>
+        <StyledMain isInLargerArticle={isInLargerArticle}>
             {!likeOptionFlag && (
                 <div className="article-likeInfo">
                     {followingUserWhoLikesArticle ? (

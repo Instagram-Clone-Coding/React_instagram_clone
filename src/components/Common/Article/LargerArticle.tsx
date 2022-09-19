@@ -19,8 +19,11 @@ const StyledLargerArticle = styled.div`
         width: 340px;
         display: flex;
         flex-direction: column;
-        & > .largerArticle__comments {
+        & > .largerArticle__mainLayout {
+            padding: 16px;
             flex: 1;
+            & > .largerArticle__comments {
+            }
         }
     }
 `;
@@ -52,20 +55,25 @@ const LargerArticle = ({ article }: LargerArticleProps) => {
                     isFollowing={article.isFollowing}
                     followLoading={article.followLoading}
                 />
-                <ArticleMain
-                    followingUserWhoLikesArticle={followingUserWhoLikesArticle}
-                    likesCount={likesCount}
-                    memberImageUrl={article.member.image.imageUrl}
-                    memberUsername={article.member.name} // 이지금
-                    memberNickname={article.member.username} // dlwlram
-                    content={article.postContent}
-                    commentsCount={article.postCommentsCount}
-                    mentions={article.mentionsOfContent}
-                    hashtags={article.hashtagsOfContent}
-                    likeOptionFlag={article.likeOptionFlag}
-                    // comments={article.comments}
-                />
-                <div className="largerArticle__comments">comment 공간</div>
+                <div className="largerArticle__mainLayout">
+                    <ArticleMain
+                        followingUserWhoLikesArticle={
+                            followingUserWhoLikesArticle
+                        }
+                        likesCount={likesCount}
+                        memberImageUrl={article.member.image.imageUrl}
+                        memberUsername={article.member.name} // 이지금
+                        memberNickname={article.member.username} // dlwlram
+                        content={article.postContent}
+                        commentsCount={article.postCommentsCount}
+                        mentions={article.mentionsOfContent}
+                        hashtags={article.hashtagsOfContent}
+                        likeOptionFlag={article.likeOptionFlag}
+                        isInLargerArticle={true}
+                        // comments={article.comments}
+                    />
+                    <div className="largerArticle__comments">comment 공간</div>
+                </div>
                 <ArticleMainIcons
                     isLiked={isLiked}
                     isBookmarked={article.postBookmarkFlag}
