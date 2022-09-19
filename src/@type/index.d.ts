@@ -402,7 +402,7 @@ declare module Profile {
     interface PostType {
         postId: number;
         postImage: CommonType.PostImageDTOProps;
-        hasManyPosts: boolean;
+        hasManyPostImages: boolean;
         postCommentsCount: number;
         postLikesCount: number;
     }

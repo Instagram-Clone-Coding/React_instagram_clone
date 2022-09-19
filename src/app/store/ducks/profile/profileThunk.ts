@@ -120,7 +120,6 @@ export const follow = createAsyncThunk<
             const { data } = await authorizedCustomAxios.post(
                 `/${payload.username}/follow`,
             );
-            console.log(data);
             return data;
         } catch (error) {
             error === FAIL_TO_REISSUE_MESSAGE && dispatch(authAction.logout());
