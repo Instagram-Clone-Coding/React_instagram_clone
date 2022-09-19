@@ -10,7 +10,7 @@ import AuthPage from "pages/Auth";
 import ResetPassword from "components/Auth/ResetPassword";
 import ResetPasswordForm from "components/Auth/ResetPassword/ResetPasswordForm";
 import Edit from "pages/Edit";
-import Paragraph from "pages/Paragraph";
+import Paragraph from "pages/Paragraph/Paragraph";
 
 const Routes = () => {
     const isLogin = useAppSelector((state) => state.auth.isLogin);
