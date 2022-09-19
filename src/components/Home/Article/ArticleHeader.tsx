@@ -16,6 +16,7 @@ const StyledArticleHeader = styled.header`
     display: flex;
     align-items: center;
     position: relative;
+    border-bottom: 1px solid ${(props) => props.theme.color.bd_gray};
 
     .header-content {
         flex: 1;

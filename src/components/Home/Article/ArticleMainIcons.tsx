@@ -13,7 +13,7 @@ import {
 
 const StyledMainIcons = styled.div`
     display: flex;
-    /* z-index: 101; */
+    border-top: 1px solid ${(props) => props.theme.color.bd_gray};
     padding: 6px 16px 8px 16px;
     margin-top: 2px;
     margin-left: -8px;

@@ -6,7 +6,7 @@ const StyledAricleCommentFormLayout = styled.div`
     padding: 6px 16px;
     display: flex;
     align-items: center;
-    border-top: 1px solid #efefef;
+    border-top: 1px solid ${(props) => props.theme.color.bd_gray};
     form {
         width: 100%;
     }
