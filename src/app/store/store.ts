@@ -7,14 +7,14 @@ import { uploadReducer } from "app/store/ducks/upload/uploadSlice";
 import { profileReducer } from "app/store/ducks/profile/profileSlice";
 import { editReducer } from "./ducks/edit/editSlice";
 import { commonReducer } from "./ducks/common/commonSlice";
-import { postReducer } from "app/store/ducks/post/postSlice";
+import { paragraphReducer } from "app/store/ducks/paragraph/paragraphSlice";
 
 export const store = configureStore({
     reducer: {
         direct: directReducer,
         auth: authReducer,
         home: homeReducer,
-        post: postReducer,
+        paragraph: paragraphReducer,
         modal: modalReducer,
         upload: uploadReducer,
         profile: profileReducer,

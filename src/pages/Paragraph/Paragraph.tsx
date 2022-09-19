@@ -1,5 +1,5 @@
-import { postActions } from "app/store/ducks/post/postSlice";
-import { useAppDispatch } from "app/store/Hooks";
+import { paragraphActions } from "app/store/ducks/paragraph/paragraphSlice";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import OnlyArticlePage from "components/Common/Article/OnlyArticlePage";
 import { authorizedCustomAxios } from "customAxios";
 import React, { useEffect, useMemo, useState } from "react";
@@ -9,7 +9,9 @@ interface ArticleProps {
 }
 
 const Paragraph = () => {
-    const [isFetching, setIsFetching] = useState(true);
+    const isDataFetching = useAppSelector(
+        (state) => state.paragraph.isDataFetching,
+    );
     const dispatch = useAppDispatch();
     const { postId: postIdStr } = useParams<{ postId: string }>();
     const history = useHistory();
@@ -24,17 +26,16 @@ const Paragraph = () => {
                 } = await authorizedCustomAxios.get<ArticleProps>(
                     `/posts/${postId}`,
                 );
+                console.log("게시글 데이터", data);
                 if (status !== 200) history.goBack(); // 에러 발생 시 뒤로 이동
-                dispatch(postActions.getArticle(data));
+                dispatch(paragraphActions.setArticle(data));
             } catch (error) {
                 console.log(error);
-            } finally {
-                setIsFetching(false);
             }
         };
         getArticle();
     }, [postId, dispatch, history]);
-    return <div>{isFetching || <OnlyArticlePage />}</div>;
+    return <div>{isDataFetching || <OnlyArticlePage />}</div>;
 };
 
 export default Paragraph;

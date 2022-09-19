@@ -197,6 +197,13 @@ declare module PostType {
     }
 }
 
+declare module ParagraphType {
+    interface ParagraphStateProps {
+        isDataFetching: boolean;
+        articleObj: PostType.ArticleStateProps;
+    }
+}
+
 declare module ModalType {
     type ActivatedModalType =
         | "unfollowing"
