@@ -93,10 +93,10 @@ const SingleContent = ({ post }: SingleContentProps) => {
                 setHoverd(false);
             }}
         >
-            {post.hasManyPosts && <Slide />}
+            {post.hasManyPostImages && <Slide />}
             <img
-                src={post.postImages.postImageUrl}
-                alt={post.postImages.altText}
+                src={post.postImage.postImageUrl}
+                alt={post.postImage.altText}
                 className="single-content"
             />
             {hoverd && (

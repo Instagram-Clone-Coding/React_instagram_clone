@@ -47,7 +47,6 @@ const SingleRow = ({ posts, isObserving }: SingleRowProps) => {
         isObserving && isVisible && dispatchExtraPost(); // 이 때 비동기 작업 및 무한 스크롤
         // isLast && isVisible && dispatchExtraArticle();
     }, [isObserving, isVisible, dispatch]);
-    console.log(posts);
 
     return (
         <SingleRowContainer ref={postRef}>

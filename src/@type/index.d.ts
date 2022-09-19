@@ -323,11 +323,12 @@ declare module UploadType {
         | "complete";
     type AdjustInputTextType = "밝기" | "대비" | "채도" | "흐리게";
 
+    type PurposeOfWarningModalType = "toDragAndDrop" | "cancelUpload";
     interface UploadStateProps {
         isUploading: boolean;
         isGrabbing: boolean;
         isWarningModalOn: boolean;
-        isJustWarningBeforePrevStep: boolean;
+        purposeOfWarningModal: PurposeOfWarningModalType;
         step: StepType;
         ratioMode: RatioType;
         files: FileProps[];
@@ -410,8 +411,8 @@ declare module Profile {
 
     interface PostType {
         postId: number;
-        postImages: CommonType.PostImageDTOProps;
-        hasManyPosts: boolean;
+        postImage: CommonType.PostImageDTOProps;
+        hasManyPostImages: boolean;
         postCommentsCount: number;
         postLikesCount: number;
     }

@@ -84,6 +84,9 @@ const ArticleHeader = ({
     followLoading,
 }: ArticleHeaderProps) => {
     const { miniProfile } = useAppSelector(({ modal }) => modal);
+    const myUsername = useAppSelector(
+        (state) => state.auth.userInfo?.memberUsername,
+    );
     const dispatch = useAppDispatch();
 
     // const [isFollowing, setIsFollowing] = useState(false); // followingModal의 isFollowing과 연결할 것
@@ -148,7 +151,7 @@ const ArticleHeader = ({
 
     const followHandler = () => {
         const followUser = async () => {
-            await dispatch(postFollow({ username: memberUsername }));
+            await dispatch(postFollow({ username: memberNickname }));
         };
         followUser();
     };
@@ -173,7 +176,7 @@ const ArticleHeader = ({
                             {memberNickname}
                         </Link>
                     </Username>
-                    {!isFollowing && (
+                    {memberNickname !== myUsername && !isFollowing && (
                         <div className="header-followBox">
                             <span>•</span>
                             <button onClick={followHandler}>
