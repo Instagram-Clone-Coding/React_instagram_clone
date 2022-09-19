@@ -24,7 +24,7 @@ const Paragraph = () => {
                 } = await authorizedCustomAxios.get<ArticleProps>(
                     `/posts/${postId}`,
                 );
-                if (status === 200) history.goBack(); // 에러 발생 시 뒤로 이동
+                if (status !== 200) history.goBack(); // 에러 발생 시 뒤로 이동
                 dispatch(postActions.getArticle(data));
             } catch (error) {
                 console.log(error);
