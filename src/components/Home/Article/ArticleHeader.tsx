@@ -151,7 +151,7 @@ const ArticleHeader = ({
 
     const followHandler = () => {
         const followUser = async () => {
-            await dispatch(postFollow({ username: memberUsername }));
+            await dispatch(postFollow({ username: memberNickname }));
         };
         followUser();
     };
@@ -176,19 +176,18 @@ const ArticleHeader = ({
                             {memberNickname}
                         </Link>
                     </Username>
-                    {memberNickname !== myUsername &&
-                        (!isFollowing || (
-                            <div className="header-followBox">
-                                <span>•</span>
-                                <button onClick={followHandler}>
-                                    {followLoading ? (
-                                        <Loading size={18} />
-                                    ) : (
-                                        "팔로우"
-                                    )}
-                                </button>
-                            </div> // 로딩 처리 필요
-                        ))}
+                    {memberNickname !== myUsername && !isFollowing && (
+                        <div className="header-followBox">
+                            <span>•</span>
+                            <button onClick={followHandler}>
+                                {followLoading ? (
+                                    <Loading size={18} />
+                                ) : (
+                                    "팔로우"
+                                )}
+                            </button>
+                        </div> // 로딩 처리 필요
+                    )}
                 </div>
                 <Link to={`/explore/locations/:id/${location}`}>
                     {/* location id */}
