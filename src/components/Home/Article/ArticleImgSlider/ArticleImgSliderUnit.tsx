@@ -18,10 +18,6 @@ const StyledArticleImgSliderUnit = styled.div`
         display: flex;
         align-items: center;
         justify-content: center;
-        max-width: 614px;
-        @media (max-width: 1000px) {
-            max-width: 600px;
-        }
     }
 
     &.containImgHashTags {
@@ -40,8 +36,9 @@ const ArticleImgSliderUnit = ({
 }: ArticleImgSliderUnitProps) => {
     const [isAvatarOn, setIsAvatarOn] = useState(false);
     const [isImgHashTagsOn, setIsImgHashTagOn] = useState<boolean | null>(null);
-    const [timeoutId, setTimeoutId] =
-        useState<null | ReturnType<typeof setTimeout>>(null);
+    const [timeoutId, setTimeoutId] = useState<null | ReturnType<
+        typeof setTimeout
+    >>(null);
 
     const onClickHandler = () => {
         if (!isAvatarOn) {
