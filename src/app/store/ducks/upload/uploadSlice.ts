@@ -5,7 +5,7 @@ const initialState: UploadType.UploadStateProps = {
     isUploading: false,
     isGrabbing: false,
     isWarningModalOn: false,
-    isJustWarningBeforePrevStep: false,
+    purposeOfWarningModal: "cancelUpload",
     step: "dragAndDrop",
     ratioMode: "square",
     files: [],
@@ -333,11 +333,12 @@ const uploadSlice = createSlice({
                 state.currentIndex
             ].hashtags.filter((hashtag, index) => index !== action.payload);
         },
-        startWarningModal: (state) => {
+        startWarningModal: (
+            state,
+            action: PayloadAction<UploadType.PurposeOfWarningModalType>,
+        ) => {
             state.isWarningModalOn = true;
-        },
-        notificateWarningIsJustAboutBeforePrevStep: (state) => {
-            state.isJustWarningBeforePrevStep = true;
+            state.purposeOfWarningModal = action.payload;
         },
         // excuteFunctionAfterWarning: (state) => {
         //     state.isWarningModalOn = false;
@@ -345,7 +346,6 @@ const uploadSlice = createSlice({
         // },
         cancelWarningModal: (state) => {
             state.isWarningModalOn = false;
-            state.isJustWarningBeforePrevStep = false;
         },
     },
     extraReducers: (build) => {
