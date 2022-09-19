@@ -121,7 +121,7 @@ const StyledImgSlider = styled.div<SliderProps>`
         display: flex;
         gap: 4px;
         justify-content: center;
-        bottom: -15px;
+        bottom: ${(props) => (props.isInLargerArticle ? "15px" : "-15px")};
         .img-dot {
             background-color: #a8a8a8;
             width: 6px;
@@ -137,14 +137,20 @@ const StyledImgSlider = styled.div<SliderProps>`
 interface SliderProps {
     total: number;
     currentIndex: number;
+    isInLargerArticle: boolean;
 }
 
 interface ArticleImgSliderProps {
     imageDTOs: CommonType.PostImageDTOProps[];
     onLike: () => undefined;
+    isInLargerArticle?: boolean;
 }
 
-const ArticleImgSlider = ({ imageDTOs, onLike }: ArticleImgSliderProps) => {
+const ArticleImgSlider = ({
+    imageDTOs,
+    onLike,
+    isInLargerArticle = false,
+}: ArticleImgSliderProps) => {
     //slider state
     const [sliderIndex, setSliderIndex] = useState(0);
     const [doubleClicked, setDoubleClicked] = useState(false);
@@ -221,6 +227,7 @@ const ArticleImgSlider = ({ imageDTOs, onLike }: ArticleImgSliderProps) => {
             onDoubleClick={doubleClickLikeHandler} // 빨간 하트 애니메이션 효과는 redux 적용하면서 연결할 예정
             total={totalIndex}
             currentIndex={sliderIndex}
+            isInLargerArticle={isInLargerArticle}
         >
             {doubleClicked && (
                 <div

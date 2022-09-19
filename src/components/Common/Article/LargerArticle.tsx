@@ -40,6 +40,7 @@ const LargerArticle = ({ article }: LargerArticleProps) => {
                 <ArticleImgSlider
                     imageDTOs={article.postImages}
                     onLike={() => undefined}
+                    isInLargerArticle={true}
                 />
             </div>
             <div className="largerArticle__rightContent">
