@@ -1,9 +1,12 @@
 import { useAppSelector } from "app/store/Hooks";
+import LargerArticle from "components/Common/Article/LargerArticle";
 import Article from "components/Home/Article";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-const StyledOnlyArticlePage = styled.article``;
+const StyledOnlyArticlePage = styled.article`
+    /* width: 736px; */
+`;
 
 const OnlyArticlePage = () => {
     const article = useAppSelector((state) => state.paragraph.articleObj);
@@ -21,13 +24,12 @@ const OnlyArticlePage = () => {
         };
     }, []);
 
-    console.log(article);
     return (
         <StyledOnlyArticlePage>
             {isMobileWidth ? (
                 <Article article={article} isObserving={false} />
             ) : (
-                <div>Hello</div>
+                <LargerArticle article={article} />
             )}
         </StyledOnlyArticlePage>
     );
