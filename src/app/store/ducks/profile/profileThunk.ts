@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { authorizedCustomAxios, customAxios } from "customAxios";
+import { authorizedCustomAxios } from "customAxios";
 import { FAIL_TO_REISSUE_MESSAGE } from "utils/constant";
 import { authAction } from "../auth/authSlice";
 import { RootState } from "app/store/store";
@@ -92,7 +92,7 @@ export const getExtraPosts = createAsyncThunk<
                 data: {
                     data: { content: data, empty },
                 },
-            } = await customAxios.get(url, config);
+            } = await authorizedCustomAxios.get(url, config);
 
             if (empty) {
                 throw rejectWithValue("게시물이 더 이상 존재하지 않습니다.");
