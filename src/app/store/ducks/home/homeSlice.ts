@@ -40,7 +40,7 @@ const homeSlice = createSlice({
         },
         updateUploadedArticle: (
             state,
-            action: PayloadAction<HomeType.ArticleProps>,
+            action: PayloadAction<PostType.ArticleProps>,
         ) => {
             state.articles.unshift({
                 ...action.payload,
