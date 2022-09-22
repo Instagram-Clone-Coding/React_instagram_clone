@@ -42,7 +42,7 @@ const StyledArticleHeader = styled.header`
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                width: 36.34px;
+                width: 40px;
                 margin-left: 2px;
                 color: ${(props) => props.theme.color.blue};
             }
