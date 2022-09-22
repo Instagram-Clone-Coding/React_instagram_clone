@@ -38,6 +38,7 @@ const FollowBtn = styled(Button)<{ isSmall: boolean; isFollowing?: boolean }>`
 interface LikedPersonUnitProps {
     personObj: LikedPersonType;
     isSmall: boolean;
+    // isFourthFromLast:boolean;
 }
 
 const LikedPersonUnit = ({ personObj, isSmall }: LikedPersonUnitProps) => {
@@ -70,10 +71,7 @@ const LikedPersonUnit = ({ personObj, isSmall }: LikedPersonUnitProps) => {
     };
 
     return (
-        <StyledLikedPersonUnit
-            className="likedPerson"
-            key={personObj.member.id}
-        >
+        <StyledLikedPersonUnit className="likedPerson">
             <StoryCircle
                 type={personObj.member.hasStory ? "unread" : "read"}
                 avatarUrl={personObj.member.image.imageUrl}
