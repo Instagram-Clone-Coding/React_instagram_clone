@@ -2,7 +2,7 @@ import StoryCircle from "components/Common/StoryCircle";
 import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "styles/UI/Button";
-import type { LikedPersonType } from "components/Common/LikedPeopleModal";
+import type { LikedPersonType } from "components/Common/LikedPeopleModal/LikedPeopleModal";
 import theme from "styles/theme";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import Loading from "components/Common/Loading";
