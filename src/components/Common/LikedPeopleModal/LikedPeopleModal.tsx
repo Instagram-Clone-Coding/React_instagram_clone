@@ -114,7 +114,12 @@ const LikedPeopleModal = ({
         const resizeEventHandler = () =>
             setIsModalWidthSmall(window.innerWidth <= 735);
 
+        const keydownEventHandler = (event: KeyboardEvent) => {
+            event.key === "Escape" && onModalOff();
+        };
         window.addEventListener("resize", resizeEventHandler);
+        window.addEventListener("keydown", keydownEventHandler);
+
         getLikedPeople(1, modalInfo.type, modalInfo.id)
             .then((data) => {
                 setLikedPeople(data);
@@ -123,8 +128,9 @@ const LikedPeopleModal = ({
         return () => {
             document.body.style.overflow = "unset";
             window.removeEventListener("resize", resizeEventHandler);
+            window.removeEventListener("keydown", keydownEventHandler);
         };
-    }, [modalInfo.id, modalInfo.type]);
+    }, [modalInfo.id, modalInfo.type, onModalOff]);
 
     return (
         <ModalCard
