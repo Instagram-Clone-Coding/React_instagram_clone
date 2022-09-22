@@ -12,16 +12,16 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 interface ChatBubbleProps {
-    content: string | Direct.PostMessageDTO | Common.ImageInfo; // DM 메세지에는 여러가지 타입이 있습니다. 순서대로 일반 메세지, 포스트 공유, 이미지 전송
+    content: string | Direct.PostMessageDTO | CommonType.ImageInfo; // DM 메세지에는 여러가지 타입이 있습니다. 순서대로 일반 메세지, 포스트 공유, 이미지 전송
     me: boolean;
     showDate: boolean;
     messageDate: string;
     messageId: number;
     likeMessageHandler: () => void;
     unlikeMessageHandler: () => void;
-    likeMembers: Common.memberType[];
-    senderImage: Common.ImageInfo;
-    sender: Common.memberType;
+    likeMembers: CommonType.memberType[];
+    senderImage: CommonType.ImageInfo;
+    sender: CommonType.memberType;
 }
 
 interface ChatBubbleContainerType {
@@ -30,7 +30,7 @@ interface ChatBubbleContainerType {
     showGuide: boolean;
     onMouseEnter: (event: React.MouseEvent<HTMLDivElement>) => void;
     onMouseLeave: (event: React.MouseEvent<HTMLDivElement>) => void;
-    liked: Common.memberType | undefined;
+    liked: CommonType.memberType | undefined;
     isString: boolean;
 }
 
@@ -282,7 +282,7 @@ const ChatBubble = ({
         return "postImage" in object;
     };
 
-    const isImage = (object: any): object is Common.ImageInfo => {
+    const isImage = (object: any): object is CommonType.ImageInfo => {
         return "imageUrl" in object;
     };
 

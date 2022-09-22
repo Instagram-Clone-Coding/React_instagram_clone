@@ -24,7 +24,7 @@ const NoArticleContainer = styled.div`
 `;
 
 interface NoArticleProps {
-    imageSprite: Common.ImageProps;
+    imageSprite: CommonType.ImageProps;
     content: string;
     description?: string;
 }

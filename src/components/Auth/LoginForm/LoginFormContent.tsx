@@ -49,7 +49,7 @@ const FormContainer = styled.div`
     }
 `;
 
-const instagramImage: Common.ImageProps = {
+const instagramImage: CommonType.ImageProps = {
     width: 175,
     height: 51,
     position: `0 -130px`,

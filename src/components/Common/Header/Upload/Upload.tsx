@@ -65,6 +65,20 @@ const Upload = () => {
             Math.min(currentHeightLimitedByWindowHeight - 43, currentMaxWidth),
         [currentHeightLimitedByWindowHeight, currentMaxWidth],
     );
+
+    const checkDirectlyCancelOrNot = useCallback(
+        (purpose: UploadType.PurposeOfWarningModalType) => {
+            if (step === "cut" || step === "edit" || step === "content") {
+                dispatch(uploadActions.startWarningModal(purpose));
+            } else if (step === "uploading") {
+                // nothing
+            } else {
+                dispatch(uploadActions.cancelUpload());
+            }
+        },
+        [dispatch, step],
+    );
+
     useEffect(() => {
         if (isUploading) {
             document.body.style.overflow = "hidden";
@@ -73,14 +87,19 @@ const Upload = () => {
             setBackDropWidth(window.innerWidth);
             setBackDropHeight(window.innerHeight);
         });
+        const keydownEventHandler = (event: KeyboardEvent) => {
+            event.key === "Escape" && checkDirectlyCancelOrNot("cancelUpload");
+        };
+        window.addEventListener("keydown", keydownEventHandler);
         return () => {
             document.body.style.overflow = "unset";
             window.removeEventListener("resize", () => {
                 setBackDropWidth(window.innerWidth);
                 setBackDropHeight(window.innerHeight);
             });
+            window.removeEventListener("keydown", keydownEventHandler);
         };
-    }, []);
+    }, [checkDirectlyCancelOrNot, isUploading]);
 
     const currentComponent = useCallback(
         (step: UploadType.StepType) => {
@@ -115,10 +134,8 @@ const Upload = () => {
     const checkIsGrabbingAndCancelUpload = () => {
         if (isGrabbing) {
             dispatch(uploadActions.stopGrabbing());
-        } else if (step === "cut" || step === "edit" || step === "content") {
-            dispatch(uploadActions.startWarningModal());
         } else {
-            dispatch(uploadActions.cancelUpload());
+            checkDirectlyCancelOrNot("cancelUpload");
         }
     };
 

@@ -25,7 +25,7 @@ const Container = styled.div`
     }
 `;
 
-interface SearchListItemProps extends Common.searchResultType {
+interface SearchListItemProps extends CommonType.searchResultType {
     setIsFocused: Dispatch<SetStateAction<boolean>>;
     button?: boolean;
 }

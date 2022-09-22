@@ -546,6 +546,16 @@ const homeSlice = createSlice({
         increaseExtraArticlesCount: (state) => {
             state.extraArticlesCount++;
         },
+        updateUploadedArticle: (
+            state,
+            action: PayloadAction<HomeType.ArticleProps>,
+        ) => {
+            state.articles.unshift({
+                ...action.payload,
+                isFollowing: false,
+                followLoading: false,
+            });
+        },
     },
     extraReducers: (build) => {
         build
