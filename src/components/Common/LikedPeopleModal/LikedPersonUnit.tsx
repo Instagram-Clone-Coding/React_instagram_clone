@@ -1,14 +1,15 @@
 import StoryCircle from "components/Common/StoryCircle";
-import React, { useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Button from "styles/UI/Button";
-import type { LikedPersonType } from "components/Common/LikedPeopleModal/LikedPeopleModal";
+import { LikedPersonType } from "components/Common/LikedPeopleModal/LikedPeopleModal";
 import theme from "styles/theme";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import Loading from "components/Common/Loading";
 import { authorizedCustomAxios } from "customAxios";
 import { authAction } from "app/store/ducks/auth/authSlice";
 import { FAIL_TO_REISSUE_MESSAGE } from "utils/constant";
+import useOnView from "hooks/useOnView";
 
 const StyledLikedPersonUnit = styled.div`
     padding: 8px 16px;
@@ -38,17 +39,22 @@ const FollowBtn = styled(Button)<{ isSmall: boolean; isFollowing?: boolean }>`
 interface LikedPersonUnitProps {
     personObj: LikedPersonType;
     isSmall: boolean;
-    // isFourthFromLast:boolean;
+    isFourthFromLast: boolean;
 }
 
-const LikedPersonUnit = ({ personObj, isSmall }: LikedPersonUnitProps) => {
+const LikedPersonUnit = ({
+    personObj,
+    isSmall,
+    isFourthFromLast,
+}: LikedPersonUnitProps) => {
     const [isFollowing, setIsFollowing] = useState(personObj.following);
     const [isFollowLoading, setIsFollowLoading] = useState(false);
     const myUsername = useAppSelector(
         (state) => state.auth.userInfo?.memberUsername,
     );
     const dispatch = useAppDispatch();
-
+    const unitRef = useRef<HTMLDivElement>(null);
+    const isOnView = useOnView(unitRef);
     const followBtnClickHandler = async () => {
         try {
             setIsFollowLoading(true);
@@ -70,8 +76,12 @@ const LikedPersonUnit = ({ personObj, isSmall }: LikedPersonUnitProps) => {
         }
     };
 
+    useEffect(() => {
+        isFourthFromLast && isOnView && console.log("isOnView");
+    }, [personObj.member.username, isFourthFromLast, isOnView]);
+
     return (
-        <StyledLikedPersonUnit className="likedPerson">
+        <StyledLikedPersonUnit className="likedPerson" ref={unitRef}>
             <StoryCircle
                 type={personObj.member.hasStory ? "unread" : "read"}
                 avatarUrl={personObj.member.image.imageUrl}
@@ -106,4 +116,4 @@ const LikedPersonUnit = ({ personObj, isSmall }: LikedPersonUnitProps) => {
     );
 };
 
-export default LikedPersonUnit;
+export default memo(LikedPersonUnit);

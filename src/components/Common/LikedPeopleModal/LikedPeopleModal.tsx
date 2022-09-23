@@ -156,11 +156,12 @@ const LikedPeopleModal = ({
                     style={{ height: likedPeople.length * 60 + "px" }}
                 >
                     {/* hasStory 2개? */}
-                    {likedPeople.map((personObj) => (
+                    {likedPeople.map((personObj, index) => (
                         <LikedPersonUnit
                             personObj={personObj}
                             isSmall={isModalWidthSmall}
                             key={personObj.member.id}
+                            isFourthFromLast={index === likedPeople.length - 4}
                         />
                     ))}
                 </div>
