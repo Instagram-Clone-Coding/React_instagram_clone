@@ -1,6 +1,6 @@
 import { paragraphActions } from "app/store/ducks/paragraph/paragraphSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import OnlyArticlePage from "components/Common/Article/OnlyArticlePage";
+import ArticleAlone from "components/Common/Article/ArticleAlone";
 import { authorizedCustomAxios } from "customAxios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useHistory } from "react-router";
@@ -35,7 +35,7 @@ const Paragraph = () => {
         };
         getArticle();
     }, [postId, dispatch, history]);
-    return <div>{isDataFetching || <OnlyArticlePage />}</div>;
+    return <div>{isDataFetching || <ArticleAlone />}</div>;
 };
 
 export default Paragraph;

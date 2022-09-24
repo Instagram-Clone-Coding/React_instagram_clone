@@ -4,11 +4,11 @@ import Article from "components/Home/Article";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-const StyledOnlyArticlePage = styled.article`
+const StyledArticleAlone = styled.article`
     /* width: 736px; */
 `;
 
-const OnlyArticlePage = () => {
+const ArticleAlone = () => {
     const article = useAppSelector((state) => state.paragraph.articleObj);
     const [isMobileWidth, setIsMobileWidth] = useState(
         window.innerWidth <= 735,
@@ -25,14 +25,14 @@ const OnlyArticlePage = () => {
     }, []);
 
     return (
-        <StyledOnlyArticlePage>
+        <StyledArticleAlone>
             {isMobileWidth ? (
                 <Article article={article} isObserving={false} />
             ) : (
                 <LargerArticle article={article} />
             )}
-        </StyledOnlyArticlePage>
+        </StyledArticleAlone>
     );
 };
 
-export default OnlyArticlePage;
+export default ArticleAlone;
