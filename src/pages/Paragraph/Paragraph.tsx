@@ -1,6 +1,6 @@
 import { paragraphActions } from "app/store/ducks/paragraph/paragraphSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import ArticleAlone from "components/Common/Article/ArticleAlone";
+import ArticleAlone from "components/Common/Article/ArticleAlone/ArticleAlone";
 import { authorizedCustomAxios } from "customAxios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useHistory } from "react-router";
