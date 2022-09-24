@@ -1,4 +1,4 @@
-import CommentForm from "components/Home/Article/CommentForm";
+import CommentForm from "components/Common/Article/CommentForm";
 import React from "react";
 import styled from "styled-components";
 

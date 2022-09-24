@@ -1,10 +1,6 @@
 import styled from "styled-components";
 import Card from "styles/UI/Card";
 import { useEffect, useRef, useState } from "react";
-import ArticleHeader from "components/Home/Article/ArticleHeader";
-import ArticleImgSlider from "components/Home/Article/ArticleImgSlider";
-import ArticleMainIcons from "components/Home/Article/ArticleMainIcons";
-import ArticleMain from "components/Home/Article/ArticleMain";
 import useOnView from "hooks/useOnView";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import {
@@ -12,8 +8,12 @@ import {
     getExtraArticle,
     postLike,
 } from "app/store/ducks/home/homThunk";
-import ArticleGap from "components/Home/Article/ArticleGap";
-import ArticleCommentFormLayout from "components/Home/Article/ArticleCommentFormLayout";
+import ArticleHeader from "components/Common/Article/ArticleHeader";
+import ArticleImgSlider from "components/Common/Article/ArticleImgSlider";
+import ArticleMainIcons from "components/Common/Article/ArticleMainIcons";
+import ArticleMain from "components/Common/Article/ArticleMain";
+import ArticleGap from "components/Common/Article/ArticleGap";
+import ArticleCommentFormLayout from "components/Common/Article/ArticleCommentFormLayout";
 
 const ArticleCard = styled(Card)`
     margin-bottom: 24px;

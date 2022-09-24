@@ -1,6 +1,6 @@
 import { useAppSelector } from "app/store/Hooks";
+import Article from "components/Common/Article/Article";
 import LargerArticle from "components/Common/Article/LargerArticle";
-import Article from "components/Home/Article";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 

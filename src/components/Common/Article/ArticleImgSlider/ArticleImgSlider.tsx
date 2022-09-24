@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import sprite2 from "assets/Images/sprite2.png";
 import styled from "styled-components";
-import ArticleImgSliderUnit from "components/Home/Article/ArticleImgSlider/ArticleImgSliderUnit";
+import ArticleImgSliderUnit from "components/Common/Article/ArticleImgSlider/ArticleImgSliderUnit";
 
 interface SliderProps {
     total: number;

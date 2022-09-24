@@ -1,9 +1,9 @@
-import ArticleCommentFormLayout from "components/Home/Article/ArticleCommentFormLayout";
-import ArticleGap from "components/Home/Article/ArticleGap";
-import ArticleHeader from "components/Home/Article/ArticleHeader";
-import ArticleImgSlider from "components/Home/Article/ArticleImgSlider";
-import ArticleMain from "components/Home/Article/ArticleMain";
-import ArticleMainIcons from "components/Home/Article/ArticleMainIcons";
+import ArticleCommentFormLayout from "components/Common/Article/ArticleCommentFormLayout";
+import ArticleGap from "components/Common/Article/ArticleGap";
+import ArticleHeader from "components/Common/Article/ArticleHeader";
+import ArticleImgSlider from "components/Common/Article/ArticleImgSlider/ArticleImgSlider";
+import ArticleMain from "components/Common/Article/ArticleMain";
+import ArticleMainIcons from "components/Common/Article/ArticleMainIcons";
 import React, { useState } from "react";
 import styled from "styled-components";
 

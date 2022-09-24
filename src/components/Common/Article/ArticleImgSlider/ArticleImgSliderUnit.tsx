@@ -1,5 +1,5 @@
-import ImgHashTagAvatar from "components/Home/Article/ArticleImgSlider/ImgHashTagAvatar";
-import ImgHashTagUsername from "components/Home/Article/ArticleImgSlider/ImgHashTagUsername";
+import ImgHashTagAvatar from "components/Common/Article/ArticleImgSlider/ImgHashTagAvatar";
+import ImgHashTagUsername from "components/Common/Article/ArticleImgSlider/ImgHashTagUsername";
 import React, { useState } from "react";
 import styled from "styled-components";
 
