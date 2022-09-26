@@ -35,7 +35,13 @@ const Layout = styled.div`
 const Home = () => {
     const {
         home: { isCopiedNotification },
-        modal: { activatedModal, memberNickname, postId, miniProfile },
+        modal: {
+            activatedModal,
+            memberNickname,
+            postId,
+            miniProfile,
+            memberImageUrl,
+        },
     } = useAppSelector((state) => state);
 
     const dispatch = useAppDispatch();
@@ -73,6 +79,8 @@ const Home = () => {
                     onModalOff={() =>
                         dispatch(modalActions.changeActivatedModal(null))
                     }
+                    memberImageUrl={memberImageUrl}
+                    memberNickname={memberNickname}
                 />
             )}
             {activatedModal === "articleMenu" && memberNickname && postId && (
