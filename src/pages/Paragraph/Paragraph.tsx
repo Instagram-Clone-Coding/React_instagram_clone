@@ -4,6 +4,27 @@ import ArticleAlone from "components/Common/Article/ArticleAlone/ArticleAlone";
 import { authorizedCustomAxios } from "customAxios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useHistory } from "react-router";
+import styled from "styled-components";
+
+const StyledParagraph = styled.main`
+    padding: calc(4vh) 20px 0;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 40px);
+    max-width: 975px;
+    margin: 0 auto;
+    margin-bottom: 16px;
+    & > .paragraph__articleLayout {
+        width: calc(100% - 40px);
+        max-width: 815px;
+        margin: 0 auto;
+    }
+    & > .paragraph__bottomBorder {
+        margin-top: 48px;
+        width: 100%;
+        border-bottom: 1px solid ${(props) => props.theme.color.bd_gray};
+    }
+`;
 interface ArticleProps {
     data: PostType.ArticleProps;
 }
@@ -26,7 +47,6 @@ const Paragraph = () => {
                 } = await authorizedCustomAxios.get<ArticleProps>(
                     `/posts/${postId}`,
                 );
-                console.log("게시글 데이터", data);
                 if (status !== 200) history.goBack(); // 에러 발생 시 뒤로 이동
                 dispatch(paragraphActions.setArticle(data));
             } catch (error) {
@@ -35,7 +55,18 @@ const Paragraph = () => {
         };
         getArticle();
     }, [postId, dispatch, history]);
-    return <div>{isDataFetching || <ArticleAlone />}</div>;
+    return (
+        <StyledParagraph>
+            {isDataFetching || (
+                <>
+                    <div className="paragraph__articleLayout">
+                        <ArticleAlone />
+                    </div>
+                    <div className="paragraph__bottomBorder"></div>
+                </>
+            )}
+        </StyledParagraph>
+    );
 };
 
 export default Paragraph;

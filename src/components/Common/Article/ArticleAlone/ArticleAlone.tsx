@@ -4,8 +4,8 @@ import LargerArticle from "components/Common/Article/ArticleAlone/LargerArticle"
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-const StyledArticleAlone = styled.article`
-    /* width: 736px; */
+const StyledArticleAlone = styled.div`
+    width: 100%;
 `;
 
 const ArticleAlone = () => {

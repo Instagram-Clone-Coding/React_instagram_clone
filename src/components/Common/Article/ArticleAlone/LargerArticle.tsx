@@ -9,7 +9,6 @@ import styled from "styled-components";
 
 const StyledLargerArticle = styled.div`
     display: flex;
-    max-width: 935px;
     border: 1px solid ${(props) => props.theme.color.bd_gray};
     & > .largerArticle__imageSliderFlexBox {
         width: calc(100% - 340px);
