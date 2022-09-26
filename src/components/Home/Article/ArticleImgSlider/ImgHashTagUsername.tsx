@@ -82,7 +82,7 @@ export const ImgHashTagUsername = ({
 }) => {
     return (
         <StyledImgHashTagUsername
-            to={isImgHashTagsOn ? `/${postTagDTO.tag.username}` : ``}
+            to={isImgHashTagsOn ? `/profile/${postTagDTO.tag.username}` : ``}
             styleprops={{
                 x: postTagDTO.tag.x,
                 y: postTagDTO.tag.y,
