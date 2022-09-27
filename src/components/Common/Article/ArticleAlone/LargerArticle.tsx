@@ -4,7 +4,8 @@ import ArticleHeader from "components/Common/Article/ArticleHeader";
 import ArticleImgSlider from "components/Common/Article/ArticleImgSlider/ArticleImgSlider";
 import ArticleMain from "components/Common/Article/ArticleMain";
 import ArticleMainIcons from "components/Common/Article/ArticleMainIcons";
-import React, { useState } from "react";
+import { authorizedCustomAxios } from "customAxios";
+import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 
 const StyledLargerArticle = styled.div`
@@ -36,12 +37,59 @@ const LargerArticle = ({ article }: LargerArticleProps) => {
         article.followingMemberUsernameLikedPost;
     const [isLiked, setIsLiked] = useState(article.postLikeFlag);
     const [likesCount, setLikesCount] = useState(article.postLikesCount);
+
+    const config = useMemo(
+        () => ({
+            params: {
+                postId: article.postId,
+            },
+        }),
+        [article.postId],
+    );
+
+    const dispatchPostLike = async () => {
+        try {
+            await authorizedCustomAxios.post("/posts/like", null, config);
+        } catch (error) {
+            setIsLiked(false);
+            setLikesCount((prev) => prev - 1);
+        }
+    };
+
+    const dispatchDeleteLike = async () => {
+        try {
+            await authorizedCustomAxios.delete("/posts/like", config);
+        } catch (error) {
+            setIsLiked(true);
+            setLikesCount((prev) => prev + 1);
+        }
+    };
+
+    const changeToLikeHandler = (): void => {
+        if (isLiked) return;
+        setIsLiked(true);
+        setLikesCount((prev) => prev + 1);
+        dispatchPostLike();
+    };
+
+    const toggleLikeHandler = (): void => {
+        if (!isLiked) {
+            setIsLiked(true);
+            setLikesCount((prev) => prev + 1);
+            dispatchPostLike();
+        } else {
+            setIsLiked(false);
+            setLikesCount((prev) => prev - 1);
+            dispatchDeleteLike();
+        }
+    };
+
     return (
         <StyledLargerArticle>
             <div className="largerArticle__imageSliderFlexBox">
                 <ArticleImgSlider
                     imageDTOs={article.postImages}
-                    onLike={() => undefined}
+                    onLike={changeToLikeHandler}
                     isInLargerArticle={true}
                 />
             </div>
@@ -77,7 +125,7 @@ const LargerArticle = ({ article }: LargerArticleProps) => {
                     isLiked={isLiked}
                     isBookmarked={article.postBookmarkFlag}
                     postId={article.postId}
-                    onToggleLike={() => {}}
+                    onToggleLike={toggleLikeHandler}
                 />
                 <ArticleGap postUploadDate={article.postUploadDate} />
                 {!article.commentOptionFlag && <ArticleCommentFormLayout />}
