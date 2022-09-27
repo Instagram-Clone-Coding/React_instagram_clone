@@ -142,7 +142,7 @@ interface SliderProps {
 
 interface ArticleImgSliderProps {
     imageDTOs: CommonType.PostImageDTOProps[];
-    onLike: () => undefined;
+    onLike: () => void;
     isInLargerArticle?: boolean;
 }
 
