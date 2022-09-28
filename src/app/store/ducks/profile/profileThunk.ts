@@ -127,3 +127,27 @@ export const follow = createAsyncThunk<
         }
     },
 );
+
+export const hashtagFollow = createAsyncThunk<void, { hashtag: string }>(
+    "profile/hashtagFollow",
+    async (payload) => {
+        const config = {
+            params: {
+                hashtag: payload.hashtag,
+            },
+        };
+        await authorizedCustomAxios.post(`hashtags/follow`, null, config);
+    },
+);
+
+export const hashtagUnfollow = createAsyncThunk<void, { hashtag: string }>(
+    "profile/hashtagFollow",
+    async (payload) => {
+        const config = {
+            params: {
+                hashtag: payload.hashtag,
+            },
+        };
+        await authorizedCustomAxios.delete(`hashtags/follow`, config);
+    },
+);
