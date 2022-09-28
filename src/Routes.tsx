@@ -10,6 +10,7 @@ import AuthPage from "pages/Auth";
 import ResetPassword from "components/Auth/ResetPassword";
 import ResetPasswordForm from "components/Auth/ResetPassword/ResetPasswordForm";
 import Edit from "pages/Edit";
+import HashtagProfile from "pages/Home/HashTag/HashtagProfile";
 
 const Routes = () => {
     const isLogin = useAppSelector((state) => state.auth.isLogin);
@@ -70,6 +71,7 @@ const AuthedContainer = () => {
             <Route exact path="/" component={Home} />
             {/* Direct */}
             <Route path="/direct" component={Direct} />
+            <Route path="/hashtag/:query" component={HashtagProfile} />
             {/* 404 페이지 필요*/}
         </>
     );

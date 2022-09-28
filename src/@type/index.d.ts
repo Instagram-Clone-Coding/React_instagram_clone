@@ -424,6 +424,13 @@ declare module Profile {
         | "block"
         | null;
     type currentCategoryType = "uploaded" | "tagged" | "saved";
+
+    type HashTagProfileType = {
+        image: CommonType.ImageInfo;
+        name: string;
+        postCount: number;
+        following: boolean;
+    };
 }
 
 declare module EditType {
