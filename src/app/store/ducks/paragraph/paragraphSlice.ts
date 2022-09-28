@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { postFollow, postUnfollow } from "app/store/ducks/home/homThunk";
 
 const initialState: ParagraphType.ParagraphStateProps = {
     isDataFetching: true,
@@ -44,6 +45,26 @@ const paragraphSlice = createSlice({
             };
             state.isDataFetching = false;
         },
+    },
+    extraReducers: (build) => {
+        build
+            .addCase(postFollow.pending, (state, action) => {
+                state.articleObj.followLoading = true;
+            })
+            .addCase(postFollow.fulfilled, (state, action) => {
+                state.articleObj.followLoading = false;
+                state.articleObj.following = true;
+            })
+            .addCase(postFollow.rejected, (state, action) => {
+                state.articleObj.followLoading = false;
+                state.articleObj.following = true;
+            })
+            .addCase(postUnfollow.fulfilled, (state, action) => {
+                state.articleObj.following = false;
+            })
+            .addCase(postUnfollow.rejected, (state, action) => {
+                state.articleObj.following = true;
+            });
     },
     // extraReducers: (build) => {},
 });
