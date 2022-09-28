@@ -101,7 +101,7 @@ const Article = ({ article, isObserving }: ArticleComponentPros) => {
                 memberUsername={article.member.name} // 이지금
                 memberNickname={article.member.username} // dlwlram
                 postId={article.postId}
-                isFollowing={article.isFollowing}
+                isFollowing={article.following}
                 followLoading={article.followLoading}
             />
             <ArticleImgSlider

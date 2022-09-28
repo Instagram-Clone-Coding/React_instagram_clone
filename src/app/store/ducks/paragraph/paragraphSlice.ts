@@ -28,7 +28,7 @@ const initialState: ParagraphType.ParagraphStateProps = {
         mentionsOfContent: [],
         likeOptionFlag: false, // 업로드한 사람만 좋아요 및 좋아요한 사람 확인 가능
         commentOptionFlag: false,
-        isFollowing: false,
+        following: false,
         followLoading: false,
     },
 };
@@ -41,7 +41,6 @@ const paragraphSlice = createSlice({
             state.articleObj = {
                 ...action.payload,
                 followLoading: false,
-                isFollowing: false, // 데이터로 와야 할 데이터로 보임. 추후 수정 예정
             };
             state.isDataFetching = false;
         },

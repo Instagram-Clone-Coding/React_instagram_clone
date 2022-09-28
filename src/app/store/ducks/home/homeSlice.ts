@@ -44,7 +44,6 @@ const homeSlice = createSlice({
         ) => {
             state.articles.unshift({
                 ...action.payload,
-                isFollowing: false,
                 followLoading: false,
             });
         },
@@ -78,14 +77,14 @@ const homeSlice = createSlice({
             .addCase(postUnfollow.fulfilled, (state, action) => {
                 state.articles.forEach((article) => {
                     if (article.member.username === action.meta.arg.username) {
-                        article.isFollowing = false;
+                        article.following = false;
                     }
                 });
             })
             .addCase(postUnfollow.rejected, (state, action) => {
                 state.articles.forEach((article) => {
                     if (article.member.username === action.meta.arg.username) {
-                        article.isFollowing = true;
+                        article.following = true;
                     }
                 });
             })
@@ -100,7 +99,7 @@ const homeSlice = createSlice({
                 state.articles.forEach((article) => {
                     if (article.member.username === action.meta.arg.username) {
                         article.followLoading = false;
-                        article.isFollowing = true;
+                        article.following = true;
                     }
                 });
             })
@@ -108,7 +107,7 @@ const homeSlice = createSlice({
                 state.articles.forEach((article) => {
                     if (article.member.username === action.meta.arg.username) {
                         article.followLoading = false;
-                        article.isFollowing = false;
+                        article.following = false;
                     }
                 });
             })
