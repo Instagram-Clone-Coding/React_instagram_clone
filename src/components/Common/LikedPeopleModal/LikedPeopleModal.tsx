@@ -82,9 +82,9 @@ const LIkedPeopleModalHeader = styled.div`
 `;
 
 const LikedPeopleModalMain = styled.div`
-    height: 100%;
+    height: calc(100% - 42px);
+    overflow-y: auto;
     & > .wrapper {
-        overflow-y: auto;
     }
 `;
 
