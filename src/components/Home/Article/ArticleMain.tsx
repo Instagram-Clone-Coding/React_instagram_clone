@@ -59,6 +59,7 @@ interface MainProps {
     }[];
     mentions: string[];
     hashtags: string[];
+    isLiked: boolean;
 }
 
 const ArticleMain = ({
@@ -73,6 +74,7 @@ const ArticleMain = ({
     comments,
     mentions,
     hashtags,
+    isLiked,
 }: MainProps) => {
     // like state
     const [isComment1Liked, setIsComment1Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
@@ -183,6 +185,7 @@ const ArticleMain = ({
                         type: "post",
                         id: postId,
                     }}
+                    isLiked={isLiked}
                 />
             )}
             <div

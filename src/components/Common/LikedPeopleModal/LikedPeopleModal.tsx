@@ -1,3 +1,4 @@
+import { useAppSelector } from "app/store/Hooks";
 import CloseSVG from "assets/Svgs/CloseSVG";
 import LikedPersonUnit from "components/Common/LikedPeopleModal/LikedPersonUnit";
 import Loading from "components/Common/Loading";
@@ -8,17 +9,12 @@ import theme from "styles/theme";
 import ModalCard from "styles/UI/ModalCard";
 
 export interface LikedPersonType {
-    follower: boolean;
     following: boolean;
-    hasStory: boolean;
     member: {
         hasStory: boolean;
         id: number;
         image: {
             imageUrl: string;
-            imageType: string;
-            imageName: string;
-            imageUUID: string;
         };
         name: string;
         username: string;
@@ -96,13 +92,16 @@ interface LikedPeopleModalProps {
         type: "post" | "comment";
         id: number;
     };
+    isLiked: boolean;
 }
 
 const LikedPeopleModal = ({
     onModalOn,
     onModalOff,
     modalInfo,
+    isLiked,
 }: LikedPeopleModalProps) => {
+    const userInfo = useAppSelector((state) => state.auth.userInfo);
     const [isLoading, setIsLoading] = useState(true);
     const [likedPeople, setLikedPeople] = useState<LikedPersonType[]>([]);
     const [isModalWidthSmall, setIsModalWidthSmall] = useState(
@@ -122,7 +121,25 @@ const LikedPeopleModal = ({
 
         getLikedPeople(1, modalInfo.type, modalInfo.id)
             .then((data) => {
-                setLikedPeople(data);
+                setLikedPeople(
+                    isLiked && userInfo
+                        ? [
+                              {
+                                  following: false,
+                                  member: {
+                                      username: userInfo.memberUsername,
+                                      name: userInfo.memberName,
+                                      hasStory: false,
+                                      image: {
+                                          imageUrl: userInfo.memberImageUrl,
+                                      },
+                                      id: -1,
+                                  },
+                              },
+                              ...data,
+                          ]
+                        : data,
+                );
             })
             .finally(() => setIsLoading(false));
         return () => {
@@ -132,6 +149,7 @@ const LikedPeopleModal = ({
         };
     }, [modalInfo.id, modalInfo.type, onModalOff]);
 
+    console.log(likedPeople);
     return (
         <ModalCard
             modalType="withBackDrop"
@@ -155,7 +173,6 @@ const LikedPeopleModal = ({
                     className="wrapper"
                     style={{ height: likedPeople.length * 60 + "px" }}
                 >
-                    {/* hasStory 2개? */}
                     {likedPeople.map((personObj, index) => (
                         <LikedPersonUnit
                             personObj={personObj}

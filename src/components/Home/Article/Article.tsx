@@ -143,6 +143,7 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
                 commentsCount={article.postCommentsCount}
                 mentions={article.mentionsOfContent}
                 hashtags={article.hashtagsOfContent}
+                isLiked={isLiked}
                 // comments={article.comments}
             />
             <div className="article-createdAt">{gapText}</div>
