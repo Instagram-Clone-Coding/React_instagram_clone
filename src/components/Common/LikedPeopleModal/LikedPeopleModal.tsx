@@ -147,9 +147,8 @@ const LikedPeopleModal = ({
             window.removeEventListener("resize", resizeEventHandler);
             window.removeEventListener("keydown", keydownEventHandler);
         };
-    }, [modalInfo.id, modalInfo.type, onModalOff]);
+    }, [modalInfo.id, modalInfo.type, onModalOff, isLiked, userInfo]);
 
-    console.log(likedPeople);
     return (
         <ModalCard
             modalType="withBackDrop"
