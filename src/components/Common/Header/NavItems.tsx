@@ -73,7 +73,7 @@ const AvatarWrapper = styled(NavItemWrapper)<{ isSubnavModalOn: boolean }>`
 
 const NavItems = () => {
     const [isSubnavModalOn, setIsSubnavMoalOn] = useState(false);
-    const [isClickAlarm, setIsClickAlarm] = useState(false);
+    const [isAlarmOn, setIsAlarmOn] = useState(false);
 
     const dispatch = useAppDispatch();
     const isUploading = useAppSelector(({ upload }) => upload.isUploading);
@@ -87,11 +87,7 @@ const NavItems = () => {
     // alarm
     const alarmContainerRef = useRef<HTMLDivElement | null>(null);
     const alarmModalControllerRef = useRef<HTMLSpanElement | null>(null);
-    useOutsideClick(
-        alarmContainerRef,
-        setIsClickAlarm,
-        alarmModalControllerRef,
-    );
+    useOutsideClick(alarmContainerRef, setIsAlarmOn, alarmModalControllerRef);
 
     const navItems = [
         {
@@ -143,15 +139,13 @@ const NavItems = () => {
             path: "/",
             component: (
                 <span ref={alarmModalControllerRef}>
-                    <Heart onClick={() => setIsClickAlarm(!isClickAlarm)} />
+                    <Heart onClick={() => setIsAlarmOn(!isAlarmOn)} />
                 </span>
             ),
             activeComponent: (
                 <span ref={alarmModalControllerRef} style={{ width: `22px` }}>
-                    <HeartActive
-                        onClick={() => setIsClickAlarm(!isClickAlarm)}
-                    />
-                    {isClickAlarm && (
+                    <HeartActive onClick={() => setIsAlarmOn(!isAlarmOn)} />
+                    {isAlarmOn && (
                         <Alarm alarmContainerRef={alarmContainerRef} />
                     )}
                 </span>
@@ -173,7 +167,7 @@ const NavItems = () => {
                             </div>
                         ) : navItem.id === "피드 활동" ? (
                             <>
-                                {isClickAlarm
+                                {isAlarmOn
                                     ? navItem.activeComponent
                                     : navItem.component}
                             </>
