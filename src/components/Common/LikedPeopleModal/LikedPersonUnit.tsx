@@ -40,12 +40,14 @@ interface LikedPersonUnitProps {
     personObj: LikedPersonType;
     isSmall: boolean;
     isFourthFromLast: boolean;
+    onView: () => void;
 }
 
 const LikedPersonUnit = ({
     personObj,
     isSmall,
     isFourthFromLast,
+    onView,
 }: LikedPersonUnitProps) => {
     const [isFollowing, setIsFollowing] = useState(personObj.following);
     const [isFollowLoading, setIsFollowLoading] = useState(false);
@@ -77,8 +79,8 @@ const LikedPersonUnit = ({
     };
 
     useEffect(() => {
-        isFourthFromLast && isOnView && console.log("isOnView");
-    }, [personObj.member.username, isFourthFromLast, isOnView]);
+        isFourthFromLast && isOnView && onView();
+    }, [isFourthFromLast, isOnView, onView]);
 
     return (
         <StyledLikedPersonUnit className="likedPerson" ref={unitRef}>

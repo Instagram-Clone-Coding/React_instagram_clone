@@ -3,7 +3,7 @@ import CloseSVG from "assets/Svgs/CloseSVG";
 import LikedPersonUnit from "components/Common/LikedPeopleModal/LikedPersonUnit";
 import Loading from "components/Common/Loading";
 import { authorizedCustomAxios } from "customAxios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import theme from "styles/theme";
 import ModalCard from "styles/UI/ModalCard";
@@ -107,6 +107,7 @@ const LikedPeopleModal = ({
     const [isModalWidthSmall, setIsModalWidthSmall] = useState(
         window.innerWidth <= 735,
     );
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
@@ -149,6 +150,19 @@ const LikedPeopleModal = ({
         };
     }, [modalInfo.id, modalInfo.type, onModalOff, isLiked, userInfo]);
 
+    const getExtraLikedPeople = useCallback(async () => {
+        try {
+            const data = await getLikedPeople(
+                currentPage + 1,
+                "post",
+                modalInfo.id,
+            );
+            if (!data.length) return;
+            setLikedPeople((prev) => [...prev, ...data]);
+            setCurrentPage((prev) => prev + 1);
+        } catch (error) {}
+    }, [modalInfo.id, currentPage]);
+
     return (
         <ModalCard
             modalType="withBackDrop"
@@ -178,6 +192,7 @@ const LikedPeopleModal = ({
                             isSmall={isModalWidthSmall}
                             key={personObj.member.id}
                             isFourthFromLast={index === likedPeople.length - 4}
+                            onView={getExtraLikedPeople}
                         />
                     ))}
                 </div>
