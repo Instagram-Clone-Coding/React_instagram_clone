@@ -16,6 +16,13 @@ const modalSlice = createSlice({
     name: "modal",
     initialState,
     reducers: {
+        setModalUsernameAndImageUrl: (
+            state,
+            action: PayloadAction<{ nickname: string; imageUrl: string }>,
+        ) => {
+            state.memberNickname = action.payload.nickname;
+            state.memberImageUrl = action.payload.imageUrl;
+        },
         startModal: (
             state,
             action: PayloadAction<ModalType.ModalStateProps>,

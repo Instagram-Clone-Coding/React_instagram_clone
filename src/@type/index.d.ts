@@ -200,6 +200,7 @@ declare module ModalType {
         | "report"
         | "articleMenu"
         | "shareWith"
+        | "alarmUnfollowing"
         | null;
 
     interface ModalPositionProps {
