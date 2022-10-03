@@ -2,9 +2,11 @@ import { alarmAction } from "app/store/ducks/alarm/alarmSlice";
 import { loadAlarmList } from "app/store/ducks/alarm/alarmThunk";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import AlarmList from "components/Common/Header/alarm/alarm_list";
+import ImageSprite from "components/Common/ImageSprite";
 import Loading from "components/Common/Loading";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import sprite from "assets/Images/sprite.png";
 
 const Container = styled.div`
     position: relative;
@@ -47,9 +49,14 @@ const Container = styled.div`
 
         .empty-container {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             margin: 50px;
-            font-size: 20px;
+            font-size: 15px;
+
+            span {
+                padding: 10px 0;
+            }
         }
     }
 `;
@@ -79,6 +86,13 @@ export default function Alarm({
         }
     };
 
+    const emptyImage: CommonType.ImageProps = {
+        width: 96,
+        height: 96,
+        position: `0 -303px`,
+        url: sprite,
+    };
+
     return (
         <Container>
             <div className="pointer" />
@@ -90,7 +104,14 @@ export default function Alarm({
                     {!alarmList ? (
                         <Loading size={36} isInButton={false} />
                     ) : alarmList.length === 0 ? (
-                        <div className="empty-container">알람이 없습니다.</div>
+                        <div className="empty-container">
+                            <ImageSprite {...emptyImage} />
+                            <span>게시물 활동</span>
+                            <span>
+                                다른 사람이 회원님이 게시물을 좋아하거나 댓글을
+                                남기면 여기에 표시됩니다.
+                            </span>
+                        </div>
                     ) : (
                         <AlarmList
                             alarmList={alarmList}
