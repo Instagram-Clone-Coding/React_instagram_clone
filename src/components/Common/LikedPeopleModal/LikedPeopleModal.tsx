@@ -3,7 +3,7 @@ import CloseSVG from "assets/Svgs/CloseSVG";
 import LikedPersonUnit from "components/Common/LikedPeopleModal/LikedPersonUnit";
 import Loading from "components/Common/Loading";
 import { authorizedCustomAxios } from "customAxios";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import theme from "styles/theme";
 import ModalCard from "styles/UI/ModalCard";
@@ -108,6 +108,24 @@ const LikedPeopleModal = ({
         window.innerWidth <= 735,
     );
     const [currentPage, setCurrentPage] = useState(1);
+    const myLikedPersonModalData: LikedPersonType | null = useMemo(
+        () =>
+            userInfo
+                ? {
+                      following: false,
+                      member: {
+                          username: userInfo.memberUsername,
+                          name: userInfo.memberName,
+                          hasStory: false,
+                          image: {
+                              imageUrl: userInfo.memberImageUrl,
+                          },
+                          id: -1,
+                      },
+                  }
+                : null,
+        [userInfo],
+    );
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
@@ -123,22 +141,8 @@ const LikedPeopleModal = ({
         getLikedPeople(1, modalInfo.type, modalInfo.id)
             .then((data) => {
                 setLikedPeople(
-                    isLiked && userInfo
-                        ? [
-                              {
-                                  following: false,
-                                  member: {
-                                      username: userInfo.memberUsername,
-                                      name: userInfo.memberName,
-                                      hasStory: false,
-                                      image: {
-                                          imageUrl: userInfo.memberImageUrl,
-                                      },
-                                      id: -1,
-                                  },
-                              },
-                              ...data,
-                          ]
+                    isLiked && myLikedPersonModalData
+                        ? [myLikedPersonModalData, ...data]
                         : data,
                 );
             })
@@ -148,7 +152,14 @@ const LikedPeopleModal = ({
             window.removeEventListener("resize", resizeEventHandler);
             window.removeEventListener("keydown", keydownEventHandler);
         };
-    }, [modalInfo.id, modalInfo.type, onModalOff, isLiked, userInfo]);
+    }, [
+        modalInfo.id,
+        modalInfo.type,
+        onModalOff,
+        isLiked,
+        userInfo,
+        myLikedPersonModalData,
+    ]);
 
     const getExtraLikedPeople = useCallback(async () => {
         try {
