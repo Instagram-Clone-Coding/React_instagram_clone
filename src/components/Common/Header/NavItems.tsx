@@ -8,13 +8,10 @@ import { ReactComponent as DirectActive } from "assets/Svgs/direct-active.svg";
 import { ReactComponent as NewArticle } from "assets/Svgs/new-article.svg";
 import { ReactComponent as NewArticleActive } from "assets/Svgs/new-article-active.svg";
 
-import { ReactComponent as Map } from "assets/Svgs/map.svg";
-import { ReactComponent as MapActive } from "assets/Svgs/map-active.svg";
-
 import { ReactComponent as Heart } from "assets/Svgs/heart.svg";
 import { ReactComponent as HeartActive } from "assets/Svgs/heart-active.svg";
 
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { selectView } from "app/store/ducks/direct/DirectSlice";
 import { uploadActions } from "app/store/ducks/upload/uploadSlice";
