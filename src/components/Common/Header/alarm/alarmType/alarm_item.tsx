@@ -39,7 +39,7 @@ const Container = styled.div`
     }
 `;
 
-export default function AlarmItem({ alarm }: { alarm: Alarm.CommonAlarm }) {
+export default function AlarmItem({ alarm }: { alarm: Alarm.PostAlarm }) {
     const alarmMessage = removeRefer(alarm.message);
     // 무한스크롤
     // 컴포넌트 언마운트 -> alarm창 닫도록

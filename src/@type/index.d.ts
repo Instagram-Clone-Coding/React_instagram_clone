@@ -469,7 +469,8 @@ declare module Alarm {
         currentPage: number;
     };
 
-    type AlarmContent = CommonAlarm | FollowAlarm;
+    type AlarmContent = PostAlarm | FollowAlarm;
+
     interface CommonAlarm {
         id: number;
         type: "COMMENT" | "LIKE_POST" | "MENTION_POST";
@@ -478,15 +479,13 @@ declare module Alarm {
             id: number;
             username: string;
             name: string;
-            image: {
-                imageUrl: string;
-                imageType: string;
-                imageName: string;
-                imageUUID: string;
-            };
+            image: CommonType.ImageInfo;
             hasStory: false;
         };
         createdDate: string;
+    }
+    interface PostAlarm extends CommonAlarm {
+        type: "COMMENT" | "LIKE_POST" | "MENTION_POST";
         postId: number;
         postImageUrl: string;
         content: string;
@@ -494,23 +493,8 @@ declare module Alarm {
         hashtagsOfContent: string[];
     }
 
-    interface FollowAlarm {
-        id: number;
+    interface FollowAlarm extends CommonAlarm {
         type: "FOLLOW";
-        message: string;
-        agent: {
-            id: number;
-            username: string;
-            name: string;
-            image: {
-                imageUrl: string;
-                imageType: string;
-                imageName: string;
-                imageUUID: string;
-            };
-            hasStory: false;
-        };
-        createdDate: string;
         following: boolean;
     }
 }
