@@ -163,11 +163,11 @@ const NavItems = () => {
                                     : navItem.component}
                             </div>
                         ) : navItem.id === "피드 활동" ? (
-                            <>
+                            <div>
                                 {isAlarmOn
                                     ? navItem.activeComponent
                                     : navItem.component}
-                            </>
+                            </div>
                         ) : (
                             <NavLink to={navItem.path}>
                                 {navItem.component}
