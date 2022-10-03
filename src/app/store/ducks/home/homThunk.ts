@@ -80,7 +80,6 @@ export const postUnfollow = createAsyncThunk<
     }
 >("home/postUnfollow", async (payload, ThunkOptions) => {
     try {
-        console.log(`/${payload.username}/follow`); // dlwlrma1
         const {
             data: { data },
         } = await authorizedCustomAxios.delete(`/${payload.username}/follow`);
@@ -101,12 +100,19 @@ export const postFollow = createAsyncThunk<
 >("home/postFollow", async (payload, ThunkOptions) => {
     try {
         const {
-            data: { data },
+            data: { data: isSuccess },
+            data,
         } = await authorizedCustomAxios.post(
             `/${payload.username}/follow`,
             null,
         );
-        return data;
+        if (
+            data.code === "F006" ||
+            data.message === "팔로우할 수 없는 대상입니다."
+        ) {
+            throw ThunkOptions.rejectWithValue("차단");
+        }
+        return isSuccess;
     } catch (error) {
         error === FAIL_TO_REISSUE_MESSAGE &&
             ThunkOptions.dispatch(authAction.logout());

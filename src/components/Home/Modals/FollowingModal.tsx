@@ -40,14 +40,18 @@ const FollowingModalInner = styled.div`
 interface FollowingModalProps {
     onModalOn: () => void;
     onModalOff: () => void;
+    memberNickname: string;
+    memberImageUrl: string;
 }
 
 const MODAL_CIRCLE_SIZE = 90 / 64;
 
-const FollowingModal = ({ onModalOn, onModalOff }: FollowingModalProps) => {
-    const { memberNickname, memberImageUrl } = useAppSelector(
-        ({ modal }) => modal,
-    );
+const FollowingModal = ({
+    onModalOn,
+    onModalOff,
+    memberNickname,
+    memberImageUrl,
+}: FollowingModalProps) => {
     const dispatch = useAppDispatch();
     const unFollowHandler = () => {
         // 언팔로우
