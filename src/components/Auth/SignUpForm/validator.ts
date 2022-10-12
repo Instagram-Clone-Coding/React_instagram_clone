@@ -8,8 +8,8 @@ const lengthScopeValidator = (
 };
 
 const hasSpecialChar = (value: string) => {
-    const hasSpecialChar = /[^0-9a-zA-Z]/g;
-    return hasSpecialChar.test(value);
+    const specialChar = /[^0-9a-zA-Z]/g;
+    return specialChar.test(value);
 };
 
 export const emailFormValidator = (email: string): boolean => {
