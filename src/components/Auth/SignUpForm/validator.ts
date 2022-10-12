@@ -7,11 +7,15 @@ const lengthScopeValidator = (
     return Length >= minLength && Length <= maxLength;
 };
 
+const hasSpecialChar = (value: string) => {
+    const hasSpecialChar = /[^0-9a-zA-Z]/g;
+    return hasSpecialChar.test(value);
+};
+
 export const emailFormValidator = (email: string): boolean => {
-    const reg =
+    const emailFormat =
         /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-    const matchResult = email.match(reg);
-    return matchResult === null ? false : true;
+    return emailFormat.test(email);
 };
 
 export const nameValidator = (name: string): boolean => {
@@ -23,11 +27,7 @@ export const usernameValidator = (username: string): boolean => {
         return false;
     }
 
-    const reg = /[0-9a-zA-Z]+/g;
-    if (username.match(reg) === null) {
-        return false;
-    }
-    return true;
+    return !hasSpecialChar(username);
 };
 
 export const passwordValidator = (password: string): boolean => {
@@ -35,9 +35,11 @@ export const passwordValidator = (password: string): boolean => {
         return false;
     }
 
-    if (!/\d+/g.test(password)) {
+    if (hasSpecialChar(password)) {
         return false;
     }
 
-    return true;
+    // 숫자,영어 최소 1개 있는지 체크하는 정규식
+    // 참고) https://stackoverflow.com/questions/7684815/regex-pattern-to-match-at-least-1-number-and-1-character-in-a-string
+    return /(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)/.test(password);
 };
