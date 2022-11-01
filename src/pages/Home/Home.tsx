@@ -108,6 +108,18 @@ const Home = () => {
                     onModalOff={() => dispatch(modalActions.resetModal())}
                 />
             )}
+            {activatedModal === "alarmUnfollowing" && (
+                <FollowingModal
+                    memberNickname={memberNickname}
+                    memberImageUrl={memberImageUrl}
+                    onModalOn={() =>
+                        dispatch(
+                            modalActions.maintainModalon("alarmUnfollowing"),
+                        )
+                    }
+                    onModalOff={() => dispatch(modalActions.resetModal())}
+                />
+            )}
         </Layout>
     );
 };

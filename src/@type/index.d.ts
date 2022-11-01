@@ -200,6 +200,7 @@ declare module ModalType {
         | "report"
         | "articleMenu"
         | "shareWith"
+        | "alarmUnfollowing"
         | null;
 
     interface ModalPositionProps {
@@ -459,4 +460,41 @@ declare module EditType {
         | "도움말";
 
     type modalType = "image" | "gender" | null;
+}
+
+declare module Alarm {
+    type AlarmItem = {
+        content: AlarmContent[];
+        totalPages: number;
+        currentPage: number;
+    };
+
+    type AlarmContent = PostAlarm | FollowAlarm;
+
+    interface CommonAlarm {
+        id: number;
+        type: "COMMENT" | "LIKE_POST" | "MENTION_POST";
+        message: string;
+        agent: {
+            id: number;
+            username: string;
+            name: string;
+            image: CommonType.ImageInfo;
+            hasStory: false;
+        };
+        createdDate: string;
+    }
+    interface PostAlarm extends CommonAlarm {
+        type: "COMMENT" | "LIKE_POST" | "MENTION_POST";
+        postId: number;
+        postImageUrl: string;
+        content: string;
+        mentionsOfContent: string[];
+        hashtagsOfContent: string[];
+    }
+
+    interface FollowAlarm extends CommonAlarm {
+        type: "FOLLOW";
+        following: boolean;
+    }
 }
