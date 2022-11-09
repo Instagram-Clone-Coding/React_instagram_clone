@@ -26,6 +26,7 @@ import { resetSearch } from "app/store/ducks/common/commonSlice";
 import { ReactComponent as Close } from "assets/Svgs/close.svg";
 import Loading from "components/Common/Loading";
 import { authorizedCustomAxios } from "customAxios";
+import WarningMaxUploadNumberModal from "components/Common/Header/Upload/WarningMaxUploadNumberModal";
 
 const StyledContent = styled.div`
     display: flex;
@@ -455,8 +456,9 @@ const Content = ({ currentWidth }: ContentProps) => {
     >([]);
     const [isImageTagUserSearchLoading, setIsImageTagUserSearchLoading] =
         useState(false);
-    const [textareaSearchType, setTextareaSearchType] =
-        useState<"mention" | "hashtag">("mention");
+    const [textareaSearchType, setTextareaSearchType] = useState<
+        "mention" | "hashtag"
+    >("mention");
     const [searchedUsers, setSearchedUsers] = useState<CommonType.memberType[]>(
         [],
     );
@@ -474,6 +476,8 @@ const Content = ({ currentWidth }: ContentProps) => {
     const [isEmojiModalOn, setIsEmojiModalOn] = useState(false);
     const [isAccessOptionOn, setIsAccessOptionOn] = useState(false);
     const [isAdvancedOptionOn, setIsAdvancedOptionOn] = useState(false);
+    const [isWarningTagNumberLimitModalOn, setIsWarningTagNumberLimitModalOn] =
+        useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     const onEmojiClick = (event: React.MouseEvent, emojiObject: IEmojiData) => {
@@ -567,6 +571,9 @@ const Content = ({ currentWidth }: ContentProps) => {
     };
 
     const ImgClickHandler = (event: React.MouseEvent<HTMLImageElement>) => {
+        if (currentFile.hashtags.length >= 20) {
+            return setIsWarningTagNumberLimitModalOn(true);
+        }
         if (isSearchBarOn) {
             dispatch(resetSearch());
             setSearchInput("");
@@ -728,6 +735,13 @@ const Content = ({ currentWidth }: ContentProps) => {
 
     return (
         <>
+            {isWarningTagNumberLimitModalOn && (
+                <WarningMaxUploadNumberModal
+                    warnigContent="tags"
+                    onModalOn={() => setIsWarningTagNumberLimitModalOn(true)}
+                    onModalOff={() => setIsWarningTagNumberLimitModalOn(false)}
+                />
+            )}
             <UploadHeader
                 excuteBeforePrevStep={() =>
                     dispatch(uploadActions.resetNewFileUrl())
