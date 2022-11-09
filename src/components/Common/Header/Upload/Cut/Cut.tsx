@@ -459,10 +459,12 @@ const Cut = ({ currentWidth }: CutProps) => {
     const [galleryState, setGalleryState] = useState<boolean | null>(null);
     const imageRef = useRef<HTMLDivElement | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const [isGalleryScrollInLeft, setIsGalleryScrollInLeft] =
-        useState<boolean | null>(true);
-    const [isGalleryScrollInRight, setIsGalleryScrollInRight] =
-        useState<boolean | null>(false);
+    const [isGalleryScrollInLeft, setIsGalleryScrollInLeft] = useState<
+        boolean | null
+    >(true);
+    const [isGalleryScrollInRight, setIsGalleryScrollInRight] = useState<
+        boolean | null
+    >(false);
     const gallerySliderRef = useRef<HTMLDivElement | null>(null);
     const [isGalleryImgGrabbed, setIsGalleryImgGrabbed] = useState(false);
     const [grabbedGalleryImgClientX, setGrabbedGalleryImgClientX] = useState(0);
@@ -1010,25 +1012,26 @@ const Cut = ({ currentWidth }: CutProps) => {
                                     </button>
                                 )}
                         </div>
-                        <div className="upload__addBtnLayout">
-                            <button onClick={buttonClickHandler}>
-                                <PlusIcon />
-                            </button>
-                            <form
-                                encType="multipart/form-data"
-                                method="POST"
-                                role="presentation"
-                            >
-                                <input
-                                    accept="image/jpeg,image/png,image/heic,image/heif"
-                                    multiple={true}
-                                    type="file"
-                                    ref={inputRef}
-                                    onChange={fileInputChangeHandler}
-                                />
-                            </form>
-                        </div>
-                        <div></div>
+                        {files.length < 10 && (
+                            <div className="upload__addBtnLayout">
+                                <button onClick={buttonClickHandler}>
+                                    <PlusIcon />
+                                </button>
+                                <form
+                                    encType="multipart/form-data"
+                                    method="POST"
+                                    role="presentation"
+                                >
+                                    <input
+                                        accept="image/jpeg,image/png,image/heic,image/heif"
+                                        multiple={true}
+                                        type="file"
+                                        ref={inputRef}
+                                        onChange={fileInputChangeHandler}
+                                    />
+                                </form>
+                            </div>
+                        )}
                     </div>
                 </div>
                 {files.length > 1 && (
