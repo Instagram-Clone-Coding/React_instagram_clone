@@ -18,7 +18,6 @@ const Routes = () => {
     return (
         <>
             <BrowserRouter basename={process.env.PUBLIC_URL}>
-                {/* <ModalsInEveryRoutes /> */}
                 {/* {!isLogin ? (
                     <Redirect to="/accounts/signin" />
                 ) : (
