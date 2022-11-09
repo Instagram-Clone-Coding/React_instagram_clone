@@ -24,6 +24,7 @@ import CutImgUnit from "components/Common/Header/Upload/Cut/CutImgUnit";
 import sprite from "assets/Images/sprite.png";
 import UploadHeader from "components/Common/Header/Upload/UploadHeader";
 import UploadImgArrowAndDots from "components/Common/Header/UploadImgArrowAndDots";
+import WarningMaxUploadNumberModal from "components/Common/Header/Upload/WarningMaxUploadNumberModal";
 
 type HandlingType = "ratio" | "resize" | "gallery" | null | "first";
 
@@ -470,6 +471,8 @@ const Cut = ({ currentWidth }: CutProps) => {
     const [grabbedGalleryImgClientX, setGrabbedGalleryImgClientX] = useState(0);
     const [grabbedGalleryImgTranslateX, setGrabbedGalleryImgTranslateX] =
         useState(0); // 클릭된 galleryImg가 이동하는 값
+    const [isWarnigMaxImageNumberModalOn, setIsWarnigMaxImageNumberModalOn] =
+        useState(false);
 
     useEffect(() => {
         if (!gallerySliderRef.current) return;
@@ -569,6 +572,9 @@ const Cut = ({ currentWidth }: CutProps) => {
         (event: ChangeEvent<HTMLInputElement>) => {
             const addedFiles = event.target.files;
             if (!addedFiles) return;
+            if (addedFiles.length + files.length > 10) {
+                return setIsWarnigMaxImageNumberModalOn(true);
+            }
             Array.from(addedFiles).forEach((file) => {
                 const img = new Image();
                 img.src = URL.createObjectURL(file);
@@ -718,6 +724,13 @@ const Cut = ({ currentWidth }: CutProps) => {
 
     return (
         <>
+            {isWarnigMaxImageNumberModalOn && (
+                <WarningMaxUploadNumberModal
+                    warnigContent="images"
+                    onModalOn={() => setIsWarnigMaxImageNumberModalOn(true)}
+                    onModalOff={() => setIsWarnigMaxImageNumberModalOn(false)}
+                />
+            )}
             <UploadHeader
                 excuteBeforePrevStep={() => {
                     fixOverTranformedImage(files[currentIndex].scale);
