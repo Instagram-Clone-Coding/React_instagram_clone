@@ -19,11 +19,14 @@ const StyledDragAndDrop = styled.div`
         align-items: center;
         & > div {
             margin-top: 16px;
-            & > h2 {
+            & > h2,
+            & > h3 {
                 font-weight: 300;
-                font-size: 22px;
                 line-height: 26px;
                 text-align: center;
+            }
+            & > h2 {
+                font-size: 22px;
             }
         }
         & > button {
@@ -141,7 +144,8 @@ const DragAndDrop = () => {
                 >
                     <ImgOrVideoIcon />
                     <div>
-                        <h2>사진과 동영상을 여기 끌어다 놓으세요</h2>
+                        <h2>사진을 여기 끌어다 놓으세요</h2>
+                        <h3>최대 10개의 사진을 업로드할 수 있습니다</h3>
                     </div>
                     <Button type="button" onClick={buttonClickHandler}>
                         컴퓨터에서 선택
