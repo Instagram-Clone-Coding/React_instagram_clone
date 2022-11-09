@@ -5,7 +5,7 @@ import { useAppDispatch } from "app/store/Hooks";
 import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import styled from "styled-components";
 import UploadHeader from "components/Common/Header/Upload/UploadHeader";
-import WarningMaxImageNumberModal from "components/Common/Header/Upload/DragAndDrop/WarningMaxImageNumberModal";
+import WarningMaxImageNumberModal from "components/Common/Header/Upload/WarningMaxUploadNumberModal";
 
 const StyledDragAndDrop = styled.div`
     width: 100%;
@@ -141,6 +141,7 @@ const DragAndDrop = () => {
         <>
             {isWarnigMaxImageNumberModalOn && (
                 <WarningMaxImageNumberModal
+                    warnigContent="images"
                     onModalOn={() => setisWarnigMaxImageNumberModalOn(true)}
                     onModalOff={() => setisWarnigMaxImageNumberModalOn(false)}
                 />

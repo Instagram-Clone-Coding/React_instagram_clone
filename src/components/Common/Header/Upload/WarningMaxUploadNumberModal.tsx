@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Button from "styles/UI/Button";
 import ModalCard from "styles/UI/ModalCard";
 
-const StyledWarningMaxImageNumberModalInner = styled.div`
+const StyledWarningMaxUploadNumberModalInner = styled.div`
     padding: 24px;
     height: 150px;
     display: flex;
@@ -20,27 +20,33 @@ const StyledWarningMaxImageNumberModalInner = styled.div`
     }
 `;
 
-interface WarningMaxImageNumberModalProps {
+interface WarningMaxUploadNumberModalProps {
     onModalOn: () => void;
     onModalOff: () => void;
+    warnigContent: "images" | "tags";
 }
 
-const WarningMaxImageNumberModal = ({
+const WarningMaxUploadNumberModal = ({
     onModalOn,
     onModalOff,
-}: WarningMaxImageNumberModalProps) => {
+    warnigContent,
+}: WarningMaxUploadNumberModalProps) => {
     return (
         <ModalCard
             modalType="withBackDrop"
             onModalOn={onModalOn}
             onModalOff={onModalOff}
         >
-            <StyledWarningMaxImageNumberModalInner>
-                <h2>사진은 최대 10개까지 업로드 가능합니다</h2>
+            <StyledWarningMaxUploadNumberModalInner>
+                <h2>
+                    {warnigContent === "images"
+                        ? "사진은 최대 10개까지 업로드 가능합니다"
+                        : "각 이미지에 태그는 최대 20개까지만 가능합니다"}
+                </h2>
                 <Button onClick={onModalOff}>확인</Button>
-            </StyledWarningMaxImageNumberModalInner>
+            </StyledWarningMaxUploadNumberModalInner>
         </ModalCard>
     );
 };
 
-export default WarningMaxImageNumberModal;
+export default WarningMaxUploadNumberModal;
