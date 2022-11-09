@@ -10,6 +10,7 @@ import AuthPage from "pages/Auth";
 import ResetPassword from "components/Auth/ResetPassword";
 import ResetPasswordForm from "components/Auth/ResetPassword/ResetPasswordForm";
 import Edit from "pages/Edit";
+import ModalsInEveryRoutes from "ModalsInEveryRoutes";
 
 const Routes = () => {
     const isLogin = useAppSelector((state) => state.auth.isLogin);
@@ -17,6 +18,7 @@ const Routes = () => {
     return (
         <>
             <BrowserRouter basename={process.env.PUBLIC_URL}>
+                {/* <ModalsInEveryRoutes /> */}
                 {/* {!isLogin ? (
                     <Redirect to="/accounts/signin" />
                 ) : (
@@ -63,6 +65,8 @@ const Routes = () => {
 const AuthedContainer = () => {
     return (
         <>
+            <ModalsInEveryRoutes />
+
             <Header />
             <Route path="/profile/:username" component={Profile} />
             <Route path="/accounts/edit" component={Edit} />
