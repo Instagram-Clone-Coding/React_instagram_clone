@@ -2,6 +2,9 @@ import styled from "styled-components";
 import HomeAside from "components/Home/HomeAside";
 import HomeStories from "components/Home/HomeStories";
 import HomeSection from "components/Home/HomeSection";
+import { useEffect } from "react";
+import { useAppDispatch } from "app/store/Hooks";
+import { modalActions } from "app/store/ducks/modal/modalSlice";
 
 const Layout = styled.div`
     padding-top: 30px;
@@ -25,6 +28,13 @@ const Layout = styled.div`
 `;
 
 const Home = () => {
+    const dispatch = useAppDispatch();
+    useEffect(() => {
+        return () => {
+            dispatch(modalActions.resetModal());
+        };
+    }, [dispatch]);
+
     return (
         <Layout>
             <main>
