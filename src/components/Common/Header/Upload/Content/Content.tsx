@@ -571,7 +571,7 @@ const Content = ({ currentWidth }: ContentProps) => {
     };
 
     const ImgClickHandler = (event: React.MouseEvent<HTMLImageElement>) => {
-        if (currentFile.hashtags.length >= 2) {
+        if (currentFile.hashtags.length >= 20) {
             return setIsWarningTagNumberLimitModalOn(true);
         }
         if (isSearchBarOn) {
