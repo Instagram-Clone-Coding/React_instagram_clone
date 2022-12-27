@@ -38,7 +38,7 @@ const Home = () => {
     return (
         <Layout>
             <main>
-                <HomeStories />
+                {/* <HomeStories /> */}
                 <HomeSection />
             </main>
             <HomeAside />
