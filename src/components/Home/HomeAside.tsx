@@ -96,7 +96,7 @@ const HomeAside = () => {
                             {userInfo.memberName}
                         </div>
                     </div>
-                    <button>전환</button>
+                    {/* <button>전환</button> */}
                 </>
             )}
         </StyledAside>
