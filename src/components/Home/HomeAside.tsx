@@ -76,7 +76,7 @@ const HomeAside = () => {
             {userInfo && (
                 <>
                     <Link
-                        to={`/${userInfo.memberUsername}`}
+                        to={`/profile/${userInfo.memberUsername}`}
                         className="aside-imgLink"
                     >
                         <StoryCircle
@@ -88,7 +88,7 @@ const HomeAside = () => {
                     </Link>
                     <div className="aside-userInfo">
                         <Username className="aside-username">
-                            <Link to={userInfo.memberUsername}>
+                            <Link to={`/profile/${userInfo.memberUsername}`}>
                                 {userInfo.memberUsername}
                             </Link>
                         </Username>
