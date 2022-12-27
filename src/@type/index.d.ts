@@ -462,12 +462,12 @@ declare module EditType {
     type modalType = "image" | "gender" | null;
 }
 
-declare module Alarm {
-    type AlarmItem = {
+declare module AlarmType {
+    interface AlarmItem {
         content: AlarmContent[];
         totalPages: number;
         currentPage: number;
-    };
+    }
 
     type AlarmContent = PostAlarm | FollowAlarm;
 
@@ -485,7 +485,6 @@ declare module Alarm {
         createdDate: string;
     }
     interface PostAlarm extends CommonAlarm {
-        type: "COMMENT" | "LIKE_POST" | "MENTION_POST";
         postId: number;
         postImageUrl: string;
         content: string;

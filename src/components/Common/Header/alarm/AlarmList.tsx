@@ -1,5 +1,5 @@
-import AlarmItem from "components/Common/Header/alarm/alarmType/alarm_item";
-import FollowAlarm from "components/Common/Header/alarm/alarmType/follow_alarm";
+import AlarmItem from "components/Common/Header/alarm/alarmType/AlarmItem";
+import FollowAlarm from "components/Common/Header/alarm/alarmType/FollowAlarm";
 import useOnView from "hooks/useOnView";
 import { useEffect, useRef } from "react";
 import styled from "styled-components";
@@ -17,7 +17,7 @@ export default function AlarmList({
     alarmList,
     onLoadExtraAlarm,
 }: {
-    alarmList: Alarm.AlarmContent[];
+    alarmList: AlarmType.AlarmContent[];
     onLoadExtraAlarm: () => void;
 }) {
     const lastAlarmItemRef = useRef<HTMLLIElement>(null);

@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -12,7 +11,7 @@ const Container = styled.div`
 
 export default function AlarmProfile({
     agent,
-}: Pick<Alarm.AlarmContent, "agent">) {
+}: Pick<AlarmType.AlarmContent, "agent">) {
     return (
         <Container>
             <Link to={`/profile/${agent.username}`}>

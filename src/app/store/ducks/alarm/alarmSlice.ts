@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { loadAlarmList } from "app/store/ducks/alarm/alarmThunk";
 
 export interface AlarmStateProps {
-    alarmList: Alarm.AlarmContent[] | null;
+    alarmList: AlarmType.AlarmContent[] | null;
     totalPage: number;
 }
 

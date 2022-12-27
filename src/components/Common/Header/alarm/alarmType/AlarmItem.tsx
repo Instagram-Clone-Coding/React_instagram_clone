@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import AlarmProfile from "components/Common/Header/alarm/alarm_profile";
+import AlarmProfile from "components/Common/Header/alarm/AlarmProfile";
 import { Link } from "react-router-dom";
 import useGapText from "hooks/useGapText";
 import { removeRefer } from "components/Common/Header/alarm/utils";
@@ -39,7 +39,7 @@ const Container = styled.div`
     }
 `;
 
-export default function AlarmItem({ alarm }: { alarm: Alarm.PostAlarm }) {
+export default function AlarmItem({ alarm }: { alarm: AlarmType.PostAlarm }) {
     const alarmMessage = removeRefer(alarm.message);
     // 무한스크롤
     // 컴포넌트 언마운트 -> alarm창 닫도록

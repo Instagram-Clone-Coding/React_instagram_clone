@@ -1,7 +1,7 @@
 import { alarmAction } from "app/store/ducks/alarm/alarmSlice";
 import { loadAlarmList } from "app/store/ducks/alarm/alarmThunk";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
-import AlarmList from "components/Common/Header/alarm/alarm_list";
+import AlarmList from "components/Common/Header/alarm/AlarmList";
 import ImageSprite from "components/Common/ImageSprite";
 import Loading from "components/Common/Loading";
 import React, { useEffect, useState } from "react";

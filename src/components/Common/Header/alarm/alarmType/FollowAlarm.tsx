@@ -1,7 +1,7 @@
 import { postFollow } from "app/store/ducks/home/homThunk";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { useAppDispatch } from "app/store/Hooks";
-import AlarmProfile from "components/Common/Header/alarm/alarm_profile";
+import AlarmProfile from "components/Common/Header/alarm/AlarmProfile";
 import { removeRefer } from "components/Common/Header/alarm/utils";
 import useGapText from "hooks/useGapText";
 import { useState } from "react";
@@ -31,7 +31,11 @@ const Container = styled.div`
     }
 `;
 
-export default function FollowAlarm({ alarm }: { alarm: Alarm.FollowAlarm }) {
+export default function FollowAlarm({
+    alarm,
+}: {
+    alarm: AlarmType.FollowAlarm;
+}) {
     const alarmMessage = removeRefer(alarm.message);
     const dispatch = useAppDispatch();
     const theme = useTheme();
@@ -44,7 +48,7 @@ export default function FollowAlarm({ alarm }: { alarm: Alarm.FollowAlarm }) {
             });
     };
 
-    const showUnfollowingModalOnHandler = () => {
+    const showUnfollowingModalHandler = () => {
         // 모달에 들어갈 유저 정보 세팅
         dispatch(
             modalActions.setModalUsernameAndImageUrl({
@@ -76,7 +80,7 @@ export default function FollowAlarm({ alarm }: { alarm: Alarm.FollowAlarm }) {
                         border: `1px solid ${theme.color.bd_gray}`,
                         height: "30px",
                     }}
-                    onClick={showUnfollowingModalOnHandler}
+                    onClick={showUnfollowingModalHandler}
                 >
                     팔로잉
                 </Button>
