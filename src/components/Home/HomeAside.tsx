@@ -1,3 +1,4 @@
+import { useAppSelector } from "app/store/Hooks";
 import StoryCircle from "components/Common/StoryCircle";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -38,7 +39,7 @@ const StyledAside = styled.aside<RightMarginProp>`
         & > * {
             margin-left: 12px;
         }
-        .aside-username {
+        .aside-username > a {
             text-decoration: none;
         }
         .aside-realName {
@@ -51,19 +52,14 @@ const StyledAside = styled.aside<RightMarginProp>`
         font-size: 12px;
     }
 `;
-const DUMMY_USER = {
-    img: "sdfsdf",
-    username: "yeongyinkim",
-    name: "김영인",
-    src: "https://images.unsplash.com/photo-1497316730643-415fac54a2af?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80",
-};
 
 const HOME_CONTENT_WIDTH = 935;
 
 const HomeAside = () => {
     const [rightMargin, setRightMargin] = useState(
-        (window.innerWidth - HOME_CONTENT_WIDTH) / 2
+        (window.innerWidth - HOME_CONTENT_WIDTH) / 2,
     );
+    const userInfo = useAppSelector(({ auth }) => auth.userInfo);
 
     useEffect(() => {
         const resizeHandler = () => {
@@ -77,24 +73,32 @@ const HomeAside = () => {
 
     return (
         <StyledAside rightMargin={rightMargin}>
-            <Link to={`/${DUMMY_USER.username}`} className="aside-imgLink">
-                <StoryCircle
-                    type="default"
-                    avatarUrl={DUMMY_USER.src}
-                    username={DUMMY_USER.username}
-                    scale={1}
-                />
-            </Link>
-            <div className="aside-userInfo">
-                <Username
-                    // href={`/${DUMMY_USER.username}`}
-                    className="aside-username"
-                >
-                    {DUMMY_USER.username}
-                </Username>
-                <div className="aside-realName">김영인</div>
-            </div>
-            <button>전환</button>
+            {userInfo && (
+                <>
+                    <Link
+                        to={`/${userInfo.memberUsername}`}
+                        className="aside-imgLink"
+                    >
+                        <StoryCircle
+                            type="default"
+                            avatarUrl={userInfo.memberImageUrl}
+                            username={userInfo.memberUsername}
+                            scale={1}
+                        />
+                    </Link>
+                    <div className="aside-userInfo">
+                        <Username className="aside-username">
+                            <Link to={userInfo.memberUsername}>
+                                {userInfo.memberUsername}
+                            </Link>
+                        </Username>
+                        <div className="aside-realName">
+                            {userInfo.memberName}
+                        </div>
+                    </div>
+                    <button>전환</button>
+                </>
+            )}
         </StyledAside>
     );
 };
