@@ -11,6 +11,7 @@ import ResetPassword from "components/Auth/ResetPassword";
 import ResetPasswordForm from "components/Auth/ResetPassword/ResetPasswordForm";
 import Edit from "pages/Edit";
 import Paragraph from "pages/Paragraph/Paragraph";
+import ModalsInEveryRoutes from "ModalsInEveryRoutes";
 
 const Routes = () => {
     const isLogin = useAppSelector((state) => state.auth.isLogin);
@@ -64,6 +65,8 @@ const Routes = () => {
 const AuthedContainer = () => {
     return (
         <>
+            <ModalsInEveryRoutes />
+
             <Header />
             <Route path="/profile/:username" component={Profile} />
             <Route path="/accounts/edit" component={Edit} />
