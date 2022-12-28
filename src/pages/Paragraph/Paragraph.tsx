@@ -18,11 +18,10 @@ const StyledParagraph = styled.main`
         width: calc(100% - 40px);
         max-width: 815px;
         margin: 0 auto;
-    }
-    & > .paragraph__bottomBorder {
-        margin-top: 48px;
-        width: 100%;
-        border-bottom: 1px solid ${(props) => props.theme.color.bd_gray};
+        & > .paragraph__bottomBorder {
+            margin-top: 48px;
+            border-bottom: 1px solid ${(props) => props.theme.color.bd_gray};
+        }
     }
 `;
 interface ArticleProps {
@@ -61,8 +60,8 @@ const Paragraph = () => {
                 <>
                     <div className="paragraph__articleLayout">
                         <ArticleAlone />
+                        <div className="paragraph__bottomBorder"></div>
                     </div>
-                    <div className="paragraph__bottomBorder"></div>
                 </>
             )}
         </StyledParagraph>
