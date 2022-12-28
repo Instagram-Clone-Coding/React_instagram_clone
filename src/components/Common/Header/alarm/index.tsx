@@ -1,12 +1,11 @@
-import { alarmAction } from "app/store/ducks/alarm/alarmSlice";
 import { loadAlarmList } from "app/store/ducks/alarm/alarmThunk";
-import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import AlarmList from "components/Common/Header/alarm/AlarmList";
 import ImageSprite from "components/Common/ImageSprite";
 import Loading from "components/Common/Loading";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import sprite from "assets/Images/sprite.png";
+import { useAppDispatch } from "app/store/Hooks";
 
 const Container = styled.div`
     position: relative;
@@ -61,6 +60,7 @@ const Container = styled.div`
     }
 `;
 
+// TODO: 팔로우 모달 닫을 때, 다 닫힘 -> 해당 모달만 닫히게! (알람은 닫히면 안됨)
 export default function Alarm({
     alarmContainerRef,
 }: {
@@ -68,23 +68,32 @@ export default function Alarm({
 }) {
     const dispatch = useAppDispatch();
     const [pageToLoad, setPageToLoad] = useState(1);
-    const { alarmList, totalPage } = useAppSelector((state) => state.alarm);
+    const [alarmList, setAlarmList] = useState<AlarmType.AlarmContent[]>([]);
+    const [totalPage, setTotalPage] = useState(1);
 
     useEffect(() => {
-        dispatch(loadAlarmList({ page: pageToLoad }));
-        setPageToLoad(pageToLoad + 1);
-
-        return () => {
-            dispatch(alarmAction.clearAlarmList());
-        };
+        dispatch(loadAlarmList({ page: pageToLoad }))
+            .unwrap()
+            .then((res) => {
+                setAlarmList([...res.content]);
+                setTotalPage(res.totalPages);
+                setPageToLoad(pageToLoad + 1);
+            });
     }, []);
 
-    const loadExtraAlarmList = () => {
+    const loadExtraAlarmList = useCallback(() => {
         if (pageToLoad <= totalPage) {
-            dispatch(loadAlarmList({ page: pageToLoad }));
-            setPageToLoad(pageToLoad + 1);
+            dispatch(loadAlarmList({ page: pageToLoad }))
+                .unwrap()
+                .then((res) => {
+                    setAlarmList((currentList) => [
+                        ...currentList,
+                        ...res.content,
+                    ]);
+                    setPageToLoad(pageToLoad + 1);
+                });
         }
-    };
+    }, [pageToLoad, totalPage, dispatch]);
 
     const emptyImage: CommonType.ImageProps = {
         width: 96,
