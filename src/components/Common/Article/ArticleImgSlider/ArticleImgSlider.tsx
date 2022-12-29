@@ -196,7 +196,6 @@ const ArticleImgSlider = ({
             left: -wrapWidth,
             behavior: "smooth",
         });
-        detectScroll();
     };
 
     const rightArrowClickHandler = (): void => {
@@ -211,7 +210,6 @@ const ArticleImgSlider = ({
             left: wrapWidth,
             behavior: "smooth",
         });
-        detectScroll();
     };
 
     const detectScroll = (): void => {
