@@ -238,13 +238,14 @@ const ArticleImgSlider = ({
                     ref={sliderRef}
                     style={{ width: imageDTOs.length * 100 + "%" }}
                 >
-                    {imageDTOs.map((imageDTO) => (
-                        <ArticleImgSliderUnit
-                            key={imageDTO.id}
-                            imageDTO={imageDTO}
-                            unitWidth={unitWidth}
-                        />
-                    ))}
+                    {wrapRef.current &&
+                        imageDTOs.map((imageDTO) => (
+                            <ArticleImgSliderUnit
+                                key={imageDTO.id}
+                                imageDTO={imageDTO}
+                                unitWidth={unitWidth}
+                            />
+                        ))}
                 </div>
             </div>
             <div className="leftArrow" onClick={leftArrowClickHandler}></div>
