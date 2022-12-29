@@ -185,7 +185,7 @@ const ArticleImgSlider = ({
         onLike();
     };
 
-    const leftArrowClickHandler = (): undefined => {
+    const leftArrowClickHandler = (): void => {
         const { current: slider } = sliderRef;
         const { current: wrap } = wrapRef;
         if (slider === null) return;
@@ -199,7 +199,7 @@ const ArticleImgSlider = ({
         detectScroll();
     };
 
-    const rightArrowClickHandler = (): undefined => {
+    const rightArrowClickHandler = (): void => {
         const { current: slider } = sliderRef;
         const { current: wrap } = wrapRef;
         if (slider === null) return;
@@ -214,7 +214,7 @@ const ArticleImgSlider = ({
         detectScroll();
     };
 
-    const detectScroll = (): undefined => {
+    const detectScroll = (): void => {
         const { current: wrap } = wrapRef;
         if (wrap === null) return;
         let scrollLeft = wrap.scrollLeft;
