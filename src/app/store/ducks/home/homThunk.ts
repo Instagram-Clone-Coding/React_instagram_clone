@@ -21,6 +21,7 @@ export const getHomeArticles = createAsyncThunk<PostType.ArticleStateProps[]>(
                 (article) => ({
                     ...article,
                     followLoading: false,
+                    currentIndex: 0,
                 }),
             );
             return articlesState;
@@ -61,8 +62,8 @@ export const getExtraArticle = createAsyncThunk<
         ThunkOptions.dispatch(homeActions.increaseExtraArticlesCount());
         const articleState: PostType.ArticleStateProps = {
             ...data[0],
-            // isFollowing: true,
             followLoading: false,
+            currentIndex: 0,
         };
         return articleState;
     } catch (error) {

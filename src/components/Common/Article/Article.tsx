@@ -22,10 +22,15 @@ const ArticleCard = styled(Card)`
 interface ArticleComponentPros {
     article: PostType.ArticleStateProps;
     isObserving: boolean;
+    onChangeIndex: (index: number) => void;
 }
 
 // 아마 여기 articleData는 상위 HomeSection 컴포넌트에서 가져와야 하지 않을까
-const Article = ({ article, isObserving }: ArticleComponentPros) => {
+const Article = ({
+    article,
+    isObserving,
+    onChangeIndex,
+}: ArticleComponentPros) => {
     // data state
     const followingUserWhoLikesArticle =
         article.followingMemberUsernameLikedPost;
@@ -107,6 +112,8 @@ const Article = ({ article, isObserving }: ArticleComponentPros) => {
             <ArticleImgSlider
                 imageDTOs={article.postImages}
                 onLike={changeToLikeHandler}
+                currentIndex={article.currentIndex}
+                onChangeIndex={onChangeIndex}
             />
             <ArticleMainIcons
                 isLiked={isLiked}

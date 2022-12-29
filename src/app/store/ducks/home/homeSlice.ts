@@ -45,6 +45,18 @@ const homeSlice = createSlice({
             state.articles.unshift({
                 ...action.payload,
                 followLoading: false,
+                currentIndex: 0,
+            });
+        },
+        changeCurrentIndex: (
+            state,
+            action: PayloadAction<{ postId: number; index: number }>,
+        ) => {
+            state.articles.forEach((article) => {
+                if (article.postId === action.payload.postId) {
+                    article.currentIndex = action.payload.index;
+                    return false;
+                }
             });
         },
     },

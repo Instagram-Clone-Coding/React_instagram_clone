@@ -30,9 +30,10 @@ const StyledLargerArticle = styled.div`
 
 interface LargerArticleProps {
     article: PostType.ArticleStateProps;
+    onChangeIndex: (index: number) => void;
 }
 
-const LargerArticle = ({ article }: LargerArticleProps) => {
+const LargerArticle = ({ article, onChangeIndex }: LargerArticleProps) => {
     const followingUserWhoLikesArticle =
         article.followingMemberUsernameLikedPost;
     const [isLiked, setIsLiked] = useState(article.postLikeFlag);
@@ -90,7 +91,9 @@ const LargerArticle = ({ article }: LargerArticleProps) => {
                 <ArticleImgSlider
                     imageDTOs={article.postImages}
                     onLike={changeToLikeHandler}
+                    currentIndex={article.currentIndex}
                     isInLargerArticle={true}
+                    onChangeIndex={onChangeIndex}
                 />
             </div>
             <div className="largerArticle__rightContent">

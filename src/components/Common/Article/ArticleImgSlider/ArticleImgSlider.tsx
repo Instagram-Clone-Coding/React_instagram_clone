@@ -144,30 +144,35 @@ interface ArticleImgSliderProps {
     imageDTOs: CommonType.PostImageDTOProps[];
     onLike: () => void;
     isInLargerArticle?: boolean;
+    currentIndex: number;
+    onChangeIndex: (index: number) => void;
 }
 
 const ArticleImgSlider = ({
     imageDTOs,
     onLike,
     isInLargerArticle = false,
+    currentIndex,
+    onChangeIndex,
 }: ArticleImgSliderProps) => {
     //slider state
-    const [sliderIndex, setSliderIndex] = useState(0);
     const [doubleClicked, setDoubleClicked] = useState(false);
-    const [unitWidth, setUnitWidth] = useState(0);
-    const totalIndex = imageDTOs.length - 1;
     const wrapRef = useRef<HTMLDivElement>(null);
     const sliderRef = useRef<HTMLDivElement>(null);
-
+    const [unitWidth, setUnitWidth] = useState(
+        wrapRef.current?.offsetWidth || 0,
+    );
+    const totalIndex = imageDTOs.length - 1;
     const resizeHandler = () => {
         if (!wrapRef.current) return;
         setUnitWidth(wrapRef.current.offsetWidth);
     };
 
     useEffect(() => {
-        wrapRef.current?.scrollBy({
-            left: 0,
-        });
+        currentIndex === 0 &&
+            wrapRef.current?.scrollBy({
+                left: 0,
+            });
         window.addEventListener("resize", resizeHandler);
         resizeHandler();
         return () => {
@@ -185,7 +190,7 @@ const ArticleImgSlider = ({
         const { current: wrap } = wrapRef;
         if (slider === null) return;
         if (wrap === null) return;
-        if (sliderIndex <= 0) return;
+        if (currentIndex <= 0) return;
         const wrapWidth = wrap.clientWidth;
         wrap.scrollBy({
             left: -wrapWidth,
@@ -199,7 +204,7 @@ const ArticleImgSlider = ({
         const { current: wrap } = wrapRef;
         if (slider === null) return;
         if (wrap === null) return;
-        if (sliderIndex >= totalIndex) return;
+        if (currentIndex >= totalIndex) return;
 
         const wrapWidth = wrap.clientWidth;
         wrap.scrollBy({
@@ -212,21 +217,15 @@ const ArticleImgSlider = ({
     const detectScroll = (): undefined => {
         const { current: wrap } = wrapRef;
         if (wrap === null) return;
-        let timer = null;
         let scrollLeft = wrap.scrollLeft;
-        if (timer !== null) {
-            clearTimeout(timer);
-        }
-        timer = setTimeout(function () {
-            setSliderIndex(Math.round(scrollLeft / wrap.clientWidth));
-        }, 150);
+        onChangeIndex(Math.round(scrollLeft / wrap.clientWidth));
     };
 
     return (
         <StyledImgSlider
             onDoubleClick={doubleClickLikeHandler} // 빨간 하트 애니메이션 효과는 redux 적용하면서 연결할 예정
             total={totalIndex}
-            currentIndex={sliderIndex}
+            currentIndex={currentIndex}
             isInLargerArticle={isInLargerArticle}
         >
             {doubleClicked && (

@@ -1,3 +1,4 @@
+import { homeActions } from "app/store/ducks/home/homeSlice";
 import { getHomeArticles } from "app/store/ducks/home/homThunk";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import Article from "components/Common/Article";
@@ -25,6 +26,14 @@ const HomeSection = () => {
                         key={article.postId}
                         article={article}
                         isObserving={articles.length - 4 === index}
+                        onChangeIndex={(index: number) =>
+                            dispatch(
+                                homeActions.changeCurrentIndex({
+                                    postId: article.postId,
+                                    index,
+                                }),
+                            )
+                        }
                     />
                 ))}
             {isExtraArticleLoading && <ExtraLoadingCircle />}

@@ -4,6 +4,7 @@ import { postFollow, postUnfollow } from "app/store/ducks/home/homThunk";
 const initialState: ParagraphType.ParagraphStateProps = {
     isDataFetching: true,
     articleObj: {
+        currentIndex: 0,
         followingMemberUsernameLikedPost: null, // 내가 팔로우한 사람 중에서 이 글을 좋아한 사람 있으면 보내줌
         member: {
             id: 0,
@@ -42,8 +43,12 @@ const paragraphSlice = createSlice({
             state.articleObj = {
                 ...action.payload,
                 followLoading: false,
+                currentIndex: 0,
             };
             state.isDataFetching = false;
+        },
+        changeCurrentIndex: (state, action) => {
+            state.articleObj.currentIndex = action.payload;
         },
     },
     extraReducers: (build) => {

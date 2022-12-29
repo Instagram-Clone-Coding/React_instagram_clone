@@ -194,6 +194,7 @@ declare module PostType {
 
     interface ArticleStateProps extends ArticleProps {
         followLoading: boolean;
+        currentIndex: number;
     }
 }
 
