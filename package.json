@@ -5,7 +5,7 @@
     "dependencies": {
         "@reduxjs/toolkit": "^1.6.2",
         "@stomp/stompjs": "^6.1.2",
-        "@testing-library/jest-dom": "^5.11.4",
+        "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/react": "^11.1.0",
         "@testing-library/user-event": "^12.1.10",
         "@types/jest": "^26.0.15",
@@ -21,7 +21,7 @@
         "axios": "^0.24.0",
         "emoji-picker-react": "^3.5.0",
         "jsonwebtoken": "^8.5.1",
-        "moment": "^2.29.3",
+        "moment": "^2.29.4",
         "query-string": "^7.1.1",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
