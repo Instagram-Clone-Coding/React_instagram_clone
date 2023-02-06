@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import queryString from "query-string";
 import HeaderBeforeLogin from "./HeaderBeforeLogin";
 import ContentBox from "components/Common/ContentBox";
@@ -72,6 +72,7 @@ const Container = styled.section`
 `;
 
 export default function ResetPasswordForm() {
+    const history = useHistory();
     const { search } = useLocation();
     const { username, code } = queryString.parse(
         search,
@@ -105,7 +106,9 @@ export default function ResetPasswordForm() {
                 username,
                 newPassword: newPasswordInputProps.value,
             }),
-        );
+        ).then(() => {
+            history.push("/");
+        });
     };
 
     return (

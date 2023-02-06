@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { signIn } from "app/store/ducks/auth/authThunk";
 import useInput from "hooks/useInput";
 import Loading from "components/Common/Loading";
+import { useHistory } from "react-router-dom";
 
 const placeholder = {
     username: "사용자 이름",
@@ -12,6 +13,8 @@ const placeholder = {
 };
 
 export default function LoginFormAndButton() {
+    const history = useHistory();
+
     const [usernameInputProps, usernameIsValid, usernameIsFocus] = useInput(
         "",
         undefined,
@@ -36,7 +39,9 @@ export default function LoginFormAndButton() {
                 }),
             );
         };
-        requestSignIn();
+        requestSignIn().then(() => {
+            history.push("/");
+        });
     };
 
     return (
