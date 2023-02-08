@@ -3,6 +3,7 @@ import { postFollow, postUnfollow } from "app/store/ducks/home/homThunk";
 
 const initialState: ParagraphType.ParagraphStateProps = {
     isDataFetching: true,
+    recentPosts: [],
     articleObj: {
         followingMemberUsernameLikedPost: null, // 내가 팔로우한 사람 중에서 이 글을 좋아한 사람 있으면 보내줌
         member: {
@@ -44,6 +45,9 @@ const paragraphSlice = createSlice({
                 followLoading: false,
             };
             state.isDataFetching = false;
+        },
+        setRecentPosts: (state, action: PayloadAction<Profile.PostType[]>) => {
+            state.recentPosts = action.payload;
         },
     },
     extraReducers: (build) => {

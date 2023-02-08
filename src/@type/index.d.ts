@@ -201,6 +201,7 @@ declare module ParagraphType {
     interface ParagraphStateProps {
         isDataFetching: boolean;
         articleObj: PostType.ArticleStateProps;
+        recentPosts: Profile.PostType[];
     }
 }
 
