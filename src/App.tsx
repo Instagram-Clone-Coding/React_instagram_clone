@@ -23,6 +23,8 @@ function App() {
                     dispatch(authAction.login());
                 }
                 // - refresh token: 없음 | 만료됨 -> 401에러 -> catch로 넘어감
+            } catch (error) {
+                console.log(error);
             } finally {
                 dispatch(authAction.finishRefreshTokenChecking());
             }
