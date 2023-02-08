@@ -3,12 +3,12 @@ import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 var jwt = require(`jsonwebtoken`);
 
 export const customAxios: AxiosInstance = axios.create({
-    baseURL: `http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080`,
+    baseURL: `http://ec2-52-79-71-191.ap-northeast-2.compute.amazonaws.com:8080`,
     withCredentials: true,
 });
 
 export const authorizedCustomAxios: AxiosInstance = axios.create({
-    baseURL: `http://ec2-3-36-185-121.ap-northeast-2.compute.amazonaws.com:8080`,
+    baseURL: `http://ec2-52-79-71-191.ap-northeast-2.compute.amazonaws.com:8080`,
     withCredentials: true,
 });
 
