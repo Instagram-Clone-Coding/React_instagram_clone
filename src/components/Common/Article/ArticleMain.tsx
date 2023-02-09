@@ -148,9 +148,7 @@ const ArticleMain = ({
         const { top, bottom, left } =
             event.currentTarget.getBoundingClientRect();
         dispatch(
-            modalActions.startModal({
-                activatedModal: null,
-                isOnMiniProfile: true,
+            modalActions.startHoverModal({
                 // 댓글 nickname에 hover 했을 때는 다르게 해야
                 memberNickname: event.currentTarget.innerText, // 이후 체크
                 memberUsername,

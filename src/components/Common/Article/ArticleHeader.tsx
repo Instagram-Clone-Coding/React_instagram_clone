@@ -121,13 +121,10 @@ const ArticleHeader = ({
         }
         if (miniProfile) return dispatch(modalActions.mouseOnHoverModal());
         dispatch(
-            modalActions.startModal({
-                activatedModal: null,
-                isOnMiniProfile: false,
+            modalActions.startHoverModal({
                 memberUsername,
                 memberNickname,
                 memberImageUrl,
-                isFollowing,
             }),
         );
         fetchMiniProfile({
@@ -198,9 +195,7 @@ const ArticleHeader = ({
                 className="header-dots"
                 onClick={() =>
                     dispatch(
-                        modalActions.startModal({
-                            isOnMiniProfile: false,
-                            activatedModal: "articleMenu",
+                        modalActions.startArticleMenuModal({
                             postId: postId,
                             memberUsername,
                             memberNickname,

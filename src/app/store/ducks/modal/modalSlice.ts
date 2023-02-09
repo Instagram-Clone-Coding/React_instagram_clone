@@ -7,24 +7,49 @@ const initialState: ModalType.ModalStateProps = {
     memberUsername: "",
     memberImageUrl: "",
     memberNickname: "",
-    postId: undefined,
-    miniProfile: undefined,
+    postId: null,
+    miniProfile: null,
+    isFollowing: null,
     isOnMiniProfile: false,
     isArticleAloneModalOn: false,
 };
+
+interface HoverModalPayloadType {
+    memberUsername: string;
+    memberNickname: string;
+    memberImageUrl: string;
+}
+
+interface ArticleMenuModalPayloadType extends HoverModalPayloadType {
+    postId: number;
+    isFollowing: boolean;
+}
 
 const modalSlice = createSlice({
     name: "modal",
     initialState,
     reducers: {
-        startModal: (
+        startHoverModal: (
             state,
-            action: PayloadAction<ModalType.ModalStateProps>,
+            action: PayloadAction<HoverModalPayloadType>,
         ) => {
-            return {
-                ...state,
-                ...action.payload,
-            }; // 전달한 modalDTO 값만 변경
+            state.isOnMiniProfile = true;
+            state.activatedModal = null;
+            state.memberUsername = action.payload.memberUsername;
+            state.memberNickname = action.payload.memberNickname;
+            state.memberImageUrl = action.payload.memberImageUrl;
+        },
+        startArticleMenuModal: (
+            state,
+            action: PayloadAction<ArticleMenuModalPayloadType>,
+        ) => {
+            state.isOnMiniProfile = false;
+            state.activatedModal = "articleMenu";
+            state.postId = action.payload.postId;
+            state.memberUsername = action.payload.memberUsername;
+            state.memberNickname = action.payload.memberNickname;
+            state.memberImageUrl = action.payload.memberImageUrl;
+            state.isFollowing = action.payload.isFollowing;
         },
         changeActivatedModal: (
             state,
@@ -80,7 +105,7 @@ const modalSlice = createSlice({
     extraReducers: (build) => {
         build
             .addCase(getMiniProfile.pending, (state) => {
-                state.miniProfile = undefined;
+                state.miniProfile = null;
             })
             .addCase(getMiniProfile.fulfilled, (state, action) => {
                 state.miniProfile = action.payload;

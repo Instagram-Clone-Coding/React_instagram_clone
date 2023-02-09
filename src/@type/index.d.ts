@@ -258,9 +258,9 @@ declare module ModalType {
         memberUsername: string;
         memberNickname: string;
         memberImageUrl: string;
-        postId?: number;
-        miniProfile?: MiniProfileStateProps;
-        isFollowing?: boolean;
+        postId: number | null;
+        miniProfile: MiniProfileStateProps | null;
+        isFollowing: boolean | null;
         isOnMiniProfile: boolean;
         isArticleAloneModalOn: boolean;
     }
