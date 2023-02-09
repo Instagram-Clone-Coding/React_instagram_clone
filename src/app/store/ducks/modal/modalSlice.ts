@@ -12,6 +12,7 @@ const initialState: ModalType.ModalStateProps = {
     isFollowing: null,
     isOnMiniProfile: false,
     isArticleAloneModalOn: false,
+    articleAloneModalPostId: null,
 };
 
 interface HoverModalPayloadType {
@@ -95,11 +96,19 @@ const modalSlice = createSlice({
                 state.miniProfile.modalPosition = action.payload;
             }
         },
-        startArticleAloneModal: (state) => {
+        startArticleAloneModal: (
+            state,
+            action: PayloadAction<{ postId: number }>,
+        ) => {
+            state.isArticleAloneModalOn = true;
+            state.articleAloneModalPostId = action.payload.postId;
+        },
+        maintainArticleAloneModal: (state) => {
             state.isArticleAloneModalOn = true;
         },
         stopArticleAloneModal: (state) => {
             state.isArticleAloneModalOn = false;
+            state.articleAloneModalPostId = null;
         },
     },
     extraReducers: (build) => {

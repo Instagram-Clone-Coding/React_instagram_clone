@@ -263,6 +263,7 @@ declare module ModalType {
         isFollowing: boolean | null;
         isOnMiniProfile: boolean;
         isArticleAloneModalOn: boolean;
+        articleAloneModalPostId: number | null;
     }
 }
 
