@@ -7,6 +7,7 @@ import ArticleMenuModal from "components/Home/Modals/ArticleMenuModal";
 import ReportModal from "components/Home/Modals/ReportModal";
 import ShareWithModal from "components/Home/Modals/SharerWithModal";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import ArticleAloneModal from "components/Common/Article/ArticleAlone/ArticleAloneModal";
 
 const ModalsInEveryRoutes = () => {
     const {
@@ -17,6 +18,7 @@ const ModalsInEveryRoutes = () => {
             postId,
             miniProfile,
             memberImageUrl,
+            isArticleAloneModalOn,
         },
     } = useAppSelector((state) => state);
 
@@ -78,6 +80,16 @@ const ModalsInEveryRoutes = () => {
                         dispatch(modalActions.maintainModalon("shareWith"))
                     }
                     onModalOff={() => dispatch(modalActions.resetModal())}
+                />
+            )}
+            {isArticleAloneModalOn && (
+                <ArticleAloneModal
+                    onModalOn={() =>
+                        dispatch(modalActions.maintainArticleAloneModal())
+                    }
+                    onModalOff={() =>
+                        dispatch(modalActions.stopArticleAloneModal())
+                    }
                 />
             )}
         </>
