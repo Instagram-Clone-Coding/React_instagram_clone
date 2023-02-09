@@ -30,9 +30,10 @@ const StyledLargerArticle = styled.div`
 
 interface LargerArticleProps {
     article: PostType.ArticleStateProps;
+    isModal?: boolean;
 }
 
-const LargerArticle = ({ article }: LargerArticleProps) => {
+const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
     const followingUserWhoLikesArticle =
         article.followingMemberUsernameLikedPost;
     const [isLiked, setIsLiked] = useState(article.postLikeFlag);

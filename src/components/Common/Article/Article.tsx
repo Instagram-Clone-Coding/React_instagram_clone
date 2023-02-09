@@ -22,10 +22,15 @@ const ArticleCard = styled(Card)`
 interface ArticleComponentPros {
     article: PostType.ArticleStateProps;
     isObserving: boolean;
+    isModal?: boolean;
 }
 
 // 아마 여기 articleData는 상위 HomeSection 컴포넌트에서 가져와야 하지 않을까
-const Article = ({ article, isObserving }: ArticleComponentPros) => {
+const Article = ({
+    article,
+    isObserving,
+    isModal = false,
+}: ArticleComponentPros) => {
     // data state
     const followingUserWhoLikesArticle =
         article.followingMemberUsernameLikedPost;
