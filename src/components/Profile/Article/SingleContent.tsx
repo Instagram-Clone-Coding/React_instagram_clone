@@ -3,6 +3,9 @@ import styled from "styled-components";
 import { ReactComponent as Slide } from "assets/Svgs/slide.svg";
 import sprite from "assets/Images/sprite4.png";
 import ImageSprite from "components/Common/ImageSprite";
+import { useAppDispatch } from "app/store/Hooks";
+import { modalActions } from "app/store/ducks/modal/modalSlice";
+import { useHistory } from "react-router-dom";
 
 const SingleContentContainer = styled.div`
     position: relative;
@@ -65,6 +68,7 @@ const SingleContentContainer = styled.div`
 
 interface SingleContentProps {
     post: Profile.PostType;
+    isLinkToParagraph?: boolean;
 }
 
 const heartImage: CommonType.ImageProps = {
@@ -80,8 +84,21 @@ const commentImage: CommonType.ImageProps = {
     url: sprite,
 };
 
-const SingleContent = ({ post }: SingleContentProps) => {
+const SingleContent = ({
+    post,
+    isLinkToParagraph = false,
+}: SingleContentProps) => {
     const [hoverd, setHoverd] = useState<boolean>(false);
+    const dispatch = useAppDispatch();
+    const history = useHistory();
+
+    const contentClickHandler = () => {
+        if (isLinkToParagraph) return history.push(`/p/${post.postId}`);
+        return dispatch(
+            modalActions.startArticleAloneModal({ postId: post.postId }),
+        );
+    };
+
     return (
         <SingleContentContainer
             onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
@@ -92,6 +109,7 @@ const SingleContent = ({ post }: SingleContentProps) => {
                 e.preventDefault();
                 setHoverd(false);
             }}
+            onClick={contentClickHandler}
         >
             {post.hasManyPostImages && <Slide />}
             <img
