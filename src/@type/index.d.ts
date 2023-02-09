@@ -262,6 +262,7 @@ declare module ModalType {
         miniProfile?: MiniProfileStateProps;
         isFollowing?: boolean;
         isOnMiniProfile: boolean;
+        isArticleAloneModalOn: boolean;
     }
 }
 

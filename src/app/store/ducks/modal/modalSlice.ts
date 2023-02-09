@@ -10,6 +10,7 @@ const initialState: ModalType.ModalStateProps = {
     postId: undefined,
     miniProfile: undefined,
     isOnMiniProfile: false,
+    isArticleAloneModalOn: false,
 };
 
 const modalSlice = createSlice({
@@ -68,6 +69,12 @@ const modalSlice = createSlice({
             if (state.miniProfile) {
                 state.miniProfile.modalPosition = action.payload;
             }
+        },
+        startArticleAloneModal: (state) => {
+            state.isArticleAloneModalOn = true;
+        },
+        stopArticleAloneModal: (state) => {
+            state.isArticleAloneModalOn = false;
         },
     },
     extraReducers: (build) => {
