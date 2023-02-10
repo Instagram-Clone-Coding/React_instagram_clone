@@ -15,8 +15,12 @@ import ArticleMain from "components/Common/Article/ArticleMain";
 import ArticleGap from "components/Common/Article/ArticleGap";
 import ArticleCommentFormLayout from "components/Common/Article/ArticleCommentFormLayout";
 
-const ArticleCard = styled(Card)`
-    margin-bottom: 24px;
+interface ArticleCardProps {
+    isModal: boolean;
+}
+
+const ArticleCard = styled(Card)<ArticleCardProps>`
+    margin-bottom: ${({ isModal }) => (isModal ? 0 : "24px")};
 `;
 
 interface ArticleComponentPros {
@@ -100,7 +104,7 @@ const Article = ({
     };
 
     return (
-        <ArticleCard as="article" ref={articleRef}>
+        <ArticleCard as="article" ref={articleRef} isModal={isModal}>
             <ArticleHeader
                 memberImageUrl={article.member.image.imageUrl}
                 memberUsername={article.member.name} // 이지금
