@@ -8,15 +8,19 @@ import { authorizedCustomAxios } from "customAxios";
 import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 
-const StyledLargerArticle = styled.div`
+interface StyledLargerArticleProps {
+    isModal: boolean;
+}
+
+const StyledLargerArticle = styled.div<StyledLargerArticleProps>`
     display: flex;
     border: 1px solid ${(props) => props.theme.color.bd_gray};
     & > .largerArticle__imageSliderFlexBox {
-        width: calc(100% - 340px);
+        width: calc(100% - ${(props) => (props.isModal ? "500px" : "340px")});
     }
     & > .largerArticle__rightContent {
-        min-width: 340px;
-        width: 340px;
+        min-width: ${(props) => (props.isModal ? "500px" : "340px")};
+        width: ${(props) => (props.isModal ? "500px" : "340px")};
         display: flex;
         flex-direction: column;
         & > .largerArticle__mainLayout {
@@ -86,7 +90,7 @@ const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
     };
 
     return (
-        <StyledLargerArticle>
+        <StyledLargerArticle isModal={isModal}>
             <div className="largerArticle__imageSliderFlexBox">
                 <ArticleImgSlider
                     imageDTOs={article.postImages}
