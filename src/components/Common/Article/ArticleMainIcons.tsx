@@ -14,8 +14,7 @@ import {
 const StyledMainIcons = styled.div`
     display: flex;
     border-top: 1px solid ${(props) => props.theme.color.bd_gray};
-    padding: 6px 16px 8px 16px;
-    margin-left: -8px;
+    padding: 6px 16px 8px 8px;
     .heart,
     .comment,
     .share,
