@@ -22,6 +22,7 @@ const ArticleAloneModal = ({
     const [articleData, setArticleData] =
         useState<PostType.ArticleStateProps | null>(null);
     const [isDataFetching, setIsDataFetching] = useState(true);
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const postId = useAppSelector(
         (state) => state.modal.articleAloneModalPostId,
     );
@@ -43,6 +44,12 @@ const ArticleAloneModal = ({
             }
         };
         getArticleData();
+        const resizeEventHandler = () => setWindowWidth(window.innerWidth);
+        window.addEventListener("resize", resizeEventHandler);
+
+        return () => {
+            window.removeEventListener("resize", resizeEventHandler);
+        };
     }, [dispatch, postId]);
 
     return (
@@ -51,6 +58,8 @@ const ArticleAloneModal = ({
             onModalOn={onModalOn}
             onModalOff={onModalOff}
             isWithCancelBtn={true}
+            isArticle={true}
+            width={windowWidth - 128}
         >
             {isDataFetching ? (
                 <Loading size={14} />
