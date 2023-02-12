@@ -17,6 +17,10 @@ const StyledLargerArticle = styled.div<StyledLargerArticleProps>`
     border: 1px solid ${(props) => props.theme.color.bd_gray};
     & > .largerArticle__imageSliderFlexBox {
         width: calc(100% - ${(props) => (props.isModal ? "500px" : "340px")});
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background-color: black;
     }
     & > .largerArticle__rightContent {
         min-width: ${(props) => (props.isModal ? "500px" : "340px")};
