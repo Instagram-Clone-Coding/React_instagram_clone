@@ -20,7 +20,6 @@ const StyledLargerArticle = styled.div<StyledLargerArticleProps>`
         display: flex;
         flex-direction: column;
         justify-content: center;
-        background-color: black;
     }
     & > .largerArticle__rightContent {
         min-width: ${(props) => (props.isModal ? "500px" : "340px")};
