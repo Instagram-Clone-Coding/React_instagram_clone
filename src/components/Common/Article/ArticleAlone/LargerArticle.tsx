@@ -125,7 +125,7 @@ const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
                         hashtags={article.hashtagsOfContent}
                         likeOptionFlag={article.likeOptionFlag}
                         isInLargerArticle={true}
-                        // comments={article.comments}
+                        comments={article.recentComments}
                     />
                     <div className="largerArticle__comments">comment 공간</div>
                 </div>

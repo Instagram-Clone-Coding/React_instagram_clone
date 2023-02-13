@@ -32,6 +32,7 @@ const initialState: ParagraphType.ParagraphStateProps = {
         commentOptionFlag: false,
         following: false,
         followLoading: false,
+        recentComments: [],
     },
 };
 

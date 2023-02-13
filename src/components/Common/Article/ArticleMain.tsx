@@ -51,7 +51,7 @@ interface MainProps {
     memberImageUrl: string;
     content: string;
     commentsCount: number;
-    comments?: {
+    comments: {
         // 없거나 있으면 보내주거나 해야 할 듯
         username: string;
         comment: string;
