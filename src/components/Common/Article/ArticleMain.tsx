@@ -213,7 +213,7 @@ const ArticleMain = ({
                     </>
                 </span>
             </div>
-            {comments && (
+            {comments.length > 0 && (
                 <div className="article-commentsBox">
                     <div className="article-commentsNum">
                         댓글 {commentsCount}개 모두 보기
