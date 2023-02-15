@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { ReactComponent as SmileFace } from "../../../assets/Svgs/smileFace.svg";
 import styled from "styled-components";
+import { authorizedCustomAxios } from "customAxios";
+
+interface FormProps {
+    lineNumber: number;
+}
 
 const StyledCommentForm = styled.form<FormProps>`
     display: flex;
@@ -37,16 +42,17 @@ const StyledCommentForm = styled.form<FormProps>`
     }
 `;
 
-interface FormProps {
-    lineNumber: number;
+interface CommentFormProps {
+    postId: number;
+    isReply?: boolean;
 }
 
-const CommentForm = () => {
+const CommentForm = ({ postId, isReply = false }: CommentFormProps) => {
     const [text, setText] = useState("");
     const isValid = text.trim() !== "";
     const lineNumber = text.split("\n").length;
     const commentValueHandler = (
-        event: React.ChangeEvent<HTMLTextAreaElement>
+        event: React.ChangeEvent<HTMLTextAreaElement>,
     ) => {
         const {
             target: { value },
@@ -54,9 +60,19 @@ const CommentForm = () => {
         setText(value);
     };
 
-    const commentSubmitHandler = (event: React.SyntheticEvent) => {
+    const commentSubmitHandler = async (event: React.SyntheticEvent) => {
         event.preventDefault();
         // handling submitted comment
+        try {
+            const { data } = await authorizedCustomAxios.post("/comments", {
+                content: text,
+                parentId: 0,
+                postId,
+            });
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
