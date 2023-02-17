@@ -173,6 +173,18 @@ declare module PostType {
         };
     }
 
+    interface CommentType {
+        id: number;
+        commentLikeFlag: boolean;
+        commentLikeCount: number;
+        content: string;
+        hashtagsOfContent: string[];
+        member: CommonType.memberType;
+        mentionsOfContent: string[];
+        repliesCount: number;
+        uploadDate: string;
+    }
+
     interface ArticleProps {
         followingMemberUsernameLikedPost: null | string; // 내가 팔로우한 사람 중에서 이 글을 좋아한 사람 있으면 보내줌
         member: CommonType.memberType;
@@ -189,7 +201,7 @@ declare module PostType {
         likeOptionFlag: boolean; // 업로드한 사람만 좋아요 및 좋아요한 사람 확인 가능
         commentOptionFlag: boolean; // 댓글 작성 가능 여부
         following: boolean;
-        recentComments: { username: string; comment: string }[];
+        recentComments: CommentType[];
     }
 
     interface ArticleStateProps extends ArticleProps {
