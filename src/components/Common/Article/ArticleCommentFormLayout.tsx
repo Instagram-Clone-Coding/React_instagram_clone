@@ -12,10 +12,16 @@ const StyledAricleCommentFormLayout = styled.div`
     }
 `;
 
-const ArticleCommentFormLayout = () => {
+interface ArticleCommentFormLayoutProps {
+    postId: number;
+}
+
+const ArticleCommentFormLayout = ({
+    postId,
+}: ArticleCommentFormLayoutProps) => {
     return (
         <StyledAricleCommentFormLayout>
-            <CommentForm />
+            <CommentForm postId={postId} />
         </StyledAricleCommentFormLayout>
     );
 };

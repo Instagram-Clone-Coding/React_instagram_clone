@@ -137,7 +137,9 @@ const Article = ({
                 comments={article.recentComments}
             />
             <ArticleGap postUploadDate={article.postUploadDate} />
-            {!article.commentOptionFlag && <ArticleCommentFormLayout />}
+            {!article.commentOptionFlag && (
+                <ArticleCommentFormLayout postId={article.postId} />
+            )}
         </ArticleCard>
     );
 };

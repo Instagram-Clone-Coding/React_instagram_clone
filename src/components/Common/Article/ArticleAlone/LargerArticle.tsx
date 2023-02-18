@@ -136,7 +136,9 @@ const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
                     onToggleLike={toggleLikeHandler}
                 />
                 <ArticleGap postUploadDate={article.postUploadDate} />
-                {!article.commentOptionFlag && <ArticleCommentFormLayout />}
+                {!article.commentOptionFlag && (
+                    <ArticleCommentFormLayout postId={article.postId} />
+                )}
             </div>
         </StyledLargerArticle>
     );

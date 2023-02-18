@@ -51,11 +51,7 @@ interface MainProps {
     memberImageUrl: string;
     content: string;
     commentsCount: number;
-    comments: {
-        // 없거나 있으면 보내주거나 해야 할 듯
-        username: string;
-        comment: string;
-    }[];
+    comments: PostType.CommentType[];
     mentions: string[];
     hashtags: string[];
     likeOptionFlag: boolean;
@@ -77,8 +73,12 @@ const ArticleMain = ({
     isInLargerArticle = false,
 }: MainProps) => {
     // like state
-    const [isComment1Liked, setIsComment1Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
-    const [isComment2Liked, setIsComment2Liked] = useState(false); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
+    const [isComment1Liked, setIsComment1Liked] = useState(
+        comments.length > 0 ? comments[0].commentLikeFlag : false,
+    ); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
+    const [isComment2Liked, setIsComment2Liked] = useState(
+        comments.length > 0 ? comments[1].commentLikeFlag : false,
+    ); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
     // content state
     const [isFullText, setIsFullText] = useState(false);
     const { miniProfile } = useAppSelector(({ modal }) => modal);
@@ -225,10 +225,10 @@ const ArticleMain = ({
                                 onMouseLeave={mouseLeaveHandler}
                                 className="comment-username"
                             >
-                                {comments[0].username}
+                                {comments[0].member.username}
                             </Username>
                             &nbsp;
-                            {comments[0].comment}
+                            {comments[0].content}
                         </span>
                         <PopHeart
                             size={17}
@@ -243,10 +243,10 @@ const ArticleMain = ({
                                 onMouseLeave={mouseLeaveHandler}
                                 className="comment-username"
                             >
-                                {comments[1].username}
+                                {comments[1].member.username}
                             </Username>
                             &nbsp;
-                            {comments[1].comment}
+                            {comments[1].content}
                         </span>
 
                         <PopHeart
