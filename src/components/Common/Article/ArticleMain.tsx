@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
 import StringFragmentWithMentionOrHashtagLink from "components/Common/StringFragmentWithMentionOrHashtagLink";
+import Comment from "components/Common/Article/Comment";
 
 interface StyledMainProps {
     isInLargerArticle: boolean;
@@ -23,18 +24,6 @@ const StyledMain = styled.div<StyledMainProps>`
         margin-bottom: 4px;
         button {
             font-weight: normal;
-        }
-    }
-    .article-commentsBox {
-        & > div {
-            margin-bottom: 4px;
-        }
-        .article-recent-comment {
-            display: flex;
-            align-items: center;
-            span {
-                flex: 1 1 auto;
-            }
         }
     }
     .article-text button,
@@ -72,13 +61,6 @@ const ArticleMain = ({
     likeOptionFlag,
     isInLargerArticle = false,
 }: MainProps) => {
-    // like state
-    const [isComment1Liked, setIsComment1Liked] = useState(
-        comments.length > 0 ? comments[0].commentLikeFlag : false,
-    ); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
-    const [isComment2Liked, setIsComment2Liked] = useState(
-        comments.length > 0 ? comments[1].commentLikeFlag : false,
-    ); // 백엔드에서 이 코멘트 좋아요 한 사람 중 내가 있는지 확인
     // content state
     const [isFullText, setIsFullText] = useState(false);
     const { miniProfile } = useAppSelector(({ modal }) => modal);
@@ -115,15 +97,6 @@ const ArticleMain = ({
             ),
         [isFullText, textArray, mentions, hashtags],
     );
-
-    const comment1LikeHandler = () => {
-        setIsComment1Liked((prev) => !prev);
-        // 백엔드 수행
-    };
-    const comment2LikeHandler = () => {
-        setIsComment2Liked((prev) => !prev);
-        // 백엔드 수행
-    };
 
     const fetchMiniProfile = async ({
         top,
@@ -213,50 +186,15 @@ const ArticleMain = ({
                     </>
                 </span>
             </div>
-            {comments.length > 0 && (
-                <div className="article-commentsBox">
-                    <div className="article-commentsNum">
-                        댓글 {commentsCount}개 모두 보기
-                    </div>
-                    <div className="article-recent-comment">
-                        <span>
-                            <Username
-                                onMouseEnter={mouseEnterHandler}
-                                onMouseLeave={mouseLeaveHandler}
-                                className="comment-username"
-                            >
-                                {comments[0].member.username}
-                            </Username>
-                            &nbsp;
-                            {comments[0].content}
-                        </span>
-                        <PopHeart
-                            size={17}
-                            isLiked={isComment1Liked}
-                            onToggleLike={comment1LikeHandler}
-                        />
-                    </div>
-                    <div className="article-recent-comment">
-                        <span>
-                            <Username
-                                onMouseEnter={mouseEnterHandler}
-                                onMouseLeave={mouseLeaveHandler}
-                                className="comment-username"
-                            >
-                                {comments[1].member.username}
-                            </Username>
-                            &nbsp;
-                            {comments[1].content}
-                        </span>
-
-                        <PopHeart
-                            size={17}
-                            isLiked={isComment2Liked}
-                            onToggleLike={comment2LikeHandler}
-                        />
-                    </div>
-                </div>
-            )}
+            <div className="article-commentsBox">
+                {comments.map((comment) => (
+                    <Comment
+                        commentObj={comment}
+                        onMouseEnter={mouseEnterHandler}
+                        onMouseLeave={mouseLeaveHandler}
+                    />
+                ))}
+            </div>
         </StyledMain>
     );
 };
