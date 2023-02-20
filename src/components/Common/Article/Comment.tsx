@@ -1,5 +1,6 @@
 import PopHeart from "components/Common/PopHeart";
 import Username from "components/Common/Username";
+import { authorizedCustomAxios } from "customAxios";
 import React, { useState } from "react";
 import styled from "styled-components";
 
@@ -23,9 +24,31 @@ interface CommentProps {
 
 const Comment = ({ commentObj, onMouseEnter, onMouseLeave }: CommentProps) => {
     const [isLiked, setIsLiked] = useState(commentObj.commentLikeFlag);
-    const commentLikeHandler = () => {
-        setIsLiked((prev) => !prev);
-        // 백엔드 수행
+    const commentLikeHandler = async () => {
+        try {
+            if (!isLiked) {
+                setIsLiked(true);
+                const { data } =
+                    await authorizedCustomAxios.post<AxiosType.ResponseType>(
+                        "/comments/like",
+                        null,
+                        { params: { commentId: commentObj.id } },
+                    );
+                if (data.status === 200) throw new Error();
+            } else {
+                setIsLiked(false);
+                const { data } = await authorizedCustomAxios.delete(
+                    "/comments/like",
+                    {
+                        params: { commentId: commentObj.id },
+                    },
+                );
+                if (data.status === 200) throw new Error();
+            }
+        } catch (error) {
+            setIsLiked((prev) => !prev);
+            console.log(error);
+        }
     };
     return (
         <StyledComment>
