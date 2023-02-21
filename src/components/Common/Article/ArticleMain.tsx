@@ -189,6 +189,7 @@ const ArticleMain = ({
             <div className="article-commentsBox">
                 {comments.map((comment) => (
                     <Comment
+                        key={comment.id}
                         commentObj={comment}
                         onMouseEnter={mouseEnterHandler}
                         onMouseLeave={mouseLeaveHandler}
