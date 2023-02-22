@@ -2,6 +2,7 @@ import PopHeart from "components/Common/PopHeart";
 import Username from "components/Common/Username";
 import { authorizedCustomAxios } from "customAxios";
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledComment = styled.div`
@@ -24,6 +25,7 @@ interface CommentProps {
 
 const Comment = ({ commentObj, onMouseEnter, onMouseLeave }: CommentProps) => {
     const [isLiked, setIsLiked] = useState(commentObj.commentLikeFlag);
+    const history = useHistory();
     const commentLikeHandler = async () => {
         try {
             if (!isLiked) {
@@ -47,7 +49,7 @@ const Comment = ({ commentObj, onMouseEnter, onMouseLeave }: CommentProps) => {
             }
         } catch (error) {
             setIsLiked((prev) => !prev);
-            console.log(error);
+            history.goBack();
         }
     };
     return (
