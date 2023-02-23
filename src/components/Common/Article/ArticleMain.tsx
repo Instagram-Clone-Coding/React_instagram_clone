@@ -40,7 +40,7 @@ interface MainProps {
     memberImageUrl: string;
     content: string;
     commentsCount: number;
-    comments: PostType.CommentType[];
+    recentComments: PostType.CommentType[];
     mentions: string[];
     hashtags: string[];
     likeOptionFlag: boolean;
@@ -55,7 +55,7 @@ const ArticleMain = ({
     memberImageUrl,
     content,
     commentsCount,
-    comments,
+    recentComments,
     mentions,
     hashtags,
     likeOptionFlag,
@@ -186,16 +186,18 @@ const ArticleMain = ({
                     </>
                 </span>
             </div>
-            <div className="article-commentsBox">
-                {comments.map((comment) => (
-                    <Comment
-                        key={comment.id}
-                        commentObj={comment}
-                        onMouseEnter={mouseEnterHandler}
-                        onMouseLeave={mouseLeaveHandler}
-                    />
-                ))}
-            </div>
+            {isInLargerArticle || (
+                <div className="article-commentsBox">
+                    {recentComments.map((comment) => (
+                        <Comment
+                            key={comment.id}
+                            commentObj={comment}
+                            onMouseEnter={mouseEnterHandler}
+                            onMouseLeave={mouseLeaveHandler}
+                        />
+                    ))}
+                </div>
+            )}
         </StyledMain>
     );
 };

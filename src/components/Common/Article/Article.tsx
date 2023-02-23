@@ -134,7 +134,7 @@ const Article = ({
                 mentions={article.mentionsOfContent}
                 hashtags={article.hashtagsOfContent}
                 likeOptionFlag={article.likeOptionFlag}
-                comments={article.recentComments}
+                recentComments={article.recentComments}
             />
             <ArticleGap postUploadDate={article.postUploadDate} />
             {!article.commentOptionFlag && (

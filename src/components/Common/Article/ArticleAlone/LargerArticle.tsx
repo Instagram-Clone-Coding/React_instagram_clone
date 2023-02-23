@@ -4,8 +4,9 @@ import ArticleHeader from "components/Common/Article/ArticleHeader";
 import ArticleImgSlider from "components/Common/Article/ArticleImgSlider/ArticleImgSlider";
 import ArticleMain from "components/Common/Article/ArticleMain";
 import ArticleMainIcons from "components/Common/Article/ArticleMainIcons";
+import Comment from "components/Common/Article/Comment";
 import { authorizedCustomAxios } from "customAxios";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
 interface StyledLargerArticleProps {
@@ -40,11 +41,41 @@ interface LargerArticleProps {
     isModal?: boolean;
 }
 
+interface GetCommentsResponseType extends AxiosType.ResponseType {
+    data: {
+        content: PostType.CommentType[];
+        first: boolean;
+        last: boolean;
+    };
+}
+
 const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
     const followingUserWhoLikesArticle =
         article.followingMemberUsernameLikedPost;
     const [isLiked, setIsLiked] = useState(article.postLikeFlag);
     const [likesCount, setLikesCount] = useState(article.postLikesCount);
+    const [comments, setComments] = useState<PostType.CommentType[]>([]);
+    const [currentCommentPage, setCurrentCommentPage] = useState(1);
+
+    useEffect(() => {
+        const getComments = async () => {
+            try {
+                const {
+                    data: {
+                        data: { content },
+                    },
+                } = await authorizedCustomAxios.get<GetCommentsResponseType>(
+                    `/comments/posts/${article.postId}`,
+                    { params: { page: currentCommentPage } },
+                );
+                setComments((prev) => [...prev, ...content]);
+                setCurrentCommentPage((prev) => prev + 1);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getComments();
+    }, []);
 
     const config = useMemo(
         () => ({
@@ -125,9 +156,18 @@ const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
                         hashtags={article.hashtagsOfContent}
                         likeOptionFlag={article.likeOptionFlag}
                         isInLargerArticle={true}
-                        comments={article.recentComments}
+                        recentComments={article.recentComments}
                     />
-                    <div className="largerArticle__comments">comment 공간</div>
+                    <div className="largerArticle__comments">
+                        {comments.map((comment) => (
+                            <Comment
+                                key={comment.id}
+                                commentObj={comment}
+                                onMouseEnter={() => {}}
+                                onMouseLeave={() => {}} // 임시
+                            />
+                        ))}
+                    </div>
                 </div>
                 <ArticleMainIcons
                     isLiked={isLiked}
