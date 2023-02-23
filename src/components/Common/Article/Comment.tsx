@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
-const StyledComment = styled.div`
+const StyledComment = styled.ul`
     margin-bottom: 4px;
     display: flex;
     align-items: center;
