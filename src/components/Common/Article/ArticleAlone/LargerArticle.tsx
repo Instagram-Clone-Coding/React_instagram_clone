@@ -75,7 +75,7 @@ const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
             }
         };
         getComments();
-    }, []);
+    }, [article.postId]);
 
     const config = useMemo(
         () => ({
