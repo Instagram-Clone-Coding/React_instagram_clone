@@ -69,13 +69,13 @@ const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
                     { params: { page: currentCommentPage } },
                 );
                 setComments((prev) => [...prev, ...content]);
-                setCurrentCommentPage((prev) => prev + 1);
+                // setCurrentCommentPage((prev) => prev + 1);
             } catch (error) {
                 console.log(error);
             }
         };
         getComments();
-    }, [article.postId]);
+    }, [article.postId, currentCommentPage]);
 
     const config = useMemo(
         () => ({
