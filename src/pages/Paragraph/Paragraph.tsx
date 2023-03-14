@@ -106,10 +106,8 @@ const Paragraph = () => {
                                                 recentPosts[index * 3 + 1],
                                                 recentPosts[index * 3 + 2],
                                             ]}
-                                            isObserving={
-                                                recentPosts.length / 3 - 2 ===
-                                                index
-                                            }
+                                            isObserving={false}
+                                            isLinkToParagraph={true}
                                         />
                                     ))}
                                 </>

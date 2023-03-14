@@ -18,9 +18,14 @@ const SingleRowContainer = styled.div`
 interface SingleRowProps {
     posts: Profile.PostType[];
     isObserving: boolean;
+    isLinkToParagraph?: boolean;
 }
 
-const SingleRow = ({ posts, isObserving }: SingleRowProps) => {
+const SingleRow = ({
+    posts,
+    isObserving,
+    isLinkToParagraph = false,
+}: SingleRowProps) => {
     const dispatch = useAppDispatch();
     const extraPostPage = useAppSelector(
         (state) => state.profile.extraPostPage,
@@ -52,7 +57,13 @@ const SingleRow = ({ posts, isObserving }: SingleRowProps) => {
         <SingleRowContainer ref={postRef}>
             {posts.map(
                 (post) =>
-                    post && <SingleContent key={post.postId} post={post} />,
+                    post && (
+                        <SingleContent
+                            key={post.postId}
+                            post={post}
+                            isLinkToParagraph={isLinkToParagraph}
+                        />
+                    ),
             )}
         </SingleRowContainer>
     );
