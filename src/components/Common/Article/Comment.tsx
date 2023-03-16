@@ -1,8 +1,9 @@
+import { authAction } from "app/store/ducks/auth/authSlice";
 import PopHeart from "components/Common/PopHeart";
 import Username from "components/Common/Username";
 import { authorizedCustomAxios } from "customAxios";
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 const StyledComment = styled.ul`
@@ -25,9 +26,8 @@ interface CommentProps {
 
 const Comment = ({ commentObj, onMouseEnter, onMouseLeave }: CommentProps) => {
     const [isLiked, setIsLiked] = useState(commentObj.commentLikeFlag);
-    const history = useHistory();
+    const dispatch = useDispatch();
     const commentLikeHandler = async () => {
-        console.log("isClicked");
         try {
             if (!isLiked) {
                 setIsLiked(true);
@@ -37,7 +37,7 @@ const Comment = ({ commentObj, onMouseEnter, onMouseLeave }: CommentProps) => {
                         null,
                         { params: { commentId: commentObj.id } },
                     );
-                if (data.status === 200) throw new Error();
+                if (data.status !== 200) throw new Error();
             } else {
                 setIsLiked(false);
                 const { data } = await authorizedCustomAxios.delete(
@@ -46,11 +46,11 @@ const Comment = ({ commentObj, onMouseEnter, onMouseLeave }: CommentProps) => {
                         params: { commentId: commentObj.id },
                     },
                 );
-                if (data.status === 200) throw new Error();
+                if (data.status !== 200) throw new Error();
             }
         } catch (error) {
             setIsLiked((prev) => !prev);
-            history.goBack();
+            dispatch(authAction.logout());
         }
     };
     return (
