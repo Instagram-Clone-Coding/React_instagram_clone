@@ -27,6 +27,7 @@ const Comment = ({ commentObj, onMouseEnter, onMouseLeave }: CommentProps) => {
     const [isLiked, setIsLiked] = useState(commentObj.commentLikeFlag);
     const history = useHistory();
     const commentLikeHandler = async () => {
+        console.log("isClicked");
         try {
             if (!isLiked) {
                 setIsLiked(true);
