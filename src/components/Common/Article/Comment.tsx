@@ -7,8 +7,16 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import StringFragmentWithMentionOrHashtagLink from "components/Common/StringFragmentWithMentionOrHashtagLink";
 
-const StyledComment = styled.ul`
+type CommentType = "comment" | "reply";
+
+interface StyledCommentProps {
+    commentType: CommentType;
+}
+
+const StyledComment = styled.ul<StyledCommentProps>`
     margin-bottom: 4px;
+    margin-left: ${({ commentType }) =>
+        commentType === "reply" ? "54px" : "0"};
     display: flex;
     align-items: center;
     & > span {
@@ -23,9 +31,15 @@ interface CommentProps {
             | React.MouseEvent<HTMLDivElement>,
     ) => void;
     onMouseLeave: () => void;
+    commentType?: CommentType;
 }
 
-const Comment = ({ commentObj, onMouseEnter, onMouseLeave }: CommentProps) => {
+const Comment = ({
+    commentObj,
+    onMouseEnter,
+    onMouseLeave,
+    commentType = "comment",
+}: CommentProps) => {
     const [isLiked, setIsLiked] = useState(commentObj.commentLikeFlag);
     const dispatch = useDispatch();
     const commentLikeHandler = async () => {
@@ -56,7 +70,7 @@ const Comment = ({ commentObj, onMouseEnter, onMouseLeave }: CommentProps) => {
     };
 
     return (
-        <StyledComment>
+        <StyledComment commentType={commentType}>
             <span>
                 <Username
                     onMouseEnter={onMouseEnter}
