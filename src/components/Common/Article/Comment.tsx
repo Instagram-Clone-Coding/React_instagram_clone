@@ -5,6 +5,7 @@ import { authorizedCustomAxios } from "customAxios";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import StringFragmentWithMentionOrHashtagLink from "components/Common/StringFragmentWithMentionOrHashtagLink";
 
 const StyledComment = styled.ul`
     margin-bottom: 4px;
@@ -53,6 +54,7 @@ const Comment = ({ commentObj, onMouseEnter, onMouseLeave }: CommentProps) => {
             dispatch(authAction.logout());
         }
     };
+
     return (
         <StyledComment>
             <span>
@@ -63,7 +65,11 @@ const Comment = ({ commentObj, onMouseEnter, onMouseLeave }: CommentProps) => {
                     {commentObj.member.username}
                 </Username>
                 &nbsp;
-                {commentObj.content}
+                <StringFragmentWithMentionOrHashtagLink
+                    str={commentObj.content}
+                    mentions={commentObj.mentionsOfContent}
+                    hashtags={commentObj.hashtagsOfContent}
+                />
             </span>
             <PopHeart
                 size={17}
