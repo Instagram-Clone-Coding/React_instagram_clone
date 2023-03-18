@@ -197,6 +197,7 @@ const ArticleMain = ({
                             commentObj={comment}
                             onMouseEnter={mouseEnterHandler}
                             onMouseLeave={mouseLeaveHandler}
+                            commentType="recent"
                         />
                     ))}
                 </div>

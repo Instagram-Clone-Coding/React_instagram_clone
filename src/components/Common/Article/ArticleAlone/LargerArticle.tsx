@@ -165,6 +165,7 @@ const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
                                 commentObj={comment}
                                 onMouseEnter={() => {}}
                                 onMouseLeave={() => {}} // 임시
+                                commentType="comment"
                             />
                         ))}
                     </div>

@@ -176,7 +176,7 @@ declare module PostType {
     interface CommentType {
         id: number;
         commentLikeFlag: boolean;
-        commentLikeCount: number;
+        commentLikesCount: number;
         content: string;
         hashtagsOfContent: string[];
         member: CommonType.memberType;

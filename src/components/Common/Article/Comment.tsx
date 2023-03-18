@@ -1,23 +1,40 @@
 import { authAction } from "app/store/ducks/auth/authSlice";
 import PopHeart from "components/Common/PopHeart";
+import StringFragmentWithMentionOrHashtagLink from "components/Common/StringFragmentWithMentionOrHashtagLink";
+import ArticleGap from "components/Common/Article/ArticleGap";
 import Username from "components/Common/Username";
 import { authorizedCustomAxios } from "customAxios";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import StringFragmentWithMentionOrHashtagLink from "components/Common/StringFragmentWithMentionOrHashtagLink";
+import { modalActions } from "app/store/ducks/modal/modalSlice";
+
+type CommentType = "comment" | "reply" | "recent";
 
 interface StyledCommentProps {
-    isReply: boolean;
+    commentType: CommentType;
 }
 
 const StyledComment = styled.ul<StyledCommentProps>`
-    margin-bottom: 4px;
-    margin-left: ${({ isReply }) => (isReply ? "54px" : "0")};
+    margin-bottom: ${({ commentType }) =>
+        commentType === "recent" ? "4px" : "16px"};
+    margin-left: ${({ commentType }) =>
+        commentType === "reply" ? "54px" : "0"};
     display: flex;
     align-items: center;
-    & > span {
-        flex: 1 1 auto;
+    & > #comment__main {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        & > #comment__info {
+            margin: 8px 0 4px 0;
+            & > button {
+                margin-right: 12px;
+                color: ${(props) => props.theme.font.gray};
+                font-size: 12px;
+                font-weight: normal;
+            }
+        }
     }
 `;
 interface CommentProps {
@@ -28,14 +45,14 @@ interface CommentProps {
             | React.MouseEvent<HTMLDivElement>,
     ) => void;
     onMouseLeave: () => void;
-    isReply?: boolean;
+    commentType: CommentType;
 }
 
 const Comment = ({
     commentObj,
     onMouseEnter,
     onMouseLeave,
-    isReply = false,
+    commentType,
 }: CommentProps) => {
     const [isLiked, setIsLiked] = useState(commentObj.commentLikeFlag);
     const dispatch = useDispatch();
@@ -66,22 +83,40 @@ const Comment = ({
         }
     };
 
+    console.log(commentObj);
+
     return (
-        <StyledComment isReply={isReply}>
-            <span>
-                <Username
-                    onMouseEnter={onMouseEnter}
-                    onMouseLeave={onMouseLeave}
-                >
-                    {commentObj.member.username}
-                </Username>
-                &nbsp;
-                <StringFragmentWithMentionOrHashtagLink
-                    str={commentObj.content}
-                    mentions={commentObj.mentionsOfContent}
-                    hashtags={commentObj.hashtagsOfContent}
-                />
-            </span>
+        <StyledComment commentType={commentType}>
+            <div id="comment__main">
+                <span>
+                    <Username
+                        onMouseEnter={onMouseEnter}
+                        onMouseLeave={onMouseLeave}
+                    >
+                        {commentObj.member.username}
+                    </Username>
+                    &nbsp;
+                    <StringFragmentWithMentionOrHashtagLink
+                        str={commentObj.content}
+                        mentions={commentObj.mentionsOfContent}
+                        hashtags={commentObj.hashtagsOfContent}
+                    />
+                </span>
+                {commentType !== "recent" && (
+                    <div id="comment__info">
+                        <ArticleGap
+                            postUploadDate={commentObj.uploadDate}
+                            isAboutComment={true}
+                        />
+                        {commentObj.commentLikesCount === 0 && (
+                            <button>
+                                좋아요 {commentObj.commentLikesCount}개
+                            </button>
+                        )}
+                        <button>답글 달기</button>
+                    </div>
+                )}
+            </div>
             <PopHeart
                 size={17}
                 isLiked={isLiked}
