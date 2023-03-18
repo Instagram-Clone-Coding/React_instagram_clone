@@ -21,7 +21,8 @@ const StyledMain = styled.div<StyledMainProps>`
         }
     }
     .article-textBox {
-        margin-bottom: 4px;
+        margin-bottom: ${({ isInLargerArticle }) =>
+            isInLargerArticle ? "20px" : "4px"};
         button {
             font-weight: normal;
         }
@@ -62,7 +63,9 @@ const ArticleMain = ({
     isInLargerArticle = false,
 }: MainProps) => {
     // content state
-    const [isFullText, setIsFullText] = useState(false);
+    const [isFullText, setIsFullText] = useState(
+        isInLargerArticle ? true : false,
+    );
     const { miniProfile } = useAppSelector(({ modal }) => modal);
     const dispatch = useAppDispatch();
     const isTextLineBreak = useMemo(() => content.includes("\n"), [content]);
