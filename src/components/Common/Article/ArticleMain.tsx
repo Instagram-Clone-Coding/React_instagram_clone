@@ -1,4 +1,3 @@
-import PopHeart from "components/Common/PopHeart";
 import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 import Username from "../Username";
@@ -41,11 +40,15 @@ interface MainProps {
     memberImageUrl: string;
     content: string;
     commentsCount: number;
-    recentComments: PostType.CommentType[];
     mentions: string[];
     hashtags: string[];
     likeOptionFlag: boolean;
     isInLargerArticle?: boolean;
+    comments: PostType.CommentType[];
+}
+
+interface FetchMiniProfileProps extends ModalType.ModalPositionProps {
+    memberNickname: string;
 }
 
 const ArticleMain = ({
@@ -56,11 +59,11 @@ const ArticleMain = ({
     memberImageUrl,
     content,
     commentsCount,
-    recentComments,
     mentions,
     hashtags,
     likeOptionFlag,
     isInLargerArticle = false,
+    comments,
 }: MainProps) => {
     // content state
     const [isFullText, setIsFullText] = useState(
@@ -105,7 +108,8 @@ const ArticleMain = ({
         top,
         bottom,
         left,
-    }: ModalType.ModalPositionProps) => {
+        memberNickname,
+    }: FetchMiniProfileProps) => {
         await dispatch(
             getMiniProfile({
                 memberNickname,
@@ -118,27 +122,18 @@ const ArticleMain = ({
         event:
             | React.MouseEvent<HTMLSpanElement>
             | React.MouseEvent<HTMLDivElement>,
+        memberNickname: string,
     ) => {
         if (!event) return;
         if (miniProfile) return dispatch(modalActions.mouseOnHoverModal());
         const { top, bottom, left } =
             event.currentTarget.getBoundingClientRect();
-        dispatch(
-            modalActions.startHoverModal({
-                // 댓글 nickname에 hover 했을 때는 다르게 해야
-                memberNickname: event.currentTarget.innerText, // 이후 체크
-                memberUsername,
-                memberImageUrl,
-                // 댓글 username이 제공될 때 예시
-                // memberUsername:comments.memberUsername,
-                // memberImageUrl:comments.imageUrl,
-            }),
-        );
 
         fetchMiniProfile({
             top,
             bottom,
             left,
+            memberNickname,
         });
     };
 
@@ -150,59 +145,83 @@ const ArticleMain = ({
     const getFullText = () => setIsFullText(true);
 
     return (
-        <StyledMain isInLargerArticle={isInLargerArticle}>
-            {!likeOptionFlag && (
-                <div className="article-likeInfo">
-                    {followingUserWhoLikesArticle ? (
-                        <div>
-                            <Username
+        <>
+            <StyledMain isInLargerArticle={isInLargerArticle}>
+                {!likeOptionFlag && (
+                    <div className="article-likeInfo">
+                        {followingUserWhoLikesArticle ? (
+                            <div>
+                                <Username
+                                    onMouseEnter={(event) =>
+                                        mouseEnterHandler(
+                                            event,
+                                            followingUserWhoLikesArticle,
+                                        )
+                                    }
+                                    onMouseLeave={mouseLeaveHandler}
+                                >
+                                    {followingUserWhoLikesArticle}
+                                </Username>
+                                님 외<span>{likesCount - 1}명</span>이
+                                좋아합니다
+                            </div>
+                        ) : (
+                            <span>좋아요 {likesCount}개</span>
+                        )}
+                    </div>
+                )}
+                <div className="article-textBox">
+                    <Username
+                        onMouseEnter={(event) =>
+                            mouseEnterHandler(event, memberNickname)
+                        }
+                        onMouseLeave={mouseLeaveHandler}
+                        className="article-text-username"
+                    >
+                        {memberNickname}
+                    </Username>
+                    &nbsp;
+                    <span className="article-text">
+                        <>
+                            {textSpan}
+                            {isTextLineBreak && !isFullText && (
+                                <>
+                                    ...&nbsp;
+                                    <button onClick={getFullText}>
+                                        더 보기
+                                    </button>
+                                </>
+                            )}
+                        </>
+                    </span>
+                </div>
+                {isInLargerArticle || (
+                    <div className="article-commentsBox">
+                        {comments.map((comment) => (
+                            <Comment
+                                key={comment.id}
+                                commentObj={comment}
                                 onMouseEnter={mouseEnterHandler}
                                 onMouseLeave={mouseLeaveHandler}
-                            >
-                                {followingUserWhoLikesArticle}
-                            </Username>
-                            님 외<span>{likesCount - 1}명</span>이 좋아합니다
-                        </div>
-                    ) : (
-                        <span>좋아요 {likesCount}개</span>
-                    )}
-                </div>
-            )}
-            <div className="article-textBox">
-                <Username
-                    onMouseEnter={mouseEnterHandler}
-                    onMouseLeave={mouseLeaveHandler}
-                    className="article-text-username"
-                >
-                    {memberNickname}
-                </Username>
-                &nbsp;
-                <span className="article-text">
-                    <>
-                        {textSpan}
-                        {isTextLineBreak && !isFullText && (
-                            <>
-                                ...&nbsp;
-                                <button onClick={getFullText}>더 보기</button>
-                            </>
-                        )}
-                    </>
-                </span>
-            </div>
-            {isInLargerArticle || (
-                <div className="article-commentsBox">
-                    {recentComments.map((comment) => (
+                                commentType="recent"
+                            />
+                        ))}
+                    </div>
+                )}
+            </StyledMain>
+            <div className="article__comments">
+                {isInLargerArticle &&
+                    comments.map((comment) => (
                         <Comment
                             key={comment.id}
                             commentObj={comment}
                             onMouseEnter={mouseEnterHandler}
-                            onMouseLeave={mouseLeaveHandler}
-                            commentType="recent"
+                            onMouseLeave={mouseLeaveHandler} // 임시
+                            commentType="comment"
                         />
                     ))}
-                </div>
-            )}
-        </StyledMain>
+            </div>
+        </>
     );
 };
 

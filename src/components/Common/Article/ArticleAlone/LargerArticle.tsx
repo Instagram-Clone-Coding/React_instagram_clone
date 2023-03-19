@@ -4,7 +4,6 @@ import ArticleHeader from "components/Common/Article/ArticleHeader";
 import ArticleImgSlider from "components/Common/Article/ArticleImgSlider/ArticleImgSlider";
 import ArticleMain from "components/Common/Article/ArticleMain";
 import ArticleMainIcons from "components/Common/Article/ArticleMainIcons";
-import Comment from "components/Common/Article/Comment";
 import { authorizedCustomAxios } from "customAxios";
 import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
@@ -30,8 +29,6 @@ const StyledLargerArticle = styled.div<StyledLargerArticleProps>`
         & > .largerArticle__mainLayout {
             padding: 16px;
             flex: 1;
-            & > .largerArticle__comments {
-            }
         }
     }
 `;
@@ -156,19 +153,8 @@ const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
                         hashtags={article.hashtagsOfContent}
                         likeOptionFlag={article.likeOptionFlag}
                         isInLargerArticle={true}
-                        recentComments={article.recentComments}
+                        comments={article.recentComments}
                     />
-                    <div className="largerArticle__comments">
-                        {comments.map((comment) => (
-                            <Comment
-                                key={comment.id}
-                                commentObj={comment}
-                                onMouseEnter={() => {}}
-                                onMouseLeave={() => {}} // 임시
-                                commentType="comment"
-                            />
-                        ))}
-                    </div>
                 </div>
                 <ArticleMainIcons
                     isLiked={isLiked}

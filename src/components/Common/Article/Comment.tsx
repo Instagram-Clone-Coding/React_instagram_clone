@@ -43,6 +43,8 @@ interface CommentProps {
         event:
             | React.MouseEvent<HTMLSpanElement>
             | React.MouseEvent<HTMLDivElement>,
+
+        memberNickname: string,
     ) => void;
     onMouseLeave: () => void;
     commentType: CommentType;
@@ -83,14 +85,14 @@ const Comment = ({
         }
     };
 
-    console.log(commentObj);
-
     return (
         <StyledComment commentType={commentType}>
             <div id="comment__main">
                 <span>
                     <Username
-                        onMouseEnter={onMouseEnter}
+                        onMouseEnter={(event) =>
+                            onMouseEnter(event, commentObj.member.username)
+                        }
                         onMouseLeave={onMouseLeave}
                     >
                         {commentObj.member.username}
