@@ -69,7 +69,7 @@ const ArticleMain = ({
     const [isFullText, setIsFullText] = useState(
         isInLargerArticle ? true : false,
     );
-    const { miniProfile } = useAppSelector(({ modal }) => modal);
+    const miniProfile = useAppSelector(({ modal }) => modal.miniProfile);
     const dispatch = useAppDispatch();
     const isTextLineBreak = useMemo(() => content.includes("\n"), [content]);
     const textArray = useMemo(
@@ -127,20 +127,16 @@ const ArticleMain = ({
         const { top, bottom, left } =
             event.currentTarget.getBoundingClientRect();
         if (!event) return;
-        if (miniProfile) {
-            dispatch(
-                modalActions.changeHoverModalPosition({ top, bottom, left }),
-            );
-            dispatch(modalActions.mouseOnHoverModal());
-            return;
-        }
+        dispatch(modalActions.changeHoverModalPosition({ top, bottom, left }));
+        dispatch(modalActions.mouseOnHoverModal());
 
-        fetchMiniProfile({
-            top,
-            bottom,
-            left,
-            memberNickname,
-        });
+        miniProfile?.memberUsername !== memberNickname &&
+            fetchMiniProfile({
+                top,
+                bottom,
+                left,
+                memberNickname,
+            });
     };
 
     const mouseLeaveHandler = () => {
