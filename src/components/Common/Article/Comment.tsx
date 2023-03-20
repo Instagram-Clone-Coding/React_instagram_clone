@@ -149,7 +149,7 @@ const Comment = ({
             </div>
             <div id="comment__popHeartLayout">
                 <PopHeart
-                    size={17}
+                    size={12}
                     isLiked={isLiked}
                     onToggleLike={commentLikeHandler}
                 />
