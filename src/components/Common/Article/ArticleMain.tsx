@@ -124,10 +124,16 @@ const ArticleMain = ({
             | React.MouseEvent<HTMLDivElement>,
         memberNickname: string,
     ) => {
-        if (!event) return;
-        if (miniProfile) return dispatch(modalActions.mouseOnHoverModal());
         const { top, bottom, left } =
             event.currentTarget.getBoundingClientRect();
+        if (!event) return;
+        if (miniProfile) {
+            dispatch(
+                modalActions.changeHoverModalPosition({ top, bottom, left }),
+            );
+            dispatch(modalActions.mouseOnHoverModal());
+            return;
+        }
 
         fetchMiniProfile({
             top,
