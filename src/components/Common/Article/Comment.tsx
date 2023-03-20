@@ -7,7 +7,7 @@ import { authorizedCustomAxios } from "customAxios";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { modalActions } from "app/store/ducks/modal/modalSlice";
+import StoryCircle from "components/Common/StoryCircle";
 
 type CommentType = "comment" | "reply" | "recent";
 
@@ -21,20 +21,32 @@ const StyledComment = styled.ul<StyledCommentProps>`
     margin-left: ${({ commentType }) =>
         commentType === "reply" ? "54px" : "0"};
     display: flex;
-    align-items: center;
     & > #comment__main {
         width: 100%;
         display: flex;
-        flex-direction: column;
-        & > #comment__info {
-            margin: 8px 0 4px 0;
-            & > button {
-                margin-right: 12px;
-                color: ${(props) => props.theme.font.gray};
-                font-size: 12px;
-                font-weight: normal;
+        & > #comment__avatar {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 18px;
+        }
+        & > #comment__middle {
+            & > #comment__info {
+                margin: 8px 0 4px 0;
+                & > button {
+                    margin-right: 12px;
+                    color: ${(props) => props.theme.font.gray};
+                    font-size: 12px;
+                    font-weight: normal;
+                }
             }
         }
+    }
+    & > #comment__popHeartLayout {
+        margin-top: ${({ commentType }) =>
+            commentType === "recent" ? "0px" : "12px"};
     }
 `;
 interface CommentProps {
@@ -88,42 +100,60 @@ const Comment = ({
     return (
         <StyledComment commentType={commentType}>
             <div id="comment__main">
-                <span>
-                    <Username
-                        onMouseEnter={(event) =>
-                            onMouseEnter(event, commentObj.member.username)
-                        }
-                        onMouseLeave={onMouseLeave}
-                    >
-                        {commentObj.member.username}
-                    </Username>
-                    &nbsp;
-                    <StringFragmentWithMentionOrHashtagLink
-                        str={commentObj.content}
-                        mentions={commentObj.mentionsOfContent}
-                        hashtags={commentObj.hashtagsOfContent}
-                    />
-                </span>
                 {commentType !== "recent" && (
-                    <div id="comment__info">
-                        <ArticleGap
-                            postUploadDate={commentObj.uploadDate}
-                            isAboutComment={true}
+                    <div id="comment__avatar">
+                        <StoryCircle
+                            type="default"
+                            avatarUrl={commentObj.member.image.imageUrl}
+                            username={commentObj.member.username}
+                            scale={42 / 64}
+                            onMouseEnter={(event) =>
+                                onMouseEnter(event, commentObj.member.username)
+                            }
+                            onMouseLeave={onMouseLeave}
                         />
-                        {commentObj.commentLikesCount === 0 && (
-                            <button>
-                                좋아요 {commentObj.commentLikesCount}개
-                            </button>
-                        )}
-                        <button>답글 달기</button>
                     </div>
                 )}
+                <div id="comment__middle">
+                    <span>
+                        <Username
+                            onMouseEnter={(event) =>
+                                onMouseEnter(event, commentObj.member.username)
+                            }
+                            onMouseLeave={onMouseLeave}
+                        >
+                            {commentObj.member.username}
+                        </Username>
+                        &nbsp;
+                        <StringFragmentWithMentionOrHashtagLink
+                            str={commentObj.content}
+                            mentions={commentObj.mentionsOfContent}
+                            hashtags={commentObj.hashtagsOfContent}
+                        />
+                    </span>
+                    {commentType !== "recent" && (
+                        <div id="comment__info">
+                            <ArticleGap
+                                postUploadDate={commentObj.uploadDate}
+                                isAboutComment={true}
+                            />
+                            {commentObj.commentLikesCount === 0 && (
+                                <button>
+                                    좋아요 {commentObj.commentLikesCount}개
+                                </button>
+                            )}
+                            <button>답글 달기</button>
+                        </div>
+                    )}
+                </div>
             </div>
-            <PopHeart
-                size={17}
-                isLiked={isLiked}
-                onToggleLike={commentLikeHandler}
-            />
+            <div id="comment__popHeartLayout">
+                <PopHeart
+                    size={17}
+                    isLiked={isLiked}
+                    onToggleLike={commentLikeHandler}
+                />
+            </div>
         </StyledComment>
     );
 };
