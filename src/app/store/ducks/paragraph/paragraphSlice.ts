@@ -34,6 +34,7 @@ const initialState: ParagraphType.ParagraphStateProps = {
         following: false,
         followLoading: false,
         recentComments: [],
+        comments: [],
     },
 };
 
@@ -45,6 +46,7 @@ const paragraphSlice = createSlice({
             state.articleObj = {
                 ...action.payload,
                 followLoading: false,
+                comments: [],
             };
             state.isDataFetching = false;
         },
@@ -59,6 +61,27 @@ const paragraphSlice = createSlice({
         },
         finishReply: (state) => {
             state.replyParentObj = null;
+        },
+        setCurrentComments: (
+            state,
+            action: PayloadAction<PostType.CommentType[]>,
+        ) => {
+            state.articleObj.comments = action.payload;
+        },
+        setNextComments: (
+            state,
+            action: PayloadAction<PostType.CommentType[]>,
+        ) => {
+            state.articleObj.comments.push(...action.payload);
+        },
+        writeNewComments: (
+            state,
+            action: PayloadAction<PostType.CommentType>,
+        ) => {
+            state.articleObj.comments = [
+                action.payload,
+                ...state.articleObj.comments,
+            ];
         },
     },
     extraReducers: (build) => {

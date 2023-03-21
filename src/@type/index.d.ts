@@ -207,6 +207,10 @@ declare module PostType {
     interface ArticleStateProps extends ArticleProps {
         followLoading: boolean;
     }
+
+    interface LargerArticleStateProps extends ArticleStateProps {
+        comments: CommentType[];
+    }
 }
 
 declare module ParagraphType {
@@ -216,7 +220,7 @@ declare module ParagraphType {
     }
     interface ParagraphStateProps {
         isDataFetching: boolean;
-        articleObj: PostType.ArticleStateProps;
+        articleObj: PostType.LargerArticleStateProps;
         recentPosts: Profile.PostType[];
         replyParentObj: ReplyParentObjType | null;
     }

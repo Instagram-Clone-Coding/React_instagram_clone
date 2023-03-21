@@ -20,7 +20,7 @@ const ArticleAloneModal = ({
     onModalOff,
 }: ArticleAloneModalProps) => {
     const [articleData, setArticleData] =
-        useState<PostType.ArticleStateProps | null>(null);
+        useState<PostType.LargerArticleStateProps | null>(null);
     const [isDataFetching, setIsDataFetching] = useState(true);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const postId = useAppSelector(
@@ -36,7 +36,7 @@ const ArticleAloneModal = ({
                 } = await authorizedCustomAxios.get<OnlyArticleDataType>(
                     `/posts/${postId}`,
                 );
-                setArticleData({ ...data, followLoading: false });
+                setArticleData({ ...data, followLoading: false, comments: [] });
             } catch (error) {
                 dispatch(modalActions.stopArticleAloneModal());
             } finally {

@@ -9,7 +9,7 @@ const StyledArticleAlone = styled.div`
 
 interface ArticleAloneProps {
     isModal?: boolean;
-    article: PostType.ArticleStateProps;
+    article: PostType.LargerArticleStateProps;
 }
 
 const ArticleAlone = ({ isModal = false, article }: ArticleAloneProps) => {

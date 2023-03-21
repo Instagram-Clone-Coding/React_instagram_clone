@@ -1,3 +1,5 @@
+import { paragraphActions } from "app/store/ducks/paragraph/paragraphSlice";
+import { useAppDispatch } from "app/store/Hooks";
 import ArticleCommentFormLayout from "components/Common/Article/ArticleCommentFormLayout";
 import ArticleGap from "components/Common/Article/ArticleGap";
 import ArticleHeader from "components/Common/Article/ArticleHeader";
@@ -34,7 +36,7 @@ const StyledLargerArticle = styled.div<StyledLargerArticleProps>`
 `;
 
 interface LargerArticleProps {
-    article: PostType.ArticleStateProps;
+    article: PostType.LargerArticleStateProps;
     isModal?: boolean;
 }
 
@@ -51,8 +53,8 @@ const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
         article.followingMemberUsernameLikedPost;
     const [isLiked, setIsLiked] = useState(article.postLikeFlag);
     const [likesCount, setLikesCount] = useState(article.postLikesCount);
-    const [comments, setComments] = useState<PostType.CommentType[]>([]);
     const [currentCommentPage, setCurrentCommentPage] = useState(1);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         const getComments = async () => {
@@ -65,14 +67,14 @@ const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
                     `/comments/posts/${article.postId}`,
                     { params: { page: currentCommentPage } },
                 );
-                setComments((prev) => [...prev, ...content]);
+                dispatch(paragraphActions.setCurrentComments(content));
                 // setCurrentCommentPage((prev) => prev + 1);
             } catch (error) {
                 console.log(error);
             }
         };
         getComments();
-    }, [article.postId, currentCommentPage]);
+    }, [article.postId, currentCommentPage, dispatch]);
 
     const config = useMemo(
         () => ({
@@ -153,7 +155,7 @@ const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
                         hashtags={article.hashtagsOfContent}
                         likeOptionFlag={article.likeOptionFlag}
                         isInLargerArticle={true}
-                        comments={comments}
+                        comments={article.comments}
                     />
                 </div>
                 <ArticleMainIcons
