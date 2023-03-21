@@ -33,13 +33,30 @@ const StyledComment = styled.li<StyledCommentProps>`
             margin-right: 18px;
         }
         & > #comment__middle {
+            & > #comment__info *,
+            & > #comment__replyLayout * {
+                color: ${(props) => props.theme.font.gray};
+                font-size: 12px;
+                font-weight: normal;
+            }
+
             & > #comment__info {
                 margin: 8px 0 4px 0;
                 & > button {
                     margin-right: 12px;
-                    color: ${(props) => props.theme.font.gray};
-                    font-size: 12px;
-                    font-weight: normal;
+                }
+            }
+            & > #comment__replyLayout {
+                margin-top: 16px;
+                & > button {
+                    display: flex;
+                    align-items: center;
+                    & > div {
+                        width: 24px;
+                        border-bottom: 1px solid
+                            ${(props) => props.theme.font.gray};
+                        margin-right: 16px;
+                    }
                 }
             }
         }
@@ -136,16 +153,30 @@ const Comment = ({
                         />
                     </span>
                     {commentType !== "recent" && (
-                        <div id="comment__info">
-                            <ArticleGap
-                                postUploadDate={commentObj.uploadDate}
-                                isAboutComment={true}
-                            />
-                            {commentObj.commentLikesCount === 0 && (
-                                <button>좋아요 {likesCount}개</button>
+                        <>
+                            <div id="comment__info">
+                                <ArticleGap
+                                    postUploadDate={commentObj.uploadDate}
+                                    isAboutComment={true}
+                                />
+                                {commentObj.commentLikesCount === 0 && (
+                                    <button>좋아요 {likesCount}개</button>
+                                )}
+                                <button>답글 달기</button>
+                            </div>
+                            {commentObj.repliesCount > 0 && (
+                                <div id="comment__replyLayout">
+                                    <button>
+                                        <div></div>
+                                        <span>
+                                            답글 보기(
+                                            {commentObj.repliesCount}
+                                            개)
+                                        </span>
+                                    </button>
+                                </div>
                             )}
-                            <button>답글 달기</button>
-                        </div>
+                        </>
                     )}
                 </div>
             </div>
