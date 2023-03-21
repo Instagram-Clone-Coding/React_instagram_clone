@@ -77,6 +77,9 @@ const Paragraph = () => {
             }
         };
         getArticle();
+        return () => {
+            dispatch(paragraphActions.finishReply());
+        };
     }, [postId, dispatch, history]);
     return (
         <StyledParagraph>
