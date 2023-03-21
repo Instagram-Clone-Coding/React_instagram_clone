@@ -78,7 +78,7 @@ const Paragraph = () => {
         };
         getArticle();
         return () => {
-            dispatch(paragraphActions.finishReply());
+            dispatch(paragraphActions.resetParagraph());
         };
     }, [postId, dispatch, history]);
     return (

@@ -42,6 +42,9 @@ const paragraphSlice = createSlice({
     name: "post",
     initialState,
     reducers: {
+        resetParagraph: (state) => {
+            return initialState;
+        },
         setArticle: (state, action: PayloadAction<PostType.ArticleProps>) => {
             state.articleObj = {
                 ...action.payload,
@@ -66,6 +69,7 @@ const paragraphSlice = createSlice({
             state,
             action: PayloadAction<PostType.CommentType[]>,
         ) => {
+            console.log(action.payload);
             state.articleObj.comments = action.payload;
         },
         setNextComments: (
