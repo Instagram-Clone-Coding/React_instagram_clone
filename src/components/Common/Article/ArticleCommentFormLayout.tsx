@@ -14,14 +14,19 @@ const StyledAricleCommentFormLayout = styled.div`
 
 interface ArticleCommentFormLayoutProps {
     postId: number;
+    isInLargerArticle: boolean;
 }
 
 const ArticleCommentFormLayout = ({
     postId,
+    isInLargerArticle,
 }: ArticleCommentFormLayoutProps) => {
     return (
         <StyledAricleCommentFormLayout>
-            <CommentForm postId={postId} />
+            <CommentForm
+                postId={postId}
+                isInLargerArticle={isInLargerArticle}
+            />
         </StyledAricleCommentFormLayout>
     );
 };

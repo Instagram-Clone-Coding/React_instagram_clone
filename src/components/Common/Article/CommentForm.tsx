@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ReactComponent as SmileFace } from "../../../assets/Svgs/smileFace.svg";
 import styled from "styled-components";
 import { authorizedCustomAxios } from "customAxios";
+import { useAppSelector } from "app/store/Hooks";
 
 interface FormProps {
     lineNumber: number;
@@ -44,11 +45,15 @@ const StyledCommentForm = styled.form<FormProps>`
 
 interface CommentFormProps {
     postId: number;
-    isReply?: boolean;
+    isInLargerArticle: boolean;
 }
 
-const CommentForm = ({ postId, isReply = false }: CommentFormProps) => {
+const CommentForm = ({ postId, isInLargerArticle }: CommentFormProps) => {
+    const replyParentObj = useAppSelector(
+        ({ paragraph }) => paragraph.replyParentObj,
+    );
     const [text, setText] = useState("");
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
     const isValid = text.trim() !== "";
     const lineNumber = text.split("\n").length;
     const commentValueHandler = (
@@ -60,13 +65,23 @@ const CommentForm = ({ postId, isReply = false }: CommentFormProps) => {
         setText(value);
     };
 
+    useEffect(() => {
+        if (!isInLargerArticle) return;
+        if (replyParentObj) {
+            setText(`@${replyParentObj.username} `);
+            textareaRef.current?.focus();
+        } else {
+            setText("");
+        }
+    }, [replyParentObj, isInLargerArticle]);
+
     const commentSubmitHandler = async (event: React.SyntheticEvent) => {
         event.preventDefault();
         // handling submitted comment
         try {
             const { data } = await authorizedCustomAxios.post("/comments", {
                 content: text,
-                parentId: 0,
+                parentId: replyParentObj?.id || 0,
                 postId,
             });
             console.log(data);
@@ -88,6 +103,7 @@ const CommentForm = ({ postId, isReply = false }: CommentFormProps) => {
                 value={text}
                 onChange={commentValueHandler}
                 autoComplete={"off"}
+                ref={textareaRef}
             />
             <button type="submit" disabled={!isValid}>
                 게시

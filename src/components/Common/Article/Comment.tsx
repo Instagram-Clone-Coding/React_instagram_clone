@@ -8,6 +8,8 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import StoryCircle from "components/Common/StoryCircle";
+import { paragraphActions } from "app/store/ducks/paragraph/paragraphSlice";
+import { useAppSelector } from "app/store/Hooks";
 
 type CommentType = "comment" | "reply" | "recent";
 
@@ -87,6 +89,9 @@ const Comment = ({
 }: CommentProps) => {
     const [isLiked, setIsLiked] = useState(commentObj.commentLikeFlag);
     const [likesCount, setLikesCount] = useState(commentObj.commentLikesCount);
+    const replyParentObj = useAppSelector(
+        ({ paragraph }) => paragraph.replyParentObj,
+    );
     const dispatch = useDispatch();
 
     const commentLikeHandler = async () => {
@@ -116,6 +121,18 @@ const Comment = ({
             setIsLiked((prev) => !prev);
             dispatch(authAction.logout());
         }
+    };
+
+    const toggleReplyHandler = (commentId: number) => {
+        if (replyParentObj?.id === commentId)
+            return dispatch(paragraphActions.finishReply());
+
+        return dispatch(
+            paragraphActions.startReply({
+                id: commentObj.id,
+                username: commentObj.member.username,
+            }),
+        );
     };
 
     return (
@@ -162,7 +179,15 @@ const Comment = ({
                                 {likesCount > 0 && (
                                     <button>좋아요 {likesCount}개</button>
                                 )}
-                                <button>답글 달기</button>
+                                <button
+                                    onClick={() =>
+                                        toggleReplyHandler(commentObj.id)
+                                    }
+                                >
+                                    {commentObj.id !== replyParentObj?.id
+                                        ? "답글 달기"
+                                        : "답글 취소"}
+                                </button>
                             </div>
                             {commentObj.repliesCount > 0 && (
                                 <div id="comment__replyLayout">

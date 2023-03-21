@@ -138,7 +138,10 @@ const Article = ({
             />
             <ArticleGap postUploadDate={article.postUploadDate} />
             {!article.commentOptionFlag && (
-                <ArticleCommentFormLayout postId={article.postId} />
+                <ArticleCommentFormLayout
+                    postId={article.postId}
+                    isInLargerArticle={false}
+                />
             )}
         </ArticleCard>
     );

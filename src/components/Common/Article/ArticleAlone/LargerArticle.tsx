@@ -164,7 +164,10 @@ const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
                 />
                 <ArticleGap postUploadDate={article.postUploadDate} />
                 {!article.commentOptionFlag && (
-                    <ArticleCommentFormLayout postId={article.postId} />
+                    <ArticleCommentFormLayout
+                        postId={article.postId}
+                        isInLargerArticle={true}
+                    />
                 )}
             </div>
         </StyledLargerArticle>

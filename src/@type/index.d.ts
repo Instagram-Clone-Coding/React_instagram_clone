@@ -210,10 +210,15 @@ declare module PostType {
 }
 
 declare module ParagraphType {
+    interface ReplyParentObjType {
+        id: number;
+        username: string;
+    }
     interface ParagraphStateProps {
         isDataFetching: boolean;
         articleObj: PostType.ArticleStateProps;
         recentPosts: Profile.PostType[];
+        replyParentObj: ReplyParentObjType | null;
     }
 }
 
