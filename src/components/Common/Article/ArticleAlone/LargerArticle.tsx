@@ -153,7 +153,7 @@ const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
                         hashtags={article.hashtagsOfContent}
                         likeOptionFlag={article.likeOptionFlag}
                         isInLargerArticle={true}
-                        comments={article.recentComments}
+                        comments={comments}
                     />
                 </div>
                 <ArticleMainIcons
