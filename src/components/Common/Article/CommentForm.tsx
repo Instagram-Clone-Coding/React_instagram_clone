@@ -48,6 +48,10 @@ interface CommentFormProps {
     isInLargerArticle: boolean;
 }
 
+interface CommentUploadResponseType extends AxiosType.ResponseType {
+    data: { commentId: number }; // 나중에 댓글 객체로 변환할 것
+}
+
 const CommentForm = ({ postId, isInLargerArticle }: CommentFormProps) => {
     const replyParentObj = useAppSelector(
         ({ paragraph }) => paragraph.replyParentObj,
@@ -79,12 +83,17 @@ const CommentForm = ({ postId, isInLargerArticle }: CommentFormProps) => {
         event.preventDefault();
         // handling submitted comment
         try {
-            const { data } = await authorizedCustomAxios.post("/comments", {
+            const { data } = await authorizedCustomAxios.post<
+                null,
+                CommentUploadResponseType
+            >("/comments", {
                 content: text,
                 parentId: replyParentObj?.id || 0,
                 postId,
             });
-            console.log(data);
+            console.log("업로드된 댓글 id:", data.commentId);
+            // if (!replyParentObj?.id)
+            //     return dispatch(paragraphActions.writeNewComments());
         } catch (error) {
             console.log(error);
         }
