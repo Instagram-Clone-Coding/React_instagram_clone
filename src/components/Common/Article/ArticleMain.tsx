@@ -198,7 +198,7 @@ const ArticleMain = ({
                     </span>
                 </div>
                 {isInLargerArticle || (
-                    <div className="article-commentsBox">
+                    <ul className="article-commentsBox">
                         {comments.map((comment) => (
                             <Comment
                                 key={comment.id}
@@ -208,7 +208,7 @@ const ArticleMain = ({
                                 commentType="recent"
                             />
                         ))}
-                    </div>
+                    </ul>
                 )}
             </StyledMain>
             <div className="article__comments">

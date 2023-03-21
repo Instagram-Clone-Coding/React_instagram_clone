@@ -15,7 +15,7 @@ interface StyledCommentProps {
     commentType: CommentType;
 }
 
-const StyledComment = styled.ul<StyledCommentProps>`
+const StyledComment = styled.li<StyledCommentProps>`
     margin-bottom: ${({ commentType }) =>
         commentType === "recent" ? "4px" : "16px"};
     margin-left: ${({ commentType }) =>
