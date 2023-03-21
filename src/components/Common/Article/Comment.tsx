@@ -159,7 +159,7 @@ const Comment = ({
                                     postUploadDate={commentObj.uploadDate}
                                     isAboutComment={true}
                                 />
-                                {commentObj.commentLikesCount === 0 && (
+                                {likesCount > 0 && (
                                     <button>좋아요 {likesCount}개</button>
                                 )}
                                 <button>답글 달기</button>
