@@ -69,11 +69,14 @@ const Comment = ({
     commentType,
 }: CommentProps) => {
     const [isLiked, setIsLiked] = useState(commentObj.commentLikeFlag);
+    const [likesCount, setLikesCount] = useState(commentObj.commentLikesCount);
     const dispatch = useDispatch();
+
     const commentLikeHandler = async () => {
         try {
             if (!isLiked) {
                 setIsLiked(true);
+                setLikesCount((prev) => prev + 1);
                 const { data } =
                     await authorizedCustomAxios.post<AxiosType.ResponseType>(
                         "/comments/like",
@@ -83,6 +86,7 @@ const Comment = ({
                 if (data.status !== 200) throw new Error();
             } else {
                 setIsLiked(false);
+                setLikesCount((prev) => prev - 1);
                 const { data } = await authorizedCustomAxios.delete(
                     "/comments/like",
                     {
@@ -138,9 +142,7 @@ const Comment = ({
                                 isAboutComment={true}
                             />
                             {commentObj.commentLikesCount === 0 && (
-                                <button>
-                                    좋아요 {commentObj.commentLikesCount}개
-                                </button>
+                                <button>좋아요 {likesCount}개</button>
                             )}
                             <button>답글 달기</button>
                         </div>
