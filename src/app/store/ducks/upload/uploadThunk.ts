@@ -29,7 +29,7 @@ export const uploadArticle = createAsyncThunk<
         const formData = new FormData();
         formData.append("content", textareaValue);
         formData.append("commentFlag", JSON.stringify(!isCommentBlocked));
-        formData.append("likeFlag", JSON.stringify(isLikesAndViewsHidden));
+        formData.append("likeFlag", JSON.stringify(!isLikesAndViewsHidden));
 
         let hashtagIndex = 0;
         for (let i = 0; i < files.length; i++) {
