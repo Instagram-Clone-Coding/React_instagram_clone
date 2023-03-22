@@ -19,7 +19,7 @@ export const uploadArticle = createAsyncThunk<
             upload: {
                 textareaValue,
                 files,
-                isCommentBlocked,
+                isCommentBlocked, // 댓글 기능 해제
                 isLikesAndViewsHidden, // 좋아요와 조회수 숨기기
             },
             auth: { userInfo },
@@ -28,8 +28,8 @@ export const uploadArticle = createAsyncThunk<
         const { memberName, memberUsername } = userInfo;
         const formData = new FormData();
         formData.append("content", textareaValue);
-        formData.append("commentFlag", JSON.stringify(!isCommentBlocked));
-        formData.append("likeFlag", JSON.stringify(!isLikesAndViewsHidden));
+        formData.append("commentFlag", JSON.stringify(!isCommentBlocked)); // commentFlag가 true면 댓글 기능 활성화
+        formData.append("likeFlag", JSON.stringify(!isLikesAndViewsHidden)); // likeFlag가 true면 좋아요, 조회수 보여주기
 
         let hashtagIndex = 0;
         for (let i = 0; i < files.length; i++) {
