@@ -6,6 +6,7 @@ import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import styled from "styled-components";
 import UploadHeader from "components/Common/Header/Upload/UploadHeader";
 import WarningMaxImageNumberModal from "components/Common/Header/Upload/WarningMaxUploadNumberModal";
+import { MAX_IMAGES_NUMBER } from "components/Common/Header/Upload/Upload";
 
 const StyledDragAndDrop = styled.div`
     width: 100%;
@@ -44,8 +45,6 @@ const StyledDragAndDrop = styled.div`
         display: none !important;
     }
 `;
-
-const MAX_IMAGES_NUMBER = 10;
 
 const DragAndDrop = () => {
     const inputRef = useRef<HTMLInputElement | null>(null);

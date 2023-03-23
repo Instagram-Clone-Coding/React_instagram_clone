@@ -25,6 +25,7 @@ import sprite from "assets/Images/sprite.png";
 import UploadHeader from "components/Common/Header/Upload/UploadHeader";
 import UploadImgArrowAndDots from "components/Common/Header/UploadImgArrowAndDots";
 import WarningMaxUploadNumberModal from "components/Common/Header/Upload/WarningMaxUploadNumberModal";
+import { MAX_IMAGES_NUMBER } from "components/Common/Header/Upload/Upload";
 
 type HandlingType = "ratio" | "resize" | "gallery" | null | "first";
 
@@ -572,7 +573,7 @@ const Cut = ({ currentWidth }: CutProps) => {
         (event: ChangeEvent<HTMLInputElement>) => {
             const addedFiles = event.target.files;
             if (!addedFiles) return;
-            if (addedFiles.length + files.length > 10) {
+            if (addedFiles.length + files.length > MAX_IMAGES_NUMBER) {
                 return setIsWarnigMaxImageNumberModalOn(true);
             }
             Array.from(addedFiles).forEach((file) => {
@@ -1025,7 +1026,7 @@ const Cut = ({ currentWidth }: CutProps) => {
                                     </button>
                                 )}
                         </div>
-                        {files.length < 10 && (
+                        {files.length < MAX_IMAGES_NUMBER && (
                             <div className="upload__addBtnLayout">
                                 <button onClick={buttonClickHandler}>
                                     <PlusIcon />
