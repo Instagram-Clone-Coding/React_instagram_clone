@@ -24,6 +24,8 @@ import CutImgUnit from "components/Common/Header/Upload/Cut/CutImgUnit";
 import sprite from "assets/Images/sprite.png";
 import UploadHeader from "components/Common/Header/Upload/UploadHeader";
 import UploadImgArrowAndDots from "components/Common/Header/UploadImgArrowAndDots";
+import WarningMaxUploadNumberModal from "components/Common/Header/Upload/WarningMaxUploadNumberModal";
+import { MAX_IMAGES_NUMBER } from "components/Common/Header/Upload/Upload";
 
 type HandlingType = "ratio" | "resize" | "gallery" | null | "first";
 
@@ -459,15 +461,19 @@ const Cut = ({ currentWidth }: CutProps) => {
     const [galleryState, setGalleryState] = useState<boolean | null>(null);
     const imageRef = useRef<HTMLDivElement | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const [isGalleryScrollInLeft, setIsGalleryScrollInLeft] =
-        useState<boolean | null>(true);
-    const [isGalleryScrollInRight, setIsGalleryScrollInRight] =
-        useState<boolean | null>(false);
+    const [isGalleryScrollInLeft, setIsGalleryScrollInLeft] = useState<
+        boolean | null
+    >(true);
+    const [isGalleryScrollInRight, setIsGalleryScrollInRight] = useState<
+        boolean | null
+    >(false);
     const gallerySliderRef = useRef<HTMLDivElement | null>(null);
     const [isGalleryImgGrabbed, setIsGalleryImgGrabbed] = useState(false);
     const [grabbedGalleryImgClientX, setGrabbedGalleryImgClientX] = useState(0);
     const [grabbedGalleryImgTranslateX, setGrabbedGalleryImgTranslateX] =
         useState(0); // 클릭된 galleryImg가 이동하는 값
+    const [isWarnigMaxImageNumberModalOn, setIsWarnigMaxImageNumberModalOn] =
+        useState(false);
 
     useEffect(() => {
         if (!gallerySliderRef.current) return;
@@ -567,6 +573,9 @@ const Cut = ({ currentWidth }: CutProps) => {
         (event: ChangeEvent<HTMLInputElement>) => {
             const addedFiles = event.target.files;
             if (!addedFiles) return;
+            if (addedFiles.length + files.length > MAX_IMAGES_NUMBER) {
+                return setIsWarnigMaxImageNumberModalOn(true);
+            }
             Array.from(addedFiles).forEach((file) => {
                 const img = new Image();
                 img.src = URL.createObjectURL(file);
@@ -716,6 +725,13 @@ const Cut = ({ currentWidth }: CutProps) => {
 
     return (
         <>
+            {isWarnigMaxImageNumberModalOn && (
+                <WarningMaxUploadNumberModal
+                    warnigContent="images"
+                    onModalOn={() => setIsWarnigMaxImageNumberModalOn(true)}
+                    onModalOff={() => setIsWarnigMaxImageNumberModalOn(false)}
+                />
+            )}
             <UploadHeader
                 excuteBeforePrevStep={() => {
                     fixOverTranformedImage(files[currentIndex].scale);
@@ -1010,25 +1026,26 @@ const Cut = ({ currentWidth }: CutProps) => {
                                     </button>
                                 )}
                         </div>
-                        <div className="upload__addBtnLayout">
-                            <button onClick={buttonClickHandler}>
-                                <PlusIcon />
-                            </button>
-                            <form
-                                encType="multipart/form-data"
-                                method="POST"
-                                role="presentation"
-                            >
-                                <input
-                                    accept="image/jpeg,image/png,image/heic,image/heif"
-                                    multiple={true}
-                                    type="file"
-                                    ref={inputRef}
-                                    onChange={fileInputChangeHandler}
-                                />
-                            </form>
-                        </div>
-                        <div></div>
+                        {files.length < MAX_IMAGES_NUMBER && (
+                            <div className="upload__addBtnLayout">
+                                <button onClick={buttonClickHandler}>
+                                    <PlusIcon />
+                                </button>
+                                <form
+                                    encType="multipart/form-data"
+                                    method="POST"
+                                    role="presentation"
+                                >
+                                    <input
+                                        accept="image/jpeg,image/png,image/heic,image/heif"
+                                        multiple={true}
+                                        type="file"
+                                        ref={inputRef}
+                                        onChange={fileInputChangeHandler}
+                                    />
+                                </form>
+                            </div>
+                        )}
                     </div>
                 </div>
                 {files.length > 1 && (
