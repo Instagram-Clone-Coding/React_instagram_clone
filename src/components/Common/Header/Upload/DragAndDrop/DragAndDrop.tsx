@@ -45,6 +45,8 @@ const StyledDragAndDrop = styled.div`
     }
 `;
 
+const MAX_IMAGES_NUMBER = 10;
+
 const DragAndDrop = () => {
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [isDraggingOver, setIsDraggingOver] = useState(false);
@@ -88,7 +90,7 @@ const DragAndDrop = () => {
 
         setIsDraggingOver(false);
         const droppedFiles = event.dataTransfer.files;
-        if (droppedFiles.length > 10) {
+        if (droppedFiles.length > MAX_IMAGES_NUMBER) {
             return setisWarnigMaxImageNumberModalOn(true);
         }
         Array.from(droppedFiles).forEach((file, index) => {
@@ -114,7 +116,7 @@ const DragAndDrop = () => {
     const fileInputChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const addedFiles = event.target.files;
         if (!addedFiles) return;
-        if (addedFiles.length > 10) {
+        if (addedFiles.length > MAX_IMAGES_NUMBER) {
             return setisWarnigMaxImageNumberModalOn(true);
         }
         Array.from(addedFiles).forEach((file, index) => {
@@ -160,7 +162,10 @@ const DragAndDrop = () => {
                     <ImgOrVideoIcon />
                     <div>
                         <h2>사진을 여기 끌어다 놓으세요</h2>
-                        <h3>최대 10개의 사진을 업로드할 수 있습니다</h3>
+                        <h3>
+                            최대 {MAX_IMAGES_NUMBER}개의 사진을 업로드할 수
+                            있습니다
+                        </h3>
                     </div>
                     <Button type="button" onClick={buttonClickHandler}>
                         컴퓨터에서 선택
