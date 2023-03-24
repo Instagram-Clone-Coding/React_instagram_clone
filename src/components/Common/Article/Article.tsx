@@ -107,8 +107,7 @@ const Article = ({
         <ArticleCard as="article" ref={articleRef} isModal={isModal}>
             <ArticleHeader
                 memberImageUrl={article.member.image.imageUrl}
-                memberUsername={article.member.name} // 이지금
-                memberNickname={article.member.username} // dlwlram
+                memberUsername={article.member.username} // dlwlrma
                 postId={article.postId}
                 isFollowing={article.following}
                 followLoading={article.followLoading}
@@ -127,8 +126,7 @@ const Article = ({
                 followingUserWhoLikesArticle={followingUserWhoLikesArticle}
                 likesCount={likesCount}
                 memberImageUrl={article.member.image.imageUrl}
-                memberUsername={article.member.name} // 이지금
-                memberNickname={article.member.username} // dlwlram
+                memberUsername={article.member.username} // dlwlram
                 content={article.postContent}
                 commentsCount={article.postCommentsCount}
                 mentions={article.mentionsOfContent}

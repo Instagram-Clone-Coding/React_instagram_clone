@@ -6,7 +6,6 @@ const initialState: ModalType.ModalStateProps = {
     activatedModal: null,
     memberUsername: "",
     memberImageUrl: "",
-    memberNickname: "",
     postId: null,
     miniProfile: null,
     isFollowing: null,
@@ -17,7 +16,6 @@ const initialState: ModalType.ModalStateProps = {
 
 interface HoverModalPayloadType {
     memberUsername: string;
-    memberNickname: string;
     memberImageUrl: string;
 }
 
@@ -37,7 +35,6 @@ const modalSlice = createSlice({
             state.isOnMiniProfile = true;
             state.activatedModal = null;
             state.memberUsername = action.payload.memberUsername;
-            state.memberNickname = action.payload.memberNickname;
             state.memberImageUrl = action.payload.memberImageUrl;
         },
         startArticleMenuModal: (
@@ -48,7 +45,6 @@ const modalSlice = createSlice({
             state.activatedModal = "articleMenu";
             state.postId = action.payload.postId;
             state.memberUsername = action.payload.memberUsername;
-            state.memberNickname = action.payload.memberNickname;
             state.memberImageUrl = action.payload.memberImageUrl;
             state.isFollowing = action.payload.isFollowing;
         },

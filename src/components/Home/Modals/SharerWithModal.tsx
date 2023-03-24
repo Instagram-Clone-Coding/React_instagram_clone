@@ -93,7 +93,7 @@ const DUMMY_BASE_URL = "https://www.instagram.com"; // 원래 root url: window.l
 // 참고 url: https://developers.facebook.com/docs/plugins/share-button?locale=ko_KR
 
 const ShareWithModal = ({ onModalOn, onModalOff }: ShareWithModalProps) => {
-    const { memberNickname, postId } = useAppSelector(({ modal }) => modal);
+    const { memberUsername, postId } = useAppSelector(({ modal }) => modal);
     const copyHandler = useCopy(DUMMY_BASE_URL + "/p/" + postId);
 
     return (
@@ -155,7 +155,7 @@ const ShareWithModal = ({ onModalOn, onModalOff }: ShareWithModalProps) => {
                     </a>
                     <a
                         className="shareWithModal-email"
-                        href={`mailto:?subject=@${memberNickname}님의 이 인스타그램 게시물 보기&body=@${memberNickname}님의 이 인스타그램 게시물 보기 %20${
+                        href={`mailto:?subject=@${memberUsername}님의 이 인스타그램 게시물 보기&body=@${memberUsername}님의 이 인스타그램 게시물 보기 %20${
                             DUMMY_BASE_URL + "/p/" + postId
                         }%3Futm_source%3Dig_web_button_share_sheet`}
                         target="_top"

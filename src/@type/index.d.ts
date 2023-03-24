@@ -240,6 +240,9 @@ declare module ModalType {
         left: number;
     }
 
+    interface FetchMiniProfileProps extends ModalPositionProps {
+        memberUsername: string;
+    }
     interface MiniProfileProps {
         blocked: boolean;
         blocking: boolean;
@@ -276,8 +279,7 @@ declare module ModalType {
 
     interface ModalStateProps {
         activatedModal: ActivatedModalType;
-        memberUsername: string;
-        memberNickname: string;
+        memberUsername: string; // dlwlrma
         memberImageUrl: string;
         postId: number | null;
         miniProfile: MiniProfileStateProps | null;

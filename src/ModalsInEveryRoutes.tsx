@@ -14,7 +14,7 @@ const ModalsInEveryRoutes = () => {
         home: { isCopiedNotification },
         modal: {
             activatedModal,
-            memberNickname,
+            memberUsername,
             postId,
             miniProfile,
             memberImageUrl,
@@ -53,10 +53,10 @@ const ModalsInEveryRoutes = () => {
                         dispatch(modalActions.changeActivatedModal(null))
                     }
                     memberImageUrl={memberImageUrl}
-                    memberNickname={memberNickname}
+                    memberUsername={memberUsername}
                 />
             )}
-            {activatedModal === "articleMenu" && memberNickname && postId && (
+            {activatedModal === "articleMenu" && memberUsername && postId && (
                 <ArticleMenuModal
                     onModalOn={() =>
                         dispatch(modalActions.maintainModalon("articleMenu"))

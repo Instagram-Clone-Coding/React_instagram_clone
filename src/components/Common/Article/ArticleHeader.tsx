@@ -67,7 +67,6 @@ const HEADER_STORY_CIRCLE = 42 / 64;
 interface ArticleHeaderProps {
     memberImageUrl: string;
     memberUsername: string;
-    memberNickname: string;
     postId: number;
     location?: string;
     isFollowing: boolean;
@@ -77,13 +76,12 @@ interface ArticleHeaderProps {
 const ArticleHeader = ({
     memberImageUrl,
     memberUsername,
-    memberNickname,
     postId,
     location,
     isFollowing,
     followLoading,
 }: ArticleHeaderProps) => {
-    const { miniProfile } = useAppSelector(({ modal }) => modal);
+    const miniProfile = useAppSelector(({ modal }) => modal.miniProfile);
     const myUsername = useAppSelector(
         (state) => state.auth.userInfo?.memberUsername,
     );
@@ -96,10 +94,12 @@ const ArticleHeader = ({
         top,
         bottom,
         left,
-    }: ModalType.ModalPositionProps) => {
+        memberUsername,
+    }: ModalType.FetchMiniProfileProps) => {
+        console.log(memberUsername);
         await dispatch(
             getMiniProfile({
-                memberNickname,
+                memberUsername,
                 modalPosition: { top, bottom, left },
             }),
         );
@@ -119,19 +119,13 @@ const ArticleHeader = ({
                 modalActions.changeHoverModalPosition({ top, bottom, left }),
             );
         }
-        if (miniProfile) return dispatch(modalActions.mouseOnHoverModal());
-        dispatch(
-            modalActions.startHoverModal({
+        miniProfile?.memberUsername !== memberUsername &&
+            fetchMiniProfile({
+                top,
+                bottom,
+                left,
                 memberUsername,
-                memberNickname,
-                memberImageUrl,
-            }),
-        );
-        fetchMiniProfile({
-            top,
-            bottom,
-            left,
-        });
+            });
     };
 
     const mouseLeaveHandler = (
@@ -148,7 +142,7 @@ const ArticleHeader = ({
 
     const followHandler = () => {
         const followUser = async () => {
-            await dispatch(postFollow({ username: memberNickname }));
+            await dispatch(postFollow({ username: memberUsername }));
         };
         followUser();
     };
@@ -158,7 +152,7 @@ const ArticleHeader = ({
             <StoryCircle
                 type="unread" // 백엔드 소통하여 읽었는지 여부 확인
                 avatarUrl={memberImageUrl}
-                username={memberNickname}
+                username={memberUsername}
                 scale={HEADER_STORY_CIRCLE}
                 onMouseEnter={mouseEnterHandler}
                 onMouseLeave={mouseLeaveHandler}
@@ -169,11 +163,11 @@ const ArticleHeader = ({
                         onMouseEnter={mouseEnterHandler}
                         onMouseLeave={mouseLeaveHandler}
                     >
-                        <Link to={`/profile/${memberNickname}`}>
-                            {memberNickname}
+                        <Link to={`/profile/${memberUsername}`}>
+                            {memberUsername}
                         </Link>
                     </Username>
-                    {memberNickname !== myUsername && !isFollowing && (
+                    {memberUsername !== myUsername && !isFollowing && (
                         <div className="header-followBox">
                             <span>•</span>
                             <button onClick={followHandler}>
@@ -198,7 +192,6 @@ const ArticleHeader = ({
                         modalActions.startArticleMenuModal({
                             postId: postId,
                             memberUsername,
-                            memberNickname,
                             memberImageUrl,
                             isFollowing,
                         }),
