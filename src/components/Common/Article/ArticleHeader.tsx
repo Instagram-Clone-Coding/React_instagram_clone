@@ -96,7 +96,6 @@ const ArticleHeader = ({
         left,
         memberUsername,
     }: ModalType.FetchMiniProfileProps) => {
-        console.log(memberUsername);
         await dispatch(
             getMiniProfile({
                 memberUsername,
