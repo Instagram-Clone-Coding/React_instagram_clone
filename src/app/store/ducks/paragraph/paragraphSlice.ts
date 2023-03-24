@@ -29,8 +29,8 @@ const initialState: ParagraphType.ParagraphStateProps = {
         postUploadDate: "",
         hashtagsOfContent: [],
         mentionsOfContent: [],
-        likeOptionFlag: false, // 업로드한 사람만 좋아요 및 좋아요한 사람 확인 가능
-        commentOptionFlag: false,
+        likeOptionFlag: true, // 좋아요, 조회수를 공개할 것인지(false면 본인만 확인 가능)
+        commentOptionFlag: true, // 댓글 기능을 활성화 여부
         following: false,
         followLoading: false,
         recentComments: [],
@@ -69,7 +69,6 @@ const paragraphSlice = createSlice({
             state,
             action: PayloadAction<PostType.CommentType[]>,
         ) => {
-            console.log(action.payload);
             state.articleObj.comments = action.payload;
         },
         setNextComments: (

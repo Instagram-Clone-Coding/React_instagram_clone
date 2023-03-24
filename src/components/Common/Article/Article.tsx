@@ -135,7 +135,7 @@ const Article = ({
                 comments={article.recentComments}
             />
             <ArticleGap postUploadDate={article.postUploadDate} />
-            {!article.commentOptionFlag && (
+            {article.commentOptionFlag && (
                 <ArticleCommentFormLayout
                     postId={article.postId}
                     isInLargerArticle={false}

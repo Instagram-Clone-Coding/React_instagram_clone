@@ -75,7 +75,7 @@ interface CommentProps {
             | React.MouseEvent<HTMLSpanElement>
             | React.MouseEvent<HTMLDivElement>,
 
-        memberNickname: string,
+        memberUsername: string,
     ) => void;
     onMouseLeave: () => void;
     commentType: CommentType;

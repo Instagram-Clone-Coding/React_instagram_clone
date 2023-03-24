@@ -36,7 +36,6 @@ interface MainProps {
     followingUserWhoLikesArticle: null | string;
     likesCount: number;
     memberUsername: string;
-    memberNickname: string;
     memberImageUrl: string;
     content: string;
     commentsCount: number;
@@ -47,15 +46,10 @@ interface MainProps {
     comments: PostType.CommentType[];
 }
 
-interface FetchMiniProfileProps extends ModalType.ModalPositionProps {
-    memberNickname: string;
-}
-
 const ArticleMain = ({
     followingUserWhoLikesArticle,
     likesCount,
     memberUsername,
-    memberNickname,
     memberImageUrl,
     content,
     commentsCount,
@@ -70,6 +64,9 @@ const ArticleMain = ({
         isInLargerArticle ? true : false,
     );
     const miniProfile = useAppSelector(({ modal }) => modal.miniProfile);
+    const myUsername = useAppSelector(
+        ({ auth }) => auth.userInfo?.memberUsername,
+    );
     const dispatch = useAppDispatch();
     const isTextLineBreak = useMemo(() => content.includes("\n"), [content]);
     const textArray = useMemo(
@@ -108,11 +105,11 @@ const ArticleMain = ({
         top,
         bottom,
         left,
-        memberNickname,
-    }: FetchMiniProfileProps) => {
+        memberUsername,
+    }: ModalType.FetchMiniProfileProps) => {
         await dispatch(
             getMiniProfile({
-                memberNickname,
+                memberUsername,
                 modalPosition: { top, bottom, left },
             }),
         );
@@ -122,7 +119,7 @@ const ArticleMain = ({
         event:
             | React.MouseEvent<HTMLSpanElement>
             | React.MouseEvent<HTMLDivElement>,
-        memberNickname: string,
+        memberUsername: string,
     ) => {
         const { top, bottom, left } =
             event.currentTarget.getBoundingClientRect();
@@ -130,12 +127,12 @@ const ArticleMain = ({
         dispatch(modalActions.changeHoverModalPosition({ top, bottom, left }));
         dispatch(modalActions.mouseOnHoverModal());
 
-        miniProfile?.memberUsername !== memberNickname &&
+        miniProfile?.memberUsername !== memberUsername &&
             fetchMiniProfile({
                 top,
                 bottom,
                 left,
-                memberNickname,
+                memberUsername,
             });
     };
 
@@ -146,41 +143,60 @@ const ArticleMain = ({
 
     const getFullText = () => setIsFullText(true);
 
+    const LikeText = ({
+        followingUserWhoLikesArticle,
+        likesCount,
+    }: {
+        followingUserWhoLikesArticle: string | null;
+        likesCount: number;
+    }) => {
+        if (followingUserWhoLikesArticle) {
+            return (
+                <div>
+                    <Username
+                        onMouseEnter={(event) =>
+                            mouseEnterHandler(
+                                event,
+                                followingUserWhoLikesArticle,
+                            )
+                        }
+                        onMouseLeave={mouseLeaveHandler}
+                    >
+                        {followingUserWhoLikesArticle}
+                    </Username>
+                    님
+                    {likesCount > 1 &&
+                        `외 ${(<span>{likesCount - 1}명</span>)}`}
+                    이 좋아합니다
+                </div>
+            );
+        } else {
+            return <span>좋아요 {likesCount}개</span>;
+        }
+    };
+
     return (
         <>
             <StyledMain isInLargerArticle={isInLargerArticle}>
-                {!likeOptionFlag && (
+                {(likeOptionFlag || myUsername === memberUsername) && (
                     <div className="article-likeInfo">
-                        {followingUserWhoLikesArticle ? (
-                            <div>
-                                <Username
-                                    onMouseEnter={(event) =>
-                                        mouseEnterHandler(
-                                            event,
-                                            followingUserWhoLikesArticle,
-                                        )
-                                    }
-                                    onMouseLeave={mouseLeaveHandler}
-                                >
-                                    {followingUserWhoLikesArticle}
-                                </Username>
-                                님 외<span>{likesCount - 1}명</span>이
-                                좋아합니다
-                            </div>
-                        ) : (
-                            <span>좋아요 {likesCount}개</span>
-                        )}
+                        <LikeText
+                            followingUserWhoLikesArticle={
+                                followingUserWhoLikesArticle
+                            }
+                            likesCount={likesCount}
+                        />
                     </div>
                 )}
                 <div className="article-textBox">
                     <Username
                         onMouseEnter={(event) =>
-                            mouseEnterHandler(event, memberNickname)
+                            mouseEnterHandler(event, memberUsername)
                         }
                         onMouseLeave={mouseLeaveHandler}
                         className="article-text-username"
                     >
-                        {memberNickname}
+                        {memberUsername}
                     </Username>
                     &nbsp;
                     <span className="article-text">
