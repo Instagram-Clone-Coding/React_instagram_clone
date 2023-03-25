@@ -62,6 +62,7 @@ const CommentForm = ({ postId, isInLargerArticle }: CommentFormProps) => {
     );
     const dispatch = useAppDispatch();
     const [text, setText] = useState("");
+    const [isUploading, setIsUploading] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const isValid = text.trim() !== "";
     const lineNumber = text.split("\n").length;
@@ -88,6 +89,7 @@ const CommentForm = ({ postId, isInLargerArticle }: CommentFormProps) => {
         event.preventDefault();
         // handling submitted comment
         try {
+            setIsUploading(true);
             const {
                 data: {
                     data: { comment },
@@ -100,6 +102,7 @@ const CommentForm = ({ postId, isInLargerArticle }: CommentFormProps) => {
                 parentId: replyParentObj?.id || 0,
                 postId,
             });
+            setText("");
             if (location.pathname === "/") {
                 // home이면
                 return dispatch(
@@ -108,12 +111,14 @@ const CommentForm = ({ postId, isInLargerArticle }: CommentFormProps) => {
             }
             return dispatch(
                 paragraphActions.writeNewComment({
-                    comment,
+                    comment: comment,
                     parentId: replyParentObj?.id,
                 }),
             );
         } catch (error) {
             console.log(error);
+        } finally {
+            setIsUploading(false);
         }
     };
 
@@ -132,7 +137,7 @@ const CommentForm = ({ postId, isInLargerArticle }: CommentFormProps) => {
                 autoComplete={"off"}
                 ref={textareaRef}
             />
-            <button type="submit" disabled={!isValid}>
+            <button type="submit" disabled={!isValid || isUploading}>
                 게시
             </button>
         </StyledCommentForm>

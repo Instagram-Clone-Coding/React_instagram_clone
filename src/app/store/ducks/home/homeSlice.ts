@@ -57,7 +57,6 @@ const homeSlice = createSlice({
             state.articles.forEach((article) => {
                 if (article.postId === action.payload.postId) {
                     article.recentComments.unshift(action.payload.comment);
-                    return false;
                 }
             });
         },

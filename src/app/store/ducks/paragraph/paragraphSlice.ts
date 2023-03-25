@@ -89,10 +89,10 @@ const paragraphSlice = createSlice({
                 state.articleObj.recentComments.unshift(action.payload.comment);
             } else {
                 state.articleObj.comments.forEach((comment) => {
+                    state.replyParentObj = null;
                     if (comment.id === action.payload.parentId) {
                         comment.repliesCount++;
                         comment.replies.unshift(action.payload.comment);
-                        return false;
                     }
                 });
             }
