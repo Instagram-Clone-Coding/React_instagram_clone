@@ -84,15 +84,15 @@ const paragraphSlice = createSlice({
                 parentId?: number;
             }>,
         ) => {
-            console.log(action.payload.comment);
             if (!action.payload.parentId) {
                 state.articleObj.comments.unshift(action.payload.comment);
+                state.articleObj.recentComments.unshift(action.payload.comment);
             } else {
                 state.articleObj.comments.forEach((comment) => {
                     if (comment.id === action.payload.parentId) {
                         comment.repliesCount++;
                         comment.replies.unshift(action.payload.comment);
-                        // return false;
+                        return false;
                     }
                 });
             }

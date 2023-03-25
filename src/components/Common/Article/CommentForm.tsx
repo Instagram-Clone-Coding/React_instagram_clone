@@ -2,7 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { ReactComponent as SmileFace } from "../../../assets/Svgs/smileFace.svg";
 import styled from "styled-components";
 import { authorizedCustomAxios } from "customAxios";
-import { useAppSelector } from "app/store/Hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import { paragraphActions } from "app/store/ducks/paragraph/paragraphSlice";
+import { useLocation } from "react-router-dom";
+import { homeActions } from "app/store/ducks/home/homeSlice";
 
 interface FormProps {
     lineNumber: number;
@@ -49,13 +52,15 @@ interface CommentFormProps {
 }
 
 interface CommentUploadResponseType extends AxiosType.ResponseType {
-    data: { commentId: number }; // 나중에 댓글 객체로 변환할 것
+    data: { comment: PostType.CommentType };
 }
 
 const CommentForm = ({ postId, isInLargerArticle }: CommentFormProps) => {
+    const location = useLocation();
     const replyParentObj = useAppSelector(
         ({ paragraph }) => paragraph.replyParentObj,
     );
+    const dispatch = useAppDispatch();
     const [text, setText] = useState("");
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const isValid = text.trim() !== "";
@@ -83,17 +88,30 @@ const CommentForm = ({ postId, isInLargerArticle }: CommentFormProps) => {
         event.preventDefault();
         // handling submitted comment
         try {
-            const { data } = await authorizedCustomAxios.post<
+            const {
+                data: {
+                    data: { comment },
+                },
+            } = await authorizedCustomAxios.post<
                 null,
-                CommentUploadResponseType
+                { data: CommentUploadResponseType }
             >("/comments", {
                 content: text,
                 parentId: replyParentObj?.id || 0,
                 postId,
             });
-            console.log("업로드된 댓글 id:", data.commentId);
-            // if (!replyParentObj?.id)
-            //     return dispatch(paragraphActions.writeNewComments());
+            if (location.pathname === "/") {
+                // home이면
+                return dispatch(
+                    homeActions.updateRecentComments({ comment, postId }),
+                );
+            }
+            return dispatch(
+                paragraphActions.writeNewComment({
+                    comment,
+                    parentId: replyParentObj?.id,
+                }),
+            );
         } catch (error) {
             console.log(error);
         }
