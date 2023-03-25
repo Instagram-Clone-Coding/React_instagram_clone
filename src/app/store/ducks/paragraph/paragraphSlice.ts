@@ -77,14 +77,39 @@ const paragraphSlice = createSlice({
         ) => {
             state.articleObj.comments.push(...action.payload);
         },
-        writeNewComments: (
+        writeNewComment: (
             state,
-            action: PayloadAction<PostType.CommentType>,
+            action: PayloadAction<{
+                comment: PostType.CommentType;
+                parentId?: number;
+            }>,
         ) => {
-            state.articleObj.comments = [
-                action.payload,
-                ...state.articleObj.comments,
-            ];
+            console.log(action.payload.comment);
+            if (!action.payload.parentId) {
+                state.articleObj.comments.unshift(action.payload.comment);
+            } else {
+                state.articleObj.comments.forEach((comment) => {
+                    if (comment.id === action.payload.parentId) {
+                        comment.repliesCount++;
+                        comment.replies.unshift(action.payload.comment);
+                        // return false;
+                    }
+                });
+            }
+        },
+        setReplies: (
+            state,
+            action: PayloadAction<{
+                replies: PostType.CommentType[];
+                parentId: number;
+            }>,
+        ) => {
+            state.articleObj.comments.forEach((comment) => {
+                if (comment.id === action.payload.parentId) {
+                    comment.replies = action.payload.replies;
+                    return false;
+                }
+            });
         },
     },
     extraReducers: (build) => {
