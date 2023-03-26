@@ -92,7 +92,11 @@ const paragraphSlice = createSlice({
                     state.replyParentObj = null;
                     if (comment.id === action.payload.parentId) {
                         comment.repliesCount++;
-                        comment.replies.unshift(action.payload.comment);
+                        if (comment.replies) {
+                            comment.replies.unshift(action.payload.comment);
+                        } else {
+                            comment.replies = [action.payload.comment];
+                        }
                     }
                 });
             }
@@ -106,8 +110,11 @@ const paragraphSlice = createSlice({
         ) => {
             state.articleObj.comments.forEach((comment) => {
                 if (comment.id === action.payload.parentId) {
-                    comment.replies = action.payload.replies;
-                    return false;
+                    if (comment.replies) {
+                        comment.replies.push(...action.payload.replies);
+                    } else {
+                        comment.replies = action.payload.replies;
+                    }
                 }
             });
         },

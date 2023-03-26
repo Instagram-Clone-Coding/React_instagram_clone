@@ -182,7 +182,7 @@ declare module PostType {
         member: CommonType.memberType;
         mentionsOfContent: string[];
         repliesCount: number;
-        replies: CommentType[];
+        replies?: CommentType[];
         uploadDate: string;
     }
 
