@@ -133,6 +133,7 @@ const Article = ({
                 hashtags={article.hashtagsOfContent}
                 likeOptionFlag={article.likeOptionFlag}
                 comments={article.recentComments}
+                postId={article.postId}
             />
             <ArticleGap postUploadDate={article.postUploadDate} />
             {article.commentOptionFlag && (

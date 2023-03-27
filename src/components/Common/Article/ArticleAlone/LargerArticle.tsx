@@ -1,5 +1,3 @@
-import { paragraphActions } from "app/store/ducks/paragraph/paragraphSlice";
-import { useAppDispatch } from "app/store/Hooks";
 import ArticleCommentFormLayout from "components/Common/Article/ArticleCommentFormLayout";
 import ArticleGap from "components/Common/Article/ArticleGap";
 import ArticleHeader from "components/Common/Article/ArticleHeader";
@@ -7,7 +5,7 @@ import ArticleImgSlider from "components/Common/Article/ArticleImgSlider/Article
 import ArticleMain from "components/Common/Article/ArticleMain";
 import ArticleMainIcons from "components/Common/Article/ArticleMainIcons";
 import { authorizedCustomAxios } from "customAxios";
-import React, { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import styled from "styled-components";
 
 interface StyledLargerArticleProps {
@@ -31,6 +29,13 @@ const StyledLargerArticle = styled.div<StyledLargerArticleProps>`
         & > .largerArticle__mainLayout {
             padding: 16px;
             flex: 1;
+            & > ul > button {
+                width: 100%;
+                height: 40px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
         }
     }
 `;
@@ -40,41 +45,11 @@ interface LargerArticleProps {
     isModal?: boolean;
 }
 
-interface GetCommentsResponseType extends AxiosType.ResponseType {
-    data: {
-        content: PostType.CommentType[];
-        first: boolean;
-        last: boolean;
-    };
-}
-
 const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
     const followingUserWhoLikesArticle =
         article.followingMemberUsernameLikedPost;
     const [isLiked, setIsLiked] = useState(article.postLikeFlag);
     const [likesCount, setLikesCount] = useState(article.postLikesCount);
-    const [currentCommentPage, setCurrentCommentPage] = useState(1);
-    const dispatch = useAppDispatch();
-
-    useEffect(() => {
-        const getComments = async () => {
-            try {
-                const {
-                    data: {
-                        data: { content },
-                    },
-                } = await authorizedCustomAxios.get<GetCommentsResponseType>(
-                    `/comments/posts/${article.postId}`,
-                    { params: { page: currentCommentPage } },
-                );
-                dispatch(paragraphActions.setCurrentComments(content));
-                // setCurrentCommentPage((prev) => prev + 1);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        getComments();
-    }, [article.postId, currentCommentPage, dispatch]);
 
     const config = useMemo(
         () => ({
@@ -154,6 +129,7 @@ const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
                         likeOptionFlag={article.likeOptionFlag}
                         isInLargerArticle={true}
                         comments={article.comments}
+                        postId={article.postId}
                     />
                 </div>
                 <ArticleMainIcons

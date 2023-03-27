@@ -49,7 +49,8 @@ const paragraphSlice = createSlice({
             state.articleObj = {
                 ...action.payload,
                 followLoading: false,
-                comments: [],
+                recentComments: action.payload.recentComments.slice(0, 2),
+                comments: action.payload.recentComments,
             };
             state.isDataFetching = false;
         },
@@ -64,12 +65,6 @@ const paragraphSlice = createSlice({
         },
         finishReply: (state) => {
             state.replyParentObj = null;
-        },
-        setCurrentComments: (
-            state,
-            action: PayloadAction<PostType.CommentType[]>,
-        ) => {
-            state.articleObj.comments = action.payload;
         },
         setNextComments: (
             state,

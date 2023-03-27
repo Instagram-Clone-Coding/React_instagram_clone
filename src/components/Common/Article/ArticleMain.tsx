@@ -6,6 +6,10 @@ import { modalActions } from "app/store/ducks/modal/modalSlice";
 import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
 import StringFragmentWithMentionOrHashtagLink from "components/Common/StringFragmentWithMentionOrHashtagLink";
 import Comment from "components/Common/Article/Comment";
+import { ReactComponent as MoreCommentsButton } from "assets/Svgs/moreComments.svg";
+import { authorizedCustomAxios } from "customAxios";
+import { paragraphActions } from "app/store/ducks/paragraph/paragraphSlice";
+import Loading from "components/Common/Loading";
 
 interface StyledMainProps {
     isInLargerArticle: boolean;
@@ -32,6 +36,13 @@ const StyledMain = styled.div<StyledMainProps>`
     }
 `;
 
+interface GetCommentsResponseType extends AxiosType.ResponseType {
+    data: {
+        content: PostType.CommentType[];
+        first: boolean;
+        last: boolean;
+    };
+}
 interface MainProps {
     followingUserWhoLikesArticle: null | string;
     likesCount: number;
@@ -44,6 +55,7 @@ interface MainProps {
     likeOptionFlag: boolean;
     isInLargerArticle?: boolean;
     comments: PostType.CommentType[];
+    postId: number;
 }
 
 const ArticleMain = ({
@@ -58,6 +70,7 @@ const ArticleMain = ({
     likeOptionFlag,
     isInLargerArticle = false,
     comments,
+    postId,
 }: MainProps) => {
     // content state
     const [isFullText, setIsFullText] = useState(
@@ -67,6 +80,11 @@ const ArticleMain = ({
     const myUsername = useAppSelector(
         ({ auth }) => auth.userInfo?.memberUsername,
     );
+    const [currentCommentPage, setCurrentCommentPage] = useState(1);
+    const [isLastComment, setIsLastComment] = useState(
+        comments.length < 10 ? true : false,
+    );
+    const [isCommentsFetching, setIsCommentsFetching] = useState(false);
     const dispatch = useAppDispatch();
     const isTextLineBreak = useMemo(() => content.includes("\n"), [content]);
     const textArray = useMemo(
@@ -175,6 +193,28 @@ const ArticleMain = ({
         }
     };
 
+    const fetchMoreComments = async () => {
+        if (isLastComment) return;
+        try {
+            setIsCommentsFetching(true);
+            const {
+                data: {
+                    data: { content, last },
+                },
+            } = await authorizedCustomAxios.get<GetCommentsResponseType>(
+                `/comments/posts/${postId}`,
+                { params: { page: currentCommentPage + 1 } },
+            );
+            dispatch(paragraphActions.setNextComments(content));
+            setIsLastComment(last);
+            setCurrentCommentPage((prev) => prev + 1);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsCommentsFetching(false);
+        }
+    };
+
     return (
         <>
             <StyledMain isInLargerArticle={isInLargerArticle}>
@@ -227,18 +267,34 @@ const ArticleMain = ({
                     </ul>
                 )}
             </StyledMain>
-            <div className="article__comments">
-                {isInLargerArticle &&
-                    comments.map((comment) => (
-                        <Comment
-                            key={comment.id}
-                            commentObj={comment}
-                            onMouseEnter={mouseEnterHandler}
-                            onMouseLeave={mouseLeaveHandler} // 임시
-                            commentType="comment"
-                        />
-                    ))}
-            </div>
+            <ul className="article__comments">
+                {isInLargerArticle && (
+                    <>
+                        {comments.map((comment) => (
+                            <Comment
+                                key={comment.id}
+                                commentObj={comment}
+                                onMouseEnter={mouseEnterHandler}
+                                onMouseLeave={mouseLeaveHandler} // 임시
+                                commentType="comment"
+                            />
+                        ))}
+                        {isLastComment || (
+                            <button
+                                className="article__moreCommentsBtn"
+                                onClick={fetchMoreComments}
+                                disabled={isCommentsFetching}
+                            >
+                                {isCommentsFetching ? (
+                                    <Loading size={24} />
+                                ) : (
+                                    <MoreCommentsButton />
+                                )}
+                            </button>
+                        )}
+                    </>
+                )}
+            </ul>
         </>
     );
 };
