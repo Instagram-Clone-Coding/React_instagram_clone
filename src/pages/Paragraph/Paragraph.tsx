@@ -68,7 +68,6 @@ const Paragraph = () => {
                 } = await authorizedCustomAxios.get<RecentArticleDataType>(
                     `accounts/${onlyArticleData.member.username}/posts/recent/post`,
                 );
-                console.log(onlyArticleData);
                 if (onlyArticleStatus !== 200 || recentArticleStatus !== 200)
                     history.goBack(); // 에러 발생 시 뒤로 이동
                 dispatch(paragraphActions.setArticle(onlyArticleData));
