@@ -114,10 +114,12 @@ const modalSlice = createSlice({
             })
             .addCase(getMiniProfile.fulfilled, (state, action) => {
                 state.miniProfile = action.payload;
+                state.isOnMiniProfile = true;
             })
-            // .addCase(getMiniProfile.rejected, (state, action) => {
-
-            // });
+            .addCase(getMiniProfile.rejected, (state) => {
+                state.miniProfile = null;
+                state.isOnMiniProfile = false;
+            })
             .addCase(postUnfollow.pending, (state) => {
                 if (state.miniProfile) {
                     state.miniProfile.isLoading = true;

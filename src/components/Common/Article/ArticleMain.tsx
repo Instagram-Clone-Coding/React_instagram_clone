@@ -76,7 +76,6 @@ const ArticleMain = ({
     const [isFullText, setIsFullText] = useState(
         isInLargerArticle ? true : false,
     );
-    const miniProfile = useAppSelector(({ modal }) => modal.miniProfile);
     const myUsername = useAppSelector(
         ({ auth }) => auth.userInfo?.memberUsername,
     );
@@ -119,21 +118,7 @@ const ArticleMain = ({
         [isFullText, textArray, mentions, hashtags],
     );
 
-    const fetchMiniProfile = async ({
-        top,
-        bottom,
-        left,
-        memberUsername,
-    }: ModalType.FetchMiniProfileProps) => {
-        await dispatch(
-            getMiniProfile({
-                memberUsername,
-                modalPosition: { top, bottom, left },
-            }),
-        );
-    };
-
-    const mouseEnterHandler = (
+    const mouseEnterHandler = async (
         event:
             | React.MouseEvent<HTMLSpanElement>
             | React.MouseEvent<HTMLDivElement>,
@@ -142,16 +127,12 @@ const ArticleMain = ({
         const { top, bottom, left } =
             event.currentTarget.getBoundingClientRect();
         if (!event) return;
-        dispatch(modalActions.changeHoverModalPosition({ top, bottom, left }));
-        dispatch(modalActions.mouseOnHoverModal());
-
-        miniProfile?.memberUsername !== memberUsername &&
-            fetchMiniProfile({
-                top,
-                bottom,
-                left,
+        await dispatch(
+            getMiniProfile({
                 memberUsername,
-            });
+                modalPosition: { top, bottom, left },
+            }),
+        );
     };
 
     const mouseLeaveHandler = () => {
