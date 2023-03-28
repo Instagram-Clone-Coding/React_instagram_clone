@@ -248,34 +248,32 @@ const ArticleMain = ({
                     </ul>
                 )}
             </StyledMain>
-            <ul className="article__comments">
-                {isInLargerArticle && (
-                    <>
-                        {comments.map((comment) => (
-                            <Comment
-                                key={comment.id}
-                                commentObj={comment}
-                                onMouseEnter={mouseEnterHandler}
-                                onMouseLeave={mouseLeaveHandler} // 임시
-                                commentType="comment"
-                            />
-                        ))}
-                        {isLastComment || (
-                            <button
-                                className="article__moreCommentsBtn"
-                                onClick={fetchMoreComments}
-                                disabled={isCommentsFetching}
-                            >
-                                {isCommentsFetching ? (
-                                    <Loading size={24} />
-                                ) : (
-                                    <MoreCommentsButton />
-                                )}
-                            </button>
-                        )}
-                    </>
-                )}
-            </ul>
+            {isInLargerArticle && (
+                <ul className="article__comments">
+                    {comments.map((comment) => (
+                        <Comment
+                            key={comment.id}
+                            commentObj={comment}
+                            onMouseEnter={mouseEnterHandler}
+                            onMouseLeave={mouseLeaveHandler} // 임시
+                            commentType="comment"
+                        />
+                    ))}
+                    {isLastComment || (
+                        <button
+                            className="article__moreCommentsBtn"
+                            onClick={fetchMoreComments}
+                            disabled={isCommentsFetching}
+                        >
+                            {isCommentsFetching ? (
+                                <Loading size={24} />
+                            ) : (
+                                <MoreCommentsButton />
+                            )}
+                        </button>
+                    )}
+                </ul>
+            )}
         </>
     );
 };
