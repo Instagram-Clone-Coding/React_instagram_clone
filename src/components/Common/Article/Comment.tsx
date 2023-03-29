@@ -4,7 +4,7 @@ import StringFragmentWithMentionOrHashtagLink from "components/Common/StringFrag
 import ArticleGap from "components/Common/Article/ArticleGap";
 import Username from "components/Common/Username";
 import { authorizedCustomAxios } from "customAxios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import StoryCircle from "components/Common/StoryCircle";
@@ -239,12 +239,16 @@ const Comment = ({
                                         >
                                             <div></div>
                                             <span>
-                                                {isLastReply
+                                                {isLastReply && isReplyOn
                                                     ? "답글 숨기기"
                                                     : `답글 보기(${
-                                                          commentObj.repliesCount -
-                                                          (commentObj.replies
-                                                              ?.length || 0)
+                                                          !isReplyOn
+                                                              ? commentObj.repliesCount
+                                                              : commentObj.repliesCount -
+                                                                (commentObj
+                                                                    .replies
+                                                                    ?.length ||
+                                                                    0)
                                                       }개)`}
                                             </span>
                                         </button>
