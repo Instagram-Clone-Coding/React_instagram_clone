@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 import Username from "../Username";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
@@ -86,14 +86,7 @@ const ArticleMain = ({
         comments.length < 10 ? true : false,
     );
     const [isCommentsFetching, setIsCommentsFetching] = useState(false);
-    const contentRef = useRef<HTMLDivElement>(null);
-    const [contentHeight, setContentHeight] = useState(0);
     const dispatch = useAppDispatch();
-
-    useEffect(() => {
-        if (contentRef.current)
-            return setContentHeight(contentRef.current.clientHeight);
-    }, []);
 
     const isTextLineBreak = useMemo(() => content.includes("\n"), [content]);
     const textArray = useMemo(
@@ -209,7 +202,7 @@ const ArticleMain = ({
     return (
         <>
             <StyledMain isInLargerArticle={isInLargerArticle}>
-                <div className="articleMain__content" ref={contentRef}>
+                <div className="articleMain__content">
                     {(likeOptionFlag || myUsername === memberUsername) && (
                         <div className="article-likeInfo">
                             <LikeText
@@ -261,13 +254,7 @@ const ArticleMain = ({
                 </div>
             </StyledMain>
             {isInLargerArticle && (
-                <ul
-                    className="article__comments"
-                    style={{
-                        height: `calc(100% -
-                            ${contentHeight}px)`,
-                    }}
-                >
+                <ul className="article__comments">
                     {comments.map((comment) => (
                         <Comment
                             key={comment.id}

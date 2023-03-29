@@ -47,11 +47,11 @@ const StyledLargerArticle = styled.div<StyledLargerArticleProps>`
                     ARTICLE_GAP_HEIGHT -
                     COMMENT_HEIGHT
                 }px`};
+            overflow-y: auto;
+            &::-webkit-scrollbar {
+                display: none;
+            }
             & > ul {
-                &::-webkit-scrollbar {
-                    display: none;
-                }
-                overflow-y: auto;
                 & > button {
                     width: 100%;
                     height: 40px;
