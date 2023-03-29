@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 import Username from "../Username";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
@@ -16,18 +16,20 @@ interface StyledMainProps {
 }
 
 const StyledMain = styled.div<StyledMainProps>`
-    padding: 0 ${(props) => (props.isInLargerArticle ? 0 : "16px")};
-    .article-likeInfo {
-        margin-bottom: 8px;
-        span {
-            font-weight: ${(props) => props.theme.font.bold};
+    padding: 0 ${(props) => (props.isInLargerArticle ? 0 : `16px`)};
+    .articleMain__content {
+        .article-likeInfo {
+            margin-bottom: 8px;
+            span {
+                font-weight: ${(props) => props.theme.font.bold};
+            }
         }
-    }
-    .article-textBox {
-        margin-bottom: ${({ isInLargerArticle }) =>
-            isInLargerArticle ? "20px" : "4px"};
-        button {
-            font-weight: normal;
+        .article-textBox {
+            padding-bottom: ${({ isInLargerArticle }) =>
+                isInLargerArticle ? "20px" : "4px"};
+            button {
+                font-weight: normal;
+            }
         }
     }
     .article-text button,
@@ -84,7 +86,15 @@ const ArticleMain = ({
         comments.length < 10 ? true : false,
     );
     const [isCommentsFetching, setIsCommentsFetching] = useState(false);
+    const contentRef = useRef<HTMLDivElement>(null);
+    const [contentHeight, setContentHeight] = useState(0);
     const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (contentRef.current)
+            return setContentHeight(contentRef.current.clientHeight);
+    }, []);
+
     const isTextLineBreak = useMemo(() => content.includes("\n"), [content]);
     const textArray = useMemo(
         () => (isTextLineBreak ? content.split("\n") : [content]),
@@ -199,57 +209,65 @@ const ArticleMain = ({
     return (
         <>
             <StyledMain isInLargerArticle={isInLargerArticle}>
-                {(likeOptionFlag || myUsername === memberUsername) && (
-                    <div className="article-likeInfo">
-                        <LikeText
-                            followingUserWhoLikesArticle={
-                                followingUserWhoLikesArticle
-                            }
-                            likesCount={likesCount}
-                        />
-                    </div>
-                )}
-                <div className="article-textBox">
-                    <Username
-                        onMouseEnter={(event) =>
-                            mouseEnterHandler(event, memberUsername)
-                        }
-                        onMouseLeave={mouseLeaveHandler}
-                        className="article-text-username"
-                    >
-                        {memberUsername}
-                    </Username>
-                    &nbsp;
-                    <span className="article-text">
-                        <>
-                            {textSpan}
-                            {isTextLineBreak && !isFullText && (
-                                <>
-                                    ...&nbsp;
-                                    <button onClick={getFullText}>
-                                        더 보기
-                                    </button>
-                                </>
-                            )}
-                        </>
-                    </span>
-                </div>
-                {isInLargerArticle || (
-                    <ul className="article-commentsBox">
-                        {comments.map((comment) => (
-                            <Comment
-                                key={comment.id}
-                                commentObj={comment}
-                                onMouseEnter={mouseEnterHandler}
-                                onMouseLeave={mouseLeaveHandler}
-                                commentType="recent"
+                <div className="articleMain__content" ref={contentRef}>
+                    {(likeOptionFlag || myUsername === memberUsername) && (
+                        <div className="article-likeInfo">
+                            <LikeText
+                                followingUserWhoLikesArticle={
+                                    followingUserWhoLikesArticle
+                                }
+                                likesCount={likesCount}
                             />
-                        ))}
-                    </ul>
-                )}
+                        </div>
+                    )}
+                    <div className="article-textBox">
+                        <Username
+                            onMouseEnter={(event) =>
+                                mouseEnterHandler(event, memberUsername)
+                            }
+                            onMouseLeave={mouseLeaveHandler}
+                            className="article-text-username"
+                        >
+                            {memberUsername}
+                        </Username>
+                        &nbsp;
+                        <span className="article-text">
+                            <>
+                                {textSpan}
+                                {isTextLineBreak && !isFullText && (
+                                    <>
+                                        ...&nbsp;
+                                        <button onClick={getFullText}>
+                                            더 보기
+                                        </button>
+                                    </>
+                                )}
+                            </>
+                        </span>
+                    </div>
+                    {isInLargerArticle || (
+                        <ul className="article-commentsBox">
+                            {comments.map((comment) => (
+                                <Comment
+                                    key={comment.id}
+                                    commentObj={comment}
+                                    onMouseEnter={mouseEnterHandler}
+                                    onMouseLeave={mouseLeaveHandler}
+                                    commentType="recent"
+                                />
+                            ))}
+                        </ul>
+                    )}
+                </div>
             </StyledMain>
             {isInLargerArticle && (
-                <ul className="article__comments">
+                <ul
+                    className="article__comments"
+                    style={{
+                        height: `calc(100% -
+                            ${contentHeight}px)`,
+                    }}
+                >
                     {comments.map((comment) => (
                         <Comment
                             key={comment.id}

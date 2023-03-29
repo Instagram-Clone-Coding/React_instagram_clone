@@ -10,11 +10,19 @@ import styled from "styled-components";
 
 interface StyledLargerArticleProps {
     isModal: boolean;
+    heightWithoutBorder: number;
 }
+
+const MIN_HEIGHT = 450;
+const HEADER_HEIGHT = 60;
+const MAIN_ICON_HEIGHT = 37;
+const ARTICLE_GAP_HEIGHT = 34;
+const COMMENT_HEIGHT = 37;
 
 const StyledLargerArticle = styled.div<StyledLargerArticleProps>`
     display: flex;
     border: 1px solid ${(props) => props.theme.color.bd_gray};
+    min-height: ${MIN_HEIGHT}px;
     & > .largerArticle__imageSliderFlexBox {
         width: calc(100% - ${(props) => (props.isModal ? "500px" : "340px")});
         display: flex;
@@ -24,17 +32,32 @@ const StyledLargerArticle = styled.div<StyledLargerArticleProps>`
     & > .largerArticle__rightContent {
         min-width: ${(props) => (props.isModal ? "500px" : "340px")};
         width: ${(props) => (props.isModal ? "500px" : "340px")};
+        height: ${(props) => `${props.heightWithoutBorder}px`};
         display: flex;
         flex-direction: column;
         & > .largerArticle__mainLayout {
             padding: 16px;
             flex: 1;
-            & > ul > button {
-                width: 100%;
-                height: 40px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
+            height: ${(props) =>
+                `${
+                    props.heightWithoutBorder -
+                    HEADER_HEIGHT -
+                    MAIN_ICON_HEIGHT -
+                    ARTICLE_GAP_HEIGHT -
+                    COMMENT_HEIGHT
+                }px`};
+            & > ul {
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+                overflow-y: auto;
+                & > button {
+                    width: 100%;
+                    height: 40px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
             }
         }
     }
@@ -50,6 +73,7 @@ const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
         article.followingMemberUsernameLikedPost;
     const [isLiked, setIsLiked] = useState(article.postLikeFlag);
     const [likesCount, setLikesCount] = useState(article.postLikesCount);
+    const [heightWithoutBorder, setHeightWithoutBorder] = useState(0);
 
     const config = useMemo(
         () => ({
@@ -98,12 +122,18 @@ const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
     };
 
     return (
-        <StyledLargerArticle isModal={isModal}>
+        <StyledLargerArticle
+            isModal={isModal}
+            heightWithoutBorder={heightWithoutBorder}
+        >
             <div className="largerArticle__imageSliderFlexBox">
                 <ArticleImgSlider
                     imageDTOs={article.postImages}
                     onLike={changeToLikeHandler}
                     isInLargerArticle={true}
+                    onResizeHeight={(height) =>
+                        setHeightWithoutBorder(Math.max(height, MIN_HEIGHT))
+                    }
                 />
             </div>
             <div className="largerArticle__rightContent">

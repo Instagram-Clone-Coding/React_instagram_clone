@@ -143,12 +143,14 @@ interface SliderProps {
 interface ArticleImgSliderProps {
     imageDTOs: CommonType.PostImageDTOProps[];
     onLike: () => void;
+    onResizeHeight?: (height: number) => void;
     isInLargerArticle?: boolean;
 }
 
 const ArticleImgSlider = ({
     imageDTOs,
     onLike,
+    onResizeHeight,
     isInLargerArticle = false,
 }: ArticleImgSliderProps) => {
     //slider state
@@ -159,12 +161,12 @@ const ArticleImgSlider = ({
     const wrapRef = useRef<HTMLDivElement>(null);
     const sliderRef = useRef<HTMLDivElement>(null);
 
-    const resizeHandler = () => {
-        if (!wrapRef.current) return;
-        setUnitWidth(wrapRef.current.offsetWidth);
-    };
-
     useEffect(() => {
+        const resizeHandler = () => {
+            if (!wrapRef.current) return;
+            setUnitWidth(wrapRef.current.offsetWidth);
+            onResizeHeight && onResizeHeight(wrapRef.current.clientHeight);
+        };
         wrapRef.current?.scrollBy({
             left: 0,
         });
@@ -173,7 +175,7 @@ const ArticleImgSlider = ({
         return () => {
             window.removeEventListener("resize", resizeHandler);
         };
-    }, []);
+    }, [onResizeHeight]);
 
     const doubleClickLikeHandler = () => {
         setDoubleClicked(true);
