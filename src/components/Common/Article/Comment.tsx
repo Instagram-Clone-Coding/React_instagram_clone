@@ -10,6 +10,7 @@ import styled from "styled-components";
 import StoryCircle from "components/Common/StoryCircle";
 import { paragraphActions } from "app/store/ducks/paragraph/paragraphSlice";
 import { useAppSelector } from "app/store/Hooks";
+import Loading from "components/Common/Loading";
 
 type CommentType = "comment" | "reply" | "recent";
 
@@ -50,9 +51,11 @@ const StyledComment = styled.li<StyledCommentProps>`
             }
             & > #comment__replyLayout {
                 margin-top: 16px;
+                display: flex;
                 & > button {
                     display: flex;
                     align-items: center;
+                    margin-right: 6px;
                     & > div {
                         width: 24px;
                         border-bottom: 1px solid
@@ -236,11 +239,18 @@ const Comment = ({
                                         >
                                             <div></div>
                                             <span>
-                                                답글 보기(
-                                                {commentObj.repliesCount}
-                                                개)
+                                                {isLastReply
+                                                    ? "답글 숨기기"
+                                                    : `답글 보기(${
+                                                          commentObj.repliesCount -
+                                                          (commentObj.replies
+                                                              ?.length || 0)
+                                                      }개)`}
                                             </span>
                                         </button>
+                                        {isReplyFetching && (
+                                            <Loading size={14} />
+                                        )}
                                     </div>
 
                                     {isReplyOn && commentObj.replies && (
