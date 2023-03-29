@@ -30,6 +30,7 @@ const StyledLargerArticle = styled.div<StyledLargerArticleProps>`
         justify-content: center;
     }
     & > .largerArticle__rightContent {
+        background-color: white;
         min-width: ${(props) => (props.isModal ? "500px" : "340px")};
         width: ${(props) => (props.isModal ? "500px" : "340px")};
         height: ${(props) => `${props.heightWithoutBorder}px`};
