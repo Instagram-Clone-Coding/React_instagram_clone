@@ -115,7 +115,7 @@ const ArticleHeader = ({
     return (
         <StyledArticleHeader>
             <StoryCircle
-                type="unread" // 백엔드 소통하여 읽었는지 여부 확인
+                type="default" // 백엔드 소통하여 읽었는지 여부 확인
                 avatarUrl={memberImageUrl}
                 username={memberUsername}
                 scale={HEADER_STORY_CIRCLE}
