@@ -23,7 +23,6 @@ const StyledComment = styled.li<StyledCommentProps>`
         commentType === "recent" ? "4px" : "16px"};
     padding-top: ${({ commentType }) =>
         commentType === "recent" ? "0" : "12px"};
-    display: flex;
     & > #comment__main {
         width: 100%;
         display: flex;
@@ -36,39 +35,39 @@ const StyledComment = styled.li<StyledCommentProps>`
             margin-right: 18px;
         }
         & > #comment__middle {
-            & > #comment__info *,
-            & > #comment__replyLayout * {
-                color: ${(props) => props.theme.font.gray};
-                font-size: 12px;
-                font-weight: normal;
-            }
-
+            flex: 1;
             & > #comment__info {
                 margin: 8px 0 4px 0;
                 & > button {
                     margin-right: 12px;
                 }
             }
-            & > #comment__replyLayout {
-                margin-top: 16px;
-                display: flex;
-                & > button {
-                    display: flex;
-                    align-items: center;
-                    margin-right: 6px;
-                    & > div {
-                        width: 24px;
-                        border-bottom: 1px solid
-                            ${(props) => props.theme.font.gray};
-                        margin-right: 16px;
-                    }
-                }
+        }
+        & > #comment__popHeartLayout {
+            margin-left: 12px;
+            margin-top: ${({ commentType }) =>
+                commentType === "recent" ? "0px" : "12px"};
+        }
+    }
+    & > #comment__replyLayout {
+        margin-top: 16px;
+        margin-left: 54px;
+        & > button {
+            display: flex;
+            align-items: center;
+            margin-right: 6px;
+            & > div {
+                width: 24px;
+                border-bottom: 1px solid ${(props) => props.theme.font.gray};
+                margin-right: 16px;
             }
         }
     }
-    & > #comment__popHeartLayout {
-        margin-top: ${({ commentType }) =>
-            commentType === "recent" ? "0px" : "12px"};
+    & > #comment__main > #comment__middle > #comment__info *,
+    & > #comment__replyLayout > button {
+        color: ${(props) => props.theme.font.gray};
+        font-size: 12px;
+        font-weight: normal;
     }
 `;
 interface CommentProps {
@@ -230,65 +229,54 @@ const Comment = ({
                                         : "답글 취소"}
                                 </button>
                             </div>
-                            {commentObj.repliesCount > 0 && (
-                                <>
-                                    <div id="comment__replyLayout">
-                                        <button
-                                            onClick={replyHandler}
-                                            disabled={isReplyFetching}
-                                        >
-                                            <div></div>
-                                            <span>
-                                                {isLastReply && isReplyOn
-                                                    ? "답글 숨기기"
-                                                    : `답글 보기(${
-                                                          !isReplyOn
-                                                              ? commentObj.repliesCount
-                                                              : commentObj.repliesCount -
-                                                                (commentObj
-                                                                    .replies
-                                                                    ?.length ||
-                                                                    0)
-                                                      }개)`}
-                                            </span>
-                                        </button>
-                                        {isReplyFetching && (
-                                            <Loading size={14} />
-                                        )}
-                                    </div>
-
-                                    {isReplyOn && commentObj.replies && (
-                                        <ul>
-                                            {commentObj.replies.map(
-                                                (replyObj) => (
-                                                    <Comment
-                                                        key={replyObj.id}
-                                                        commentType="reply"
-                                                        commentObj={replyObj}
-                                                        onMouseEnter={
-                                                            onMouseEnter
-                                                        }
-                                                        onMouseLeave={
-                                                            onMouseLeave
-                                                        }
-                                                    />
-                                                ),
-                                            )}
-                                        </ul>
-                                    )}
-                                </>
-                            )}
                         </>
                     )}
                 </div>
+                <div id="comment__popHeartLayout">
+                    <PopHeart
+                        size={12}
+                        isLiked={isLiked}
+                        onToggleLike={commentLikeHandler}
+                    />
+                </div>
             </div>
-            <div id="comment__popHeartLayout">
-                <PopHeart
-                    size={12}
-                    isLiked={isLiked}
-                    onToggleLike={commentLikeHandler}
-                />
-            </div>
+            {commentObj.repliesCount > 0 && (
+                <>
+                    <div id="comment__replyLayout">
+                        <button
+                            onClick={replyHandler}
+                            disabled={isReplyFetching}
+                        >
+                            <div></div>
+                            <span>
+                                {isLastReply && isReplyOn
+                                    ? "답글 숨기기"
+                                    : `답글 보기(${
+                                          !isReplyOn
+                                              ? commentObj.repliesCount
+                                              : commentObj.repliesCount -
+                                                (commentObj.replies?.length ||
+                                                    0)
+                                      }개)`}
+                            </span>
+                        </button>
+                        {isReplyFetching && <Loading size={14} />}
+                        {isReplyOn && commentObj.replies && (
+                            <ul>
+                                {commentObj.replies.map((replyObj) => (
+                                    <Comment
+                                        key={replyObj.id}
+                                        commentType="reply"
+                                        commentObj={replyObj}
+                                        onMouseEnter={onMouseEnter}
+                                        onMouseLeave={onMouseLeave}
+                                    />
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                </>
+            )}
         </StyledComment>
     );
 };
