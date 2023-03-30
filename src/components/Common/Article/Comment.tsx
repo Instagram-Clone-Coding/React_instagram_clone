@@ -23,10 +23,10 @@ const StyledComment = styled.li<StyledCommentProps>`
         commentType === "recent" ? "4px" : "16px"};
     padding-top: ${({ commentType }) =>
         commentType === "recent" ? "0" : "12px"};
-    & > #comment__main {
+    & > .comment__main {
         width: 100%;
         display: flex;
-        & > #comment__avatar {
+        & > .comment__avatar {
             width: 32px;
             height: 32px;
             display: flex;
@@ -34,22 +34,22 @@ const StyledComment = styled.li<StyledCommentProps>`
             align-items: center;
             margin-right: 18px;
         }
-        & > #comment__middle {
+        & > .comment__middle {
             flex: 1;
-            & > #comment__info {
+            & > .comment__info {
                 margin: 8px 0 4px 0;
                 & > button {
                     margin-right: 12px;
                 }
             }
         }
-        & > #comment__popHeartLayout {
+        & > .comment__popHeartLayout {
             margin-left: 12px;
             margin-top: ${({ commentType }) =>
                 commentType === "recent" ? "0px" : "12px"};
         }
     }
-    & > #comment__replyLayout {
+    & > .comment__replyLayout {
         margin-top: 16px;
         margin-left: 54px;
         & > button {
@@ -63,8 +63,8 @@ const StyledComment = styled.li<StyledCommentProps>`
             }
         }
     }
-    & > #comment__main > #comment__middle > #comment__info *,
-    & > #comment__replyLayout > button {
+    & > .comment__main > .comment__middle > .comment__info *,
+    & > .comment__replyLayout > button {
         color: ${(props) => props.theme.font.gray};
         font-size: 12px;
         font-weight: normal;
@@ -177,9 +177,9 @@ const Comment = ({
 
     return (
         <StyledComment commentType={commentType}>
-            <div id="comment__main">
+            <div className="comment__main">
                 {commentType !== "recent" && (
-                    <div id="comment__avatar">
+                    <div className="comment__avatar">
                         <StoryCircle
                             type="default"
                             avatarUrl={commentObj.member.image.imageUrl}
@@ -192,7 +192,7 @@ const Comment = ({
                         />
                     </div>
                 )}
-                <div id="comment__middle">
+                <div className="comment__middle">
                     <span>
                         <Username
                             onMouseEnter={(event) =>
@@ -211,7 +211,7 @@ const Comment = ({
                     </span>
                     {commentType !== "recent" && (
                         <>
-                            <div id="comment__info">
+                            <div className="comment__info">
                                 <ArticleGap
                                     postUploadDate={commentObj.uploadDate}
                                     isAboutComment={true}
@@ -232,7 +232,7 @@ const Comment = ({
                         </>
                     )}
                 </div>
-                <div id="comment__popHeartLayout">
+                <div className="comment__popHeartLayout">
                     <PopHeart
                         size={12}
                         isLiked={isLiked}
@@ -242,7 +242,7 @@ const Comment = ({
             </div>
             {commentObj.repliesCount > 0 && (
                 <>
-                    <div id="comment__replyLayout">
+                    <div className="comment__replyLayout">
                         <button
                             onClick={replyHandler}
                             disabled={isReplyFetching}
