@@ -11,6 +11,7 @@ import StoryCircle from "components/Common/StoryCircle";
 import { paragraphActions } from "app/store/ducks/paragraph/paragraphSlice";
 import { useAppSelector } from "app/store/Hooks";
 import Loading from "components/Common/Loading";
+import { ReactComponent as ThreeDots } from "assets/Svgs/threeDots.svg";
 
 type CommentType = "comment" | "reply" | "recent";
 
@@ -23,9 +24,13 @@ const StyledComment = styled.li<StyledCommentProps>`
         commentType === "recent" ? "4px" : "16px"};
     padding-top: ${({ commentType }) =>
         commentType === "recent" ? "0" : "12px"};
+
     & > .comment__main {
         width: 100%;
         display: flex;
+        &:hover > .comment__middle > .comment__info > .comment__menu {
+            display: flex;
+        }
         & > .comment__avatar {
             width: 32px;
             height: 32px;
@@ -38,8 +43,21 @@ const StyledComment = styled.li<StyledCommentProps>`
             flex: 1;
             & > .comment__info {
                 margin: 8px 0 4px 0;
+                display: flex;
+                height: 13px;
+                align-items: center;
                 & > button {
+                    height: 100%;
+                    font-weight: 600;
                     margin-right: 12px;
+                    display: flex;
+                    align-items: center;
+                }
+                & > .comment__menu {
+                    display: none;
+                }
+                & > time {
+                    margin-bottom: 0;
                 }
             }
         }
@@ -67,7 +85,6 @@ const StyledComment = styled.li<StyledCommentProps>`
     & > .comment__replyLayout > button {
         color: ${(props) => props.theme.font.gray};
         font-size: 12px;
-        font-weight: normal;
     }
 `;
 interface CommentProps {
@@ -227,6 +244,9 @@ const Comment = ({
                                     {commentObj.id !== replyParentObj?.id
                                         ? "답글 달기"
                                         : "답글 취소"}
+                                </button>
+                                <button className="comment__menu">
+                                    <ThreeDots />
                                 </button>
                             </div>
                         </>
