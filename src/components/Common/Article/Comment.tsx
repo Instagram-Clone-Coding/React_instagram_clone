@@ -279,7 +279,7 @@ const Comment = ({
                     />
                 </div>
             </div>
-            {commentObj.repliesCount > 0 && (
+            {commentType !== "recent" && commentObj.repliesCount > 0 && (
                 <>
                     <div className="comment__replyLayout">
                         <button
