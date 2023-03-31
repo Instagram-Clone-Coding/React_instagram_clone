@@ -89,6 +89,7 @@ const StyledComment = styled.li<StyledCommentProps>`
     }
 `;
 interface CommentProps {
+    parentCommentId?: number;
     commentObj: PostType.CommentType;
     onMouseEnter: (
         event:
@@ -109,6 +110,7 @@ interface GetReplyProps extends AxiosType.ResponseType {
 }
 
 const Comment = ({
+    parentCommentId,
     commentObj,
     onMouseEnter,
     onMouseLeave,
@@ -195,7 +197,7 @@ const Comment = ({
 
         return dispatch(
             paragraphActions.startReply({
-                id: commentObj.id,
+                id: parentCommentId || commentObj.id,
                 username: commentObj.member.username,
             }),
         );
@@ -299,6 +301,7 @@ const Comment = ({
                         <ul>
                             {commentObj.replies.map((replyObj) => (
                                 <Comment
+                                    parentCommentId={commentObj.id}
                                     key={replyObj.id}
                                     commentType="reply"
                                     commentObj={replyObj}
