@@ -96,6 +96,21 @@ const paragraphSlice = createSlice({
                 });
             }
         },
+        deleteComment: (
+            state,
+            action: PayloadAction<{ commentId: number }>,
+        ) => {
+            state.articleObj.comments = state.articleObj.comments.filter(
+                (comment) => comment.id !== action.payload.commentId,
+            );
+            state.articleObj.comments.forEach((comment) => {
+                if (comment.replies) {
+                    comment.replies = comment.replies.filter(
+                        (reply) => reply.id !== action.payload.commentId,
+                    );
+                }
+            });
+        },
         setReplies: (
             state,
             action: PayloadAction<{

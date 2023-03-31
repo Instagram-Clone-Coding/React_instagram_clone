@@ -12,6 +12,7 @@ import { paragraphActions } from "app/store/ducks/paragraph/paragraphSlice";
 import { useAppSelector } from "app/store/Hooks";
 import Loading from "components/Common/Loading";
 import { ReactComponent as ThreeDots } from "assets/Svgs/threeDots.svg";
+import { modalActions } from "app/store/ducks/modal/modalSlice";
 
 type CommentType = "comment" | "reply" | "recent";
 
@@ -122,6 +123,9 @@ const Comment = ({
     const replyParentObj = useAppSelector(
         ({ paragraph }) => paragraph.replyParentObj,
     );
+    const myUsername = useAppSelector(
+        ({ auth }) => auth.userInfo?.memberUsername,
+    );
     const dispatch = useDispatch();
 
     const replyHandler = async () => {
@@ -192,6 +196,11 @@ const Comment = ({
         );
     };
 
+    const commentMenuBtnClickHandler = () => {
+        dispatch(modalActions.changeActivatedModal("commentMenu"));
+        dispatch(modalActions.setCommentId({ commentId: commentObj.id }));
+    };
+
     return (
         <StyledComment commentType={commentType}>
             <div className="comment__main">
@@ -245,9 +254,14 @@ const Comment = ({
                                         ? "답글 달기"
                                         : "답글 취소"}
                                 </button>
-                                <button className="comment__menu">
-                                    <ThreeDots />
-                                </button>
+                                {commentObj.member.username === myUsername && ( // '신고' 기능이 없으면 자기 댓글이 아닌 경우에 모달에 보여줄 메뉴가 없어서 아예 버튼 비활성화
+                                    <button
+                                        className="comment__menu"
+                                        onClick={commentMenuBtnClickHandler}
+                                    >
+                                        <ThreeDots />
+                                    </button>
+                                )}
                             </div>
                         </>
                     )}

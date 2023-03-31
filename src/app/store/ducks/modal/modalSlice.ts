@@ -7,6 +7,7 @@ const initialState: ModalType.ModalStateProps = {
     memberUsername: "",
     memberImageUrl: "",
     postId: null,
+    commentId: null,
     miniProfile: null,
     isFollowing: null,
     isOnMiniProfile: false,
@@ -53,6 +54,9 @@ const modalSlice = createSlice({
             action: PayloadAction<ModalType.ActivatedModalType>,
         ) => {
             state.activatedModal = action.payload;
+        },
+        setCommentId: (state, action: PayloadAction<{ commentId: number }>) => {
+            state.commentId = action.payload.commentId;
         },
         mouseOnHoverModal: (state) => {
             state.isOnMiniProfile = true;

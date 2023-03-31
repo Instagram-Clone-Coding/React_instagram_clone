@@ -232,6 +232,7 @@ declare module ModalType {
         | "unfollowing"
         | "report"
         | "articleMenu"
+        | "commentMenu"
         | "shareWith"
         | null;
 
@@ -283,6 +284,7 @@ declare module ModalType {
         memberUsername: string; // dlwlrma
         memberImageUrl: string;
         postId: number | null;
+        commentId: number | null;
         miniProfile: MiniProfileStateProps | null;
         isFollowing: boolean | null;
         isOnMiniProfile: boolean;

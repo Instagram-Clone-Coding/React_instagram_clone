@@ -8,6 +8,7 @@ import ReportModal from "components/Home/Modals/ReportModal";
 import ShareWithModal from "components/Home/Modals/SharerWithModal";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import ArticleAloneModal from "components/Common/Article/ArticleAlone/ArticleAloneModal";
+import CommentMenuModal from "components/Home/Modals/CommentMenuModal";
 
 const ModalsInEveryRoutes = () => {
     const {
@@ -61,7 +62,9 @@ const ModalsInEveryRoutes = () => {
                     onModalOn={() =>
                         dispatch(modalActions.maintainModalon("articleMenu"))
                     }
-                    onModalOff={() => dispatch(modalActions.resetModal())}
+                    onModalOff={() =>
+                        dispatch(modalActions.changeActivatedModal(null))
+                    }
                     postId={postId}
                 />
             )}
@@ -71,7 +74,9 @@ const ModalsInEveryRoutes = () => {
                     onModalOn={() =>
                         dispatch(modalActions.maintainModalon("report"))
                     }
-                    onModalOff={() => dispatch(modalActions.resetModal())}
+                    onModalOff={() =>
+                        dispatch(modalActions.changeActivatedModal(null))
+                    }
                 />
             )}
             {activatedModal === "shareWith" && (
@@ -79,7 +84,9 @@ const ModalsInEveryRoutes = () => {
                     onModalOn={() =>
                         dispatch(modalActions.maintainModalon("shareWith"))
                     }
-                    onModalOff={() => dispatch(modalActions.resetModal())}
+                    onModalOff={() =>
+                        dispatch(modalActions.changeActivatedModal(null))
+                    }
                 />
             )}
             {isArticleAloneModalOn && (
@@ -89,6 +96,18 @@ const ModalsInEveryRoutes = () => {
                     }
                     onModalOff={() =>
                         dispatch(modalActions.stopArticleAloneModal())
+                    }
+                />
+            )}
+            {activatedModal === "commentMenu" && (
+                <CommentMenuModal
+                    onModalOn={() =>
+                        dispatch(
+                            modalActions.changeActivatedModal("commentMenu"),
+                        )
+                    }
+                    onModalOff={() =>
+                        dispatch(modalActions.changeActivatedModal(null))
                     }
                 />
             )}
