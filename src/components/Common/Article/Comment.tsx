@@ -117,7 +117,12 @@ const Comment = ({
     const [isLiked, setIsLiked] = useState(commentObj.commentLikeFlag);
     const [likesCount, setLikesCount] = useState(commentObj.commentLikesCount);
     const [isReplyOn, setIsReplyOn] = useState(false);
-    const [isLastReply, setIsLastReply] = useState(false);
+    const [isLastReply, setIsLastReply] = useState(
+        (commentObj.replies &&
+            commentObj.replies.length <= 10 &&
+            commentObj.repliesCount <= 10) ||
+            false,
+    );
     const [isReplyFetching, setIsReplyFetching] = useState(false);
     const [replyPage, setReplyPage] = useState(1);
     const replyParentObj = useAppSelector(
