@@ -1,48 +1,58 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ReactComponent as SmileFace } from "../../../assets/Svgs/smileFace.svg";
+import { ReactComponent as Emoji } from "assets/Svgs/direct-emoji-icon.svg";
 import styled from "styled-components";
 import { authorizedCustomAxios } from "customAxios";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { paragraphActions } from "app/store/ducks/paragraph/paragraphSlice";
 import { useLocation } from "react-router-dom";
 import { homeActions } from "app/store/ducks/home/homeSlice";
+import EmojiPicker, { IEmojiData } from "emoji-picker-react";
 
 interface FormProps {
     lineNumber: number;
 }
 
 const StyledCommentForm = styled.form<FormProps>`
-    display: flex;
-    align-items: center;
-    flex-wrap: nowrap;
-    textarea {
-        // reset
-        border: none;
-        overflow: auto;
-        outline: none;
-        -webkit-box-shadow: none;
-        -moz-box-shadow: none;
-        box-shadow: none;
-        resize: none;
-        //style
-        flex: 1;
-        height: ${(props) =>
-            props.lineNumber < 5 ? props.lineNumber * 18 : 5 * 18}px;
-        background: none;
-    }
-    button {
-        padding: 0;
+    position: relative;
+    width: 100%;
+    .textarea__container {
+        width: 100%;
         display: flex;
         align-items: center;
+        flex-wrap: nowrap;
+        & > textarea {
+            // reset
+            border: none;
+            overflow: auto;
+            outline: none;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+            resize: none;
+            //style
+            flex: 1;
+            height: ${(props) =>
+                props.lineNumber < 5 ? props.lineNumber * 18 : 5 * 18}px;
+            background: none;
+        }
+        & > button {
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+        & > button:first-child {
+            padding: 2px;
+        }
+        & > button[type="submit"] {
+            color: ${(props) => props.theme.color.blue};
+        }
+        & > button[type="submit"]:disabled {
+            opacity: 0.3;
+        }
     }
-    & > button:first-child {
-        padding: 2px;
-    }
-    button[type="submit"] {
-        color: ${(props) => props.theme.color.blue};
-    }
-    button[type="submit"]:disabled {
-        opacity: 0.3;
+    & > aside {
+        position: absolute;
+        bottom: 150%;
     }
 `;
 
@@ -62,6 +72,7 @@ const CommentForm = ({ postId, isInLargerArticle }: CommentFormProps) => {
     );
     const dispatch = useAppDispatch();
     const [text, setText] = useState("");
+    const [isEmojiPickerOn, setIsEmojiPickerOn] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const isValid = text.trim() !== "";
@@ -84,6 +95,14 @@ const CommentForm = ({ postId, isInLargerArticle }: CommentFormProps) => {
             setText("");
         }
     }, [replyParentObj, isInLargerArticle]);
+
+    const emojiSelectHandler = (
+        event: React.MouseEvent,
+        emojiObj: IEmojiData,
+    ) => {
+        setText((prev) => prev + emojiObj.emoji);
+        setIsEmojiPickerOn(false);
+    };
 
     const commentSubmitHandler = async (event: React.SyntheticEvent) => {
         event.preventDefault();
@@ -127,19 +146,30 @@ const CommentForm = ({ postId, isInLargerArticle }: CommentFormProps) => {
             lineNumber={lineNumber}
             onSubmit={commentSubmitHandler}
         >
-            <button onClick={() => {}}>
-                <SmileFace />
-            </button>
-            <textarea
-                placeholder="댓글 달기..."
-                value={text}
-                onChange={commentValueHandler}
-                autoComplete={"off"}
-                ref={textareaRef}
-            />
-            <button type="submit" disabled={!isValid || isUploading}>
-                게시
-            </button>
+            {isEmojiPickerOn && (
+                <EmojiPicker
+                    pickerStyle={{ width: "80%" }}
+                    onEmojiClick={emojiSelectHandler}
+                />
+            )}
+            <div className="textarea__container">
+                <button
+                    onClick={() => setIsEmojiPickerOn((prev) => !prev)}
+                    type="button"
+                >
+                    <Emoji />
+                </button>
+                <textarea
+                    placeholder="댓글 달기..."
+                    value={text}
+                    onChange={commentValueHandler}
+                    autoComplete={"off"}
+                    ref={textareaRef}
+                />
+                <button type="submit" disabled={!isValid || isUploading}>
+                    게시
+                </button>
+            </div>
         </StyledCommentForm>
     );
 };

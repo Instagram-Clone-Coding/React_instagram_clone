@@ -7,9 +7,6 @@ const StyledAricleCommentFormLayout = styled.div`
     display: flex;
     align-items: center;
     border-top: 1px solid ${(props) => props.theme.color.bd_gray};
-    form {
-        width: 100%;
-    }
 `;
 
 interface ArticleCommentFormLayoutProps {
