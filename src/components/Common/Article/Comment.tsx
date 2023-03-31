@@ -280,41 +280,35 @@ const Comment = ({
                 </div>
             </div>
             {commentType !== "recent" && commentObj.repliesCount > 0 && (
-                <>
-                    <div className="comment__replyLayout">
-                        <button
-                            onClick={replyHandler}
-                            disabled={isReplyFetching}
-                        >
-                            <div></div>
-                            <span>
-                                {isLastReply && isReplyOn
-                                    ? "답글 숨기기"
-                                    : `답글 보기(${
-                                          !isReplyOn
-                                              ? commentObj.repliesCount
-                                              : commentObj.repliesCount -
-                                                (commentObj.replies?.length ||
-                                                    0)
-                                      }개)`}
-                            </span>
-                        </button>
-                        {isReplyFetching && <Loading size={14} />}
-                        {isReplyOn && commentObj.replies && (
-                            <ul>
-                                {commentObj.replies.map((replyObj) => (
-                                    <Comment
-                                        key={replyObj.id}
-                                        commentType="reply"
-                                        commentObj={replyObj}
-                                        onMouseEnter={onMouseEnter}
-                                        onMouseLeave={onMouseLeave}
-                                    />
-                                ))}
-                            </ul>
-                        )}
-                    </div>
-                </>
+                <div className="comment__replyLayout">
+                    <button onClick={replyHandler} disabled={isReplyFetching}>
+                        <div></div>
+                        <span>
+                            {isLastReply && isReplyOn
+                                ? "답글 숨기기"
+                                : `답글 보기(${
+                                      !isReplyOn
+                                          ? commentObj.repliesCount
+                                          : commentObj.repliesCount -
+                                            (commentObj.replies?.length || 0)
+                                  }개)`}
+                        </span>
+                    </button>
+                    {isReplyFetching && <Loading size={14} />}
+                    {isReplyOn && commentObj.replies && (
+                        <ul>
+                            {commentObj.replies.map((replyObj) => (
+                                <Comment
+                                    key={replyObj.id}
+                                    commentType="reply"
+                                    commentObj={replyObj}
+                                    onMouseEnter={onMouseEnter}
+                                    onMouseLeave={onMouseLeave}
+                                />
+                            ))}
+                        </ul>
+                    )}
+                </div>
             )}
         </StyledComment>
     );
