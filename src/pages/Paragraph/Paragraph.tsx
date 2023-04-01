@@ -31,6 +31,16 @@ const StyledParagraph = styled.main`
             }
         }
     }
+    @media (max-width: 735px) {
+        padding: calc(4vh) 0 0;
+        width: 100%;
+        max-width: none;
+        & > .paragraph__articleLayout {
+            width: 100%;
+            max-width: none;
+            margin: 0;
+        }
+    }
 `;
 interface OnlyArticleDataType {
     data: PostType.ArticleProps;
