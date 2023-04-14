@@ -51,18 +51,18 @@ const SingleContentContainer = styled.div`
         }
     }
 
+    margin-right: 3px;
     @media (min-width: 736px) {
-        margin-right: 30px;
+        margin-right: 4px;
+    }
+    &:last-child {
+        margin-right: 0px;
+    }
 
-        &:last-child {
-            margin-right: 0px;
-        }
+    img {
+    }
 
-        img {
-        }
-
-        img:last-child {
-        }
+    img:last-child {
     }
 `;
 
