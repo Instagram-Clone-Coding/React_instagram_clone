@@ -11,8 +11,8 @@ const SingleContentContainer = styled.div`
     position: relative;
     cursor: pointer;
     width: 100%;
-    max-width: 292px;
-    height: 100%;
+    max-width: 309px;
+    flex: 1;
     svg {
         position: absolute;
         right: 0;
@@ -21,8 +21,7 @@ const SingleContentContainer = styled.div`
     }
 
     img {
-        width: 100%;
-        height: 100%;
+        object-fit: cover;
     }
 
     .hover {
@@ -30,8 +29,6 @@ const SingleContentContainer = styled.div`
         top: 0;
         left: 0;
         background-color: rgba(0, 0, 0, 0.3);
-        width: 100%;
-        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -51,18 +48,10 @@ const SingleContentContainer = styled.div`
         }
     }
 
-    margin-right: 3px;
-    @media (min-width: 736px) {
-        margin-right: 4px;
-    }
-    &:last-child {
-        margin-right: 0px;
-    }
-
-    img {
-    }
-
-    img:last-child {
+    img,
+    & > .hover {
+        width: 100%;
+        aspect-ratio: 1 / 1;
     }
 `;
 
