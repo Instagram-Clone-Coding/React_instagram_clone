@@ -5,12 +5,16 @@ import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { getExtraPosts } from "app/store/ducks/profile/profileThunk";
 import { useParams } from "react-router-dom";
 import useOnView from "hooks/useOnView";
+import { v4 as uuidv4 } from "uuid";
 
 const SingleRowContainer = styled.div`
     display: flex;
     gap: 3px;
     @media (min-width: 736px) {
         gap: 4px;
+    }
+    & > .emptyLayout {
+        flex: 1;
     }
 `;
 
@@ -51,18 +55,18 @@ const SingleRow = ({
         isObserving && isVisible && dispatchExtraPost(); // 이 때 비동기 작업 및 무한 스크롤
         // isLast && isVisible && dispatchExtraArticle();
     }, [isObserving, isVisible, dispatch]);
-
     return (
         <SingleRowContainer ref={postRef}>
-            {posts.map(
-                (post) =>
-                    post && (
-                        <SingleContent
-                            key={post.postId}
-                            post={post}
-                            isLinkToParagraph={isLinkToParagraph}
-                        />
-                    ),
+            {posts.map((post) =>
+                post ? (
+                    <SingleContent
+                        key={post.postId}
+                        post={post}
+                        isLinkToParagraph={isLinkToParagraph}
+                    />
+                ) : (
+                    <div className="emptyLayout" key={uuidv4()}></div>
+                ),
             )}
         </SingleRowContainer>
     );
