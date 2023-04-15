@@ -8,10 +8,9 @@ import useOnView from "hooks/useOnView";
 
 const SingleRowContainer = styled.div`
     display: flex;
-    height: 290px;
-
+    gap: 3px;
     @media (min-width: 736px) {
-        margin-bottom: 28px;
+        gap: 4px;
     }
 `;
 
