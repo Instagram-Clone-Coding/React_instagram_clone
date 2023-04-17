@@ -1,3 +1,4 @@
+import { useAppSelector } from "app/store/Hooks";
 import Article from "components/Common/Article/Article";
 import LargerArticle from "components/Common/Article/ArticleAlone/LargerArticle";
 import { useEffect, useState } from "react";
@@ -9,10 +10,10 @@ const StyledArticleAlone = styled.div`
 
 interface ArticleAloneProps {
     isModal?: boolean;
-    article: PostType.ArticleStateProps;
 }
 
-const ArticleAlone = ({ isModal = false, article }: ArticleAloneProps) => {
+const ArticleAlone = ({ isModal = false }: ArticleAloneProps) => {
+    const article = useAppSelector(({ paragraph }) => paragraph.articleObj);
     const [isMobileWidth, setIsMobileWidth] = useState(
         window.innerWidth <= 735,
     );

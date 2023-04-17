@@ -173,6 +173,19 @@ declare module PostType {
         };
     }
 
+    interface CommentType {
+        id: number;
+        commentLikeFlag: boolean;
+        commentLikesCount: number;
+        content: string;
+        hashtagsOfContent: string[];
+        member: CommonType.memberType;
+        mentionsOfContent: string[];
+        repliesCount: number;
+        replies?: CommentType[];
+        uploadDate: string;
+    }
+
     interface ArticleProps {
         followingMemberUsernameLikedPost: null | string; // 내가 팔로우한 사람 중에서 이 글을 좋아한 사람 있으면 보내줌
         member: CommonType.memberType;
@@ -189,19 +202,28 @@ declare module PostType {
         likeOptionFlag: boolean; // 업로드한 사람만 좋아요 및 좋아요한 사람 확인 가능
         commentOptionFlag: boolean; // 댓글 작성 가능 여부
         following: boolean;
-        // recentComments: string[]; 내부 객체 구조
+        recentComments: CommentType[];
     }
 
     interface ArticleStateProps extends ArticleProps {
         followLoading: boolean;
     }
+
+    interface LargerArticleStateProps extends ArticleStateProps {
+        comments: CommentType[];
+    }
 }
 
 declare module ParagraphType {
+    interface ReplyParentObjType {
+        id: number;
+        username: string;
+    }
     interface ParagraphStateProps {
         isDataFetching: boolean;
-        articleObj: PostType.ArticleStateProps;
+        articleObj: PostType.LargerArticleStateProps;
         recentPosts: Profile.PostType[];
+        replyParentObj: ReplyParentObjType | null;
     }
 }
 
@@ -210,6 +232,7 @@ declare module ModalType {
         | "unfollowing"
         | "report"
         | "articleMenu"
+        | "commentMenu"
         | "shareWith"
         | null;
 
@@ -219,6 +242,9 @@ declare module ModalType {
         left: number;
     }
 
+    interface FetchMiniProfileProps extends ModalPositionProps {
+        memberUsername: string;
+    }
     interface MiniProfileProps {
         blocked: boolean;
         blocking: boolean;
@@ -255,10 +281,10 @@ declare module ModalType {
 
     interface ModalStateProps {
         activatedModal: ActivatedModalType;
-        memberUsername: string;
-        memberNickname: string;
+        memberUsername: string; // dlwlrma
         memberImageUrl: string;
         postId: number | null;
+        commentId: number | null;
         miniProfile: MiniProfileStateProps | null;
         isFollowing: boolean | null;
         isOnMiniProfile: boolean;

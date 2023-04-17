@@ -107,8 +107,7 @@ const Article = ({
         <ArticleCard as="article" ref={articleRef} isModal={isModal}>
             <ArticleHeader
                 memberImageUrl={article.member.image.imageUrl}
-                memberUsername={article.member.name} // 이지금
-                memberNickname={article.member.username} // dlwlram
+                memberUsername={article.member.username} // dlwlrma
                 postId={article.postId}
                 isFollowing={article.following}
                 followLoading={article.followLoading}
@@ -127,17 +126,22 @@ const Article = ({
                 followingUserWhoLikesArticle={followingUserWhoLikesArticle}
                 likesCount={likesCount}
                 memberImageUrl={article.member.image.imageUrl}
-                memberUsername={article.member.name} // 이지금
-                memberNickname={article.member.username} // dlwlram
+                memberUsername={article.member.username} // dlwlram
                 content={article.postContent}
                 commentsCount={article.postCommentsCount}
                 mentions={article.mentionsOfContent}
                 hashtags={article.hashtagsOfContent}
                 likeOptionFlag={article.likeOptionFlag}
-                // comments={article.comments}
+                comments={article.recentComments}
+                postId={article.postId}
             />
             <ArticleGap postUploadDate={article.postUploadDate} />
-            {!article.commentOptionFlag && <ArticleCommentFormLayout />}
+            {article.commentOptionFlag && (
+                <ArticleCommentFormLayout
+                    postId={article.postId}
+                    isInLargerArticle={false}
+                />
+            )}
         </ArticleCard>
     );
 };

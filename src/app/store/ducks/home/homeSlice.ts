@@ -47,6 +47,19 @@ const homeSlice = createSlice({
                 followLoading: false,
             });
         },
+        updateRecentComments: (
+            state,
+            action: PayloadAction<{
+                comment: PostType.CommentType;
+                postId: number;
+            }>,
+        ) => {
+            state.articles.forEach((article) => {
+                if (article.postId === action.payload.postId) {
+                    article.recentComments.unshift(action.payload.comment);
+                }
+            });
+        },
     },
     extraReducers: (build) => {
         build

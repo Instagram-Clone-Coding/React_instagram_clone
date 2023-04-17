@@ -51,9 +51,13 @@ interface RecentArticleDataType {
 }
 
 const Paragraph = () => {
-    const { isDataFetching, recentPosts, articleObj } = useAppSelector(
-        (state) => state.paragraph,
-    );
+    const {
+        isDataFetching,
+        recentPosts,
+        articleObj: {
+            member: { username },
+        },
+    } = useAppSelector((state) => state.paragraph);
     const dispatch = useAppDispatch();
     const { postId: postIdStr } = useParams<{ postId: string }>();
     const history = useHistory();
@@ -87,41 +91,41 @@ const Paragraph = () => {
             }
         };
         getArticle();
+        return () => {
+            dispatch(paragraphActions.resetParagraph());
+        };
     }, [postId, dispatch, history]);
     return (
         <StyledParagraph>
             {isDataFetching || (
                 <>
                     <div className="paragraph__articleLayout">
-                        <ArticleAlone article={articleObj} />
-                        {recentPosts.length > 0 &&
-                            articleObj.member.username !== "" && (
-                                <>
-                                    <div className="paragraph__bottomBorder"></div>
-                                    {articleObj.member.username && (
-                                        <div className="paragraph__username">
-                                            {articleObj.member.username}
-                                            <span>님의 게시글 더보기</span>
-                                        </div>
-                                    )}
-                                    {[
-                                        ...Array(
-                                            Math.ceil(recentPosts.length / 3),
-                                        ),
-                                    ].map((a, index) => (
-                                        <SingleRow
-                                            key={index}
-                                            posts={[
-                                                recentPosts[index * 3],
-                                                recentPosts[index * 3 + 1],
-                                                recentPosts[index * 3 + 2],
-                                            ]}
-                                            isObserving={false}
-                                            isLinkToParagraph={true}
-                                        />
-                                    ))}
-                                </>
-                            )}
+                        <ArticleAlone />
+                        {recentPosts.length > 0 && username !== "" && (
+                            <>
+                                <div className="paragraph__bottomBorder"></div>
+                                {username && (
+                                    <div className="paragraph__username">
+                                        {username}
+                                        <span>님의 게시글 더보기</span>
+                                    </div>
+                                )}
+                                {[
+                                    ...Array(Math.ceil(recentPosts.length / 3)),
+                                ].map((a, index) => (
+                                    <SingleRow
+                                        key={index}
+                                        posts={[
+                                            recentPosts[index * 3],
+                                            recentPosts[index * 3 + 1],
+                                            recentPosts[index * 3 + 2],
+                                        ]}
+                                        isObserving={false}
+                                        isLinkToParagraph={true}
+                                    />
+                                ))}
+                            </>
+                        )}
                     </div>
                 </>
             )}

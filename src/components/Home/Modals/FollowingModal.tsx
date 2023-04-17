@@ -40,7 +40,7 @@ const FollowingModalInner = styled.div`
 interface FollowingModalProps {
     onModalOn: () => void;
     onModalOff: () => void;
-    memberNickname: string;
+    memberUsername: string;
     memberImageUrl: string;
 }
 
@@ -49,14 +49,14 @@ const MODAL_CIRCLE_SIZE = 90 / 64;
 const FollowingModal = ({
     onModalOn,
     onModalOff,
-    memberNickname,
+    memberUsername,
     memberImageUrl,
 }: FollowingModalProps) => {
     const dispatch = useAppDispatch();
     const unFollowHandler = () => {
         // 언팔로우
         const unFollowUser = async () => {
-            await dispatch(postUnfollow({ username: memberNickname }));
+            await dispatch(postUnfollow({ username: memberUsername }));
         };
         unFollowUser();
         onModalOff();
@@ -72,11 +72,11 @@ const FollowingModal = ({
                 <StoryCircle
                     type="default"
                     avatarUrl={memberImageUrl}
-                    username={memberNickname}
+                    username={memberUsername}
                     scale={MODAL_CIRCLE_SIZE}
                 />
                 <div className="followingModal-warning">
-                    @{memberNickname}님의 팔로우를 취소하시겠어요?
+                    @{memberUsername}님의 팔로우를 취소하시겠어요?
                 </div>
                 <div
                     className="followingModal-delete"

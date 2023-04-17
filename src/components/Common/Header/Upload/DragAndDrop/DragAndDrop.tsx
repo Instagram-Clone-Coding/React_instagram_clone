@@ -5,6 +5,8 @@ import { useAppDispatch } from "app/store/Hooks";
 import { uploadActions } from "app/store/ducks/upload/uploadSlice";
 import styled from "styled-components";
 import UploadHeader from "components/Common/Header/Upload/UploadHeader";
+import WarningMaxImageNumberModal from "components/Common/Header/Upload/WarningMaxUploadNumberModal";
+import { MAX_IMAGES_NUMBER } from "components/Common/Header/Upload/Upload";
 
 const StyledDragAndDrop = styled.div`
     width: 100%;
@@ -19,11 +21,14 @@ const StyledDragAndDrop = styled.div`
         align-items: center;
         & > div {
             margin-top: 16px;
-            & > h2 {
+            & > h2,
+            & > h3 {
                 font-weight: 300;
-                font-size: 22px;
                 line-height: 26px;
                 text-align: center;
+            }
+            & > h2 {
+                font-size: 22px;
             }
         }
         & > button {
@@ -43,8 +48,9 @@ const StyledDragAndDrop = styled.div`
 
 const DragAndDrop = () => {
     const inputRef = useRef<HTMLInputElement | null>(null);
-    // const [files, setFiles] = useState<(string | ArrayBuffer | null)[]>([]);
     const [isDraggingOver, setIsDraggingOver] = useState(false);
+    const [isWarnigMaxImageNumberModalOn, setisWarnigMaxImageNumberModalOn] =
+        useState(false);
     const dispatch = useAppDispatch();
 
     const buttonClickHandler = () => {
@@ -81,7 +87,11 @@ const DragAndDrop = () => {
         event.preventDefault();
         event.stopPropagation();
 
+        setIsDraggingOver(false);
         const droppedFiles = event.dataTransfer.files;
+        if (droppedFiles.length > MAX_IMAGES_NUMBER) {
+            return setisWarnigMaxImageNumberModalOn(true);
+        }
         Array.from(droppedFiles).forEach((file, index) => {
             const img = new Image();
             img.src = URL.createObjectURL(file);
@@ -100,12 +110,14 @@ const DragAndDrop = () => {
                 }
             };
         });
-        setIsDraggingOver(false);
     };
 
     const fileInputChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const addedFiles = event.target.files;
         if (!addedFiles) return;
+        if (addedFiles.length > MAX_IMAGES_NUMBER) {
+            return setisWarnigMaxImageNumberModalOn(true);
+        }
         Array.from(addedFiles).forEach((file, index) => {
             const img = new Image();
             img.src = URL.createObjectURL(file);
@@ -128,6 +140,13 @@ const DragAndDrop = () => {
 
     return (
         <>
+            {isWarnigMaxImageNumberModalOn && (
+                <WarningMaxImageNumberModal
+                    warnigContent="images"
+                    onModalOn={() => setisWarnigMaxImageNumberModalOn(true)}
+                    onModalOff={() => setisWarnigMaxImageNumberModalOn(false)}
+                />
+            )}
             <UploadHeader />
             <StyledDragAndDrop>
                 <div
@@ -141,7 +160,11 @@ const DragAndDrop = () => {
                 >
                     <ImgOrVideoIcon />
                     <div>
-                        <h2>사진과 동영상을 여기 끌어다 놓으세요</h2>
+                        <h2>사진을 여기 끌어다 놓으세요</h2>
+                        <h3>
+                            최대 {MAX_IMAGES_NUMBER}개의 사진을 업로드할 수
+                            있습니다
+                        </h3>
                     </div>
                     <Button type="button" onClick={buttonClickHandler}>
                         컴퓨터에서 선택

@@ -7,15 +7,23 @@ const StyledAricleCommentFormLayout = styled.div`
     display: flex;
     align-items: center;
     border-top: 1px solid ${(props) => props.theme.color.bd_gray};
-    form {
-        width: 100%;
-    }
 `;
 
-const ArticleCommentFormLayout = () => {
+interface ArticleCommentFormLayoutProps {
+    postId: number;
+    isInLargerArticle: boolean;
+}
+
+const ArticleCommentFormLayout = ({
+    postId,
+    isInLargerArticle,
+}: ArticleCommentFormLayoutProps) => {
     return (
         <StyledAricleCommentFormLayout>
-            <CommentForm />
+            <CommentForm
+                postId={postId}
+                isInLargerArticle={isInLargerArticle}
+            />
         </StyledAricleCommentFormLayout>
     );
 };

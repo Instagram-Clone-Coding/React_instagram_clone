@@ -2,21 +2,36 @@ import useGapText from "hooks/useGapText";
 import React from "react";
 import styled from "styled-components";
 
-const StyledArticleGap = styled.div`
-    padding-left: 16px;
+interface StyledArticleGapProps {
+    isAboutComment: boolean;
+}
+
+const StyledArticleGap = styled.time<StyledArticleGapProps>`
+    padding-left: ${({ isAboutComment }) => (isAboutComment ? "0px" : "16px")};
+    margin-right: 12px;
     margin-bottom: 16px;
     color: ${(props) => props.theme.font.gray};
-    font-size: 10px;
+    font-size: ${({ isAboutComment }) => (isAboutComment ? "12px" : "10px")};
 `;
 
 interface ArticleGapProps {
     postUploadDate: string;
+    isAboutComment?: boolean;
 }
 
-const ArticleGap = ({ postUploadDate }: ArticleGapProps) => {
-    const gapText = `${useGapText(postUploadDate)} 전`;
+const ArticleGap = ({
+    postUploadDate,
+    isAboutComment = false,
+}: ArticleGapProps) => {
+    const gapText = `${useGapText(postUploadDate)} ${
+        isAboutComment ? "" : "전"
+    }`;
 
-    return <StyledArticleGap>{gapText}</StyledArticleGap>;
+    return (
+        <StyledArticleGap isAboutComment={isAboutComment}>
+            {gapText}
+        </StyledArticleGap>
+    );
 };
 
 export default React.memo(ArticleGap);

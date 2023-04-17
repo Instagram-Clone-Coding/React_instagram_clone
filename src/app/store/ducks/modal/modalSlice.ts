@@ -6,8 +6,8 @@ const initialState: ModalType.ModalStateProps = {
     activatedModal: null,
     memberUsername: "",
     memberImageUrl: "",
-    memberNickname: "",
     postId: null,
+    commentId: null,
     miniProfile: null,
     isFollowing: null,
     isOnMiniProfile: false,
@@ -17,7 +17,6 @@ const initialState: ModalType.ModalStateProps = {
 
 interface HoverModalPayloadType {
     memberUsername: string;
-    memberNickname: string;
     memberImageUrl: string;
 }
 
@@ -37,7 +36,6 @@ const modalSlice = createSlice({
             state.isOnMiniProfile = true;
             state.activatedModal = null;
             state.memberUsername = action.payload.memberUsername;
-            state.memberNickname = action.payload.memberNickname;
             state.memberImageUrl = action.payload.memberImageUrl;
         },
         startArticleMenuModal: (
@@ -48,7 +46,6 @@ const modalSlice = createSlice({
             state.activatedModal = "articleMenu";
             state.postId = action.payload.postId;
             state.memberUsername = action.payload.memberUsername;
-            state.memberNickname = action.payload.memberNickname;
             state.memberImageUrl = action.payload.memberImageUrl;
             state.isFollowing = action.payload.isFollowing;
         },
@@ -57,6 +54,9 @@ const modalSlice = createSlice({
             action: PayloadAction<ModalType.ActivatedModalType>,
         ) => {
             state.activatedModal = action.payload;
+        },
+        setCommentId: (state, action: PayloadAction<{ commentId: number }>) => {
+            state.commentId = action.payload.commentId;
         },
         mouseOnHoverModal: (state) => {
             state.isOnMiniProfile = true;
@@ -118,10 +118,12 @@ const modalSlice = createSlice({
             })
             .addCase(getMiniProfile.fulfilled, (state, action) => {
                 state.miniProfile = action.payload;
+                state.isOnMiniProfile = true;
             })
-            // .addCase(getMiniProfile.rejected, (state, action) => {
-
-            // });
+            .addCase(getMiniProfile.rejected, (state) => {
+                state.miniProfile = null;
+                state.isOnMiniProfile = false;
+            })
             .addCase(postUnfollow.pending, (state) => {
                 if (state.miniProfile) {
                     state.miniProfile.isLoading = true;

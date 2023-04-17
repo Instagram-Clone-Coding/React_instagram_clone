@@ -1,4 +1,5 @@
 import { modalActions } from "app/store/ducks/modal/modalSlice";
+import { paragraphActions } from "app/store/ducks/paragraph/paragraphSlice";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import ArticleAlone from "components/Common/Article/ArticleAlone/ArticleAlone";
 import Loading from "components/Common/Loading";
@@ -19,8 +20,6 @@ const ArticleAloneModal = ({
     onModalOn,
     onModalOff,
 }: ArticleAloneModalProps) => {
-    const [articleData, setArticleData] =
-        useState<PostType.ArticleStateProps | null>(null);
     const [isDataFetching, setIsDataFetching] = useState(true);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const postId = useAppSelector(
@@ -36,11 +35,10 @@ const ArticleAloneModal = ({
                 } = await authorizedCustomAxios.get<OnlyArticleDataType>(
                     `/posts/${postId}`,
                 );
-                setArticleData({ ...data, followLoading: false });
+                dispatch(paragraphActions.setArticle(data));
+                setIsDataFetching(false);
             } catch (error) {
                 dispatch(modalActions.stopArticleAloneModal());
-            } finally {
-                setIsDataFetching(false);
             }
         };
         getArticleData();
@@ -64,9 +62,7 @@ const ArticleAloneModal = ({
             {isDataFetching ? (
                 <Loading size={14} />
             ) : (
-                articleData && (
-                    <ArticleAlone isModal={true} article={articleData} />
-                )
+                <ArticleAlone isModal={true} />
             )}
         </ModalCard>
     );
