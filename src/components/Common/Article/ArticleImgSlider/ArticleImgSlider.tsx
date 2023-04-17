@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import sprite2 from "assets/Images/sprite2.png";
 import styled from "styled-components";
-import ArticleImgSliderUnit from "components/Home/Article/ArticleImgSlider/ArticleImgSliderUnit";
+import ArticleImgSliderUnit from "components/Common/Article/ArticleImgSlider/ArticleImgSliderUnit";
 
 interface SliderProps {
     total: number;
@@ -121,7 +121,7 @@ const StyledImgSlider = styled.div<SliderProps>`
         display: flex;
         gap: 4px;
         justify-content: center;
-        bottom: -15px;
+        bottom: ${(props) => (props.isInLargerArticle ? "15px" : "-15px")};
         .img-dot {
             background-color: #a8a8a8;
             width: 6px;
@@ -137,14 +137,22 @@ const StyledImgSlider = styled.div<SliderProps>`
 interface SliderProps {
     total: number;
     currentIndex: number;
+    isInLargerArticle: boolean;
 }
 
 interface ArticleImgSliderProps {
     imageDTOs: CommonType.PostImageDTOProps[];
-    onLike: () => undefined;
+    onLike: () => void;
+    onResizeHeight?: (height: number) => void;
+    isInLargerArticle?: boolean;
 }
 
-const ArticleImgSlider = ({ imageDTOs, onLike }: ArticleImgSliderProps) => {
+const ArticleImgSlider = ({
+    imageDTOs,
+    onLike,
+    onResizeHeight,
+    isInLargerArticle = false,
+}: ArticleImgSliderProps) => {
     //slider state
     const [sliderIndex, setSliderIndex] = useState(0);
     const [doubleClicked, setDoubleClicked] = useState(false);
@@ -153,12 +161,12 @@ const ArticleImgSlider = ({ imageDTOs, onLike }: ArticleImgSliderProps) => {
     const wrapRef = useRef<HTMLDivElement>(null);
     const sliderRef = useRef<HTMLDivElement>(null);
 
-    const resizeHandler = () => {
-        if (!wrapRef.current) return;
-        setUnitWidth(wrapRef.current.offsetWidth);
-    };
-
     useEffect(() => {
+        const resizeHandler = () => {
+            if (!wrapRef.current) return;
+            setUnitWidth(wrapRef.current.offsetWidth);
+            onResizeHeight && onResizeHeight(wrapRef.current.clientHeight);
+        };
         wrapRef.current?.scrollBy({
             left: 0,
         });
@@ -167,7 +175,7 @@ const ArticleImgSlider = ({ imageDTOs, onLike }: ArticleImgSliderProps) => {
         return () => {
             window.removeEventListener("resize", resizeHandler);
         };
-    }, []);
+    }, [onResizeHeight]);
 
     const doubleClickLikeHandler = () => {
         setDoubleClicked(true);
@@ -221,6 +229,7 @@ const ArticleImgSlider = ({ imageDTOs, onLike }: ArticleImgSliderProps) => {
             onDoubleClick={doubleClickLikeHandler} // 빨간 하트 애니메이션 효과는 redux 적용하면서 연결할 예정
             total={totalIndex}
             currentIndex={sliderIndex}
+            isInLargerArticle={isInLargerArticle}
         >
             {doubleClicked && (
                 <div

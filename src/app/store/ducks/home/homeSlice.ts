@@ -40,12 +40,24 @@ const homeSlice = createSlice({
         },
         updateUploadedArticle: (
             state,
-            action: PayloadAction<HomeType.ArticleProps>,
+            action: PayloadAction<PostType.ArticleProps>,
         ) => {
             state.articles.unshift({
                 ...action.payload,
-                isFollowing: false,
                 followLoading: false,
+            });
+        },
+        updateRecentComments: (
+            state,
+            action: PayloadAction<{
+                comment: PostType.CommentType;
+                postId: number;
+            }>,
+        ) => {
+            state.articles.forEach((article) => {
+                if (article.postId === action.payload.postId) {
+                    article.recentComments.unshift(action.payload.comment);
+                }
             });
         },
     },
@@ -78,14 +90,14 @@ const homeSlice = createSlice({
             .addCase(postUnfollow.fulfilled, (state, action) => {
                 state.articles.forEach((article) => {
                     if (article.member.username === action.meta.arg.username) {
-                        article.isFollowing = false;
+                        article.following = false;
                     }
                 });
             })
             .addCase(postUnfollow.rejected, (state, action) => {
                 state.articles.forEach((article) => {
                     if (article.member.username === action.meta.arg.username) {
-                        article.isFollowing = true;
+                        article.following = true;
                     }
                 });
             })
@@ -100,7 +112,7 @@ const homeSlice = createSlice({
                 state.articles.forEach((article) => {
                     if (article.member.username === action.meta.arg.username) {
                         article.followLoading = false;
-                        article.isFollowing = true;
+                        article.following = true;
                     }
                 });
             })
@@ -108,7 +120,7 @@ const homeSlice = createSlice({
                 state.articles.forEach((article) => {
                     if (article.member.username === action.meta.arg.username) {
                         article.followLoading = false;
-                        article.isFollowing = false;
+                        article.following = false;
                     }
                 });
             })

@@ -6,30 +6,57 @@ const initialState: ModalType.ModalStateProps = {
     activatedModal: null,
     memberUsername: "",
     memberImageUrl: "",
-    memberNickname: "",
-    postId: undefined,
-    miniProfile: undefined,
+    postId: null,
+    commentId: null,
+    miniProfile: null,
+    isFollowing: null,
     isOnMiniProfile: false,
+    isArticleAloneModalOn: false,
+    articleAloneModalPostId: null,
 };
+
+interface HoverModalPayloadType {
+    memberUsername: string;
+    memberImageUrl: string;
+}
+
+interface ArticleMenuModalPayloadType extends HoverModalPayloadType {
+    postId: number;
+    isFollowing: boolean;
+}
 
 const modalSlice = createSlice({
     name: "modal",
     initialState,
     reducers: {
-        startModal: (
+        startHoverModal: (
             state,
-            action: PayloadAction<ModalType.ModalStateProps>,
+            action: PayloadAction<HoverModalPayloadType>,
         ) => {
-            return {
-                ...state,
-                ...action.payload,
-            }; // 전달한 modalDTO 값만 변경
+            state.isOnMiniProfile = true;
+            state.activatedModal = null;
+            state.memberUsername = action.payload.memberUsername;
+            state.memberImageUrl = action.payload.memberImageUrl;
+        },
+        startArticleMenuModal: (
+            state,
+            action: PayloadAction<ArticleMenuModalPayloadType>,
+        ) => {
+            state.isOnMiniProfile = false;
+            state.activatedModal = "articleMenu";
+            state.postId = action.payload.postId;
+            state.memberUsername = action.payload.memberUsername;
+            state.memberImageUrl = action.payload.memberImageUrl;
+            state.isFollowing = action.payload.isFollowing;
         },
         changeActivatedModal: (
             state,
             action: PayloadAction<ModalType.ActivatedModalType>,
         ) => {
             state.activatedModal = action.payload;
+        },
+        setCommentId: (state, action: PayloadAction<{ commentId: number }>) => {
+            state.commentId = action.payload.commentId;
         },
         mouseOnHoverModal: (state) => {
             state.isOnMiniProfile = true;
@@ -69,18 +96,34 @@ const modalSlice = createSlice({
                 state.miniProfile.modalPosition = action.payload;
             }
         },
+        startArticleAloneModal: (
+            state,
+            action: PayloadAction<{ postId: number }>,
+        ) => {
+            state.isArticleAloneModalOn = true;
+            state.articleAloneModalPostId = action.payload.postId;
+        },
+        maintainArticleAloneModal: (state) => {
+            state.isArticleAloneModalOn = true;
+        },
+        stopArticleAloneModal: (state) => {
+            state.isArticleAloneModalOn = false;
+            state.articleAloneModalPostId = null;
+        },
     },
     extraReducers: (build) => {
         build
             .addCase(getMiniProfile.pending, (state) => {
-                state.miniProfile = undefined;
+                state.miniProfile = null;
             })
             .addCase(getMiniProfile.fulfilled, (state, action) => {
                 state.miniProfile = action.payload;
+                state.isOnMiniProfile = true;
             })
-            // .addCase(getMiniProfile.rejected, (state, action) => {
-
-            // });
+            .addCase(getMiniProfile.rejected, (state) => {
+                state.miniProfile = null;
+                state.isOnMiniProfile = false;
+            })
             .addCase(postUnfollow.pending, (state) => {
                 if (state.miniProfile) {
                     state.miniProfile.isLoading = true;

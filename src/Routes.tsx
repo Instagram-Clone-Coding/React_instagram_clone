@@ -10,6 +10,7 @@ import AuthPage from "pages/Auth";
 import ResetPassword from "components/Auth/ResetPassword";
 import ResetPasswordForm from "components/Auth/ResetPassword/ResetPasswordForm";
 import Edit from "pages/Edit";
+import Paragraph from "pages/Paragraph/Paragraph";
 import ModalsInEveryRoutes from "ModalsInEveryRoutes";
 
 const Routes = () => {
@@ -73,6 +74,7 @@ const AuthedContainer = () => {
             <Route exact path="/" component={Home} />
             {/* Direct */}
             <Route path="/direct" component={Direct} />
+            <Route path="/p/:postId" component={Paragraph} />
             {/* 404 페이지 필요*/}
         </>
     );

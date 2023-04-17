@@ -3,6 +3,8 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@reduxjs/toolkit": "^1.6.2",
+        "@stomp/stompjs": "^6.1.2",
         "axios": "^0.24.0",
         "emoji-picker-react": "^3.5.0",
         "jsonwebtoken": "^8.5.1",
@@ -18,8 +20,7 @@
         "styled-components": "^5.3.1",
         "styled-reset": "^4.3.4",
         "typescript": "^4.1.2",
-        "@reduxjs/toolkit": "^1.6.2",
-        "@stomp/stompjs": "^6.1.2"
+        "uuid": "^9.0.0"
     },
     "scripts": {
         "start": "react-scripts start",
@@ -50,7 +51,6 @@
     },
     "devDependencies": {
         "@types/jsonwebtoken": "^8.5.8",
-        "react-error-overlay": "6.0.9",
         "@types/navermaps": "^3.0.16",
         "@types/node": "^12.0.0",
         "@types/query-string": "^6.3.0",
@@ -59,6 +59,8 @@
         "@types/react-router-dom": "^5.3.0",
         "@types/sockjs-client": "^1.5.1",
         "@types/stompjs": "^2.3.5",
-        "@types/styled-components": "^5.1.14"
+        "@types/styled-components": "^5.1.14",
+        "@types/uuid": "^9.0.1",
+        "react-error-overlay": "6.0.9"
     }
 }

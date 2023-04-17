@@ -1,0 +1,43 @@
+<svg
+    aria-label="댓글 더 읽어들이기"
+    color="rgb(38, 38, 38)"
+    fill="rgb(38, 38, 38)"
+    height="24"
+    role="img"
+    viewBox="0 0 24 24"
+    width="24"
+>
+    <title>댓글 더 읽어들이기</title>
+    <circle
+        cx="12.001"
+        cy="12.005"
+        fill="none"
+        r="10.5"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+    ></circle>
+    <line
+        fill="none"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        x1="7.001"
+        x2="17.001"
+        y1="12.005"
+        y2="12.005"
+    ></line>
+    <line
+        fill="none"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        x1="12.001"
+        x2="12.001"
+        y1="7.005"
+        y2="17.005"
+    ></line>
+</svg>

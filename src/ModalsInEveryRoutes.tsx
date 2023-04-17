@@ -7,16 +7,19 @@ import ArticleMenuModal from "components/Home/Modals/ArticleMenuModal";
 import ReportModal from "components/Home/Modals/ReportModal";
 import ShareWithModal from "components/Home/Modals/SharerWithModal";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
+import ArticleAloneModal from "components/Common/Article/ArticleAlone/ArticleAloneModal";
+import CommentMenuModal from "components/Home/Modals/CommentMenuModal";
 
 const ModalsInEveryRoutes = () => {
     const {
         home: { isCopiedNotification },
         modal: {
             activatedModal,
-            memberNickname,
+            memberUsername,
             postId,
             miniProfile,
             memberImageUrl,
+            isArticleAloneModalOn,
         },
     } = useAppSelector((state) => state);
 
@@ -51,15 +54,18 @@ const ModalsInEveryRoutes = () => {
                         dispatch(modalActions.changeActivatedModal(null))
                     }
                     memberImageUrl={memberImageUrl}
-                    memberNickname={memberNickname}
+                    memberUsername={memberUsername}
                 />
             )}
-            {activatedModal === "articleMenu" && memberNickname && postId && (
+            {activatedModal === "articleMenu" && memberUsername && postId && (
                 <ArticleMenuModal
                     onModalOn={() =>
                         dispatch(modalActions.maintainModalon("articleMenu"))
                     }
-                    onModalOff={() => dispatch(modalActions.resetModal())}
+                    onModalOff={() =>
+                        dispatch(modalActions.changeActivatedModal(null))
+                    }
+                    postId={postId}
                 />
             )}
             {/* 아래 두 모달은 이전 모달을 거쳐야 하므로 필요없는 data는 action에 담지 않음 */}
@@ -68,7 +74,9 @@ const ModalsInEveryRoutes = () => {
                     onModalOn={() =>
                         dispatch(modalActions.maintainModalon("report"))
                     }
-                    onModalOff={() => dispatch(modalActions.resetModal())}
+                    onModalOff={() =>
+                        dispatch(modalActions.changeActivatedModal(null))
+                    }
                 />
             )}
             {activatedModal === "shareWith" && (
@@ -76,7 +84,31 @@ const ModalsInEveryRoutes = () => {
                     onModalOn={() =>
                         dispatch(modalActions.maintainModalon("shareWith"))
                     }
-                    onModalOff={() => dispatch(modalActions.resetModal())}
+                    onModalOff={() =>
+                        dispatch(modalActions.changeActivatedModal(null))
+                    }
+                />
+            )}
+            {isArticleAloneModalOn && (
+                <ArticleAloneModal
+                    onModalOn={() =>
+                        dispatch(modalActions.maintainArticleAloneModal())
+                    }
+                    onModalOff={() =>
+                        dispatch(modalActions.stopArticleAloneModal())
+                    }
+                />
+            )}
+            {activatedModal === "commentMenu" && (
+                <CommentMenuModal
+                    onModalOn={() =>
+                        dispatch(
+                            modalActions.changeActivatedModal("commentMenu"),
+                        )
+                    }
+                    onModalOff={() =>
+                        dispatch(modalActions.changeActivatedModal(null))
+                    }
                 />
             )}
         </>

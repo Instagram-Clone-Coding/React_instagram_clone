@@ -1,12 +1,6 @@
 import styled from "styled-components";
 import Card from "styles/UI/Card";
 import { useEffect, useRef, useState } from "react";
-import ArticleHeader from "components/Home/Article/ArticleHeader";
-import ArticleImgSlider from "components/Home/Article/ArticleImgSlider";
-import ArticleMainIcons from "components/Home/Article/ArticleMainIcons";
-import ArticleMain from "components/Home/Article/ArticleMain";
-import CommentForm from "components/Home/Article/CommentForm";
-import useGapText from "hooks/useGapText";
 import useOnView from "hooks/useOnView";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import {
@@ -14,41 +8,39 @@ import {
     getExtraArticle,
     postLike,
 } from "app/store/ducks/home/homThunk";
+import ArticleHeader from "components/Common/Article/ArticleHeader";
+import ArticleImgSlider from "components/Common/Article/ArticleImgSlider";
+import ArticleMainIcons from "components/Common/Article/ArticleMainIcons";
+import ArticleMain from "components/Common/Article/ArticleMain";
+import ArticleGap from "components/Common/Article/ArticleGap";
+import ArticleCommentFormLayout from "components/Common/Article/ArticleCommentFormLayout";
 
-const ArticleCard = styled(Card)`
-    margin-bottom: 24px;
-    .article-createdAt {
-        padding-left: 16px;
-        margin-bottom: 16px;
-        color: ${(props) => props.theme.font.gray};
-        font-size: 10px;
-    }
-    .article-form-layout {
-        padding: 6px 16px;
-        display: flex;
-        align-items: center;
-        border-top: 1px solid #efefef;
-        form {
-            width: 100%;
-        }
-    }
+interface ArticleCardProps {
+    isModal: boolean;
+}
+
+const ArticleCard = styled(Card)<ArticleCardProps>`
+    margin-bottom: ${({ isModal }) => (isModal ? 0 : "24px")};
 `;
 
 interface ArticleComponentPros {
-    article: HomeType.ArticleStateProps;
+    article: PostType.ArticleStateProps;
     isObserving: boolean;
-    isLast: boolean;
+    isModal?: boolean;
 }
 
 // 아마 여기 articleData는 상위 HomeSection 컴포넌트에서 가져와야 하지 않을까
-const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
+const Article = ({
+    article,
+    isObserving,
+    isModal = false,
+}: ArticleComponentPros) => {
     // data state
     const followingUserWhoLikesArticle =
         article.followingMemberUsernameLikedPost;
     // like state
     const [isLiked, setIsliked] = useState(article.postLikeFlag);
     const [likesCount, setLikesCount] = useState(article.postLikesCount);
-    const gapText = `${useGapText(article.postUploadDate)} 전`;
     const articleRef = useRef<HTMLDivElement>(null);
     const isVisible = useOnView(articleRef);
     const { extraArticlesCount } = useAppSelector(({ home }) => home);
@@ -68,7 +60,6 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
         };
 
         isObserving && isVisible && dispatchExtraArticle(); // 이 때 비동기 작업 및 무한 스크롤
-        // isLast && isVisible && dispatchExtraArticle();
     }, [isObserving, isVisible, dispatch]);
 
     const dispatchPostLike = async () => {
@@ -113,13 +104,12 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
     };
 
     return (
-        <ArticleCard as="article" ref={articleRef}>
+        <ArticleCard as="article" ref={articleRef} isModal={isModal}>
             <ArticleHeader
                 memberImageUrl={article.member.image.imageUrl}
-                memberUsername={article.member.name} // 이지금
-                memberNickname={article.member.username} // dlwlram
+                memberUsername={article.member.username} // dlwlrma
                 postId={article.postId}
-                isFollowing={article.isFollowing}
+                isFollowing={article.following}
                 followLoading={article.followLoading}
             />
             <ArticleImgSlider
@@ -136,18 +126,22 @@ const Article = ({ article, isObserving, isLast }: ArticleComponentPros) => {
                 followingUserWhoLikesArticle={followingUserWhoLikesArticle}
                 likesCount={likesCount}
                 memberImageUrl={article.member.image.imageUrl}
-                memberUsername={article.member.name} // 이지금
-                memberNickname={article.member.username} // dlwlram
+                memberUsername={article.member.username} // dlwlram
                 content={article.postContent}
                 commentsCount={article.postCommentsCount}
                 mentions={article.mentionsOfContent}
                 hashtags={article.hashtagsOfContent}
-                // comments={article.comments}
+                likeOptionFlag={article.likeOptionFlag}
+                comments={article.recentComments}
+                postId={article.postId}
             />
-            <div className="article-createdAt">{gapText}</div>
-            <div className="article-form-layout">
-                <CommentForm />
-            </div>
+            <ArticleGap postUploadDate={article.postUploadDate} />
+            {article.commentOptionFlag && (
+                <ArticleCommentFormLayout
+                    postId={article.postId}
+                    isInLargerArticle={false}
+                />
+            )}
         </ArticleCard>
     );
 };
