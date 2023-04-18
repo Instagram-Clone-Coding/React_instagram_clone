@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { ReactComponent as Emoji } from "assets/Svgs/direct-emoji-icon.svg";
 import styled from "styled-components";
 import { authorizedCustomAxios } from "customAxios";
@@ -117,7 +117,7 @@ const CommentForm = ({ postId, isInLargerArticle }: CommentFormProps) => {
                 null,
                 { data: CommentUploadResponseType }
             >("/comments", {
-                content: text,
+                content: text.trim(),
                 parentId: replyParentObj?.id || 0,
                 postId,
             });
@@ -138,6 +138,16 @@ const CommentForm = ({ postId, isInLargerArticle }: CommentFormProps) => {
             console.log(error);
         } finally {
             setIsUploading(false);
+        }
+    };
+
+    const enterHandler = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+        event.preventDefault();
+        if (event.key !== "Enter") return;
+        if (event.shiftKey) {
+            setText((prev) => prev + "\n");
+        } else {
+            isValid && commentSubmitHandler(event);
         }
     };
 
@@ -165,6 +175,7 @@ const CommentForm = ({ postId, isInLargerArticle }: CommentFormProps) => {
                     onChange={commentValueHandler}
                     autoComplete={"off"}
                     ref={textareaRef}
+                    onKeyDown={enterHandler}
                 />
                 <button type="submit" disabled={!isValid || isUploading}>
                     게시
