@@ -95,6 +95,9 @@ const StyledHoverModalInner = styled.div`
         & > #margin {
             margin-right: 4px;
         }
+        & > a > button {
+            width: 100%;
+        }
         & > * {
             flex: 1 1 auto;
             font-weight: ${(props) => props.theme.font.bold};
@@ -238,12 +241,14 @@ const HoverModal = ({
                     <div className="hoverModal-btns">
                         {userInfo?.memberUsername ===
                         miniProfile.memberUsername ? (
-                            <Button
-                                bgColor={"#efefef"}
-                                color={theme.font.default_black}
-                            >
-                                <Link to="/accounts/edit">프로필 편집</Link>
-                            </Button>
+                            <Link to="/accounts/edit">
+                                <Button
+                                    bgColor={"#efefef"}
+                                    color={theme.font.default_black}
+                                >
+                                    프로필 편집
+                                </Button>
+                            </Link>
                         ) : miniProfile.following ? (
                             <>
                                 <Link to="/direct/t/id" id="margin">
