@@ -32,6 +32,8 @@ const StyledUploadModalInner = styled.div<ModalInnerProps>`
 
 const BORDER_TOTAL_WIDTH = 2;
 
+export const MAX_IMAGES_NUMBER = 10;
+
 const Upload = () => {
     const dispatch = useAppDispatch();
     const step = useAppSelector(({ upload }) => upload.step);

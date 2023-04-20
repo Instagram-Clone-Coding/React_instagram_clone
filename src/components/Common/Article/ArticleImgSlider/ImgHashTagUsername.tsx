@@ -77,7 +77,7 @@ export const ImgHashTagUsername = ({
     postTagDTO,
     isImgHashTagsOn,
 }: {
-    postTagDTO: HomeType.PostImgTagDTOProps;
+    postTagDTO: PostType.PostImgTagDTOProps;
     isImgHashTagsOn: boolean | null;
 }) => {
     return (

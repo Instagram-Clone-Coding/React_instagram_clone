@@ -3,13 +3,16 @@ import styled from "styled-components";
 import { ReactComponent as Slide } from "assets/Svgs/slide.svg";
 import sprite from "assets/Images/sprite4.png";
 import ImageSprite from "components/Common/ImageSprite";
+import { useAppDispatch } from "app/store/Hooks";
+import { modalActions } from "app/store/ducks/modal/modalSlice";
+import { useHistory } from "react-router-dom";
 
 const SingleContentContainer = styled.div`
     position: relative;
     cursor: pointer;
     width: 100%;
-    max-width: 292px;
-    height: 100%;
+    max-width: 309px;
+    flex: 1;
     svg {
         position: absolute;
         right: 0;
@@ -18,8 +21,7 @@ const SingleContentContainer = styled.div`
     }
 
     img {
-        width: 100%;
-        height: 100%;
+        object-fit: cover;
     }
 
     .hover {
@@ -27,8 +29,6 @@ const SingleContentContainer = styled.div`
         top: 0;
         left: 0;
         background-color: rgba(0, 0, 0, 0.3);
-        width: 100%;
-        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -48,23 +48,16 @@ const SingleContentContainer = styled.div`
         }
     }
 
-    @media (min-width: 736px) {
-        margin-right: 30px;
-
-        &:last-child {
-            margin-right: 0px;
-        }
-
-        img {
-        }
-
-        img:last-child {
-        }
+    img,
+    & > .hover {
+        width: 100%;
+        aspect-ratio: 1 / 1;
     }
 `;
 
 interface SingleContentProps {
     post: Profile.PostType;
+    isLinkToParagraph?: boolean;
 }
 
 const heartImage: CommonType.ImageProps = {
@@ -80,8 +73,21 @@ const commentImage: CommonType.ImageProps = {
     url: sprite,
 };
 
-const SingleContent = ({ post }: SingleContentProps) => {
+const SingleContent = ({
+    post,
+    isLinkToParagraph = false,
+}: SingleContentProps) => {
     const [hoverd, setHoverd] = useState<boolean>(false);
+    const dispatch = useAppDispatch();
+    const history = useHistory();
+
+    const contentClickHandler = () => {
+        if (isLinkToParagraph) return history.push(`/p/${post.postId}`);
+        return dispatch(
+            modalActions.startArticleAloneModal({ postId: post.postId }),
+        );
+    };
+
     return (
         <SingleContentContainer
             onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
@@ -92,6 +98,7 @@ const SingleContent = ({ post }: SingleContentProps) => {
                 e.preventDefault();
                 setHoverd(false);
             }}
+            onClick={contentClickHandler}
         >
             {post.hasManyPostImages && <Slide />}
             <img

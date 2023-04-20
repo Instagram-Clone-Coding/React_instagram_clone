@@ -136,40 +136,9 @@ declare module AuthType {
 
 declare module HomeType {
     type StoriesScrollPositionType = "left" | "right" | "center";
-
-    interface PostImgTagDTOProps {
-        id: number;
-        tag: {
-            username: string;
-            x: number;
-            y: number;
-        };
-    }
-
-    interface ArticleProps {
-        followingMemberUsernameLikedPost: null | string; // 내가 팔로우한 사람 중에서 이 글을 좋아한 사람 있으면 보내줌
-        member: CommonType.memberType;
-        postBookmarkFlag: boolean; // 내가 북마크 했는지
-        postCommentsCount: number;
-        postContent: string;
-        postId: number;
-        postImages: CommonType.PostImageDTOProps[];
-        postLikeFlag: boolean; // 내가 좋아요 했는지
-        postLikesCount: number;
-        postUploadDate: string;
-        hashtagsOfContent: string[];
-        mentionsOfContent: string[];
-        // comment 몇 개 가져오기
-    }
-
-    interface ArticleStateProps extends ArticleProps {
-        isFollowing: boolean;
-        followLoading: boolean;
-    }
-
     interface homeStateProps {
         storiesScrollPosition: storiesScrollPositionType;
-        articles: ArticleStateProps[];
+        articles: PostType.ArticleStateProps[];
         // location?
         isLoading: boolean; // 더미 로딩
         isExtraArticleLoading: boolean;
@@ -194,11 +163,76 @@ declare module HomeType {
     }
 }
 
+declare module PostType {
+    interface PostImgTagDTOProps {
+        id: number;
+        tag: {
+            username: string;
+            x: number;
+            y: number;
+        };
+    }
+
+    interface CommentType {
+        id: number;
+        commentLikeFlag: boolean;
+        commentLikesCount: number;
+        content: string;
+        hashtagsOfContent: string[];
+        member: CommonType.memberType;
+        mentionsOfContent: string[];
+        repliesCount: number;
+        replies?: CommentType[];
+        uploadDate: string;
+    }
+
+    interface ArticleProps {
+        followingMemberUsernameLikedPost: null | string; // 내가 팔로우한 사람 중에서 이 글을 좋아한 사람 있으면 보내줌
+        member: CommonType.memberType;
+        postBookmarkFlag: boolean; // 내가 북마크 했는지
+        postCommentsCount: number;
+        postContent: string;
+        postId: number;
+        postImages: CommonType.PostImageDTOProps[];
+        postLikeFlag: boolean; // 내가 좋아요 했는지
+        postLikesCount: number;
+        postUploadDate: string;
+        hashtagsOfContent: string[];
+        mentionsOfContent: string[];
+        likeOptionFlag: boolean; // 업로드한 사람만 좋아요 및 좋아요한 사람 확인 가능
+        commentOptionFlag: boolean; // 댓글 작성 가능 여부
+        following: boolean;
+        recentComments: CommentType[];
+    }
+
+    interface ArticleStateProps extends ArticleProps {
+        followLoading: boolean;
+    }
+
+    interface LargerArticleStateProps extends ArticleStateProps {
+        comments: CommentType[];
+    }
+}
+
+declare module ParagraphType {
+    interface ReplyParentObjType {
+        id: number;
+        username: string;
+    }
+    interface ParagraphStateProps {
+        isDataFetching: boolean;
+        articleObj: PostType.LargerArticleStateProps;
+        recentPosts: Profile.PostType[];
+        replyParentObj: ReplyParentObjType | null;
+    }
+}
+
 declare module ModalType {
     type ActivatedModalType =
         | "unfollowing"
         | "report"
         | "articleMenu"
+        | "commentMenu"
         | "shareWith"
         | null;
 
@@ -208,6 +242,9 @@ declare module ModalType {
         left: number;
     }
 
+    interface FetchMiniProfileProps extends ModalPositionProps {
+        memberUsername: string;
+    }
     interface MiniProfileProps {
         blocked: boolean;
         blocking: boolean;
@@ -244,13 +281,15 @@ declare module ModalType {
 
     interface ModalStateProps {
         activatedModal: ActivatedModalType;
-        memberUsername: string;
-        memberNickname: string;
+        memberUsername: string; // dlwlrma
         memberImageUrl: string;
-        postId?: number;
-        miniProfile?: MiniProfileStateProps;
-        isFollowing?: boolean;
+        postId: number | null;
+        commentId: number | null;
+        miniProfile: MiniProfileStateProps | null;
+        isFollowing: boolean | null;
         isOnMiniProfile: boolean;
+        isArticleAloneModalOn: boolean;
+        articleAloneModalPostId: number | null;
     }
 }
 

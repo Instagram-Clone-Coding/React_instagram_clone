@@ -12,12 +12,17 @@ const ArticleMenuModalInner = styled.div`
     & > div {
         width: 100%;
         flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         height: 48px;
         line-height: 48px;
         text-align: center;
         cursor: pointer;
         & > a {
             text-decoration: none;
+            width: 100%;
+            height: 100%;
         }
     }
     & > div:not(.articleMenuModal-report) {
@@ -33,16 +38,19 @@ const ArticleMenuModalInner = styled.div`
 interface ArticleMenuModalProps {
     onModalOn: () => void;
     onModalOff: () => void;
+    postId: number;
 }
-
-const DUMMY_P_ID = "CWWCI-eINvr"; // 게시물 id
 
 const DUMMY_BASE_URL = "https://www.instagram.com"; // 원래 root url: window.location.href
 
-const ArticleMenuModal = ({ onModalOn, onModalOff }: ArticleMenuModalProps) => {
+const ArticleMenuModal = ({
+    onModalOn,
+    onModalOff,
+    postId,
+}: ArticleMenuModalProps) => {
     const { isFollowing } = useAppSelector(({ modal }) => modal);
     const dispatch = useAppDispatch();
-    const copyHandler = useCopy(DUMMY_BASE_URL + "/p/" + DUMMY_P_ID);
+    const copyHandler = useCopy(DUMMY_BASE_URL + "/p/" + postId);
 
     const unFollowClickHandler = () => {
         dispatch(modalActions.changeActivatedModal("unfollowing"));
@@ -72,8 +80,7 @@ const ArticleMenuModal = ({ onModalOn, onModalOff }: ArticleMenuModalProps) => {
                     </div>
                 )}
                 <div>
-                    <Link to={`/`}>게시물로 이동</Link>
-                    {/* p, tv 등 다양해서 일단 url은 보류 */}
+                    <Link to={`/p/${postId}`}>게시물로 이동</Link>
                 </div>
                 <div
                     onClick={() =>

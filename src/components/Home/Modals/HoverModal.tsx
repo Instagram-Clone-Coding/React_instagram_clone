@@ -1,13 +1,13 @@
 import StoryCircle from "components/Common/StoryCircle";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import Card from "styles/UI/Card";
 import ModalCard from "styles/UI/ModalCard";
 import Username from "../../Common/Username";
 import sprite2 from "../../../assets/Images/sprite2.png";
 import useNumberSummary from "hooks/useNumberSummary";
 import Button from "styles/UI/Button";
-import { useAppDispatch } from "app/store/Hooks";
+import { useAppDispatch, useAppSelector } from "app/store/Hooks";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
 import Loading from "components/Common/Loading";
 import { postFollow } from "app/store/ducks/home/homThunk";
@@ -89,11 +89,18 @@ const StyledHoverModalInner = styled.div`
         padding: 16px;
         display: flex;
         align-items: center;
+        * {
+            text-decoration: none;
+        }
+        & > #margin {
+            margin-right: 4px;
+        }
+        & > a > button {
+            width: 100%;
+        }
         & > * {
             flex: 1 1 auto;
-            text-decoration: none;
             font-weight: ${(props) => props.theme.font.bold};
-            margin-right: 4px;
             cursor: pointer;
             & > div {
                 padding: 5px 9px;
@@ -130,6 +137,8 @@ const HoverModal = ({
     onMouseLeave,
     miniProfile,
 }: HoverModalProps) => {
+    const userInfo = useAppSelector(({ auth }) => auth.userInfo);
+    const theme = useTheme();
     const dispatch = useAppDispatch();
 
     const postsNumSummary = useNumberSummary(
@@ -230,9 +239,19 @@ const HoverModal = ({
                         ))}
                     </div>
                     <div className="hoverModal-btns">
-                        {miniProfile.following ? (
+                        {userInfo?.memberUsername ===
+                        miniProfile.memberUsername ? (
+                            <Link to="/accounts/edit">
+                                <Button
+                                    bgColor={"#efefef"}
+                                    color={theme.font.default_black}
+                                >
+                                    프로필 편집
+                                </Button>
+                            </Link>
+                        ) : miniProfile.following ? (
                             <>
-                                <Link to="/direct/t/id">
+                                <Link to="/direct/t/id" id="margin">
                                     <Card>메세지 보내기</Card>
                                 </Link>
                                 <div>

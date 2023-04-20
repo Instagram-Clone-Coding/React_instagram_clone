@@ -93,6 +93,7 @@ interface ModalProps {
     maxHeight?: number;
     minWidth?: number;
     minHeight?: number;
+    isArticle?: boolean;
 }
 
 const ModalCard = ({
@@ -108,6 +109,7 @@ const ModalCard = ({
     maxHeight,
     minHeight,
     minWidth,
+    isArticle = false,
 }: ModalProps) => {
     const modalRef = useRef() as React.MutableRefObject<HTMLDivElement>;
     const isUpperThanHalfPosition = useMemo(
@@ -153,7 +155,11 @@ const ModalCard = ({
                 minHeight={minHeight}
             >
                 {isWithCancelBtn && <Cancel onClick={onModalOff} />}
-                <Card onClick={(event) => event.stopPropagation()} radius={12}>
+                <Card
+                    onClick={(event) => event.stopPropagation()}
+                    radius={12}
+                    isArticle={isArticle}
+                >
                     {children}
                 </Card>
             </StyledBackDrop>
