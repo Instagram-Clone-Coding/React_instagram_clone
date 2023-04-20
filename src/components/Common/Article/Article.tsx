@@ -132,7 +132,7 @@ const Article = ({
                 commentsCount={article.postCommentsCount}
                 mentions={article.mentionsOfContent}
                 hashtags={article.hashtagsOfContent}
-                isLiked={isLiked}
+                isLiked
                 likeOptionFlag={article.likeOptionFlag}
                 comments={article.recentComments}
             />

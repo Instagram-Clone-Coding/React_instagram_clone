@@ -10,6 +10,7 @@ import { ReactComponent as MoreCommentsButton } from "assets/Svgs/moreComments.s
 import { authorizedCustomAxios } from "customAxios";
 import { paragraphActions } from "app/store/ducks/paragraph/paragraphSlice";
 import Loading from "components/Common/Loading";
+import LikedPeopleModal from "components/Common/LikedPeopleModal";
 
 interface StyledMainProps {
     isInLargerArticle: boolean;
@@ -20,6 +21,9 @@ const StyledMain = styled.div<StyledMainProps>`
     .articleMain__content {
         .article-likeInfo {
             margin-bottom: 8px;
+            &.notZero {
+                cursor: pointer;
+            }
             span {
                 font-weight: ${(props) => props.theme.font.bold};
             }
@@ -58,6 +62,7 @@ interface MainProps {
     isInLargerArticle?: boolean;
     comments: PostType.CommentType[];
     postId: number;
+    isLiked: boolean;
 }
 
 const ArticleMain = ({
@@ -73,6 +78,7 @@ const ArticleMain = ({
     isInLargerArticle = false,
     comments,
     postId,
+    isLiked,
 }: MainProps) => {
     // content state
     const [isFullText, setIsFullText] = useState(
@@ -86,6 +92,7 @@ const ArticleMain = ({
         comments.length < 10 ? true : false,
     );
     const [isCommentsFetching, setIsCommentsFetching] = useState(false);
+    const [isLikedPeopleModalOn, setIsLikedPeopleModalOn] = useState(false);
     const dispatch = useAppDispatch();
 
     const isTextLineBreak = useMemo(() => content.includes("\n"), [content]);
@@ -202,9 +209,27 @@ const ArticleMain = ({
     return (
         <>
             <StyledMain isInLargerArticle={isInLargerArticle}>
+                {isLikedPeopleModalOn && (
+                    <LikedPeopleModal
+                        onModalOn={() => setIsLikedPeopleModalOn(true)}
+                        onModalOff={() => setIsLikedPeopleModalOn(false)}
+                        modalInfo={{
+                            type: "post",
+                            id: postId,
+                        }}
+                        isLiked={isLiked}
+                    />
+                )}
                 <div className="articleMain__content">
                     {(likeOptionFlag || myUsername === memberUsername) && (
-                        <div className="article-likeInfo">
+                        <div
+                            className={`article-likeInfo ${
+                                likesCount > 0 ? "notZero" : ""
+                            }`}
+                            onClick={() =>
+                                likesCount > 0 && setIsLikedPeopleModalOn(true)
+                            }
+                        >
                             <LikeText
                                 followingUserWhoLikesArticle={
                                     followingUserWhoLikesArticle

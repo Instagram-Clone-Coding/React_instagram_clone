@@ -161,6 +161,7 @@ const LargerArticle = ({ article, isModal = false }: LargerArticleProps) => {
                         isInLargerArticle={true}
                         comments={article.comments}
                         postId={article.postId}
+                        isLiked
                     />
                 </div>
                 <ArticleMainIcons
