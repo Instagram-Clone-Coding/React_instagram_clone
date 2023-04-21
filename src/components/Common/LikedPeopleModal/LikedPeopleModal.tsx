@@ -3,7 +3,7 @@ import CloseSVG from "assets/Svgs/CloseSVG";
 import LikedPersonUnit from "components/Common/LikedPeopleModal/LikedPersonUnit";
 import Loading from "components/Common/Loading";
 import { authorizedCustomAxios } from "customAxios";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import theme from "styles/theme";
 import ModalCard from "styles/UI/ModalCard";
@@ -31,6 +31,9 @@ const getLikedPeople = async (
     page: number,
     type: "post" | "comment",
     id: number,
+    setLoading: (state: boolean) => void,
+    setArr: (arr: LikedPersonType[]) => void,
+    increasePage: () => void,
 ) => {
     const config = {
         params: {
@@ -38,6 +41,7 @@ const getLikedPeople = async (
             size: 10,
         },
     };
+    setLoading(true);
     try {
         const {
             data: {
@@ -47,10 +51,12 @@ const getLikedPeople = async (
             `/${type === "post" ? "posts" : "comments"}/${id}/likes`,
             config,
         );
-        return arr;
+        setArr(arr);
+        increasePage();
     } catch (error) {
         console.log(error);
-        return [];
+    } finally {
+        setLoading(false);
     }
 };
 
@@ -84,6 +90,27 @@ const LikedPeopleModalMain = styled.div`
     }
 `;
 
+const getInitialLikedPeople = (
+    userInfo: AuthType.UserInfo | null,
+    isLiked: boolean,
+): LikedPersonType[] =>
+    userInfo && isLiked
+        ? [
+              {
+                  following: false,
+                  member: {
+                      username: userInfo.memberUsername,
+                      name: userInfo.memberName,
+                      hasStory: false,
+                      image: {
+                          imageUrl: userInfo.memberImageUrl,
+                      },
+                      id: -1,
+                  },
+              },
+          ]
+        : [];
+
 interface LikedPeopleModalProps {
     onModalOn: () => void;
     onModalOff: () => void;
@@ -102,30 +129,14 @@ const LikedPeopleModal = ({
     isLiked,
 }: LikedPeopleModalProps) => {
     const userInfo = useAppSelector((state) => state.auth.userInfo);
-    const [isLoading, setIsLoading] = useState(true);
-    const [likedPeople, setLikedPeople] = useState<LikedPersonType[]>([]);
+    const [isLoading, setIsLoading] = useState(true); // axios 요청 중인가?
+    const [likedPeople, setLikedPeople] = useState<LikedPersonType[]>(
+        getInitialLikedPeople(userInfo, isLiked),
+    );
     const [isModalWidthSmall, setIsModalWidthSmall] = useState(
         window.innerWidth <= 735,
     );
     const [currentPage, setCurrentPage] = useState(1);
-    const myLikedPersonModalData: LikedPersonType | null = useMemo(
-        () =>
-            userInfo
-                ? {
-                      following: false,
-                      member: {
-                          username: userInfo.memberUsername,
-                          name: userInfo.memberName,
-                          hasStory: false,
-                          image: {
-                              imageUrl: userInfo.memberImageUrl,
-                          },
-                          id: -1,
-                      },
-                  }
-                : null,
-        [userInfo],
-    );
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
@@ -138,41 +149,20 @@ const LikedPeopleModal = ({
         window.addEventListener("resize", resizeEventHandler);
         window.addEventListener("keydown", keydownEventHandler);
 
-        getLikedPeople(1, modalInfo.type, modalInfo.id)
-            .then((data) => {
-                setLikedPeople(
-                    isLiked && myLikedPersonModalData
-                        ? [myLikedPersonModalData, ...data]
-                        : data,
-                );
-            })
-            .finally(() => setIsLoading(false));
+        getLikedPeople(
+            currentPage,
+            modalInfo.type,
+            modalInfo.id,
+            setIsLoading,
+            (arr) => setLikedPeople((prev) => [...prev, ...arr]),
+            () => setCurrentPage((prev) => prev + 1),
+        );
         return () => {
             document.body.style.overflow = "unset";
             window.removeEventListener("resize", resizeEventHandler);
             window.removeEventListener("keydown", keydownEventHandler);
         };
-    }, [
-        modalInfo.id,
-        modalInfo.type,
-        onModalOff,
-        isLiked,
-        userInfo,
-        myLikedPersonModalData,
-    ]);
-
-    const getExtraLikedPeople = useCallback(async () => {
-        try {
-            const data = await getLikedPeople(
-                currentPage + 1,
-                "post",
-                modalInfo.id,
-            );
-            if (!data.length) return;
-            setLikedPeople((prev) => [...prev, ...data]);
-            setCurrentPage((prev) => prev + 1);
-        } catch (error) {}
-    }, [modalInfo.id, currentPage]);
+    }, [modalInfo.id, modalInfo.type, onModalOff]);
 
     return (
         <ModalCard
@@ -203,7 +193,20 @@ const LikedPeopleModal = ({
                             isSmall={isModalWidthSmall}
                             key={personObj.member.id}
                             isFourthFromLast={index === likedPeople.length - 4}
-                            onView={getExtraLikedPeople}
+                            onView={() =>
+                                getLikedPeople(
+                                    currentPage,
+                                    modalInfo.type,
+                                    modalInfo.id,
+                                    setIsLoading,
+                                    (arr) =>
+                                        setLikedPeople((prev) => [
+                                            ...prev,
+                                            ...arr,
+                                        ]),
+                                    () => setCurrentPage((prev) => prev + 1),
+                                )
+                            }
                         />
                     ))}
                 </div>
