@@ -10,6 +10,9 @@ import { authorizedCustomAxios } from "customAxios";
 import { authAction } from "app/store/ducks/auth/authSlice";
 import { FAIL_TO_REISSUE_MESSAGE } from "utils/constant";
 import useOnView from "hooks/useOnView";
+import { getMiniProfile } from "app/store/ducks/modal/modalThunk";
+import { modalActions } from "app/store/ducks/modal/modalSlice";
+import Username from "components/Common/Username";
 
 const StyledLikedPersonUnit = styled.div`
     padding: 8px 16px;
@@ -21,9 +24,6 @@ const StyledLikedPersonUnit = styled.div`
     }
     & > div:nth-child(2) {
         flex: 1;
-        #username {
-            font-weight: ${(props) => props.theme.font.bold};
-        }
     }
     & > button {
         margin-left: 8px;
@@ -82,6 +82,25 @@ const LikedPersonUnit = ({
         isFourthFromLast && isOnView && onView();
     }, [isFourthFromLast, isOnView, onView]);
 
+    const mouseEnterHandler = async (
+        event: React.MouseEvent<HTMLSpanElement | HTMLDivElement>,
+    ) => {
+        if (!event) return;
+        const { top, bottom, left } =
+            event.currentTarget.getBoundingClientRect();
+        await dispatch(
+            getMiniProfile({
+                memberUsername: personObj.member.username,
+                modalPosition: { top, bottom, left },
+            }),
+        );
+    };
+
+    const mouseLeaveHandler = () => {
+        dispatch(modalActions.mouseNotOnHoverModal());
+        setTimeout(() => dispatch(modalActions.checkMouseOnHoverModal()), 500);
+    };
+
     return (
         <StyledLikedPersonUnit className="likedPerson" ref={unitRef}>
             <StoryCircle
@@ -89,11 +108,16 @@ const LikedPersonUnit = ({
                 avatarUrl={personObj.member.image.imageUrl}
                 username={personObj.member.username}
                 scale={54 / 64}
-                onMouseEnter={() => {}}
-                onMouseLeave={() => {}} // hoverModal
+                onMouseEnter={mouseEnterHandler}
+                onMouseLeave={mouseLeaveHandler}
             />
             <div>
-                <div id="username">{personObj.member.username}</div>
+                <Username
+                    onMouseEnter={mouseEnterHandler}
+                    onMouseLeave={mouseLeaveHandler}
+                >
+                    {personObj.member.username}
+                </Username>
                 <div>{personObj.member.name}</div>
             </div>
             {personObj.member.username !== myUsername && (
