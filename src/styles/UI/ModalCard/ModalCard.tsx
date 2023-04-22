@@ -31,13 +31,14 @@ interface StyledBackDropProps {
     maxHeight?: number;
     minWidth?: number;
     minHeight?: number;
+    zIndex?: number;
 }
 
 const StyledBackDrop = styled.div<StyledBackDropProps>`
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 999;
+    z-index: ${(props) => props.zIndex || 999};
     display: flex;
     align-items: center;
     justify-content: center;
@@ -94,6 +95,7 @@ interface ModalProps {
     minWidth?: number;
     minHeight?: number;
     isArticle?: boolean;
+    zIndex?: number;
 }
 
 const ModalCard = ({
@@ -110,6 +112,7 @@ const ModalCard = ({
     minHeight,
     minWidth,
     isArticle = false,
+    zIndex,
 }: ModalProps) => {
     const modalRef = useRef() as React.MutableRefObject<HTMLDivElement>;
     const isUpperThanHalfPosition = useMemo(
@@ -153,6 +156,7 @@ const ModalCard = ({
                 maxHeight={maxHeight}
                 minWidth={minWidth}
                 minHeight={minHeight}
+                zIndex={zIndex}
             >
                 {isWithCancelBtn && <Cancel onClick={onModalOff} />}
                 <Card

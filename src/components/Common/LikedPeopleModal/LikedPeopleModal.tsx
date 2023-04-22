@@ -167,6 +167,7 @@ const LikedPeopleModal = ({
     return (
         <ModalCard
             modalType="withBackDrop"
+            zIndex={99}
             onModalOn={onModalOn}
             onModalOff={onModalOff}
             width={isModalWidthSmall ? 260 : 400}
