@@ -1,4 +1,4 @@
-import navLogo from "assets/Images/nav-logo.png";
+import Logo from "assets/Images/logo-hello-world.png";
 import SearchBar from "components/Common/Header/SearchBar";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -31,7 +31,7 @@ const Container = styled.div`
             }
 
             img {
-                margin-top: 7px;
+                width: 110px;
             }
 
             .logo {
@@ -82,11 +82,7 @@ export default function HeaderBeforeLogin({
                     <div className="logo-container">
                         <Link to="/">
                             <div className="logo">
-                                <img
-                                    src={navLogo}
-                                    alt="상단바 인스타 로고"
-                                    srcSet={navLogo + " 2x"}
-                                />
+                                <img src={Logo} alt="hello world 로고" />
                             </div>
                         </Link>
                     </div>
