@@ -63,9 +63,7 @@ export default function Form(props: { router: "signIn" | "signUp" }) {
                         이건 실제 인스타그램이 아닙니다.
                     </span>
                 </p>
-                <p>
-                    개발자를 희망하는 학생들이 연습용으로 만든 프로젝트입니다.
-                </p>
+                <p>개발자들이 사이드 프로젝트로 만든 클론 페이지입니다.</p>
             </aside>
         </Container>
     );
