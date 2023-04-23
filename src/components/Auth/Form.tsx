@@ -20,11 +20,10 @@ const Container = styled.div<{ pathname: string }>`
     .warning-message {
         padding: 5px;
         text-align: center;
-        font-weight: 700;
-        color: #1589dc;
+        color: red;
 
         .warning {
-            color: red;
+            font-weight: 700;
             margin-right: 5px;
         }
 
