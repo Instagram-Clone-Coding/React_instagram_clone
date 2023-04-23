@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Appdownload from "components/Auth/AppDownload";
+
 import ContentBox from "components/Common/ContentBox";
 import Suggest from "components/Auth/Suggest";
 import EmailConfirmForm from "components/Auth/SignUpForm/EmailConfirmForm";
@@ -16,6 +16,22 @@ const Container = styled.div<{ pathname: string }>`
     justify-content: center;
     max-width: 350px;
     flex-grow: 1;
+
+    .warning-message {
+        padding: 5px;
+        text-align: center;
+        font-weight: 700;
+        color: #1589dc;
+
+        .warning {
+            color: red;
+            margin-right: 5px;
+        }
+
+        .not-instagram {
+            text-decoration: underline;
+        }
+    }
 `;
 
 const contentBox: UIType.ContentBoxProps = {
@@ -41,7 +57,17 @@ export default function Form(props: { router: "signIn" | "signUp" }) {
             <ContentBox padding={contentBox.padding} margin={contentBox.margin}>
                 <Suggest />
             </ContentBox>
-            <Appdownload />
+            <aside className="warning-message">
+                <p>
+                    <span className="warning">주의</span>
+                    <span className="not-instagram">
+                        이건 실제 인스타그램이 아닙니다.
+                    </span>
+                </p>
+                <p>
+                    개발자를 희망하는 학생들이 연습용으로 만든 프로젝트입니다.
+                </p>
+            </aside>
         </Container>
     );
 }
