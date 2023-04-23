@@ -1,7 +1,6 @@
 import { authAction } from "app/store/ducks/auth/authSlice";
 import { useAppDispatch } from "app/store/Hooks";
 import Form from "components/Auth/Form";
-import { Footer } from "components/Common/Footer/Footer";
 import { useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
@@ -56,7 +55,6 @@ export default function AuthPage(props: { router: "signIn" | "signUp" }) {
                     <main className="form-container">
                         <Form router={props.router} />
                     </main>
-                    <Footer />
                 </Section>
             )}
         </>

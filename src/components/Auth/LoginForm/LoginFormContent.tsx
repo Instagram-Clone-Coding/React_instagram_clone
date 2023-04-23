@@ -1,15 +1,19 @@
 import styled from "styled-components";
-import ImageSprite from "components/Common/ImageSprite";
 import { Link } from "react-router-dom";
 import Line from "components/Auth/Line";
 import FacebookLogin from "components/Auth/FacebookLogin";
 import LoginFormAndButton from "components/Auth/LoginForm/FormAndButton";
 import { useAppSelector } from "app/store/Hooks";
-import sprite from "assets/Images/loginPageSprite.png";
+import Logo from "assets/Images/logo-hello-world.png";
 
 const FormContainer = styled.div`
+    .logo-container {
+        text-align: center;
+    }
+
     .logo {
-        margin: 22px auto 12px;
+        margin-top: 1rem;
+        width: 200px;
     }
 
     .inputContainer {
@@ -49,19 +53,14 @@ const FormContainer = styled.div`
     }
 `;
 
-const instagramImage: CommonType.ImageProps = {
-    width: 175,
-    height: 51,
-    position: `0 -130px`,
-    url: sprite,
-};
-
 export default function LoginForm() {
     const errorMessage = useAppSelector((state) => state.auth.errorMessage);
 
     return (
         <FormContainer>
-            <ImageSprite {...instagramImage} className="logo" />
+            <div className="logo-container">
+                <img src={Logo} alt="hello world 로고" className="logo" />
+            </div>
             <div className="inputContainer">
                 <form className="inputForm">
                     <div className="loginForm">

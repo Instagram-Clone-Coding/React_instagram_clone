@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import navLogo from "assets/Images/nav-logo.png";
 import SearchBar from "./SearchBar";
 import NavItems from "./NavItems";
 import { NavLink } from "react-router-dom";
 import { useEffect } from "react";
 import { useAppDispatch } from "app/store/Hooks";
 import { getUserInfo } from "app/store/ducks/auth/authThunk";
+import Logo from "assets/Images/logo-hello-world.png";
 
 const HeaderContainer = styled.nav`
     display: flex;
@@ -38,6 +38,10 @@ const LogoWrapper = styled(NavLink)`
     flex: 1 9999 0%;
     min-width: 40px;
     margin-top: 7px;
+
+    img {
+        width: 110px;
+    }
 `;
 
 const FakeHeader = styled.div`
@@ -54,11 +58,7 @@ const Header = () => {
             <HeaderContainer>
                 <HeaderContentsWrapper>
                     <LogoWrapper to="/">
-                        <img
-                            src={navLogo}
-                            alt="상단바 인스타 로고"
-                            srcSet={navLogo + " 2x"}
-                        />
+                        <img src={Logo} alt="hello world 로고" />
                     </LogoWrapper>
                     {/*  */}
                     <SearchBar />
