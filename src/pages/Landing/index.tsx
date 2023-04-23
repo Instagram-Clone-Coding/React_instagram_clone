@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import ShowingInstagram from "components/Auth/InstagramImageSlider";
-import { Footer } from "components/Common/Footer/Footer";
 import { useAppSelector } from "app/store/Hooks";
 import Form from "components/Auth/Form";
 
@@ -42,7 +41,6 @@ export default function Landing() {
                     />
                 </div>
             </main>
-            <Footer />
         </Container>
     );
 }

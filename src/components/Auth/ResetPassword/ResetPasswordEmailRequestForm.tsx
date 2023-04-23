@@ -1,4 +1,3 @@
-import { Footer } from "components/Common/Footer/Footer";
 import ContentBox from "components/Common/ContentBox";
 import ImageSprite from "components/Common/ImageSprite";
 import sprite from "assets/Images/sprite2.png";
@@ -191,7 +190,6 @@ export default function ResetPasswordEmailRequestForm() {
             {hasNotification && (
                 <Notification text="사용자를 찾을 수 없습니다." />
             )}
-            <Footer />
         </Container>
     );
 }
