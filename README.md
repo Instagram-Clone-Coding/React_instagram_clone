@@ -174,6 +174,14 @@ Frontend
     `index.tsx`를 자주 사용하게 되면 파일 이름으로 검색해 작업에 용이하지 못하므로
     `컴포넌트이름.tsx` 사용을 지향하고 `index.js` 로 `import`를 쉽게 할 수 있게한다.
 
+8.  관심사 분리
+    UI와 로직을 분리합니다.
+
+-   UI 담당: `.tsx`
+-   로직 담당
+    -   `custom hook`: hooks 필요한 로직
+    -   `utils`: hooks 필요없는 로직
+
 ### Commit Convention
 
 feat: 새로운 기능에 대한 커밋  
