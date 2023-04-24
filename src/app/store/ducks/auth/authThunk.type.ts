@@ -8,7 +8,7 @@ export type FormState = "signUp" | "confirmEmail" | "signIn";
 export type LoginDevice = {
     tokenId: string;
     location: {
-        city: string | null;
+        city: string;
         longitude: string;
         latitude: string;
     };

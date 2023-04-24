@@ -37,7 +37,6 @@ const LogoWrapper = styled(NavLink)`
     align-items: center;
     flex: 1 9999 0%;
     min-width: 40px;
-    margin-top: 7px;
 
     img {
         width: 110px;

@@ -7,6 +7,8 @@ import NaverMap from "components/Edit/Menus/naver_map";
 import useGapText from "hooks/useGapText";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { isInvalidLocation } from "utils/maps";
+import LocationError from "assets/Images/location-error-maps.png";
 
 const Container = styled.div<{ isToggleOn: boolean }>`
     padding: 0.5rem 0;
@@ -54,6 +56,34 @@ const Container = styled.div<{ isToggleOn: boolean }>`
         button {
             padding: 20px 0;
         }
+
+        .location-error-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+
+            .location-error-img {
+                width: 100%;
+                height: 100%;
+            }
+
+            .location-error-background {
+                position: absolute;
+                top: 0;
+                background-color: gray;
+                opacity: 70%;
+                width: 100%;
+                height: 100%;
+
+                .location-error-text {
+                    font-size: 1.25rem;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+        }
     }
 
     hr {
@@ -77,6 +107,8 @@ export default function DeviceItem({
     const firstLoginTime = useGapText(lastLoginDate);
 
     useEffect(() => {
+        if (isInvalidLocation(location.city)) return;
+
         const naverMap = new NaverMap();
         naverMap.loadScript(() => setMapLoaded(true));
         if (mapLoaded && isToggleOn) {
@@ -94,7 +126,7 @@ export default function DeviceItem({
                 map: map,
             });
         }
-    });
+    }, [isToggleOn]);
 
     return (
         <Container isToggleOn={isToggleOn}>
@@ -103,7 +135,7 @@ export default function DeviceItem({
                     <Map />
                     <div className="description">
                         <div className="city">
-                            {location.city === "Unknown"
+                            {isInvalidLocation(location.city)
                                 ? "위치를 찾을 수 없습니다"
                                 : location.city}
                         </div>
@@ -126,10 +158,26 @@ export default function DeviceItem({
             </div>
             {isToggleOn && (
                 <div className="map-container">
-                    <div
-                        id={index}
-                        style={{ width: "100%", height: "200px" }}
-                    ></div>
+                    {isInvalidLocation(location.city) ? (
+                        <div className="location-error-container">
+                            <img
+                                src={LocationError}
+                                alt="위치불러오기 실패 시 보여주는 이미지"
+                                className="location-error-img"
+                            />
+                            <div className="location-error-background">
+                                <p className="location-error-text">
+                                    위치를 찾을 수 없습니다
+                                </p>
+                            </div>
+                        </div>
+                    ) : (
+                        <div
+                            id={index}
+                            style={{ width: "100%", height: "200px" }}
+                        ></div>
+                    )}
+
                     <button
                         onClick={() =>
                             dispatch(deviceLogout({ tokenId, current }))
