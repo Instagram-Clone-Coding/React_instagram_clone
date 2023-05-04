@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 import ChatBar from "components/Direct/Section/ChatBar";
 import ChatSection from "components/Direct/Section/ChatSection";
