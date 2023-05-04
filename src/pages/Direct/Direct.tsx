@@ -186,7 +186,7 @@ const Direct = () => {
         document.title = "(1) 받은 메세지함 · Direct";
     }, []);
 
-    const viewRender = () => {
+    const ChatArea = () => {
         switch (view) {
             case "inbox":
                 return <InboxSection />;
@@ -218,7 +218,9 @@ const Direct = () => {
                     <AsideBody />
                 </aside>
                 {/* body */}
-                <section>{viewRender()}</section>
+                <section>
+                    <ChatArea />
+                </section>
             </Container>
         </Layout>
     );
