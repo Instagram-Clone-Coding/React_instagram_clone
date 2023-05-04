@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import ChatBubble from "components/Direct/Section/ChatBubble/ChatBubble";
 import { useAppDispatch, useAppSelector } from "app/store/Hooks";
@@ -72,8 +72,8 @@ const ChatSection = ({
     const isLoading = useAppSelector((state) => state.direct.isLoading);
     const userInfo = useAppSelector((state) => state.auth.userInfo);
 
-    const sectionRef = useRef() as React.MutableRefObject<HTMLDivElement>;
-    const scrollCheckRef = useRef() as React.MutableRefObject<HTMLDivElement>;
+    const sectionRef = useRef<HTMLDivElement>(null);
+    const scrollCheckRef = useRef<HTMLDivElement>(null);
 
     const [y, setY] = useState(0);
     const [scrollDirection, setScrollDirection] = useState(
@@ -81,7 +81,7 @@ const ChatSection = ({
     );
 
     useEffect(() => {
-        if (chatMessageList.length === 10) {
+        if (chatMessageList.length === 10 && sectionRef.current) {
             sectionRef.current.scrollTop = sectionRef.current.scrollHeight;
         }
     }, [chatMessageList]);
@@ -100,7 +100,12 @@ const ChatSection = ({
                     page: 1,
                     roomId: selectedRoom?.chatRoomId,
                 }),
-            );
+            ).then(() => {
+                if (sectionRef.current) {
+                    sectionRef.current.scrollTop =
+                        sectionRef.current.scrollHeight;
+                }
+            });
 
             // 웹소켓으로 조회해버린 메세지의 개수도 0개로 리셋해줍니다.
             dispatch(resetSubChatCount());
@@ -115,6 +120,7 @@ const ChatSection = ({
 
     const handleScroll = useCallback(
         async (e) => {
+            if (!sectionRef.current) return;
             if (y > sectionRef.current.scrollTop) {
                 setScrollDirection("up");
             } else if (y < sectionRef.current.scrollTop) {
@@ -168,7 +174,7 @@ const ChatSection = ({
             isRequestsChat={view === "requestsChat"}
         >
             {isLoading && <ExtraLoadingCircle />}
-            {chatMessageListPage === 2 && <div className="dummy-rect"></div>}
+            {/* {chatMessageListPage === 2 && <div className="dummy-rect"></div>} */}
 
             <div className="chat-bubble-section" ref={scrollCheckRef}>
                 {[...chatMessageList].map((chatMessageListItem, index) => (
