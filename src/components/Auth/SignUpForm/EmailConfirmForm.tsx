@@ -11,6 +11,7 @@ import { authAction } from "app/store/ducks/auth/authSlice";
 import { signIn } from "app/store/ducks/auth/authThunk";
 import { useState } from "react";
 import Loading from "components/Common/Loading";
+import { useHistory } from "react-router-dom";
 
 const Container = styled.div`
     .form-description {
@@ -71,6 +72,7 @@ const messageImage: CommonType.ImageProps = {
 };
 
 export default function EmailConfirmForm() {
+    const history = useHistory();
     const userInput = useAppSelector((state) => state.auth.signUpUserData);
     const dispatch = useAppDispatch();
     const [errorMessage, setErrorMessage] = useState("");
@@ -129,7 +131,9 @@ export default function EmailConfirmForm() {
                             username: userInput.username,
                             password: userInput.password,
                         }),
-                    );
+                    ).then(() => {
+                        history.push("/");
+                    });
                 } else if (status === 200 && !data) {
                     setErrorMessage(message);
                     // 인증코드가 다를 경우, 200번대가 아니라 400번대가 더 적합할 거 같음(사용자 입력에러니까)
