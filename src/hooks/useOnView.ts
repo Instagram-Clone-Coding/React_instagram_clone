@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useMemo, useState } from "react";
 
-const useOnView = (ref: RefObject<HTMLElement> | null) => {
+const useOnView = (ref: RefObject<HTMLElement | null>) => {
     const [isIntersecting, setIntersecting] = useState(false);
 
     const observer = useMemo(
@@ -19,7 +19,7 @@ const useOnView = (ref: RefObject<HTMLElement> | null) => {
         return () => {
             observer.disconnect();
         };
-    }, [observer, ref]);
+    }, [observer, ref.current]);
 
     return isIntersecting;
 };

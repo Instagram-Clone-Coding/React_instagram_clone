@@ -123,6 +123,7 @@ const Article = ({
                 onToggleLike={toggleLikeHandler}
             />
             <ArticleMain
+                postId={article.postId}
                 followingUserWhoLikesArticle={followingUserWhoLikesArticle}
                 likesCount={likesCount}
                 memberImageUrl={article.member.image.imageUrl}
@@ -131,9 +132,9 @@ const Article = ({
                 commentsCount={article.postCommentsCount}
                 mentions={article.mentionsOfContent}
                 hashtags={article.hashtagsOfContent}
+                isLiked
                 likeOptionFlag={article.likeOptionFlag}
                 comments={article.recentComments}
-                postId={article.postId}
             />
             <ArticleGap postUploadDate={article.postUploadDate} />
             {article.commentOptionFlag && (

@@ -13,6 +13,7 @@ import { useAppSelector } from "app/store/Hooks";
 import Loading from "components/Common/Loading";
 import { ReactComponent as ThreeDots } from "assets/Svgs/threeDots.svg";
 import { modalActions } from "app/store/ducks/modal/modalSlice";
+import LikedPeopleModal from "components/Common/LikedPeopleModal";
 
 type CommentType = "comment" | "reply" | "recent";
 
@@ -126,6 +127,7 @@ const Comment = ({
             false,
     );
     const [isReplyFetching, setIsReplyFetching] = useState(false);
+    const [isLikedPeopleModalOn, setIsLikedPeopleModalOn] = useState(false);
     const [replyPage, setReplyPage] = useState(1);
     const replyParentObj = useAppSelector(
         ({ paragraph }) => paragraph.replyParentObj,
@@ -209,111 +211,138 @@ const Comment = ({
     };
 
     return (
-        <StyledComment commentType={commentType}>
-            <div className="comment__main">
-                {commentType !== "recent" && (
-                    <div className="comment__avatar">
-                        <StoryCircle
-                            type="default"
-                            avatarUrl={commentObj.member.image.imageUrl}
-                            username={commentObj.member.username}
-                            scale={42 / 64}
-                            onMouseEnter={(event) =>
-                                onMouseEnter(event, commentObj.member.username)
-                            }
-                            onMouseLeave={onMouseLeave}
+        <>
+            {isLikedPeopleModalOn && (
+                <LikedPeopleModal
+                    modalInfo={{ type: "comment", id: commentObj.id }}
+                    onModalOn={() => setIsLikedPeopleModalOn(true)}
+                    onModalOff={() => setIsLikedPeopleModalOn(false)}
+                    isLiked
+                />
+            )}
+            <StyledComment commentType={commentType}>
+                <div className="comment__main">
+                    {commentType !== "recent" && (
+                        <div className="comment__avatar">
+                            <StoryCircle
+                                type="default"
+                                avatarUrl={commentObj.member.image.imageUrl}
+                                username={commentObj.member.username}
+                                scale={42 / 64}
+                                onMouseEnter={(event) =>
+                                    onMouseEnter(
+                                        event,
+                                        commentObj.member.username,
+                                    )
+                                }
+                                onMouseLeave={onMouseLeave}
+                            />
+                        </div>
+                    )}
+                    <div className="comment__middle">
+                        <span>
+                            <Username
+                                onMouseEnter={(event) =>
+                                    onMouseEnter(
+                                        event,
+                                        commentObj.member.username,
+                                    )
+                                }
+                                onMouseLeave={onMouseLeave}
+                            >
+                                {commentObj.member.username}
+                            </Username>
+                            &nbsp;
+                            <StringFragmentWithMentionOrHashtagLink
+                                str={commentObj.content}
+                                mentions={commentObj.mentionsOfContent}
+                                hashtags={commentObj.hashtagsOfContent}
+                            />
+                        </span>
+                        {commentType !== "recent" && (
+                            <>
+                                <div className="comment__info">
+                                    <ArticleGap
+                                        postUploadDate={commentObj.uploadDate}
+                                        isAboutComment={true}
+                                    />
+                                    {likesCount > 0 && (
+                                        <button
+                                            onClick={() =>
+                                                setIsLikedPeopleModalOn(true)
+                                            }
+                                        >
+                                            좋아요 {likesCount}개
+                                        </button>
+                                    )}
+                                    <button
+                                        onClick={() =>
+                                            toggleReplyHandler(commentObj.id)
+                                        }
+                                    >
+                                        {commentObj.id !== replyParentObj?.id
+                                            ? "답글 달기"
+                                            : "답글 취소"}
+                                    </button>
+                                    {commentObj.member.username ===
+                                        myUsername && ( // '신고' 기능이 없으면 자기 댓글이 아닌 경우에 모달에 보여줄 메뉴가 없어서 아예 버튼 비활성화
+                                        <button
+                                            className="comment__menu"
+                                            onClick={commentMenuBtnClickHandler}
+                                        >
+                                            <ThreeDots />
+                                        </button>
+                                    )}
+                                </div>
+                            </>
+                        )}
+                    </div>
+                    <div className="comment__popHeartLayout">
+                        <PopHeart
+                            size={12}
+                            isLiked={isLiked}
+                            onToggleLike={commentLikeHandler}
                         />
                     </div>
-                )}
-                <div className="comment__middle">
-                    <span>
-                        <Username
-                            onMouseEnter={(event) =>
-                                onMouseEnter(event, commentObj.member.username)
-                            }
-                            onMouseLeave={onMouseLeave}
+                </div>
+                {commentType !== "recent" && commentObj.repliesCount > 0 && (
+                    <div className="comment__replyLayout">
+                        <button
+                            onClick={replyHandler}
+                            disabled={isReplyFetching}
                         >
-                            {commentObj.member.username}
-                        </Username>
-                        &nbsp;
-                        <StringFragmentWithMentionOrHashtagLink
-                            str={commentObj.content}
-                            mentions={commentObj.mentionsOfContent}
-                            hashtags={commentObj.hashtagsOfContent}
-                        />
-                    </span>
-                    {commentType !== "recent" && (
-                        <>
-                            <div className="comment__info">
-                                <ArticleGap
-                                    postUploadDate={commentObj.uploadDate}
-                                    isAboutComment={true}
-                                />
-                                {likesCount > 0 && (
-                                    <button>좋아요 {likesCount}개</button>
-                                )}
-                                <button
-                                    onClick={() =>
-                                        toggleReplyHandler(commentObj.id)
-                                    }
-                                >
-                                    {commentObj.id !== replyParentObj?.id
-                                        ? "답글 달기"
-                                        : "답글 취소"}
-                                </button>
-                                {commentObj.member.username === myUsername && ( // '신고' 기능이 없으면 자기 댓글이 아닌 경우에 모달에 보여줄 메뉴가 없어서 아예 버튼 비활성화
-                                    <button
-                                        className="comment__menu"
-                                        onClick={commentMenuBtnClickHandler}
-                                    >
-                                        <ThreeDots />
-                                    </button>
-                                )}
-                            </div>
-                        </>
-                    )}
-                </div>
-                <div className="comment__popHeartLayout">
-                    <PopHeart
-                        size={12}
-                        isLiked={isLiked}
-                        onToggleLike={commentLikeHandler}
-                    />
-                </div>
-            </div>
-            {commentType !== "recent" && commentObj.repliesCount > 0 && (
-                <div className="comment__replyLayout">
-                    <button onClick={replyHandler} disabled={isReplyFetching}>
-                        <div></div>
-                        <span>
-                            {isLastReply && isReplyOn
-                                ? "답글 숨기기"
-                                : `답글 보기(${
-                                      !isReplyOn
-                                          ? commentObj.repliesCount
-                                          : commentObj.repliesCount -
-                                            (commentObj.replies?.length || 0)
-                                  }개)`}
-                        </span>
-                    </button>
-                    {isReplyFetching && <Loading size={14} />}
-                    {isReplyOn && commentObj.replies && (
-                        <ul>
-                            {commentObj.replies.map((replyObj) => (
-                                <Comment
-                                    parentCommentId={commentObj.id}
-                                    key={replyObj.id}
-                                    commentType="reply"
-                                    commentObj={replyObj}
-                                    onMouseEnter={onMouseEnter}
-                                    onMouseLeave={onMouseLeave}
-                                />
-                            ))}
-                        </ul>
-                    )}
-                </div>
-            )}
-        </StyledComment>
+                            <div></div>
+                            <span>
+                                {isLastReply && isReplyOn
+                                    ? "답글 숨기기"
+                                    : `답글 보기(${
+                                          !isReplyOn
+                                              ? commentObj.repliesCount
+                                              : commentObj.repliesCount -
+                                                (commentObj.replies?.length ||
+                                                    0)
+                                      }개)`}
+                            </span>
+                        </button>
+                        {isReplyFetching && <Loading size={14} />}
+                        {isReplyOn && commentObj.replies && (
+                            <ul>
+                                {commentObj.replies.map((replyObj) => (
+                                    <Comment
+                                        parentCommentId={commentObj.id}
+                                        key={replyObj.id}
+                                        commentType="reply"
+                                        commentObj={replyObj}
+                                        onMouseEnter={onMouseEnter}
+                                        onMouseLeave={onMouseLeave}
+                                    />
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                )}
+            </StyledComment>
+        </>
     );
 };
 
